@@ -2,7 +2,32 @@
 
 # Öffentlicher Release 0.1.28 – Prüfnachweise
 
-Letzter vollständiger Kandidatenlauf 38770630888: alle fünf Plattform-/Betriebsjobs
+## Endgültiger gemeinsamer Qualitätsstand
+
+Commit `461f567e22ea73dba1b748de02b4e58271ecbd12`,
+[vollständiger Lauf 38775534418](https://github.com/EinfachMxrc/unios-app/actions/runs/38775534418):
+alle sechs Pflichtjobs erfolgreich. Linux 1.361 bestanden / zwölf Skips,
+Coverage 84,53 %; macOS 1.363 / zehn Skips; Windows 1.364 / neun Skips und
+Dienststartprüfung. Frontend 1.435 Tests und **530 Browserfälle in einem Lauf**
+bestanden. Docker einschließlich Backup und Wiederherstellung, GLib, Typecheck,
+Lint, i18n, OpenAPI und Bundle-Grenzen grün. [Lighthouse](pwa.json) erneut am
+endgültigen normalen Web-Build: Accessibility 100, Legacy-PWA 100.
+
+Alle 17 Dependency-PRs, PR #19 und PR #22 sind enthalten; der Freigabe-PR #23
+ist zusammengeführt. Der [Paketlauf 38779476404](https://github.com/EinfachMxrc/unios-app/actions/runs/38779476404)
+am selben Commit besteht für Windows x64 und Linux x64 einschließlich isolierter
+Client-Startproben (2,976 s / 6,448 s inklusive Loader). Alle vier Installer
+entsprechen den CI-SHA256-Belegen; beide Update-Signaturen samt signierter Version
+0.1.28 sind offline geprüft. Der veröffentlichte
+[Release v0.1.28](https://github.com/EinfachMxrc/unios-app/releases/tag/v0.1.28)
+ist die neueste Ausgabe mit 13 Assets. GitHub-Asset-Hashes, öffentlicher Feed
+und Prüfsummen-Datei wurden nach dem Upload abgeglichen. [Abschlussbeleg](release-verification.json).
+Frische Geräteinstallation, native GUI und echte Hochschulkonten bleiben separat
+manuell zu prüfen; kein öffentlicher macOS-Installer.
+
+## Frühere Kandidaten und behobene Befunde
+
+Vorheriger vollständiger Kandidatenlauf 38770630888: alle fünf Plattform-/Betriebsjobs
 bestanden, Browser 528/530. Das Kursnamenformular nutzte nach Cache-Hydrierung
 einen veralteten Vergleichswert; unberührte Formulare übernehmen jetzt frische
 Serverwerte, eigene Eingaben behalten ihren ursprünglichen Konfliktvergleich.

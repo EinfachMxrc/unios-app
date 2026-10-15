@@ -1,5 +1,34 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Öffentlicher Release 0.1.28 veröffentlicht
+
+Kandidat `461f567e22ea73dba1b748de02b4e58271ecbd12`,
+[Qualitätslauf 38775534418](https://github.com/EinfachMxrc/unios-app/actions/runs/38775534418):
+alle sechs Pflichtjobs erfolgreich. Linux 1.361 bestanden / zwölf Skips und
+84,53 % Coverage; macOS 1.363 / zehn Skips; Windows 1.364 / neun Skips samt
+Dienststartprüfung. Alle 1.435 Frontendtests und **530 Browserfälle in einem
+vollständigen Lauf** bestanden. Docker prüft auch Backup/Wiederherstellung;
+GLib-Sicherheitsprüfung grün. Lighthouse am endgültigen normalen Web-Build:
+Accessibility 100 und Legacy-PWA 100, keine Laufzeitfehler.
+
+PR #23 ist zusammengeführt; zu diesem Zeitpunkt keine offenen PRs. Der
+öffentliche Hauptzweig enthält dieselben Dateien wie der geprüfte Kandidat.
+Der Paketlauf 38779476404 hat die sechs Prüfjobs am exakten Commit bestätigt
+und Windows x64 (EXE/MSI) sowie Linux x64 (DEB/AppImage) erfolgreich gebaut.
+Die isolierten Client-Startproben bestehen: Windows 2,976 s und Linux 6,448 s
+inklusive Loader; diese Messungen ersetzen keine normale GUI-/Geräteabnahme.
+Vier Paketprüfsummen stimmen mit den CI-Belegen überein; beide Update-Signaturen
+und ihre signierte Version 0.1.28 wurden offline geprüft.
+
+[Release v0.1.28](https://github.com/EinfachMxrc/unios-app/releases/tag/v0.1.28)
+am 15.10.2026 um 18:07 UTC veröffentlicht und als neueste Ausgabe gesetzt.
+Alle 13 GitHub-Asset-Hashes stimmen mit dem geprüften Staging überein. Öffentlicher
+Update-Feed und SHA256SUMS anonym heruntergeladen und mit den Uploads verglichen.
+Feed im Beta-Kanal, nur tatsächlich gebaute Windows-/Linux-Plattformen. Belege:
+`docs/qa/public-release-0.1.28-20261015/release-verification.json` und die
+Verifikationsdateien im Release. Keine neue Geräteinstallation oder Hochschul-
+abnahme behauptet; kein öffentlicher Mac-Installer ohne Developer-ID/Notarisierung.
+
 ## 15.10.2026 – Kursnamen nach Cache-Hydrierung und PDF-Testvorbedingung
 
 Lauf 38770630888 bestand alle Plattform-/Betriebsjobs: Linux 1.361 Tests mit
