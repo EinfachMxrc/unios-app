@@ -36,7 +36,10 @@ def _client(api_key: str):
 
 
 def fetch_models(api_key: str, client_factory: Callable | None = None) -> list[ModelOption]:
-    import anthropic
+    try:
+        import anthropic
+    except ImportError as exc:
+        raise NotConfiguredError("KI-Adapter braucht das optionale Paket: uv sync --extra ai") from exc
 
     try:
         page = (client_factory or _client)(api_key).models.list(limit=100)

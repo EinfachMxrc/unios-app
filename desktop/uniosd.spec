@@ -42,13 +42,14 @@ for vendor in license_vendors:
 hiddenimports = collect_submodules("app")
 hiddenimports.extend(collect_submodules("clients.uni_mcp"))
 for package in ("institutions", "config", "anki", "moodle_dl", "keyring", "playwright", "mcp",
-                "wasmtime", "faster_whisper", "ctranslate2", "av", "tokenizers", "onnxruntime"):
+                "wasmtime", "faster_whisper", "ctranslate2", "av", "tokenizers", "onnxruntime", "anthropic"):
     package_data, package_binaries, package_imports = collect_all(package)
     datas.extend(package_data)
     binaries.extend(package_binaries)
     hiddenimports.extend(package_imports)
 datas.extend(copy_metadata("moodle-dl", recursive=True))
 datas.extend(copy_metadata("unios"))
+datas.extend(copy_metadata("anthropic", recursive=True))
 
 analysis = Analysis(
     [str(root / "desktop" / "backend.py")],

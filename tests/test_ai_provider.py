@@ -65,6 +65,18 @@ def test_connect_preselects_newest_model_and_enables_adapter(settings, service):
     assert settings.ai_adapter_enabled is True
 
 
+def test_missing_optional_sdk_returns_service_unavailable(settings, coordinator, monkeypatch):
+    import sys
+
+    monkeypatch.setitem(sys.modules, "anthropic", None)
+    app = FastAPI()
+    app.include_router(provider_router(settings, coordinator))
+    with TestClient(app) as client:
+        response = client.put("/api/ai/provider/key", json={"api_key": "synthetic-sdk-test"})
+    assert response.status_code == 503
+    assert "optionale Paket" in response.json()["detail"]
+
+
 def test_saved_key_and_choice_survive_a_restart(settings, service):
     service.connect("sk-fixture-key")  # pragma: allowlist secret
     service.choose("model-old")

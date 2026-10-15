@@ -296,6 +296,12 @@ def startup_check() -> int:
     from time import perf_counter
 
     started = perf_counter()
+    if getattr(sys, 'frozen', False):
+        # Validate the optional SDK inside the real installer without a key or network.
+        import anthropic
+
+        if not callable(anthropic.Anthropic):
+            raise RuntimeError('KI-SDK fehlt im Desktop-Paket')
     import httpx
 
     from app.client.api import create_client_app
