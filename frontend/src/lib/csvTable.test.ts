@@ -11,7 +11,11 @@ it('guesses the separator German Excel and plain CSV use', () => {
 
 it('keeps quoted separators, line breaks and doubled quotes inside one field', () => {
   const { rows } = parseCsv('Titel;Kommentar\r\n"Analysis; I";"sagte ""gut""\nund mehr"\nB;', ';')
-  expect(rows).toEqual([['Titel', 'Kommentar'], ['Analysis; I', 'sagte "gut"\nund mehr'], ['B', '']])
+  expect(rows).toEqual([
+    ['Titel', 'Kommentar'],
+    ['Analysis; I', 'sagte "gut"\nund mehr'],
+    ['B', ''],
+  ])
 })
 
 it('stops at the limit and says more rows follow', () => {

@@ -27,7 +27,12 @@ export function workingNoteDraftFor(noteId: string): NoteDraft | null {
 
 /** Failed disk writes retain the current text in this window, without claiming persistence. */
 export function rememberVolatileNoteDraft(draft: Omit<NoteDraft, 'updatedAt' | 'deviceId' | 'writeId'>): NoteDraft {
-  const saved = { ...draft, updatedAt: Date.now(), deviceId: workingDrafts.get(draft.noteId)?.deviceId ?? 'memory-only', writeId: randomId() }
+  const saved = {
+    ...draft,
+    updatedAt: Date.now(),
+    deviceId: workingDrafts.get(draft.noteId)?.deviceId ?? 'memory-only',
+    writeId: randomId(),
+  }
   workingDrafts.set(draft.noteId, saved)
   return saved
 }
@@ -57,11 +62,19 @@ export function draftFor(noteId: string): NoteDraft | null {
     const stored = localStorage.getItem(`${prefix}${noteId}`)
     if (!stored) return null
     const draft: NoteDraft = JSON.parse(stored)
-    if (draft.noteId !== noteId || !Number.isInteger(draft.baseRevision) || draft.baseRevision < 1 ||
-        typeof draft.baseTitle !== 'string' || typeof draft.baseBody !== 'string' ||
-        typeof draft.title !== 'string' || typeof draft.body !== 'string' ||
-        typeof draft.updatedAt !== 'number' || typeof draft.deviceId !== 'string' ||
-        typeof draft.writeId !== 'string') return null
+    if (
+      draft.noteId !== noteId ||
+      !Number.isInteger(draft.baseRevision) ||
+      draft.baseRevision < 1 ||
+      typeof draft.baseTitle !== 'string' ||
+      typeof draft.baseBody !== 'string' ||
+      typeof draft.title !== 'string' ||
+      typeof draft.body !== 'string' ||
+      typeof draft.updatedAt !== 'number' ||
+      typeof draft.deviceId !== 'string' ||
+      typeof draft.writeId !== 'string'
+    )
+      return null
     return draft
   } catch {
     return null
@@ -96,8 +109,13 @@ export function archivedDraftsFor(noteId: string): NoteDraft[] {
       if (!key?.startsWith(`${archivedPrefix}${noteId}:`)) continue
       try {
         const draft = JSON.parse(localStorage.getItem(key) ?? 'null') as NoteDraft | null
-        if (draft?.noteId === noteId && typeof draft.title === 'string' &&
-            typeof draft.body === 'string' && Number.isInteger(draft.baseRevision)) drafts.push(draft)
+        if (
+          draft?.noteId === noteId &&
+          typeof draft.title === 'string' &&
+          typeof draft.body === 'string' &&
+          Number.isInteger(draft.baseRevision)
+        )
+          drafts.push(draft)
       } catch {
         // One damaged copy must not hide the other recovery copies.
       }
@@ -117,16 +135,24 @@ export function newNoteDraftFor(courseId: number, resourceId: number | null): Ne
     const raw = localStorage.getItem(newKey(courseId, resourceId))
     if (!raw) return null
     const draft: NewNoteDraft = JSON.parse(raw)
-    return draft.courseId === courseId && draft.resourceId === resourceId &&
-      typeof draft.title === 'string' && typeof draft.body === 'string' &&
-      typeof draft.writeId === 'string' ? draft : null
+    return draft.courseId === courseId &&
+      draft.resourceId === resourceId &&
+      typeof draft.title === 'string' &&
+      typeof draft.body === 'string' &&
+      typeof draft.writeId === 'string'
+      ? draft
+      : null
   } catch {
     return null
   }
 }
 
-export function keepNewNoteDraft(courseId: number, resourceId: number | null,
-                                 title: string, body: string): NewNoteDraft {
+export function keepNewNoteDraft(
+  courseId: number,
+  resourceId: number | null,
+  title: string,
+  body: string,
+): NewNoteDraft {
   const draft = { courseId, resourceId, title, body, updatedAt: Date.now(), writeId: randomId() }
   localStorage.setItem(newKey(courseId, resourceId), JSON.stringify(draft))
   return draft

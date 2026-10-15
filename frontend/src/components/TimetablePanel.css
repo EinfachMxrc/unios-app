@@ -1,9 +1,29 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.timetable-selection { display: grid; gap: 10px; margin-block: 16px; }
-.timetable-selection h3, .timetable-selection p { margin: 0; }
-.timetable-selection details { padding: 10px 12px; border: 1px solid var(--app-border); border-radius: 8px; }
-.timetable-selection summary { cursor: pointer; overflow-wrap: anywhere; }
-.timetable-selection label { display: flex; align-items: center; gap: 10px; padding-top: 10px; font-size: .9rem; }
+.timetable-selection {
+  display: grid;
+  gap: 10px;
+  margin-block: 16px;
+}
+.timetable-selection h3,
+.timetable-selection p {
+  margin: 0;
+}
+.timetable-selection details {
+  padding: 10px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+}
+.timetable-selection summary {
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.timetable-selection label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  font-size: 0.9rem;
+}
 .timetable-panel {
   margin: 1.25rem 0 2rem;
 }
@@ -12,15 +32,30 @@
   align-items: center;
   gap: 1rem;
   border: 1px solid var(--border);
-  border-radius: .75rem;
+  border-radius: 0.75rem;
   padding: 1rem 1.25rem;
   background: var(--card);
 }
-.timetable-summary-empty > svg { color: var(--muted-foreground); flex-shrink: 0; }
-.timetable-summary-empty > div { flex: 1; min-width: 0; }
-.timetable-summary-empty h2 { font-size: .85rem; font-weight: 600; }
-.timetable-summary-empty p { font-size: .8rem; color: var(--muted-foreground); margin-top: .25rem; }
-.timetable-summary-empty a { font-size: .8rem; }
+.timetable-summary-empty > svg {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+.timetable-summary-empty > div {
+  flex: 1;
+  min-width: 0;
+}
+.timetable-summary-empty h2 {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.timetable-summary-empty p {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
+}
+.timetable-summary-empty a {
+  font-size: 0.8rem;
+}
 .timetable-navigation {
   display: flex;
   align-items: center;
@@ -172,16 +207,29 @@
   grid-template-columns: 1fr;
 }
 @media (max-width: 520px) {
-  .timetable-summary-empty { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: .5rem .75rem; align-items: start; }
-  .timetable-summary-empty > div { grid-column: 2; }
-  .timetable-summary-empty a { grid-column: 2; margin-left: 0; max-width: 100%; width: fit-content; white-space: normal; }
+  .timetable-summary-empty {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 0.5rem 0.75rem;
+    align-items: start;
+  }
+  .timetable-summary-empty > div {
+    grid-column: 2;
+  }
+  .timetable-summary-empty a {
+    grid-column: 2;
+    margin-left: 0;
+    max-width: 100%;
+    width: fit-content;
+    white-space: normal;
+  }
   .timetable-panel [data-slot='card-header'] {
     flex-wrap: wrap;
   }
   .timetable-navigation {
     display: grid;
     grid-template-columns: max-content max-content minmax(0, 1fr);
-    gap: .75rem;
+    gap: 0.75rem;
   }
   .timetable-navigation > div {
     grid-column: 1 / -1;
@@ -189,7 +237,9 @@
     min-width: 0;
     order: 0;
   }
-  .timetable-navigation > button:last-child { justify-self: end; }
+  .timetable-navigation > button:last-child {
+    justify-self: end;
+  }
   .timetable-appointment {
     gap: 0.75rem;
   }

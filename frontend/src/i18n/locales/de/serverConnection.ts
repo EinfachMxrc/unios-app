@@ -3,18 +3,22 @@ export default {
   title: 'Dein UniOS-Server',
   welcome: 'UniOS einrichten',
   heading: 'Dein Studium auf allen Geräten',
-  description: 'Dein Server hält Unterlagen, Termine und Notizen aktuell. Diese App verbindet sich damit und bewahrt deine Entwürfe auf diesem Gerät.',
+  description:
+    'Dein Server hält Unterlagen, Termine und Notizen aktuell. Diese App verbindet sich damit und bewahrt deine Entwürfe auf diesem Gerät.',
   address: 'Serveradresse',
   code: 'Gerätecode',
-  codeHint: 'Den einmaligen Code erhältst du am Server oder unter Einstellungen → Geräte auf einem bereits verbundenen Gerät. Er gilt zehn Minuten.',
+  codeHint:
+    'Den einmaligen Code erhältst du am Server oder unter Einstellungen → Geräte auf einem bereits verbundenen Gerät. Er gilt zehn Minuten.',
   connect: 'Verbinden',
   connecting: 'Wird verbunden …',
   paired: 'Mit deinem Server gekoppelt',
-  offlineHint: 'Bei fehlender Verbindung bleiben bereits geladene Ansichten und Notizentwürfe verfügbar. Neue Änderungen werden nach der Verbindung geprüft und übertragen.',
+  offlineHint:
+    'Bei fehlender Verbindung bleiben bereits geladene Ansichten und Notizentwürfe verfügbar. Neue Änderungen werden nach der Verbindung geprüft und übertragen.',
   renew: 'Gerät erneut koppeln',
   invalidCode: 'Der Gerätecode ist ungültig oder abgelaufen. Bitte einen neuen Code verwenden.',
   unavailable: 'Dein Server ist nicht erreichbar. Bitte die Adresse und Verbindung prüfen.',
-  bindingError: 'Die Kopplung konnte nicht sicher gespeichert werden. Die App darf lokale Entwürfe nicht mit einem anderen Server vermischen.',
+  bindingError:
+    'Die Kopplung konnte nicht sicher gespeichert werden. Die App darf lokale Entwürfe nicht mit einem anderen Server vermischen.',
   keyringUnavailable: 'Der sichere Schlüsselbund dieses Geräts ist nicht verfügbar.',
   deviceLabel: 'UniOS Desktop',
   cancel: 'Abbrechen',

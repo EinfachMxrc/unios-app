@@ -405,7 +405,11 @@ export function StudySessionPage() {
           </div>
         ) : (
           <div className="study-session-main">
-            {readOnly && <p role="status" className="muted-text">{t('standbySessionReadOnly')}</p>}
+            {readOnly && (
+              <p role="status" className="muted-text">
+                {t('standbySessionReadOnly')}
+              </p>
+            )}
             <div className="study-session-heading">
               <p className="study-session-eyebrow">{t('sessionEyebrow')}</p>
               <h1>{deck.replace(/^Uni::/, '').replaceAll('::', ' › ')}</h1>

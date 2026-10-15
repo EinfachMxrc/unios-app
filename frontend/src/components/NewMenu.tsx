@@ -28,7 +28,13 @@ export function NewMenu() {
         <DropdownMenu.Content className="new-menu" align="end" sideOffset={8} aria-label={t('new')}>
           {items.map(({ to, label, icon: Icon }) => (
             <DropdownMenu.Item asChild key={to}>
-              <Link to={to} className="new-menu-item" onClick={() => { if (to === '/notes?new=1') beginNewFreeNote() }}>
+              <Link
+                to={to}
+                className="new-menu-item"
+                onClick={() => {
+                  if (to === '/notes?new=1') beginNewFreeNote()
+                }}
+              >
                 <Icon size={17} />
                 {label}
               </Link>

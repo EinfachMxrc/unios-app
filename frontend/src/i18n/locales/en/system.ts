@@ -102,7 +102,8 @@ export default {
   syncSummary: '{{courses}} courses · {{resources}} resources · {{changes}} changes',
   noSyncHistoryTitle: 'No sync yet',
   syncRunUnavailableTitle: 'This sync is unavailable here',
-  syncRunUnavailableText: 'The linked run is not included in the most recently loaded history. Find the saved event in the activity history.',
+  syncRunUnavailableText:
+    'The linked run is not included in the most recently loaded history. Find the saved event in the activity history.',
   openSyncActivity: 'View syncs in activity history',
   noSyncHistoryText: 'Automatic sync begins once Moodle is set up.',
 }

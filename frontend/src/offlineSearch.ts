@@ -9,9 +9,36 @@ function normalized(value: string): string {
   return value.normalize('NFKC').toLocaleLowerCase('de-DE')
 }
 
-const questionStopwords = new Set(['aber', 'alle', 'auch', 'dass', 'eine', 'einem', 'einen', 'einer', 'eines',
-  'für', 'haben', 'hat', 'hier', 'kann', 'man', 'mit', 'oder', 'sind', 'über', 'und', 'unter', 'wann',
-  'wird', 'wurde', 'werden', 'welche', 'welcher', 'wenn'])
+const questionStopwords = new Set([
+  'aber',
+  'alle',
+  'auch',
+  'dass',
+  'eine',
+  'einem',
+  'einen',
+  'einer',
+  'eines',
+  'für',
+  'haben',
+  'hat',
+  'hier',
+  'kann',
+  'man',
+  'mit',
+  'oder',
+  'sind',
+  'über',
+  'und',
+  'unter',
+  'wann',
+  'wird',
+  'wurde',
+  'werden',
+  'welche',
+  'welcher',
+  'wenn',
+])
 
 export function searchOffline(
   index: OfflineSearchIndex,
@@ -21,7 +48,8 @@ export function searchOffline(
   kind = '',
 ): { hits: Array<OfflineSearchItem & { excerpt: string }>; total: number } {
   const raw = (normalized(query).match(/[\p{L}\p{N}_]+/gu) ?? []).slice(0, 10)
-  const relevant = raw.length > 3 ? raw.filter((term) => term.length >= 4 && !questionStopwords.has(term)).slice(0, 8) : []
+  const relevant =
+    raw.length > 3 ? raw.filter((term) => term.length >= 4 && !questionStopwords.has(term)).slice(0, 8) : []
   const terms = relevant.length ? relevant : raw
   const allRequired = !relevant.length
   if (!terms.length) return { hits: [], total: 0 }
@@ -32,7 +60,8 @@ export function searchOffline(
     if (courseId && String(item.course_id) !== courseId) continue
     if (semesterId && String(item.semester_id) !== semesterId) continue
     const haystack = normalized(`${item.title} ${item.body}`)
-    if (allRequired ? !terms.every((term) => haystack.includes(term)) : !terms.some((term) => haystack.includes(term))) continue
+    if (allRequired ? !terms.every((term) => haystack.includes(term)) : !terms.some((term) => haystack.includes(term)))
+      continue
     total += 1
     if (hits.length >= 100) continue
     const body = item.body.replace(/\s+/g, ' ').trim()

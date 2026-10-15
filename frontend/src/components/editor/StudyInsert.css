@@ -1,74 +1,396 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.studio-dialog.study-insert-dialog { display: block; width: min(660px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: 90dvh; overflow: auto; }
-.study-insert-dialog > p { margin: 8px 0; }
-.math-entry-host { min-width: 0; margin: 12px 0; }
-.math-entry-host math-field { width: 100%; min-width: 0; padding: 12px; border: 1px solid var(--app-border); border-radius: 10px; color: var(--app-text); background: var(--app-surface); font-size: 1.25rem; --caret-color: var(--primary); --selection-background-color: var(--app-surface-alt); }
-.math-entry-host math-field::part(menu-toggle) { display: none; }
-.math-templates, .study-insert-actions, .study-insert-tools { display: flex; flex-wrap: wrap; gap: 6px; }
-.math-templates button, .study-insert-actions button, .study-insert-tools button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 7px 11px; border: 1px solid var(--app-border); border-radius: 8px; background: var(--app-surface); color: var(--app-text); font-size: .85rem; }
-.math-templates button:hover, .study-insert-tools button:hover { background: var(--app-surface-alt); }
-.study-insert-actions { position: sticky; bottom: 0; z-index: 2; justify-content: flex-end; margin-top: 16px; padding: 12px 0; border-top: 1px solid var(--app-border); background: var(--app-surface); }
-.study-insert-actions button:last-child { background: var(--primary); color: var(--primary-foreground); }
-.study-insert-actions button:disabled { opacity: .45; cursor: not-allowed; }
-.math-source { width: 100%; min-height: 90px; font-family: monospace; margin-top: 8px; }
-.math-keyboard-container { position: relative; min-width: 0; height: 0; --keycap-height: 44px; --keycap-gap: 4px; }
-.logic-expression { display: grid; gap: 6px; margin-top: 12px; }
-.logic-expression input { width: 100%; min-width: 0; font-family: monospace; padding: 10px; border: 1px solid var(--app-border); border-radius: 8px; }
-.logic-options { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
-.study-insert-dialog .logic-options label { display: flex; align-items: center; gap: 6px; }
-.logic-table-scroll { max-width: 100%; max-height: 320px; overflow: auto; border: 1px solid var(--app-border); border-radius: 8px; }
-.logic-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-.logic-table :is(th,td) { padding: 8px 12px; text-align: center; border-bottom: 1px solid var(--app-border); white-space: nowrap; }
-.logic-table th { position: sticky; top: 0; background: var(--app-surface-alt); font-weight: 550; }
-.logic-table td:last-child { font-weight: 650; }
-.studio-math { min-width: 0; max-width: 100%; }
-.studio-math-inline { display: inline-block; vertical-align: middle; }
-.studio-math-block { display: block; margin: 14px 0; }
-.studio-math-button { max-width: 100%; padding: 3px; border: 0; color: inherit; background: transparent; border-radius: 4px; cursor: pointer; }
-.studio-math-button:hover { background: var(--app-surface-alt); }
-.studio-math-block .studio-math-button { width: 100%; }
-.studio-math-render { display: inline-block; min-width: 0; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; vertical-align: middle; }
-.studio-math-render .katex-display { margin: .5em 0; }
-.studio-math-error { font-family: monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
-.reader-note-preview { max-width: 100%; overflow: auto; }
-.study-field { display: grid; gap: 6px; margin: 12px 0; min-width: 0; }
-.study-field :is(input,textarea,select), .study-fields input { min-width: 0; width: 100%; border: 1px solid var(--app-border); border-radius: 8px; padding: 9px; background: var(--app-surface); color: var(--app-text); }
-.study-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin: 10px 0; }
-.study-fields label:has(input[type=checkbox]) { display: flex; align-items: center; gap: 8px; }
-.study-fields input[type=checkbox] { width: auto; }
-.study-insert-dialog details { margin: 12px 0; }
-.study-insert-dialog details > label { display: flex; gap: 8px; margin: 10px 0; }
-.study-insert-dialog button:focus-visible, .studio-study-block button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-.logic-table button { min-width: 44px; min-height: 44px; border: 1px solid var(--app-border); border-radius: 6px; }
-.logic-table button[aria-pressed=true] { background: var(--primary); color: var(--primary-foreground); }
-.study-diagram { overflow: auto; max-width: 100%; max-height: 650px; color: var(--app-text); }
-.study-diagram svg { display: block; width: 100%; min-width: 340px; }
-.study-insert-dialog .study-diagram svg { max-height: 260px; }
-.study-diagram rect { fill: var(--app-surface-alt); stroke: var(--app-border); }
-.study-diagram text { fill: currentColor; font-size: 14px; font-family: inherit; }
-.study-diagram .study-edge-label { font-size: 12px; paint-order: stroke; stroke: var(--app-surface); stroke-width: 4px; }
-.study-diagram pre, .study-text { white-space: pre-wrap; overflow-wrap: anywhere; }
-.studio-study-block { border: 1px solid var(--app-border); border-radius: 10px; padding: 12px; margin: 12px 0; max-width: 100%; }
-.studio-study-block button, .study-fields button, .study-insert-dialog > button { min-height: 40px; border: 1px solid var(--app-border); border-radius: 7px; padding: 7px 10px; margin: 5px 5px 5px 0; color: var(--app-text); background: var(--app-surface); }
-.study-answer { padding: 10px; margin-top: 8px; background: var(--app-surface-alt); border-radius: 8px; }
-.math-templates { max-height: 180px; overflow: auto; margin-top: 8px; }
-.math-quick-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.math-quick-tabs button, .study-helper-shelf button, .study-helper-star { min-height: 36px; border: 1px solid var(--app-border); border-radius: 8px; padding: 7px 10px; background: var(--app-surface); color: var(--app-text); font-size: .85rem; }
-.math-quick-tabs button[aria-pressed=true], .study-helper-shelf button[aria-pressed=true] { background: var(--app-surface-alt); border-color: var(--primary); }
-.math-template-choice { display: inline-flex; border: 1px solid var(--app-border); border-radius: 8px; }
-.math-template-choice.is-selected { border-color: var(--primary); }
-.math-template-choice button { border: 0; border-radius: 7px 0 0 7px; padding-inline: 10px; }
-.math-template-choice .math-template-star { min-width: 36px; padding: 7px; border-radius: 0 7px 7px 0; border-left: 1px solid var(--app-border); }
-.math-template-star[aria-pressed=true], .study-helper-star[aria-pressed=true] { color: var(--primary); }
-.study-helper-select { display: flex; gap: 8px; align-items: end; }
-.study-helper-select .study-field { flex: 1; }
-.study-helper-select .study-helper-star { margin-block: 12px; min-width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; }
-.study-helper-shelf { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-block: 8px; }
-.study-helper-shelf > span { color: var(--app-muted); font-size: .8rem; margin-right: 4px; }
-.study-command-hint { font-size: .78rem; margin: 6px 0; }
+.studio-dialog.study-insert-dialog {
+  display: block;
+  width: min(660px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  max-height: 90dvh;
+  overflow: auto;
+}
+.study-insert-dialog > p {
+  margin: 8px 0;
+}
+.math-entry-host {
+  min-width: 0;
+  margin: 12px 0;
+}
+.math-entry-host math-field {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  color: var(--app-text);
+  background: var(--app-surface);
+  font-size: 1.25rem;
+  --caret-color: var(--primary);
+  --selection-background-color: var(--app-surface-alt);
+}
+.math-entry-host math-field::part(menu-toggle) {
+  display: none;
+}
+.math-templates,
+.study-insert-actions,
+.study-insert-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.math-templates button,
+.study-insert-actions button,
+.study-insert-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  font-size: 0.85rem;
+}
+.math-templates button:hover,
+.study-insert-tools button:hover {
+  background: var(--app-surface-alt);
+}
+.study-insert-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--app-border);
+  background: var(--app-surface);
+}
+.study-insert-actions button:last-child {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.study-insert-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.math-source {
+  width: 100%;
+  min-height: 90px;
+  font-family: monospace;
+  margin-top: 8px;
+}
+.math-keyboard-container {
+  position: relative;
+  min-width: 0;
+  height: 0;
+  --keycap-height: 44px;
+  --keycap-gap: 4px;
+}
+.logic-expression {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+}
+.logic-expression input {
+  width: 100%;
+  min-width: 0;
+  font-family: monospace;
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+}
+.logic-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0;
+}
+.study-insert-dialog .logic-options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.logic-table-scroll {
+  max-width: 100%;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+}
+.logic-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.logic-table :is(th, td) {
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--app-border);
+  white-space: nowrap;
+}
+.logic-table th {
+  position: sticky;
+  top: 0;
+  background: var(--app-surface-alt);
+  font-weight: 550;
+}
+.logic-table td:last-child {
+  font-weight: 650;
+}
+.studio-math {
+  min-width: 0;
+  max-width: 100%;
+}
+.studio-math-inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+.studio-math-block {
+  display: block;
+  margin: 14px 0;
+}
+.studio-math-button {
+  max-width: 100%;
+  padding: 3px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.studio-math-button:hover {
+  background: var(--app-surface-alt);
+}
+.studio-math-block .studio-math-button {
+  width: 100%;
+}
+.studio-math-render {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  vertical-align: middle;
+}
+.studio-math-render .katex-display {
+  margin: 0.5em 0;
+}
+.studio-math-error {
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reader-note-preview {
+  max-width: 100%;
+  overflow: auto;
+}
+.study-field {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  min-width: 0;
+}
+.study-field :is(input, textarea, select),
+.study-fields input {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  padding: 9px;
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+.study-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+.study-fields label:has(input[type='checkbox']) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.study-fields input[type='checkbox'] {
+  width: auto;
+}
+.study-insert-dialog details {
+  margin: 12px 0;
+}
+.study-insert-dialog details > label {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+.study-insert-dialog button:focus-visible,
+.studio-study-block button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.logic-table button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+}
+.logic-table button[aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.study-diagram {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 650px;
+  color: var(--app-text);
+}
+.study-diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 340px;
+}
+.study-insert-dialog .study-diagram svg {
+  max-height: 260px;
+}
+.study-diagram rect {
+  fill: var(--app-surface-alt);
+  stroke: var(--app-border);
+}
+.study-diagram text {
+  fill: currentColor;
+  font-size: 14px;
+  font-family: inherit;
+}
+.study-diagram .study-edge-label {
+  font-size: 12px;
+  paint-order: stroke;
+  stroke: var(--app-surface);
+  stroke-width: 4px;
+}
+.study-diagram pre,
+.study-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.studio-study-block {
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 12px 0;
+  max-width: 100%;
+}
+.studio-study-block button,
+.study-fields button,
+.study-insert-dialog > button {
+  min-height: 40px;
+  border: 1px solid var(--app-border);
+  border-radius: 7px;
+  padding: 7px 10px;
+  margin: 5px 5px 5px 0;
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+.study-answer {
+  padding: 10px;
+  margin-top: 8px;
+  background: var(--app-surface-alt);
+  border-radius: 8px;
+}
+.math-templates {
+  max-height: 180px;
+  overflow: auto;
+  margin-top: 8px;
+}
+.math-quick-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.math-quick-tabs button,
+.study-helper-shelf button,
+.study-helper-star {
+  min-height: 36px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  font-size: 0.85rem;
+}
+.math-quick-tabs button[aria-pressed='true'],
+.study-helper-shelf button[aria-pressed='true'] {
+  background: var(--app-surface-alt);
+  border-color: var(--primary);
+}
+.math-template-choice {
+  display: inline-flex;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+}
+.math-template-choice.is-selected {
+  border-color: var(--primary);
+}
+.math-template-choice button {
+  border: 0;
+  border-radius: 7px 0 0 7px;
+  padding-inline: 10px;
+}
+.math-template-choice .math-template-star {
+  min-width: 36px;
+  padding: 7px;
+  border-radius: 0 7px 7px 0;
+  border-left: 1px solid var(--app-border);
+}
+.math-template-star[aria-pressed='true'],
+.study-helper-star[aria-pressed='true'] {
+  color: var(--primary);
+}
+.study-helper-select {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+}
+.study-helper-select .study-field {
+  flex: 1;
+}
+.study-helper-select .study-helper-star {
+  margin-block: 12px;
+  min-width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.study-helper-shelf {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-block: 8px;
+}
+.study-helper-shelf > span {
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  margin-right: 4px;
+}
+.study-command-hint {
+  font-size: 0.78rem;
+  margin: 6px 0;
+}
 @media (max-width: 700px) {
-  .math-templates button, .study-insert-actions button, .study-insert-tools button, .math-quick-tabs button, .study-helper-shelf button { min-height: 44px; }
-  .math-template-choice .math-template-star, .study-helper-select .study-helper-star { min-width: 44px; min-height: 44px; }
-  .math-entry-host math-field { font-size: 1.1rem; }
+  .math-templates button,
+  .study-insert-actions button,
+  .study-insert-tools button,
+  .math-quick-tabs button,
+  .study-helper-shelf button {
+    min-height: 44px;
+  }
+  .math-template-choice .math-template-star,
+  .study-helper-select .study-helper-star {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .math-entry-host math-field {
+    font-size: 1.1rem;
+  }
 }

@@ -95,6 +95,15 @@ def save_connector_secret(connector_id: str, alias: str, value: str) -> bool:
         return False
 
 
+def delete_connector_secret(connector_id: str, alias: str) -> None:
+    if not _secure_backend():
+        return
+    try:
+        keyring.delete_password(f"unios.connector.{connector_id}", alias)
+    except (KeyringError, RuntimeError):
+        pass  # already gone or the store is unavailable; nothing else to remove
+
+
 def load_connector_secret(connector_id: str, alias: str) -> str:
     if not _secure_backend():
         return ""

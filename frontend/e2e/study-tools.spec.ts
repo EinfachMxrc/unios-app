@@ -8,7 +8,9 @@ import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
 
 async function editor(page: Page) {
-  const created = await page.request.post('/api/notes', { data: { course_id: 1, title: 'Werkzeuge · Testnotiz', body: 'Vorlesung' } })
+  const created = await page.request.post('/api/notes', {
+    data: { course_id: 1, title: 'Werkzeuge · Testnotiz', body: 'Vorlesung' },
+  })
   expect(created.ok()).toBeTruthy()
   const id = (await created.json()).note.id
   await page.goto(`/notes?id=${id}`)
@@ -19,8 +21,10 @@ async function editor(page: Page) {
 }
 async function slash(page: Page, command: string) {
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await body.press('ControlOrMeta+End'); await body.press('Enter')
-  await body.pressSequentially(`/${command}`); await body.press('Tab')
+  await body.press('ControlOrMeta+End')
+  await body.press('Enter')
+  await body.pressSequentially(`/${command}`)
+  await body.press('Tab')
 }
 async function saved(page: Page, id: number) {
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
@@ -58,7 +62,8 @@ test('keyboard-only formula entry restores the caret and variable matrices round
   await expect(dialog).toHaveCount(0)
   await expect(body.locator('.studio-math .katex')).toHaveCount(2)
   const markdown = await saved(page, id)
-  expect(markdown).toContain('pmatrix'); expect(markdown).toContain('weiter')
+  expect(markdown).toContain('pmatrix')
+  expect(markdown).toContain('weiter')
   expect(markdown).not.toContain('placeholder')
   await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await page.reload()
@@ -70,13 +75,17 @@ test('named math templates support placeholders and multiline LaTeX editing', as
   await slash(page, 'grenzwert')
   const dialog = page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
   await expect(dialog.locator('math-field')).toBeFocused()
-  await page.keyboard.type('0'); await page.keyboard.press('Tab'); await page.keyboard.type('x')
+  await page.keyboard.type('0')
+  await page.keyboard.press('Tab')
+  await page.keyboard.type('x')
   await expect(dialog.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(dialog).toHaveCount(0)
   await slash(page, 'schritte')
   await dialog.locator('summary').filter({ hasText: 'LaTeX bearbeiten' }).click()
-  await dialog.getByRole('textbox', { name: 'LaTeX bearbeiten', exact: true }).fill('\\begin{aligned}x+1&=3\\\\x&=2\\end{aligned}')
+  await dialog
+    .getByRole('textbox', { name: 'LaTeX bearbeiten', exact: true })
+    .fill('\\begin{aligned}x+1&=3\\\\x&=2\\end{aligned}')
   await dialog.getByRole('textbox', { name: 'LaTeX bearbeiten', exact: true }).press('ControlOrMeta+Enter')
   await expect(dialog).toHaveCount(0)
   await expect(page.locator('.studio-document .studio-math-block .katex')).toHaveCount(1)
@@ -101,10 +110,12 @@ test('hex numbers and bit widths handle exact wide values, cancellation and inva
   await expect(dialog.locator('tbody')).toContainText('11111111')
   await number.fill('102')
   await expect(dialog.getByRole('button', { name: 'Einfügen', exact: true })).toBeDisabled()
-  await number.press('ControlOrMeta+Enter'); await expect(dialog).toBeVisible()
+  await number.press('ControlOrMeta+Enter')
+  await expect(dialog).toBeVisible()
   await number.press('Escape')
   const markdown = await saved(page, id)
-  expect(markdown).toContain('9007199254740993'); expect(markdown).not.toContain('11111111')
+  expect(markdown).toContain('9007199254740993')
+  expect(markdown).not.toContain('11111111')
   expect(markdown).toContain('/bin') // Cancelling preserves even the typed command.
 })
 
@@ -114,11 +125,13 @@ test('KV cells work with keyboard, verify groups, and DNF/KNF insert correctly',
   const dialog = page.getByRole('dialog', { name: 'Wahrheitstabelle', exact: true })
   await expect(dialog.getByRole('combobox', { name: 'Ansicht', exact: true })).toHaveValue('kv')
   await dialog.getByRole('textbox', { name: 'Logischer Ausdruck', exact: true }).fill('A | B')
-  for (const bits of ['10', '11']) await dialog.getByRole('button', { name: `Belegung ${bits} · Wert 1`, exact: true }).press('Space')
+  for (const bits of ['10', '11'])
+    await dialog.getByRole('button', { name: `Belegung ${bits} · Wert 1`, exact: true }).press('Space')
   await expect(dialog.getByRole('button', { name: 'Gruppe übernehmen', exact: true })).toBeEnabled()
   await dialog.getByRole('button', { name: 'Gruppe übernehmen', exact: true }).press('Enter')
   await expect(dialog).toContainText('noch nicht alle Einsen abgedeckt')
-  for (const bits of ['01', '11']) await dialog.getByRole('button', { name: `Belegung ${bits} · Wert 1`, exact: true }).press('Space')
+  for (const bits of ['01', '11'])
+    await dialog.getByRole('button', { name: `Belegung ${bits} · Wert 1`, exact: true }).press('Space')
   await dialog.getByRole('button', { name: 'Gruppe übernehmen', exact: true }).press('Enter')
   await expect(dialog).toContainText('Alle Einsen abgedeckt')
   await dialog.getByRole('button', { name: 'Tabelle einfügen', exact: true }).press('ControlOrMeta+Enter')
@@ -130,32 +143,41 @@ test('KV cells work with keyboard, verify groups, and DNF/KNF insert correctly',
   await expect(page.locator('.studio-document')).toContainText('KNF')
 })
 
-test('diagram source remains editable and hidden-answer exercises accept nested math without early insertion', async ({ page }) => {
+test('diagram source remains editable and hidden-answer exercises accept nested math without early insertion', async ({
+  page,
+}) => {
   const id = await editor(page)
   await slash(page, 'diagramm')
   const dialog = page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
   await expect(dialog.getByRole('textbox', { name: 'Verbindungen', exact: true })).toBeFocused()
-  await dialog.getByRole('textbox', { name: 'Verbindungen', exact: true }).fill('Problem -> Teilproblem\nTeilproblem -> Lösung : prüfen')
+  await dialog
+    .getByRole('textbox', { name: 'Verbindungen', exact: true })
+    .fill('Problem -> Teilproblem\nTeilproblem -> Lösung : prüfen')
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(page.locator('.studio-document svg[role=img]')).toBeVisible()
   await slash(page, 'ueben')
   await dialog.getByRole('textbox', { name: 'Aufgabe oder Frage', exact: true }).fill('Was ist die Hälfte?')
   const answer = dialog.getByRole('textbox', { name: 'Lösung', exact: true })
-  await answer.focus(); await answer.press('ControlOrMeta+Shift+M')
+  await answer.focus()
+  await answer.press('ControlOrMeta+Shift+M')
   const math = page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
   await math.getByRole('button', { name: 'Bruch', exact: true }).click()
   await expect(math.locator('math-field')).toBeFocused()
-  await page.keyboard.type('1'); await page.keyboard.press('Tab'); await page.keyboard.type('2')
+  await page.keyboard.type('1')
+  await page.keyboard.press('Tab')
+  await page.keyboard.type('2')
   await expect(math.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(math).toHaveCount(0); await expect(dialog).toBeVisible()
+  await expect(math).toHaveCount(0)
+  await expect(dialog).toBeVisible()
   await expect(answer).toHaveValue('$\\frac12$')
   await answer.press('ControlOrMeta+Enter')
   await expect(page.locator('.studio-document .study-answer')).toHaveCount(0)
   await page.getByRole('button', { name: 'Lösung zeigen', exact: true }).press('Enter')
   await expect(page.locator('.studio-document .study-answer .katex')).toHaveCount(1)
   const markdown = await saved(page, id)
-  expect(markdown).toContain('unios-diagram'); expect(markdown).toContain('unios-recall')
+  expect(markdown).toContain('unios-diagram')
+  expect(markdown).toContain('unios-recall')
   await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await page.reload()
   await expect(page.locator('.rendered-note svg[role=img]')).toBeVisible()
@@ -187,46 +209,69 @@ for (const tool of ['statistics', 'source', 'project', 'code'] as const) {
     } else {
       await expect(dialog.getByRole('textbox', { name: 'Titel', exact: true })).toBeFocused()
       await page.keyboard.type('Testbeleg')
-      if (tool === 'source') await dialog.getByRole('textbox', { name: 'Link (optional)', exact: true }).fill('https://example.org/book')
+      if (tool === 'source')
+        await dialog.getByRole('textbox', { name: 'Link (optional)', exact: true }).fill('https://example.org/book')
     }
     await page.keyboard.press('ControlOrMeta+Enter')
-    await expect(dialog).toHaveCount(0); await expect(body).toBeFocused()
+    await expect(dialog).toHaveCount(0)
+    await expect(body).toBeFocused()
     const markdown = await saved(page, id)
-    expect(markdown).toContain(({ statistics: 'binom', source: 'https://example.org/book', project: 'Fragestellung', code: 'int x = 1;' })[tool])
+    expect(markdown).toContain(
+      { statistics: 'binom', source: 'https://example.org/book', project: 'Fragestellung', code: 'int x = 1;' }[tool],
+    )
     await page.reload()
-    await expect(page.locator('.rendered-note')).toContainText(({ statistics: 'Voraussetzungen', source: 'Testbeleg', project: 'Fragestellung', code: 'int x = 1;' })[tool])
+    await expect(page.locator('.rendered-note')).toContainText(
+      { statistics: 'Voraussetzungen', source: 'Testbeleg', project: 'Fragestellung', code: 'int x = 1;' }[tool],
+    )
   })
 }
 
-test('PDF clip retains the existing draft on upload failure, then inserts a real PNG with a source rectangle', async ({ page }) => {
+test('PDF clip retains the existing draft on upload failure, then inserts a real PNG with a source rectangle', async ({
+  page,
+}) => {
   await page.goto('/material/1')
   await expect(page.locator('[data-reader-page="1"] canvas').first()).toBeVisible()
   await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
   await page.getByRole('tab', { name: 'Mitschrift', exact: true }).click()
   const note = page.getByRole('textbox', { name: 'Notizinhalt', exact: true, includeHidden: true })
-  await note.fill('Meine bestehende Mitschrift.'); await note.blur()
+  await note.fill('Meine bestehende Mitschrift.')
+  await note.blur()
   await page.getByRole('button', { name: 'Bildausschnitt', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'PDF-Ausschnitt übernehmen', exact: true })
   await expect(dialog.getByRole('button', { name: 'In Mitschrift übernehmen', exact: true })).toBeEnabled()
-  for (const [label, value] of [['Links (%)', '10'], ['Oben (%)', '20'], ['Breite (%)', '40'], ['Höhe (%)', '30']]) {
+  for (const [label, value] of [
+    ['Links (%)', '10'],
+    ['Oben (%)', '20'],
+    ['Breite (%)', '40'],
+    ['Höhe (%)', '30'],
+  ]) {
     await dialog.getByRole('spinbutton', { name: label, exact: true }).fill(value)
   }
-  await page.route('**/api/note-assets', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"detail":"offline"}' }), { times: 1 })
+  await page.route(
+    '**/api/note-assets',
+    (route) => route.fulfill({ status: 503, contentType: 'application/json', body: '{"detail":"offline"}' }),
+    { times: 1 },
+  )
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(dialog.getByRole('status')).toBeVisible()
   await expect(note).toHaveValue('Meine bestehende Mitschrift.')
-  const retry = page.waitForResponse(response => response.url().endsWith('/api/note-assets') && response.request().method() === 'POST')
+  const retry = page.waitForResponse(
+    (response) => response.url().endsWith('/api/note-assets') && response.request().method() === 'POST',
+  )
   await page.keyboard.press('ControlOrMeta+Enter')
   const response = await retry
   expect(response.status(), await response.text()).toBe(200)
   await expect(dialog).toHaveCount(0)
   await expect(note).toHaveValue(/Meine bestehende Mitschrift\.[\s\S]*api\/note-assets\/[0-9a-f-]+\.png/)
-  const markdown = await note.inputValue(), image = /\]\((\/api\/note-assets\/[0-9a-f-]+\.png)\)/.exec(markdown)![1]
+  const markdown = await note.inputValue(),
+    image = /\]\((\/api\/note-assets\/[0-9a-f-]+\.png)\)/.exec(markdown)![1]
   const png = await page.request.get(image)
-  expect(png.ok()).toBeTruthy(); expect(png.headers()['content-type']).toContain('image/png')
+  expect(png.ok()).toBeTruthy()
+  expect(png.headers()['content-type']).toContain('image/png')
   expect((await png.body()).subarray(1, 4).toString()).toBe('PNG')
   expect(markdown).toContain('page=1&clip=0.10000,0.20000,0.40000,0.30000')
-  await page.reload(); await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(markdown)
+  await page.reload()
+  await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(markdown)
   const source = /\]\((\/material\/\d+\?page=1&clip=[^)]+)\)/.exec(markdown)![1]
   await page.goto(source)
   const rectangle = page.locator('[data-material-page="1"] .material-mark.pending')
@@ -234,18 +279,23 @@ test('PDF clip retains the existing draft on upload failure, then inserts a real
   await expect(rectangle).toHaveAttribute('style', /width: 40%; height: 30%/)
 })
 
-test('Markdown input slash commands preserve cancellation, replace only the command and restore typing position', async ({ page }) => {
+test('Markdown input slash commands preserve cancellation, replace only the command and restore typing position', async ({
+  page,
+}) => {
   await editor(page)
   await page.getByRole('button', { name: 'Markdown', exact: true }).click()
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
   await body.fill('Anfang\n/hex')
-  await body.press('ControlOrMeta+End'); await body.press('Tab')
+  await body.press('ControlOrMeta+End')
+  await body.press('Tab')
   const dialog = page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
   await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).press('Escape')
   await expect(body).toHaveValue('Anfang\n/hex')
-  await body.press('Tab'); await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).fill('F')
+  await body.press('Tab')
+  await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).fill('F')
   await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(body).toBeFocused(); await page.keyboard.type('Nachher')
+  await expect(body).toBeFocused()
+  await page.keyboard.type('Nachher')
   await expect(body).toHaveValue(/^Anfang\n[\s\S]*15[\s\S]*Nachher$/)
   expect(await body.inputValue()).not.toContain('/hex')
 })
@@ -253,59 +303,80 @@ test('Markdown input slash commands preserve cancellation, replace only the comm
 test('practice answers accept keyboard formulas and keep the submitted math in history', async ({ page }) => {
   const detail = await (await page.request.get('/api/courses/1')).json()
   const resource = detail.resources.find((item: { name: string }) => item.name === '04_Schleifen.pdf')
-  const exercise = { question: 'Schreibe ein Beispiel für einen Bruch.', topic: 'Brüche', difficulty: 'easy', sample_solution: 'Ein Halb.', solution_steps: 'Zähler und Nenner angeben.', source_page: 1 }
-  const created = await page.request.post('/api/ai/exercises/import', { data: {
-    schema_version: 1, generated_by: 'browser-test', generated_at: new Date().toISOString(),
-    source: { resource_id: resource.id, version: detail.versions[resource.id][0].version }, exercises: [exercise],
-  } })
+  const exercise = {
+    question: 'Schreibe ein Beispiel für einen Bruch.',
+    topic: 'Brüche',
+    difficulty: 'easy',
+    sample_solution: 'Ein Halb.',
+    solution_steps: 'Zähler und Nenner angeben.',
+    source_page: 1,
+  }
+  const created = await page.request.post('/api/ai/exercises/import', {
+    data: {
+      schema_version: 1,
+      generated_by: 'browser-test',
+      generated_at: new Date().toISOString(),
+      source: { resource_id: resource.id, version: detail.versions[resource.id][0].version },
+      exercises: [exercise],
+    },
+  })
   expect(created.ok()).toBeTruthy()
   const item = (await created.json())[0]
-  expect((await page.request.put(`/api/ai/exercises/${item.id}`, { data: { ...exercise, status: 'approved' } })).ok()).toBeTruthy()
+  expect(
+    (await page.request.put(`/api/ai/exercises/${item.id}`, { data: { ...exercise, status: 'approved' } })).ok(),
+  ).toBeTruthy()
   await page.goto('/learning')
   const row = page.locator('.data-row').filter({ hasText: exercise.question })
   await row.getByRole('button', { name: 'Aufgabe üben', exact: true }).click()
   const answer = row.getByRole('textbox', { name: 'Deine Antwort', exact: true })
-  await answer.fill('/bruch'); await answer.press('Tab')
+  await answer.fill('/bruch')
+  await answer.press('Tab')
   const dialog = page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
   await expect(dialog.locator('math-field')).toBeFocused()
-  await page.keyboard.type('1'); await page.keyboard.press('Tab'); await page.keyboard.type('2')
+  await page.keyboard.type('1')
+  await page.keyboard.press('Tab')
+  await page.keyboard.type('2')
   await expect(dialog.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(answer).toHaveValue('$\\frac12$'); await expect(answer).toBeFocused()
+  await expect(answer).toHaveValue('$\\frac12$')
+  await expect(answer).toBeFocused()
   await row.getByRole('button', { name: 'Lösung ansehen', exact: true }).click()
   await row.getByRole('button', { name: 'Richtig · speichern', exact: true }).click()
   await expect(page.getByText('Versuch gespeichert.', { exact: true })).toBeVisible()
   const history = await (await page.request.get('/api/learning/practice/history')).json()
-  expect(history.find((attempt: { question: string }) => attempt.question === exercise.question).answer).toBe('$\\frac12$')
+  expect(history.find((attempt: { question: string }) => attempt.question === exercise.question).answer).toBe(
+    '$\\frac12$',
+  )
 })
 
-for (const theme of ['light', 'dark']) for (const width of [1440, 390]) {
-  test(`expanded helpers fit ${theme} ${width}px and retain visible action buttons`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 900 })
-    await page.addInitScript(value => localStorage.setItem('unios-theme', value), theme)
-    await editor(page)
-    const directory = path.resolve('..', 'docs/qa/study-tools-20261007')
-    await mkdir(directory, { recursive: true })
-    await slash(page, 'matrix')
-    let dialog = page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
-    await expect(dialog.locator('math-field')).toBeFocused()
-    await expect(dialog.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeInViewport()
-    await page.screenshot({ path: screenshotPath(path.join(directory, `math-${theme}-${width}.png`)) })
-    expect(await dialog.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
-    await dialog.getByRole('button', { name: 'Abbrechen', exact: true }).click()
-    await slash(page, 'diagramm')
-    dialog = page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
-    await dialog.getByRole('combobox', { name: 'Vorlage', exact: true }).selectOption('probability')
-    await expect(dialog.getByRole('button', { name: 'Einfügen', exact: true })).toBeInViewport()
-    await page.screenshot({ path: screenshotPath(path.join(directory, `diagram-${theme}-${width}.png`)) })
-    expect(await dialog.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-    await dialog.getByRole('button', { name: 'Abbrechen', exact: true }).click()
-    await slash(page, 'kv')
-    dialog = page.getByRole('dialog', { name: 'Wahrheitstabelle', exact: true })
-    await expect(dialog.getByRole('textbox', { name: 'Logischer Ausdruck', exact: true })).toBeFocused()
-    await expect(dialog.getByRole('button', { name: 'Belegung 11 · Wert 1', exact: true })).toBeVisible()
-    await page.screenshot({ path: screenshotPath(path.join(directory, `kv-${theme}-${width}.png`)) })
-    expect(await dialog.evaluate(node => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
-  })
-}
+for (const theme of ['light', 'dark'])
+  for (const width of [1440, 390]) {
+    test(`expanded helpers fit ${theme} ${width}px and retain visible action buttons`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      await page.addInitScript((value) => localStorage.setItem('unios-theme', value), theme)
+      await editor(page)
+      const directory = path.resolve('..', 'docs/qa/study-tools-20261007')
+      await mkdir(directory, { recursive: true })
+      await slash(page, 'matrix')
+      let dialog = page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
+      await expect(dialog.locator('math-field')).toBeFocused()
+      await expect(dialog.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeInViewport()
+      await page.screenshot({ path: screenshotPath(path.join(directory, `math-${theme}-${width}.png`)) })
+      expect(await dialog.evaluate((node) => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
+      await dialog.getByRole('button', { name: 'Abbrechen', exact: true }).click()
+      await slash(page, 'diagramm')
+      dialog = page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
+      await dialog.getByRole('combobox', { name: 'Vorlage', exact: true }).selectOption('probability')
+      await expect(dialog.getByRole('button', { name: 'Einfügen', exact: true })).toBeInViewport()
+      await page.screenshot({ path: screenshotPath(path.join(directory, `diagram-${theme}-${width}.png`)) })
+      expect(await dialog.evaluate((node) => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+      await dialog.getByRole('button', { name: 'Abbrechen', exact: true }).click()
+      await slash(page, 'kv')
+      dialog = page.getByRole('dialog', { name: 'Wahrheitstabelle', exact: true })
+      await expect(dialog.getByRole('textbox', { name: 'Logischer Ausdruck', exact: true })).toBeFocused()
+      await expect(dialog.getByRole('button', { name: 'Belegung 11 · Wert 1', exact: true })).toBeVisible()
+      await page.screenshot({ path: screenshotPath(path.join(directory, `kv-${theme}-${width}.png`)) })
+      expect(await dialog.evaluate((node) => node.scrollWidth - node.clientWidth)).toBeLessThanOrEqual(1)
+    })
+  }

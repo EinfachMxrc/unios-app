@@ -10,10 +10,16 @@ import { languageFor } from './CodeView'
 
 const content = vi.hoisted(() => ({ value: { isPending: false, error: null as unknown, data: '' as unknown } }))
 vi.mock('./useFileContent', () => ({ useFileContent: () => content.value }))
-vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string, values: Record<string, unknown> = {}) =>
-  `${key}${Object.keys(values).length ? JSON.stringify(values) : ''}` }) }))
+vi.mock('@/i18n/useT', () => ({
+  useT: () => ({
+    t: (key: string, values: Record<string, unknown> = {}) =>
+      `${key}${Object.keys(values).length ? JSON.stringify(values) : ''}`,
+  }),
+}))
 
-beforeEach(() => { content.value = { isPending: false, error: null, data: '' } })
+beforeEach(() => {
+  content.value = { isPending: false, error: null, data: '' }
+})
 afterEach(cleanup)
 
 it('shows code with line numbers and its language, and highlights keywords', () => {
@@ -29,13 +35,17 @@ it('shows code with line numbers and its language, and highlights keywords', () 
 it('turns a semicolon CSV into a table with a header row', () => {
   content.value.data = 'Modul;Note\nAnalysis;1,3\n'
   render(<FileViewer versionId={5} kind="table" filename="noten.csv" />)
-  expect(screen.getAllByRole('columnheader').map(cell => cell.textContent)).toEqual(['', 'Modul', 'Note'])
+  expect(screen.getAllByRole('columnheader').map((cell) => cell.textContent)).toEqual(['', 'Modul', 'Note'])
   expect(screen.getByRole('cell', { name: '1,3' })).toBeTruthy()
 })
 
 it('says when a file is too large to show', () => {
   content.value = { isPending: false, error: new ApiError('zu groß', 413), data: undefined }
-  render(<MemoryRouter><FileViewer versionId={6} kind="code" filename="dump.sql" /></MemoryRouter>)
+  render(
+    <MemoryRouter>
+      <FileViewer versionId={6} kind="code" filename="dump.sql" />
+    </MemoryRouter>,
+  )
   expect(screen.getByText('viewerTooLarge')).toBeTruthy()
 })
 

@@ -318,7 +318,7 @@ def build_ai_package(session, settings: Settings, payload: AiPackageRequest) -> 
                      filename=f"ki-{payload.mode}-{scope_id}.zip")
 
 
-def ai_router(settings: Settings, factory, coordinator: HostCoordinator) -> APIRouter:
+def ai_router(settings: Settings, factory, coordinator: HostCoordinator, provider=None) -> APIRouter:
     router = APIRouter(prefix="/api/ai")
 
     @router.get("/access", response_model=AccessView)
@@ -357,6 +357,8 @@ def ai_router(settings: Settings, factory, coordinator: HostCoordinator) -> APIR
 
     @router.get("/adapter/status", response_model=AdapterStatusView)
     def adapter_status():
+        if provider is not None:
+            provider.apply_stored()
         now = datetime.now(UTC)
         with factory() as session:
             used = committed_tokens(session, month_key(now))
@@ -371,6 +373,8 @@ def ai_router(settings: Settings, factory, coordinator: HostCoordinator) -> APIR
     def adapter_propose(payload: AdapterProposeRequest):
         from app.ai.proposals_service import propose
 
+        if provider is not None:
+            provider.apply_stored()
         return propose(factory, settings, payload, coordinator.assert_writer)
 
     @router.get("/package/resources", response_model=list[PackageResource])

@@ -4,7 +4,9 @@ import { expect, test } from './fixtures'
 
 test('strukturierte Suche findet die tatsächliche PDF-Seite', async ({ page }) => {
   await page.goto('/search')
-  await page.getByRole('textbox', { name: 'Suchbegriff' }).fill('Rekursionstiefe course:"Programmieren 1" type:document')
+  await page
+    .getByRole('textbox', { name: 'Suchbegriff' })
+    .fill('Rekursionstiefe course:"Programmieren 1" type:document')
   await page.getByRole('button', { name: 'Suchen', exact: true }).click()
   const result = page.locator('.search-result').filter({ hasText: '04_Schleifen.pdf' })
   await expect(result).toContainText('Seite/Folie 2')
@@ -21,7 +23,9 @@ test('Palette nutzt Registry und Texttasten bleiben im Eingabefeld', async ({ pa
   await expect(dialog.getByRole('heading', { name: 'Objektaktionen' })).toBeVisible()
   await dialog.getByRole('combobox', { name: 'Objekttyp', exact: true }).selectOption('assignment')
   await dialog.getByRole('combobox', { name: 'Objekt wählen', exact: true }).selectOption({ index: 1 })
-  await dialog.getByRole('combobox', { name: 'Objektaktionen', exact: true }).selectOption('assignment.submission_status')
+  await dialog
+    .getByRole('combobox', { name: 'Objektaktionen', exact: true })
+    .selectOption('assignment.submission_status')
   await dialog.getByRole('button', { name: 'Ausführen', exact: true }).click()
   await expect(dialog.getByRole('status')).toContainText('Aktion ausgeführt')
   await page.keyboard.press('Escape')
@@ -32,10 +36,14 @@ test('Palette nutzt Registry und Texttasten bleiben im Eingabefeld', async ({ pa
 
 test('Notiz rückgängig erstellt eine neue Fassung', async ({ page }) => {
   await page.goto('/notes')
-  const created = await page.request.post('/api/notes', { data: { course_id: 1, title: 'Undo-Beispiel', body: 'Erste Fassung' } })
+  const created = await page.request.post('/api/notes', {
+    data: { course_id: 1, title: 'Undo-Beispiel', body: 'Erste Fassung' },
+  })
   expect(created.ok()).toBe(true)
   const note = (await created.json()).note
-  const changed = await page.request.put(`/api/notes/${note.id}`, { data: { expected_revision: 1, title: 'Undo-Beispiel', body: 'Zweite Fassung' } })
+  const changed = await page.request.put(`/api/notes/${note.id}`, {
+    data: { expected_revision: 1, title: 'Undo-Beispiel', body: 'Zweite Fassung' },
+  })
   expect(changed.ok()).toBe(true)
   await page.goto(`/notes?id=${note.id}`)
   await page.getByRole('button', { name: 'Rückgängig', exact: true }).click()

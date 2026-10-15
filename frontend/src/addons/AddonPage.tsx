@@ -49,12 +49,17 @@ function FocusTimer({ duration, breakMinutes }: { duration: number; breakMinutes
   return (
     <div className="addon-timer">
       <p className="addon-widget-kicker">{phase === 'work' ? t('focusTimerLabel') : t('breakLabel')}</p>
-      <strong role="timer" aria-label={t('timerRemainingAria', { minutes: Math.floor(seconds / 60), seconds: seconds % 60 })}>
+      <strong
+        role="timer"
+        aria-label={t('timerRemainingAria', { minutes: Math.floor(seconds / 60), seconds: seconds % 60 })}
+      >
         {String(Math.floor(seconds / 60)).padStart(2, '0')}:{String(seconds % 60).padStart(2, '0')}
       </strong>
       {finished && <p role="status">{t('timeUpMessage')}</p>}
       <div className="addon-timer-actions">
-        <Button onClick={deadline === null ? start : pause}>{deadline === null ? t('startButton') : t('pauseButton')}</Button>
+        <Button onClick={deadline === null ? start : pause}>
+          {deadline === null ? t('startButton') : t('pauseButton')}
+        </Button>
         <Button variant="outline" onClick={reset}>
           {t('resetButton')}
         </Button>
@@ -86,10 +91,19 @@ function AddonContent() {
     const fingerprint = data.fingerprint
     if (!fingerprint) return
     setExecutionFingerprint(fingerprint)
-    setRunning(true); setFailure('')
-    try { const result = await request<{ title: string; body: string }>(`/api/addons/${encodeURIComponent(id ?? '')}/execute`, { method: 'POST', body: JSON.stringify({ fingerprint }) }); setOutput({ ...result, fingerprint }) }
-    catch (cause) { setFailure(extractApiErrorMessage(cause)) }
-    finally { setRunning(false) }
+    setRunning(true)
+    setFailure('')
+    try {
+      const result = await request<{ title: string; body: string }>(
+        `/api/addons/${encodeURIComponent(id ?? '')}/execute`,
+        { method: 'POST', body: JSON.stringify({ fingerprint }) },
+      )
+      setOutput({ ...result, fingerprint })
+    } catch (cause) {
+      setFailure(extractApiErrorMessage(cause))
+    } finally {
+      setRunning(false)
+    }
   }
   return (
     <Shell title={data?.title ?? t('defaultAddonTitle')}>
@@ -102,9 +116,21 @@ function AddonContent() {
         <section className="addon-page-content" key={data.fingerprint}>
           <p className="addon-widget-kicker">{t('widgetKicker')}</p>
           <h2>{data.title}</h2>
-          {data.runtime === 'wasm' && <><p>{t('wasmLimits')}</p><Button disabled={running} onClick={() => void execute()}>{running ? t('running') : t('execute')}</Button></>}
+          {data.runtime === 'wasm' && (
+            <>
+              <p>{t('wasmLimits')}</p>
+              <Button disabled={running} onClick={() => void execute()}>
+                {running ? t('running') : t('execute')}
+              </Button>
+            </>
+          )}
           {failure && executionFingerprint === data.fingerprint && <p role="alert">{failure}</p>}
-          {output && output.fingerprint === data.fingerprint && <section role="status"><h3>{output.title}</h3><p className="whitespace-pre-wrap">{output.body}</p></section>}
+          {output && output.fingerprint === data.fingerprint && (
+            <section role="status">
+              <h3>{output.title}</h3>
+              <p className="whitespace-pre-wrap">{output.body}</p>
+            </section>
+          )}
           {data.body && <p>{data.body}</p>}
           {data.view === 'focus_timer' && (
             <FocusTimer duration={data.duration_minutes ?? 25} breakMinutes={data.break_minutes ?? 5} />

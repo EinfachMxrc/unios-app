@@ -53,10 +53,15 @@ test('approved mailbox is read, deduplicated and never creates a deadline withou
     }),
   )
   await page.addInitScript(() => {
-        const saved = JSON.parse(localStorage.getItem('unios-ui-preferences-v1') || localStorage.getItem('marc-ui-preferences-v1') || '{}')
-        localStorage.setItem('unios-ui-preferences-v1', JSON.stringify({ ...saved, modules: { ...saved.modules, mail: true } }))
-      })
-      await page.goto('/mail')
+    const saved = JSON.parse(
+      localStorage.getItem('unios-ui-preferences-v1') || localStorage.getItem('marc-ui-preferences-v1') || '{}',
+    )
+    localStorage.setItem(
+      'unios-ui-preferences-v1',
+      JSON.stringify({ ...saved, modules: { ...saved.modules, mail: true } }),
+    )
+  })
+  await page.goto('/mail')
   await page.locator('.mail-settings > summary').click()
   await page.getByRole('button', { name: 'Mit Microsoft verbinden', exact: true }).click()
   await expect(page.getByText('TEST-CODE', { exact: true })).toBeVisible()

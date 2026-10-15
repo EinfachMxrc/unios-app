@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
-  tokensReserved: '{{count}} Tokens sind für laufende oder noch ungeklärte Anfragen reserviert. Sie stehen bis zur Klärung nicht erneut zur Verfügung.',
+  tokensReserved:
+    '{{count}} Tokens sind für laufende oder noch ungeklärte Anfragen reserviert. Sie stehen bis zur Klärung nicht erneut zur Verfügung.',
   agentCategories: 'Weitere Quellen für Agenten freigeben',
   agentCategory: {
     notes: 'Eigene Notizen',
@@ -18,9 +19,17 @@ export default {
   agentIndexJobs: 'Indexaufträge verwalten',
 
   adapterPanelTitle: 'KI-Adapter',
-  adapterOffText:
-    'Ausgeschaltet. Optionaler automatischer Anbieter für Karten- und Übungsvorschläge, standardmäßig aus. Einrichtung über eigenen Schlüssel und Monatsbudget in der Konfiguration.',
-  adapterUnconfiguredText: 'Eingeschaltet, aber noch kein eigener Schlüssel eingerichtet. Es wird nichts gesendet.',
+  adapterConnectText:
+    'Füge deinen Anthropic-API-Schlüssel ein. Danach wählst du nur noch das Modell. Der Schlüssel liegt im Schlüsselbund dieses Geräts, zur Prüfung wird nur die Modellliste abgefragt, keine Studieninhalte.',
+  apiKeyLabel: 'API-Schlüssel', // pragma: allowlist secret
+  connectKeyButton: 'Verbinden',
+  connectingKeyButton: 'Prüfe Schlüssel…',
+  modelLabel: 'Modell',
+  chooseModelAria: 'KI-Modell wählen',
+  chooseModelOption: 'Modell wählen',
+  modelHint: 'Die Liste kommt direkt vom Anbieter, das neueste Modell ist vorgewählt. Die Wahl bestimmt die Kosten.',
+  removeKeyButton: 'Schlüssel entfernen',
+  removingKeyButton: 'Entferne…',
   tokensUsedWithBudget: 'Diesen Monat verbraucht: {{used}} Tokens von {{budget}}.',
   tokensUsedNoBudget: 'Diesen Monat verbraucht: {{used}} Tokens (kein Budgetlimit gesetzt).',
   courseLabel: 'Kurs',

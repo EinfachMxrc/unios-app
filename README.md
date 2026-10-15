@@ -74,7 +74,7 @@ Welche Plattformen ein Release enthält, steht in dessen Beschreibung; der Stand
 
 ## Demo ohne Hochschulzugang
 
-Die Demo bringt vier erfundene Kurse, PDFs, Notizen, Aufgaben und 15 Karteikarten mit, einen eigenen Datenordner und keine Verbindung zu deinem Bestand. Du brauchst Python 3.12+, [uv](https://docs.astral.sh/uv/) und Node.js 22+.
+Die Demo bringt vier erfundene Kurse, PDFs, Notizen, Aufgaben und 15 Karteikarten mit, einen eigenen Datenordner und keine Verbindung zu deinem Bestand. Du brauchst Python 3.13+, [uv](https://docs.astral.sh/uv/) und Node.js 22+.
 
 ```sh
 git clone https://github.com/EinfachMxrc/unios-app.git

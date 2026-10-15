@@ -34,7 +34,11 @@ describe('extractPageText', () => {
 })
 
 describe('nextSearchResult', () => {
-  const results = [{ page: 2, count: 1 }, { page: 5, count: 2 }, { page: 9, count: 1 }]
+  const results = [
+    { page: 2, count: 1 },
+    { page: 5, count: 2 },
+    { page: 9, count: 1 },
+  ]
 
   it('returns undefined when there are no results', () => {
     expect(nextSearchResult([], 3, 1)).toBeUndefined()
@@ -58,7 +62,11 @@ describe('nextSearchResult', () => {
 })
 
 describe('searchPosition', () => {
-  const results = [{ page: 2, count: 1 }, { page: 5, count: 3 }, { page: 9, count: 2 }]
+  const results = [
+    { page: 2, count: 1 },
+    { page: 5, count: 3 },
+    { page: 9, count: 2 },
+  ]
   it('names the hit page you are on and the hits on the whole document', () => {
     expect(searchPosition(results, 5)).toEqual({ index: 2, pages: 3, hits: 6 })
   })
@@ -70,10 +78,15 @@ describe('searchPosition', () => {
 
 describe('pageBadges', () => {
   it('counts search hits and placed highlights per page, skipping unplaced ones', () => {
-    const badges = pageBadges([{ page: 2, count: 3 }], [
-      { anchor: { page: 2, status: 'matched' } }, { anchor: { page: 4, status: 'matched' } },
-      { anchor: { page: 4, status: 'matched' } }, { anchor: { page: null, status: 'unmatched' } },
-    ])
+    const badges = pageBadges(
+      [{ page: 2, count: 3 }],
+      [
+        { anchor: { page: 2, status: 'matched' } },
+        { anchor: { page: 4, status: 'matched' } },
+        { anchor: { page: 4, status: 'matched' } },
+        { anchor: { page: null, status: 'unmatched' } },
+      ],
+    )
     expect(badges.get(2)).toEqual({ hits: 3, marks: 1 })
     expect(badges.get(4)).toEqual({ hits: 0, marks: 2 })
     expect(badges.size).toBe(2)

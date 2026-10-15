@@ -9,10 +9,11 @@ const dist = path.resolve(import.meta.dirname, '..', '.tmp', 'workspace-022-pwa'
 export default defineConfig({
   ...full,
   testDir: path.resolve(import.meta.dirname, 'e2e'),
-  webServer: Array.isArray(full.webServer) ? full.webServer.map(server => ({
-    ...server,
-    command: server.command.startsWith('npm run preview')
-      ? `${server.command} --outDir "${dist}"` : server.command,
-    env: { ...server.env, UNIOS_TEST_REACT_DIST: dist },
-  })) : full.webServer,
+  webServer: Array.isArray(full.webServer)
+    ? full.webServer.map((server) => ({
+        ...server,
+        command: server.command.startsWith('npm run preview') ? `${server.command} --outDir "${dist}"` : server.command,
+        env: { ...server.env, UNIOS_TEST_REACT_DIST: dist },
+      }))
+    : full.webServer,
 })

@@ -11,7 +11,8 @@ und [DESKTOP_PACKAGES](DESKTOP_PACKAGES.md).
 
 1. **Qualität:** `pytest`, `ruff check .`, `mypy app tests`, Frontend-Typecheck, Lint,
    Test, Build und die passenden Playwright-Abläufe sind grün.
-2. **Version** in `pyproject.toml` (und den Desktop-Manifesten) erhöhen. Der Tag heißt `vX.Y.Z`.
+2. **Version** in `pyproject.toml` (und den Desktop-Manifesten) erhöhen, ebenso den Standard-Image-Tag in
+   `deploy/server/` (`UNIOS_VERSION`, ein Test prüft die Übereinstimmung). Der Tag heißt `vX.Y.Z`.
 3. **CHANGELOG.md:** den Abschnitt „Unveröffentlicht“ in `X.Y.Z – Titel (Datum)` umbenennen.
 4. **Screenshots** neu aufnehmen und ansehen ([Anleitung](readme/current/SCREENSHOTS.md)).
    README-Bilder müssen zur Version passen.

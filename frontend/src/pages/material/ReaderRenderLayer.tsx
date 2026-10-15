@@ -28,14 +28,17 @@ export function ReaderRenderLayer({
   const completed = useRef(new Set<RenderPart>())
   const [complete, setComplete] = useState(false)
   const failed = useRef(false)
-  const finishPart = useCallback((part: RenderPart) => {
-    if (failed.current) return
-    completed.current.add(part)
-    if (completed.current.size === 3) {
-      setComplete(true)
-      onRendered(renderWidth)
-    }
-  }, [onRendered, renderWidth])
+  const finishPart = useCallback(
+    (part: RenderPart) => {
+      if (failed.current) return
+      completed.current.add(part)
+      if (completed.current.size === 3) {
+        setComplete(true)
+        onRendered(renderWidth)
+      }
+    },
+    [onRendered, renderWidth],
+  )
   const reportFailure = useCallback(() => {
     // A failed part cannot satisfy the shared success barrier. Also ignore
     // late successes from this task after its replacement was discarded.

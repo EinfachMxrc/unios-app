@@ -13,7 +13,9 @@ test('a PDF opens the direct course workspace and Today resumes its page and dra
   await page.goto(`/material/${seed.version_id}?page=12`)
   await expect(page.locator('[data-material-page="12"] canvas')).toBeVisible()
   await page.getByRole('link', { name: 'Arbeitsbereich öffnen', exact: true }).click()
-  await expect(page).toHaveURL(new RegExp(`/learning/focus/course/${seed.course_id}\\?mode=source&version=${seed.version_id}&page=12`))
+  await expect(page).toHaveURL(
+    new RegExp(`/learning/focus/course/${seed.course_id}\\?mode=source&version=${seed.version_id}&page=12`),
+  )
   await expect(page.locator('.focus-exam')).toHaveCount(0)
   const note = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
   await note.fill('Meine direkte Mitschrift ohne Lernplan.')
@@ -33,7 +35,9 @@ test('source and notes adapt to the actual available width with a keyboard divid
   await expect(handle).toBeVisible()
   await handle.focus()
   await handle.press('End')
-  await expect.poll(() => page.locator('.material-reader').evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThanOrEqual(319)
+  await expect
+    .poll(() => page.locator('.material-reader').evaluate((el) => el.getBoundingClientRect().width))
+    .toBeGreaterThanOrEqual(319)
   await handle.dblclick()
   await page.setViewportSize({ width: 960, height: 900 })
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
@@ -47,11 +51,15 @@ test('a new app tab resumes a local draft and source page from device storage', 
   const seed = await response.json()
   await page.goto(`/learning/focus/course/${seed.course_id}?mode=source&version=${seed.version_id}&page=80`)
   await expect(page.locator('[data-material-page="80"] canvas')).toBeInViewport()
-  await page.getByRole('textbox', { name: 'Notizinhalt', exact: true }).fill('Mein lokaler Entwurf bleibt beim Neustart erhalten.')
+  await page
+    .getByRole('textbox', { name: 'Notizinhalt', exact: true })
+    .fill('Mein lokaler Entwurf bleibt beim Neustart erhalten.')
   const next = await context.newPage()
   await next.goto('/')
   await next.getByRole('link', { name: 'Hier weitermachen', exact: true }).click()
-  await expect(next.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue('Mein lokaler Entwurf bleibt beim Neustart erhalten.')
+  await expect(next.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(
+    'Mein lokaler Entwurf bleibt beim Neustart erhalten.',
+  )
   await expect(next.locator('.material-pager')).toContainText('Seite 80 von 120')
   await expect(next.locator('[data-material-page="80"] canvas')).toBeInViewport()
   await next.close()
@@ -60,7 +68,9 @@ test('a new app tab resumes a local draft and source page from device storage', 
 test('a fresh note-first session retains the explicit source page when returning to the PDF', async ({ page }) => {
   const response = await page.request.post('/api/__test__/focus-workspace')
   const seed = await response.json()
-  await page.goto(`/learning/focus/course/${seed.course_id}?mode=notes&version=${seed.version_id}&note=${seed.note_id}&page=80`)
+  await page.goto(
+    `/learning/focus/course/${seed.course_id}?mode=notes&version=${seed.version_id}&note=${seed.note_id}&page=80`,
+  )
   await expect(page.locator('.note-canvas')).toContainText('Meine eigene Begründung.')
   await page.getByRole('button', { name: 'Quelle & Mitschrift', exact: true }).click()
   await expect(page.locator('.material-pager')).toContainText('Seite 80 von 120')

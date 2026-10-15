@@ -150,13 +150,20 @@
   }
 }
 @media (max-width: 520px) {
-  .task-peek { border-radius: 0; }
+  .task-peek {
+    border-radius: 0;
+  }
   .task-peek-content {
     padding: 17px;
   }
 }
 @media (pointer: coarse) {
-  .task-peek header button { width: 44px; height: 44px; }
+  .task-peek header button {
+    width: 44px;
+    height: 44px;
+  }
 }
 html[data-reduce-motion='true'] :is(.task-peek[open], .task-peek.is-closing),
-html[data-reduce-motion='true'] :is(.task-peek[open], .task-peek.is-closing)::backdrop { animation: none; }
+html[data-reduce-motion='true'] :is(.task-peek[open], .task-peek.is-closing)::backdrop {
+  animation: none;
+}

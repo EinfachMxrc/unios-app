@@ -11,60 +11,152 @@ export type View = 'list' | 'table' | 'cards' | 'board' | 'calendar'
 export type Sort = 'date' | 'title' | 'progress'
 export type GroupBy = 'status' | 'course' | 'kind' | 'source'
 export type VisibleField = 'title' | 'course' | 'date' | 'status' | 'source' | 'tags'
-export type AnyGroup = { kind?: Exclude<Kind, 'all'>; course_id?: number; status?: string; source?: string; tag?: string;
-  max_percent?: number; own_group_only?: boolean }
-export type Config = { kind: Kind; view: View; course_id: number | null; days: number | null
-  max_percent: number | null; own_group_only: boolean; include_unmeasured: boolean; sort: Sort;
-  tag: string | null; priority: 'low' | 'medium' | 'high' | null; exam_relevant: boolean | null;
-  difficulty: 'easy' | 'medium' | 'hard' | null; workflow_status: 'open' | 'working' | 'done' | null;
-  group_by: GroupBy; any_groups: AnyGroup[]; visible_fields: VisibleField[];
-  sort_direction: 'auto' | 'asc' | 'desc'; time_filter: 'all' | 'upcoming' | 'overdue';
-  unread_only: boolean; has_questions: boolean; submission_filter: 'all' | 'unsubmitted' }
+export type AnyGroup = {
+  kind?: Exclude<Kind, 'all'>
+  course_id?: number
+  status?: string
+  source?: string
+  tag?: string
+  max_percent?: number
+  own_group_only?: boolean
+}
+export type Config = {
+  kind: Kind
+  view: View
+  course_id: number | null
+  days: number | null
+  max_percent: number | null
+  own_group_only: boolean
+  include_unmeasured: boolean
+  sort: Sort
+  tag: string | null
+  priority: 'low' | 'medium' | 'high' | null
+  exam_relevant: boolean | null
+  difficulty: 'easy' | 'medium' | 'hard' | null
+  workflow_status: 'open' | 'working' | 'done' | null
+  group_by: GroupBy
+  any_groups: AnyGroup[]
+  visible_fields: VisibleField[]
+  sort_direction: 'auto' | 'asc' | 'desc'
+  time_filter: 'all' | 'upcoming' | 'overdue'
+  unread_only: boolean
+  has_questions: boolean
+  submission_filter: 'all' | 'unsubmitted'
+}
 export type Collection = { id: number; name: string; config: Config; revision: number }
-export type Item = { id: string; title: string; subtitle: string; course_name: string | null; url: string
-  date: string | null; score: number | null; status: string; tags: string[];
-  priority: string | null; exam_relevant: boolean | null }
-  & { kind: Exclude<Kind, 'all'>; source: string; course_id: number | null }
+export type Item = {
+  id: string
+  title: string
+  subtitle: string
+  course_name: string | null
+  url: string
+  date: string | null
+  score: number | null
+  status: string
+  tags: string[]
+  priority: string | null
+  exam_relevant: boolean | null
+} & { kind: Exclude<Kind, 'all'>; source: string; course_id: number | null }
 export type Result = { items: Item[]; total: number }
 
-const kindKeys: Record<Kind, Keys<'collections'>> = { all: 'kindAll', topics: 'kindTopics', materials: 'kindMaterials',
-  deadlines: 'kindDeadlines', questions: 'kindQuestions', notes: 'kindNotes', cards: 'kindCards' }
+const kindKeys: Record<Kind, Keys<'collections'>> = {
+  all: 'kindAll',
+  topics: 'kindTopics',
+  materials: 'kindMaterials',
+  deadlines: 'kindDeadlines',
+  questions: 'kindQuestions',
+  notes: 'kindNotes',
+  cards: 'kindCards',
+}
 
 export function kindLabels(t: TypedT<'collections'>): Record<Kind, string> {
-  return { all: t('kindAll'), topics: t('kindTopics'), materials: t('kindMaterials'), deadlines: t('kindDeadlines'),
-    questions: t('kindQuestions'), notes: t('kindNotes'), cards: t('kindCards') }
+  return {
+    all: t('kindAll'),
+    topics: t('kindTopics'),
+    materials: t('kindMaterials'),
+    deadlines: t('kindDeadlines'),
+    questions: t('kindQuestions'),
+    notes: t('kindNotes'),
+    cards: t('kindCards'),
+  }
 }
-export const emptyConfig: Config = { kind: 'topics', view: 'list', course_id: null, days: null, max_percent: 70,
-  own_group_only: false, include_unmeasured: true, sort: 'progress', tag: null, priority: null,
-  exam_relevant: null, difficulty: null, workflow_status: null, group_by: 'status', any_groups: [],
-  visible_fields: ['title', 'course', 'date', 'status'], sort_direction: 'auto', time_filter: 'all',
-  unread_only: false, has_questions: false, submission_filter: 'all' }
+export const emptyConfig: Config = {
+  kind: 'topics',
+  view: 'list',
+  course_id: null,
+  days: null,
+  max_percent: 70,
+  own_group_only: false,
+  include_unmeasured: true,
+  sort: 'progress',
+  tag: null,
+  priority: null,
+  exam_relevant: null,
+  difficulty: null,
+  workflow_status: null,
+  group_by: 'status',
+  any_groups: [],
+  visible_fields: ['title', 'course', 'date', 'status'],
+  sort_direction: 'auto',
+  time_filter: 'all',
+  unread_only: false,
+  has_questions: false,
+  submission_filter: 'all',
+}
 export function presetsFor(t: TypedT<'collections'>): Array<{ name: string; config: Config }> {
   return [
     { name: t('presetExamPrep'), config: emptyConfig },
-    { name: t('presetNewMaterials'), config: { ...emptyConfig, kind: 'materials', days: 14, max_percent: null,
-      sort: 'date' } },
-    { name: t('presetUrgentThisWeek'), config: { ...emptyConfig, kind: 'deadlines', days: 7, max_percent: null,
-      include_unmeasured: false, sort: 'date' } },
-    { name: t('presetOpenQuestions'), config: { ...emptyConfig, kind: 'questions', max_percent: null,
-      include_unmeasured: false, sort: 'date' } },
-    { name: t('presetOverdue'), config: { ...emptyConfig, kind: 'deadlines', max_percent: null,
-      sort: 'date', time_filter: 'overdue' } },
-    { name: t('presetUnsubmitted'), config: { ...emptyConfig, kind: 'deadlines', max_percent: null,
-      sort: 'date', submission_filter: 'unsubmitted' } },
-    { name: t('presetUnread'), config: { ...emptyConfig, kind: 'materials', max_percent: null,
-      sort: 'date', unread_only: true } },
-    { name: t('presetMaterialQuestions'), config: { ...emptyConfig, kind: 'materials', max_percent: null,
-      sort: 'date', has_questions: true } },
-    { name: t('presetExamMaterials'), config: { ...emptyConfig, kind: 'materials', max_percent: null,
-      sort: 'date', exam_relevant: true } },
+    {
+      name: t('presetNewMaterials'),
+      config: { ...emptyConfig, kind: 'materials', days: 14, max_percent: null, sort: 'date' },
+    },
+    {
+      name: t('presetUrgentThisWeek'),
+      config: {
+        ...emptyConfig,
+        kind: 'deadlines',
+        days: 7,
+        max_percent: null,
+        include_unmeasured: false,
+        sort: 'date',
+      },
+    },
+    {
+      name: t('presetOpenQuestions'),
+      config: { ...emptyConfig, kind: 'questions', max_percent: null, include_unmeasured: false, sort: 'date' },
+    },
+    {
+      name: t('presetOverdue'),
+      config: { ...emptyConfig, kind: 'deadlines', max_percent: null, sort: 'date', time_filter: 'overdue' },
+    },
+    {
+      name: t('presetUnsubmitted'),
+      config: { ...emptyConfig, kind: 'deadlines', max_percent: null, sort: 'date', submission_filter: 'unsubmitted' },
+    },
+    {
+      name: t('presetUnread'),
+      config: { ...emptyConfig, kind: 'materials', max_percent: null, sort: 'date', unread_only: true },
+    },
+    {
+      name: t('presetMaterialQuestions'),
+      config: { ...emptyConfig, kind: 'materials', max_percent: null, sort: 'date', has_questions: true },
+    },
+    {
+      name: t('presetExamMaterials'),
+      config: { ...emptyConfig, kind: 'materials', max_percent: null, sort: 'date', exam_relevant: true },
+    },
     { name: t('kindCards'), config: { ...emptyConfig, kind: 'cards', max_percent: null, sort: 'date' } },
   ]
 }
 
 export function previewPath(config: Config) {
-  const params = new URLSearchParams({ kind: config.kind, view: config.view, sort: config.sort,
-    own_group_only: String(config.own_group_only), include_unmeasured: String(config.include_unmeasured) })
+  const params = new URLSearchParams({
+    kind: config.kind,
+    view: config.view,
+    sort: config.sort,
+    own_group_only: String(config.own_group_only),
+    include_unmeasured: String(config.include_unmeasured),
+  })
   if (config.course_id) params.set('course_id', String(config.course_id))
   if (config.days) params.set('days', String(config.days))
   if (config.max_percent !== null) params.set('max_percent', String(config.max_percent))
@@ -85,8 +177,12 @@ export function previewPath(config: Config) {
 }
 
 export function berlinDay(value: string): { year: number; month: number; day: number } {
-  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin', year: 'numeric',
-    month: '2-digit', day: '2-digit' }).formatToParts(new Date(value))
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date(value))
   const part = (type: string) => Number(parts.find((item) => item.type === type)?.value)
   return { year: part('year'), month: part('month') - 1, day: part('day') }
 }

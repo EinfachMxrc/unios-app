@@ -10,20 +10,21 @@ const PRECISION = 10_000
 const round = (value: number) => Math.round(value * PRECISION) / PRECISION
 
 function validRect(rect: number[]): boolean {
-  if (rect.length !== 4 || !rect.every(value => Number.isFinite(value) && value >= 0 && value <= 1.000001)) return false
+  if (rect.length !== 4 || !rect.every((value) => Number.isFinite(value) && value >= 0 && value <= 1.000001))
+    return false
   return rect[2] > rect[0] && rect[3] > rect[1]
 }
 
 /** Writes a passage into a link: "x1,y1,x2,y2;…", four decimals each. */
 export function encodeMark(rects: PassageRects): string | null {
   const kept = rects.filter(validRect).slice(0, MAX_RECTS)
-  return kept.length ? kept.map(rect => rect.map(round).join(',')).join(';') : null
+  return kept.length ? kept.map((rect) => rect.map(round).join(',')).join(';') : null
 }
 
 /** Reads a passage back from a link; anything malformed means "no exact place". */
 export function parseMark(value: string | null): PassageRects | null {
   if (!value || value.length > MAX_RECTS * 32) return null
-  const rects = value.split(';').map(part => part.split(',').map(Number))
+  const rects = value.split(';').map((part) => part.split(',').map(Number))
   return rects.length <= MAX_RECTS && rects.every(validRect) ? rects : null
 }
 
@@ -31,8 +32,8 @@ export function parseMark(value: string | null): PassageRects | null {
 export function pageRects(rects: Iterable<DOMRect>, page: DOMRect): PassageRects {
   const fraction = (value: number) => Math.max(0, Math.min(1, value))
   return Array.from(rects)
-    .filter(rect => rect.width > 1 && rect.height > 1)
-    .map(rect => [
+    .filter((rect) => rect.width > 1 && rect.height > 1)
+    .map((rect) => [
       fraction((rect.left - page.left) / page.width),
       fraction((rect.top - page.top) / page.height),
       fraction((rect.right - page.left) / page.width),

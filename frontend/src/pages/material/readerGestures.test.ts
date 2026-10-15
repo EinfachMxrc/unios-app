@@ -38,7 +38,11 @@ describe('reader wheel geometry', () => {
   it('keeps the same page fraction under the cursor when preceding pages grow', () => {
     const anchor = captureReaderZoomAnchor({ left: 80, top: -300, width: 800, height: 1200 }, { x: 400, y: 300 })!
     expect(anchor).toEqual({ x: 400, y: 300, fractionX: 0.4, fractionY: 0.5 })
-    const scroll = restoreReaderZoomAnchor(anchor, { left: 80, top: 200, width: 1000, height: 1500 }, { left: 50, top: 2000, maxLeft: 600 })
+    const scroll = restoreReaderZoomAnchor(
+      anchor,
+      { left: 80, top: 200, width: 1000, height: 1500 },
+      { left: 50, top: 2000, maxLeft: 600 },
+    )
     expect(scroll).toEqual({ left: 130, top: 2650 })
     expect(200 + anchor.fractionY * 1500 - (scroll.top - 2000)).toBe(300)
   })
@@ -46,17 +50,37 @@ describe('reader wheel geometry', () => {
   it('handles centered pages, gutters and scroll boundaries', () => {
     const anchor = captureReaderZoomAnchor({ left: 300, top: 100, width: 400, height: 600 }, { x: 200, y: 50 })!
     expect(anchor.fractionX).toBe(-0.25)
-    expect(restoreReaderZoomAnchor(anchor, { left: 250, top: 100, width: 600, height: 900 }, { left: 0, top: 0, maxLeft: 50 })).toEqual({ left: 0, top: 0 })
-    expect(restoreReaderZoomAnchor({ x: 0, y: 0, fractionX: 1, fractionY: 0 }, { left: 0, top: 0, width: 800, height: 600 }, { left: 0, top: 0, maxLeft: 250 }).left).toBe(250)
+    expect(
+      restoreReaderZoomAnchor(
+        anchor,
+        { left: 250, top: 100, width: 600, height: 900 },
+        { left: 0, top: 0, maxLeft: 50 },
+      ),
+    ).toEqual({ left: 0, top: 0 })
+    expect(
+      restoreReaderZoomAnchor(
+        { x: 0, y: 0, fractionX: 1, fractionY: 0 },
+        { left: 0, top: 0, width: 800, height: 600 },
+        { left: 0, top: 0, maxLeft: 250 },
+      ).left,
+    ).toBe(250)
     expect(captureReaderZoomAnchor({ left: 0, top: 0, width: 0, height: 600 }, { x: 10, y: 10 })).toBeNull()
     expect(captureReaderZoomAnchor({ left: 0, top: 0, width: 800, height: NaN }, { x: 10, y: 10 })).toBeNull()
   })
 
   it('retains pan fractions while external movement and scroll boundaries take precedence', () => {
     const previous = { requested: { x: 10.4, y: 100.4 }, observed: { x: 10, y: 100 } }
-    expect(accumulateReaderPan(previous, { left: 10, top: 100, maxLeft: 500, maxTop: 2000 }, { x: 0.3, y: 0.3 })).toEqual({ left: 10.700000000000001, top: 100.7 })
-    expect(accumulateReaderPan(previous, { left: 30, top: 300, maxLeft: 500, maxTop: 2000 }, { x: 1, y: 2 })).toEqual({ left: 31, top: 302 })
-    expect(accumulateReaderPan(null, { left: 500, top: 2000, maxLeft: 500, maxTop: 2000 }, { x: 50, y: 100 })).toEqual({ left: 500, top: 2000 })
+    expect(
+      accumulateReaderPan(previous, { left: 10, top: 100, maxLeft: 500, maxTop: 2000 }, { x: 0.3, y: 0.3 }),
+    ).toEqual({ left: 10.700000000000001, top: 100.7 })
+    expect(accumulateReaderPan(previous, { left: 30, top: 300, maxLeft: 500, maxTop: 2000 }, { x: 1, y: 2 })).toEqual({
+      left: 31,
+      top: 302,
+    })
+    expect(accumulateReaderPan(null, { left: 500, top: 2000, maxLeft: 500, maxTop: 2000 }, { x: 50, y: 100 })).toEqual({
+      left: 500,
+      top: 2000,
+    })
   })
 })
 

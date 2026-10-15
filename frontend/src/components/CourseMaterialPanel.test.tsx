@@ -7,18 +7,36 @@ import { CourseMaterialPanel } from './CourseMaterialPanel'
 import type { CourseMaterial } from '@/types'
 
 const mocks = vi.hoisted(() => ({ data: null as CourseMaterial | null, request: vi.fn(), reload: vi.fn() }))
-vi.mock('@/api', () => ({ useApi: () => ({ data: mocks.data, loading: false, error: null, reload: mocks.reload }), request: mocks.request }))
+vi.mock('@/api', () => ({
+  useApi: () => ({ data: mocks.data, loading: false, error: null, reload: mocks.reload }),
+  request: mocks.request,
+}))
 vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string) => key }) }))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
-vi.mock('@/hooks/useApiMutation', () => ({ useApiMutation: (execute: () => Promise<CourseMaterial>, options: { onSuccess: (data: CourseMaterial) => void }) => ({
-  mutate: async () => options.onSuccess(await execute()), pending: false, error: null, reset: vi.fn(),
-}) }))
+vi.mock('@/hooks/useApiMutation', () => ({
+  useApiMutation: (execute: () => Promise<CourseMaterial>, options: { onSuccess: (data: CourseMaterial) => void }) => ({
+    mutate: async () => options.onSuccess(await execute()),
+    pending: false,
+    error: null,
+    reset: vi.fn(),
+  }),
+}))
 beforeEach(() => {
   vi.clearAllMocks()
-  mocks.data = { course_id: 2, scratchpad: 'Gespeicherter Stand', scratchpad_revision: 1, annotations: [], questions: [] }
+  mocks.data = {
+    course_id: 2,
+    scratchpad: 'Gespeicherter Stand',
+    scratchpad_revision: 1,
+    annotations: [],
+    questions: [],
+  }
 })
 afterEach(cleanup)
-const tree = () => <MemoryRouter><CourseMaterialPanel courseId={2} /></MemoryRouter>
+const tree = () => (
+  <MemoryRouter>
+    <CourseMaterialPanel courseId={2} />
+  </MemoryRouter>
+)
 
 it('preserves a dirty draft and its CAS base when an annotation refetch returns a newer scratchpad', () => {
   const view = render(tree())
@@ -39,7 +57,9 @@ it('accepts a clean refetch and saves against exactly that confirmed revision', 
   expect((screen.getByLabelText('scratchpadLabel') as HTMLTextAreaElement).value).toBe('Neu geladen')
   fireEvent.change(screen.getByLabelText('scratchpadLabel'), { target: { value: 'Eigene Ergänzung' } })
   mocks.request.mockResolvedValue({ ...mocks.data, scratchpad: 'Eigene Ergänzung', scratchpad_revision: 4 })
-  await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'saveScratchpadButton' })) })
+  await act(async () => {
+    fireEvent.click(screen.getByRole('button', { name: 'saveScratchpadButton' }))
+  })
   expect(JSON.parse(mocks.request.mock.calls[0][1].body)).toEqual({ expected_revision: 3, body: 'Eigene Ergänzung' })
   view.rerender(tree())
   expect((screen.getByLabelText('scratchpadLabel') as HTMLTextAreaElement).value).toBe('Eigene Ergänzung')

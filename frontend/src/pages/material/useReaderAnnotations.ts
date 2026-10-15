@@ -14,10 +14,14 @@ import { clearSavedBrowserSelection, readReaderSelection } from './readerSelecti
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
 
 function validSelection(value: unknown): value is Selection | null {
-  return value === null || (!!value && typeof value === 'object' &&
-    typeof (value as Selection).quote === 'string' &&
-    Number.isSafeInteger((value as Selection).page) &&
-    Array.isArray((value as Selection).rects))
+  return (
+    value === null ||
+    (!!value &&
+      typeof value === 'object' &&
+      typeof (value as Selection).quote === 'string' &&
+      Number.isSafeInteger((value as Selection).page) &&
+      Array.isArray((value as Selection).rects))
+  )
 }
 
 /**
@@ -26,7 +30,13 @@ function validSelection(value: unknown): value is Selection | null {
  * and re-anchoring marks. A save only clears what is still the same passage,
  * so a newer selection made while it ran survives.
  */
-export function useReaderAnnotations({ versionId, data, reload, canWrite, online }: {
+export function useReaderAnnotations({
+  versionId,
+  data,
+  reload,
+  canWrite,
+  online,
+}: {
   versionId: number
   data: Material | null
   reload: () => void
@@ -35,7 +45,8 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
 }) {
   const { t } = useT('material')
   const [selection, setSelection] = useWorkspaceState<Selection | null>(`pdf:${versionId}:selection`, null, {
-    persist: false, valid: validSelection,
+    persist: false,
+    valid: validSelection,
   })
   const [comment, setComment] = useWorkspaceState(`pdf:${versionId}:comment`, '', { persist: false })
   const [reanchorId, setReanchorId] = useState<string | null>(null)
@@ -44,7 +55,9 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
   const [actionMessage, setActionMessage] = useState('')
   const savingGuard = useRef(false)
   const latest = useRef({ selection, comment })
-  useLayoutEffect(() => { latest.current = { selection, comment } }, [selection, comment])
+  useLayoutEffect(() => {
+    latest.current = { selection, comment }
+  }, [selection, comment])
 
   function captureSelection() {
     const result = readReaderSelection(window.getSelection())
@@ -67,8 +80,14 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
     setActionError('')
     setActionMessage('')
     const entry = {
-      id: randomId(), versionId, kind, quote: captured.quote, page: captured.page,
-      rects: captured.rects, comment: capturedComment, createdAt: new Date().toISOString(),
+      id: randomId(),
+      versionId,
+      kind,
+      quote: captured.quote,
+      page: captured.page,
+      rects: captured.rects,
+      comment: capturedComment,
+      createdAt: new Date().toISOString(),
     }
     try {
       let queued = !canWrite
@@ -87,8 +106,8 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
         reload()
       }
       if (latest.current.selection === captured && latest.current.comment === capturedComment) {
-        setSelection(current => current === captured ? null : current)
-        setComment(current => current === capturedComment ? '' : current)
+        setSelection((current) => (current === captured ? null : current))
+        setComment((current) => (current === capturedComment ? '' : current))
         clearSavedBrowserSelection(captured.quote)
       }
     } catch (cause) {
@@ -123,11 +142,16 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
     try {
       await request(`/api/material/${versionId}/annotations/${item.id}/reanchor`, {
         method: 'POST',
-        body: JSON.stringify({ expected_revision: item.revision, quote: captured.quote, page: captured.page, rects: captured.rects }),
+        body: JSON.stringify({
+          expected_revision: item.revision,
+          quote: captured.quote,
+          page: captured.page,
+          rects: captured.rects,
+        }),
       })
       setReanchorId(null)
       if (latest.current.selection === captured) {
-        setSelection(current => current === captured ? null : current)
+        setSelection((current) => (current === captured ? null : current))
         clearSavedBrowserSelection(captured.quote)
       }
       reload()
@@ -140,8 +164,21 @@ export function useReaderAnnotations({ versionId, data, reload, canWrite, online
   }
 
   return {
-    selection, setSelection, comment, setComment, reanchorId, setReanchorId, saving,
-    actionError, setActionError, actionMessage, setActionMessage,
-    captureSelection, add, update, remove, reassign,
+    selection,
+    setSelection,
+    comment,
+    setComment,
+    reanchorId,
+    setReanchorId,
+    saving,
+    actionError,
+    setActionError,
+    actionMessage,
+    setActionMessage,
+    captureSelection,
+    add,
+    update,
+    remove,
+    reassign,
   }
 }

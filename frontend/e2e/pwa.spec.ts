@@ -42,17 +42,19 @@ test('PDF worker and editor fonts are available offline before either editor was
   await page.evaluate(() => navigator.serviceWorker.ready)
   await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
   const dependencies = await page.evaluate(async () => {
-    const requests = (await Promise.all((await caches.keys()).map(async name =>
-      (await caches.open(name)).keys()))).flat()
-    return requests.map(request => request.url).filter(url =>
-      /(?:pdf\.worker\.min-.+\.mjs|codicon-.+\.ttf|fira-code-latin-400-normal-.+\.woff)$/.test(url))
+    const requests = (
+      await Promise.all((await caches.keys()).map(async (name) => (await caches.open(name)).keys()))
+    ).flat()
+    return requests
+      .map((request) => request.url)
+      .filter((url) => /(?:pdf\.worker\.min-.+\.mjs|codicon-.+\.ttf|fira-code-latin-400-normal-.+\.woff)$/.test(url))
   })
-  expect(dependencies.some(url => /pdf\.worker\.min-.+\.mjs$/.test(url))).toBe(true)
-  expect(dependencies.some(url => /codicon-.+\.ttf$/.test(url))).toBe(true)
-  expect(dependencies.some(url => /fira-code-latin-400-normal-.+\.woff$/.test(url))).toBe(true)
+  expect(dependencies.some((url) => /pdf\.worker\.min-.+\.mjs$/.test(url))).toBe(true)
+  expect(dependencies.some((url) => /codicon-.+\.ttf$/.test(url))).toBe(true)
+  expect(dependencies.some((url) => /fira-code-latin-400-normal-.+\.woff$/.test(url))).toBe(true)
   await context.setOffline(true)
   for (const url of dependencies) {
-    const response = await page.evaluate(async url => {
+    const response = await page.evaluate(async (url) => {
       const response = await fetch(url)
       return { ok: response.ok, size: (await response.arrayBuffer()).byteLength }
     }, url)
@@ -91,7 +93,9 @@ test('the private read cache keeps study pages available offline without saving 
   await expectPersisted(page, 'api:/api/courses/1')
   await page.goto('/deadlines')
   await page.getByRole('button', { name: 'Abgaben', exact: true }).click()
-  await expect(page.getByLabel('Fristen als Tabelle').getByRole('button', { name: 'Schleifen üben', exact: true })).toBeVisible()
+  await expect(
+    page.getByLabel('Fristen als Tabelle').getByRole('button', { name: 'Schleifen üben', exact: true }),
+  ).toBeVisible()
   await expectPersisted(page, 'api:/api/deadlines')
   await page.goto('/search?q=Rekursionstiefe')
   await expect(page.locator('.search-result').first()).toBeVisible()
@@ -171,7 +175,9 @@ test('the private read cache keeps study pages available offline without saving 
   await expect(page.getByText('Keine gespeicherten Treffer')).toBeVisible()
   await page.goto('/deadlines')
   await expect(page.getByRole('button', { name: 'Abgaben', exact: true })).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByLabel('Fristen als Tabelle').getByRole('button', { name: 'Schleifen üben', exact: true })).toBeVisible()
+  await expect(
+    page.getByLabel('Fristen als Tabelle').getByRole('button', { name: 'Schleifen üben', exact: true }),
+  ).toBeVisible()
   await page.goto('/courses')
   await expect(page.getByRole('link', { name: /Programmieren 1/ }).first()).toBeVisible()
   await page.goto('/courses/1')
@@ -189,7 +195,10 @@ test('the private read cache keeps study pages available offline without saving 
       await page.reload()
       await expect(page.getByText(/Offline – Stand: \d{2}\.\d{2}\.\d{4}/)).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-      await page.screenshot({ path: screenshotPath(path.join(screenshots, `offline-heute-${theme}-${width}.png`)), fullPage: true })
+      await page.screenshot({
+        path: screenshotPath(path.join(screenshots, `offline-heute-${theme}-${width}.png`)),
+        fullPage: true,
+      })
     }
   }
 })

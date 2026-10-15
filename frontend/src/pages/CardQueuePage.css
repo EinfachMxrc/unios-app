@@ -1,8 +1,34 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.card-queue-row { display: block; min-width: 0; overflow-wrap: anywhere; }
-.card-queue-row .subtle-link { white-space: normal; }
-.card-queue-row .row-subtitle a { text-decoration: underline; text-underline-offset: .2em; }
-.manual-card-content { display: grid; gap: 14px; margin: 0; color: var(--app-text); }
-.manual-card-content dt { margin-bottom: 4px; font-size: 12px; font-weight: 600; }
-.manual-card-content dd { margin: 0; white-space: pre-wrap; font-size: 15px; line-height: 1.65; }
-.manual-card-content .manual-card-question { font-size: 17px; font-weight: 600; }
+.card-queue-row {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.card-queue-row .subtle-link {
+  white-space: normal;
+}
+.card-queue-row .row-subtitle a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.manual-card-content {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  color: var(--app-text);
+}
+.manual-card-content dt {
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.manual-card-content dd {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.manual-card-content .manual-card-question {
+  font-size: 17px;
+  font-weight: 600;
+}

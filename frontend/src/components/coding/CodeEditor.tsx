@@ -38,16 +38,28 @@ export function CodeEditor({ value, language, filename, label, onChange, onRun, 
     const code = monaco.editor.createModel(value, language)
     model.current = code
     const options = {
-      automaticLayout: true, minimap: { enabled: false }, fontSize: 14, fontFamily: 'Fira Code, monospace',
-      fontLigatures: true, scrollBeyondLastLine: false, tabSize: 4, ariaLabel: label,
-      wordWrap: 'on' as const, padding: { top: 20, bottom: 20 }, fixedOverflowWidgets: true,
+      automaticLayout: true,
+      minimap: { enabled: false },
+      fontSize: 14,
+      fontFamily: 'Fira Code, monospace',
+      fontLigatures: true,
+      scrollBeyondLastLine: false,
+      tabSize: 4,
+      ariaLabel: label,
+      wordWrap: 'on' as const,
+      padding: { top: 20, bottom: 20 },
+      fixedOverflowWidgets: true,
       readOnly,
       editContext: false,
     }
     let old: monaco.editor.ITextModel | null = null
     if (original !== undefined) {
       old = monaco.editor.createModel(original, language)
-      const diff = monaco.editor.createDiffEditor(container.current, { ...options, renderSideBySide: false, originalEditable: false })
+      const diff = monaco.editor.createDiffEditor(container.current, {
+        ...options,
+        renderSideBySide: false,
+        originalEditable: false,
+      })
       diff.setModel({ original: old, modified: code })
       editor.current = diff
     } else {
@@ -56,7 +68,9 @@ export function CodeEditor({ value, language, filename, label, onChange, onRun, 
     const editable = 'getModifiedEditor' in editor.current ? editor.current.getModifiedEditor() : editor.current
     const change = code.onDidChangeContent(() => callbacks.current.onChange(code.getValue()))
     const action = editable.addAction({
-      id: 'unios.run', label, keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+      id: 'unios.run',
+      label,
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
       run: () => callbacks.current.onRun(),
     })
     const theme = () => monaco.editor.setTheme(document.documentElement.classList.contains('dark') ? 'vs-dark' : 'vs')
@@ -81,7 +95,9 @@ export function CodeEditor({ value, language, filename, label, onChange, onRun, 
     if (model.current && model.current.getValue() !== value) model.current.setValue(value)
   }, [value])
 
-  useEffect(() => { editor.current?.updateOptions({ readOnly }) }, [readOnly])
+  useEffect(() => {
+    editor.current?.updateOptions({ readOnly })
+  }, [readOnly])
 
   return <div className="coding-monaco" ref={container} />
 }

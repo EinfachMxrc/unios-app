@@ -14,8 +14,17 @@ import { HostContext } from '@/hooks/host'
 const mocks = vi.hoisted(() => ({
   reads: new Map<string, { data: unknown; error: string | null; loading: boolean }>(),
   fresh: new Map<string, StudyDueResponse>(),
-  useApi: vi.fn(), fetchQuery: vi.fn(), cancelQueries: vi.fn(), request: vi.fn(),
-  online: vi.fn(), verified: vi.fn(), queue: vi.fn(), flush: vi.fn(), pending: vi.fn(), pendingIds: vi.fn(), undo: vi.fn(),
+  useApi: vi.fn(),
+  fetchQuery: vi.fn(),
+  cancelQueries: vi.fn(),
+  request: vi.fn(),
+  online: vi.fn(),
+  verified: vi.fn(),
+  queue: vi.fn(),
+  flush: vi.fn(),
+  pending: vi.fn(),
+  pendingIds: vi.fn(),
+  undo: vi.fn(),
 }))
 
 vi.mock('@/api', () => ({ useApi: mocks.useApi, request: mocks.request, localDate: (value: string) => value }))
@@ -23,12 +32,17 @@ vi.mock('@/offlineCache', () => ({ queryClient: { fetchQuery: mocks.fetchQuery, 
 vi.mock('@/hostAvailability', () => ({ useHostOnline: mocks.online }))
 vi.mock('@/lib/runtimeAccess', () => ({ useRuntimeVerified: mocks.verified }))
 vi.mock('@/lib/motion', () => ({ waitForMotion: async () => undefined }))
-vi.mock('@/studyQueue', () => ({ queueReview: mocks.queue, flushReviews: mocks.flush,
+vi.mock('@/studyQueue', () => ({
+  queueReview: mocks.queue,
+  flushReviews: mocks.flush,
   StudyUndoUnavailableError: class extends Error {},
-  pendingReviewCount: mocks.pending, pendingReviewCardIds: mocks.pendingIds, undoReview: mocks.undo,
-  validPendingReview: (value: unknown) => value === null || typeof value === 'object' }))
+  pendingReviewCount: mocks.pending,
+  pendingReviewCardIds: mocks.pendingIds,
+  undoReview: mocks.undo,
+  validPendingReview: (value: unknown) => value === null || typeof value === 'object',
+}))
 vi.mock('@/i18n/useT', () => {
-  const t = (key: string, options?: Record<string, unknown>) => options ? `${key}:${JSON.stringify(options)}` : key
+  const t = (key: string, options?: Record<string, unknown>) => (options ? `${key}:${JSON.stringify(options)}` : key)
   return { useT: () => ({ t }) }
 })
 
@@ -39,43 +53,65 @@ function setDue(deck: string, due: StudyDueResponse) {
 }
 
 function tree(deck: string, search = '') {
-  return <MemoryRouter initialEntries={[`/study/session/${encodeURIComponent(deck)}${search}`]}>
-    <Link to={`/study/session/${encodeURIComponent('Uni::A')}`}>Switch A</Link>
-    <Link to={`/study/session/${encodeURIComponent('Uni::B')}`}>Switch B</Link>
-    <Routes><Route path="/study/session/:deck" element={<StudySessionPage />} /></Routes>
-  </MemoryRouter>
+  return (
+    <MemoryRouter initialEntries={[`/study/session/${encodeURIComponent(deck)}${search}`]}>
+      <Link to={`/study/session/${encodeURIComponent('Uni::A')}`}>Switch A</Link>
+      <Link to={`/study/session/${encodeURIComponent('Uni::B')}`}>Switch B</Link>
+      <Routes>
+        <Route path="/study/session/:deck" element={<StudySessionPage />} />
+      </Routes>
+    </MemoryRouter>
+  )
 }
 
 function deferred<T>() {
   let resolve!: (value: T) => void
-  const promise = new Promise<T>(accept => { resolve = accept })
+  const promise = new Promise<T>((accept) => {
+    resolve = accept
+  })
   return { promise, resolve }
 }
 
 beforeEach(() => {
   clearWorkspace()
   vi.clearAllMocks()
-  mocks.reads.clear(); mocks.fresh.clear()
+  mocks.reads.clear()
+  mocks.fresh.clear()
   mocks.reads.set('/api/anki/study/status', { data: { mode: 'integrated' }, error: null, loading: false })
-  mocks.useApi.mockImplementation((path: string) => ({ ...(mocks.reads.get(path) ?? { data: null, error: null, loading: true }),
-    updatedAt: Date.parse('2026-10-07T12:00:00Z'), reload: () => undefined }))
+  mocks.useApi.mockImplementation((path: string) => ({
+    ...(mocks.reads.get(path) ?? { data: null, error: null, loading: true }),
+    updatedAt: Date.parse('2026-10-07T12:00:00Z'),
+    reload: () => undefined,
+  }))
   mocks.fetchQuery.mockImplementation(async ({ queryKey }: { queryKey: string[] }) => {
     const due = mocks.fresh.get(queryKey[1])
     if (!due) throw new Error('Synthetic missing scope')
     return due
   })
   mocks.cancelQueries.mockResolvedValue(undefined)
-  mocks.online.mockReturnValue(true); mocks.verified.mockReturnValue(true)
+  mocks.online.mockReturnValue(true)
+  mocks.verified.mockReturnValue(true)
   mocks.queue.mockResolvedValue({ pending: 1, estimate: new Date('2026-10-08T12:00:00Z') })
-  mocks.flush.mockResolvedValue(0); mocks.pending.mockResolvedValue(0); mocks.pendingIds.mockResolvedValue([])
+  mocks.flush.mockResolvedValue(0)
+  mocks.pending.mockResolvedValue(0)
+  mocks.pendingIds.mockResolvedValue([])
   mocks.undo.mockResolvedValue({ pending: 0, card: null })
 })
-afterEach(() => { cleanup(); clearWorkspace() })
+afterEach(() => {
+  cleanup()
+  clearWorkspace()
+})
 
 it('undoes the final rated answer with Z even after the session is complete', async () => {
   const deck = 'Uni::A'
-  const review = { card_id: 1, rating: 3, review_id: 'synthetic-ui-review', offline: true,
-    reviewed_at: '2026-10-09T12:00:00Z', study_deck_id: 42 }
+  const review = {
+    card_id: 1,
+    rating: 3,
+    review_id: 'synthetic-ui-review',
+    offline: true,
+    reviewed_at: '2026-10-09T12:00:00Z',
+    study_deck_id: 42,
+  }
   mocks.queue.mockResolvedValue({ pending: 1, estimate: new Date(), review })
   setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(1, deck)]))
   render(tree(deck))
@@ -107,8 +143,13 @@ it('keeps a known standby session read-only for both clicks and rating shortcuts
 
 it('keeps the current queue and exact undo target when the host rejects undo', async () => {
   const deck = 'Uni::A'
-  const review = { card_id: 1, rating: 3, review_id: 'synthetic-ui-conflict', offline: true,
-    reviewed_at: '2026-10-09T12:00:00Z' }
+  const review = {
+    card_id: 1,
+    rating: 3,
+    review_id: 'synthetic-ui-conflict',
+    offline: true,
+    reviewed_at: '2026-10-09T12:00:00Z',
+  }
   mocks.queue.mockResolvedValue({ pending: 1, estimate: new Date(), review })
   mocks.undo.mockRejectedValue(new Error('Synthetic newer review'))
   setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(1, deck), syntheticStudyCard(2, deck)]))
@@ -126,11 +167,21 @@ it('keeps the current queue and exact undo target when the host rejects undo', a
 
 it('does not undo while Z is typed into an editable field', async () => {
   const deck = 'Uni::A'
-  const review = { card_id: 1, rating: 3, review_id: 'synthetic-ui-input', offline: true,
-    reviewed_at: '2026-10-09T12:00:00Z' }
+  const review = {
+    card_id: 1,
+    rating: 3,
+    review_id: 'synthetic-ui-input',
+    offline: true,
+    reviewed_at: '2026-10-09T12:00:00Z',
+  }
   mocks.queue.mockResolvedValue({ pending: 1, estimate: new Date(), review })
   setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(1, deck)]))
-  const view = render(<><input aria-label="Synthetic typing" />{tree(deck)}</>)
+  const view = render(
+    <>
+      <input aria-label="Synthetic typing" />
+      {tree(deck)}
+    </>,
+  )
   await screen.findByText('Question 1')
   fireEvent.click(screen.getByRole('button', { name: /showAnswer/ }))
   fireEvent.keyDown(window, { key: '3' })
@@ -141,29 +192,63 @@ it('does not undo while Z is typed into an editable field', async () => {
 })
 
 function setFocus(deck: string) {
-  const focus: LearningFocusContext = { kind: 'block', id: 12, label: 'Accepted block', status: 'accepted',
-    course_id: 2, course_name: 'Course B', exam_id: 3, exam_title: 'Exam B', exam_at: null, exam_changed: null,
-    topics: [{ id: 4, name: 'Topic B' }], missing_topic_ids: [], duration_minutes: 35,
-    starts_at: '2026-10-07T12:00:00Z', ends_at: null,
-    card_scope: { mode: 'integrated', decks: [{ deck_id: 42, name: deck }], scope: 'course_related_decks', uncertain: false } }
+  const focus: LearningFocusContext = {
+    kind: 'block',
+    id: 12,
+    label: 'Accepted block',
+    status: 'accepted',
+    course_id: 2,
+    course_name: 'Course B',
+    exam_id: 3,
+    exam_title: 'Exam B',
+    exam_at: null,
+    exam_changed: null,
+    topics: [{ id: 4, name: 'Topic B' }],
+    missing_topic_ids: [],
+    duration_minutes: 35,
+    starts_at: '2026-10-07T12:00:00Z',
+    ends_at: null,
+    card_scope: {
+      mode: 'integrated',
+      decks: [{ deck_id: 42, name: deck }],
+      scope: 'course_related_decks',
+      uncertain: false,
+    },
+  }
   mocks.reads.set('/api/learning/focus/block/12', { data: focus, error: null, loading: false })
   return focus
 }
 
 it('returns to the accepted workspace at the frozen source and preserves the revealed native queue through context refetch', async () => {
   const deck = 'Uni::B'
-  const source = { resource_id: 1, resource_name: 'Synthetic.pdf', course_id: 2, course_name: 'Course B',
-    version_id: 17, version: 1, page: 12, sha256: 'synthetic-hash', quote: 'Original quote',
-    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', annotation_revision: 3, url: '/material/18?page=17' }
+  const source = {
+    resource_id: 1,
+    resource_name: 'Synthetic.pdf',
+    course_id: 2,
+    course_name: 'Course B',
+    version_id: 17,
+    version: 1,
+    page: 12,
+    sha256: 'synthetic-hash',
+    quote: 'Original quote',
+    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+    annotation_revision: 3,
+    url: '/material/18?page=17',
+  }
   setDue(deck, syntheticStudyDue(deck, [{ ...syntheticStudyCard(1, deck), source }]))
   const focus = setFocus(deck)
   const view = render(tree(deck, '?focus=block%3A12'))
   await screen.findByText('Question 1')
   fireEvent.click(screen.getByRole('button', { name: /showAnswer/ }))
-  expect(screen.getByRole('link', { name: /manual.openSource/ }).getAttribute('href'))
-    .toBe('/learning/focus/block/12?mode=source&version=17&page=12')
+  expect(screen.getByRole('link', { name: /manual.openSource/ }).getAttribute('href')).toBe(
+    '/learning/focus/block/12?mode=source&version=17&page=12',
+  )
   expect(screen.getByRole('link', { name: 'allDecksLink' }).getAttribute('href')).toBe('/study?focus=block%3A12')
-  mocks.reads.set('/api/learning/focus/block/12', { data: { ...focus, exam_title: 'Renamed exam' }, error: null, loading: false })
+  mocks.reads.set('/api/learning/focus/block/12', {
+    data: { ...focus, exam_title: 'Renamed exam' },
+    error: null,
+    loading: false,
+  })
   setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(99, deck)]))
   view.rerender(tree(deck, '?focus=block%3A12'))
   expect(screen.getByText('Answer 1')).toBeTruthy()
@@ -182,9 +267,20 @@ it('rejects an unrelated deck before fetching or presenting its native cards', a
 
 it('opens the frozen manual source version/page while preserving the revealed session through refetch', async () => {
   const deck = 'Uni::A'
-  const source = { resource_id: 1, resource_name: 'Synthetic.pdf', course_id: 2, course_name: 'Synthetic Course',
-    version_id: 17, version: 1, page: 12, sha256: 'synthetic-hash', quote: 'Original quote',
-    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', annotation_revision: 3, url: '/material/18?page=17' }
+  const source = {
+    resource_id: 1,
+    resource_name: 'Synthetic.pdf',
+    course_id: 2,
+    course_name: 'Synthetic Course',
+    version_id: 17,
+    version: 1,
+    page: 12,
+    sha256: 'synthetic-hash',
+    quote: 'Original quote',
+    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+    annotation_revision: 3,
+    url: '/material/18?page=17',
+  }
   setDue(deck, syntheticStudyDue(deck, [{ ...syntheticStudyCard(1, deck), source }]))
   const view = render(tree(deck))
   await screen.findByText('Question 1')
@@ -199,12 +295,32 @@ it('opens the frozen manual source version/page while preserving the revealed se
 
 it('replaces the question with the complete native answer without duplicating FrontSide and keeps the source', async () => {
   const deck = 'Uni::A'
-  const source = { resource_id: 1, resource_name: 'Synthetic.pdf', course_id: 2, course_name: 'Synthetic Course',
-    version_id: 17, version: 1, page: 12, sha256: 'synthetic-hash', quote: 'Original quote',
-    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', annotation_revision: 3, url: '/material/18?page=17' }
-  setDue(deck, syntheticStudyDue(deck, [{ ...syntheticStudyCard(1, deck), source,
-    front_html: '<div>Own native question</div>',
-    back_html: '<div>Own native question</div><hr id="answer"><p><strong>Own native answer</strong></p><p>Custom template detail</p>' }]))
+  const source = {
+    resource_id: 1,
+    resource_name: 'Synthetic.pdf',
+    course_id: 2,
+    course_name: 'Synthetic Course',
+    version_id: 17,
+    version: 1,
+    page: 12,
+    sha256: 'synthetic-hash',
+    quote: 'Original quote',
+    annotation_id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+    annotation_revision: 3,
+    url: '/material/18?page=17',
+  }
+  setDue(
+    deck,
+    syntheticStudyDue(deck, [
+      {
+        ...syntheticStudyCard(1, deck),
+        source,
+        front_html: '<div>Own native question</div>',
+        back_html:
+          '<div>Own native question</div><hr id="answer"><p><strong>Own native answer</strong></p><p>Custom template detail</p>',
+      },
+    ]),
+  )
   render(tree(deck))
   await screen.findByText('Own native question')
   expect(screen.queryByText('Own native answer')).toBeNull()
@@ -223,7 +339,9 @@ it('loads the exact parent scope and rates its child card in the returned parent
   render(tree(deck))
   await screen.findByText('Question 7')
   expect(mocks.useApi).toHaveBeenCalledWith(studyDuePath(deck), { enabled: true })
-  expect(mocks.fetchQuery).toHaveBeenCalledWith(expect.objectContaining({ queryKey: ['api', studyDuePath(deck)], staleTime: 0 }))
+  expect(mocks.fetchQuery).toHaveBeenCalledWith(
+    expect.objectContaining({ queryKey: ['api', studyDuePath(deck)], staleTime: 0 }),
+  )
   fireEvent.click(screen.getByRole('button', { name: /showAnswer/ }))
   fireEvent.click(screen.getByRole('button', { name: /ratingGood/ }))
   await screen.findByRole('heading', { name: 'sessionDoneTitle' })
@@ -232,17 +350,27 @@ it('loads the exact parent scope and rates its child card in the returned parent
 
 it('preserves progress, revealed answer and frozen metadata through background refetch', async () => {
   const deck = 'Uni::A'
-  setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(1, deck), { ...syntheticStudyCard(2, deck),
-    back_html: '<div>Question 2</div><hr id="answer"><div>Answer 2</div>' }]))
+  setDue(
+    deck,
+    syntheticStudyDue(deck, [
+      syntheticStudyCard(1, deck),
+      { ...syntheticStudyCard(2, deck), back_html: '<div>Question 2</div><hr id="answer"><div>Answer 2</div>' },
+    ]),
+  )
   const view = render(tree(deck))
   await screen.findByText('Question 1')
   fireEvent.click(screen.getByRole('button', { name: /showAnswer/ }))
   fireEvent.click(screen.getByRole('button', { name: /ratingGood/ }))
   await screen.findByText('Question 2')
   fireEvent.click(screen.getByRole('button', { name: /showAnswer/ }))
-  setDue(deck, syntheticStudyDue(deck, [syntheticStudyCard(99, deck)], {
-    counts: { new: 99, learning: 1, review: 1 }, has_more: true, generated_at: '2026-10-08T12:00:00Z',
-  }))
+  setDue(
+    deck,
+    syntheticStudyDue(deck, [syntheticStudyCard(99, deck)], {
+      counts: { new: 99, learning: 1, review: 1 },
+      has_more: true,
+      generated_at: '2026-10-08T12:00:00Z',
+    }),
+  )
   view.rerender(tree(deck))
   expect(screen.queryByText('Question 99')).toBeNull()
   expect(screen.getByText('Question 2')).toBeTruthy()
@@ -266,7 +394,10 @@ it('keeps deck caches separate and resumes the frozen session after a deck switc
   fireEvent.click(screen.getByRole('link', { name: 'Switch A' }))
   await screen.findByText('Question 2')
   expect(screen.queryByText('Question 1')).toBeNull()
-  expect(mocks.fetchQuery.mock.calls.map(call => call[0].queryKey[1])).toEqual([studyDuePath('Uni::A'), studyDuePath('Uni::B')])
+  expect(mocks.fetchQuery.mock.calls.map((call) => call[0].queryKey[1])).toEqual([
+    studyDuePath('Uni::A'),
+    studyDuePath('Uni::B'),
+  ])
 })
 
 it('uses a fresh online snapshot instead of freezing cards already acknowledged in the old cache', async () => {
@@ -290,7 +421,10 @@ it('waits for durable offline outbox hydration and skips already rated cards on 
   expect(screen.queryByRole('button', { name: /showAnswer|ratingGood/ })).toBeNull()
   fireEvent.keyDown(window, { key: '3' })
   expect(mocks.queue).not.toHaveBeenCalled()
-  await act(async () => { hydration.resolve([1]); await hydration.promise })
+  await act(async () => {
+    hydration.resolve([1])
+    await hydration.promise
+  })
   await screen.findByText('Question 2')
   expect(screen.queryByText('Question 1')).toBeNull()
   expect(screen.getByText('sessionProgressText:{"completed":1,"total":2,"count":2}')).toBeTruthy()
@@ -299,8 +433,11 @@ it('waits for durable offline outbox hydration and skips already rated cards on 
 
 it('explains an uncached offline deck without substituting the global daily window', () => {
   mocks.online.mockReturnValue(false)
-  mocks.reads.set('/api/anki/study/due', { data: syntheticStudyDue('', [syntheticStudyCard(1, 'Uni::A')], { scope: null }),
-    error: null, loading: false })
+  mocks.reads.set('/api/anki/study/due', {
+    data: syntheticStudyDue('', [syntheticStudyCard(1, 'Uni::A')], { scope: null }),
+    error: null,
+    loading: false,
+  })
   render(tree('Uni::B'))
   expect(screen.getByRole('heading', { name: 'offlineDeckMissingTitle' })).toBeTruthy()
   expect(screen.getByRole('link', { name: 'openConnection' }).getAttribute('href')).toBe('/system')
@@ -332,17 +469,18 @@ it('explicitly starts a new bounded session without reusing the completed cached
   expect(mocks.fetchQuery).toHaveBeenCalledTimes(2)
 })
 
-it.each([{ key: 'Enter', code: 'Enter' }, { key: ' ', code: 'Space' }])(
-  'preserves native snapshot-summary keyboard activation for $code', async event => {
-    setDue('Uni::A', syntheticStudyDue('Uni::A'))
-    render(tree('Uni::A'))
-    await screen.findByText('Question 1')
-    const summary = screen.getByText(/sessionSnapshotText/)
-    expect(summary.tagName).toBe('SUMMARY')
-    summary.focus()
-    // jsdom has no native details activation; allow the browser default instead of intercepting it.
-    expect(fireEvent.keyDown(summary, event)).toBe(true)
-    expect(screen.queryByText('Answer 1')).toBeNull()
-    expect(mocks.queue).not.toHaveBeenCalled()
-  },
-)
+it.each([
+  { key: 'Enter', code: 'Enter' },
+  { key: ' ', code: 'Space' },
+])('preserves native snapshot-summary keyboard activation for $code', async (event) => {
+  setDue('Uni::A', syntheticStudyDue('Uni::A'))
+  render(tree('Uni::A'))
+  await screen.findByText('Question 1')
+  const summary = screen.getByText(/sessionSnapshotText/)
+  expect(summary.tagName).toBe('SUMMARY')
+  summary.focus()
+  // jsdom has no native details activation; allow the browser default instead of intercepting it.
+  expect(fireEvent.keyDown(summary, event)).toBe(true)
+  expect(screen.queryByText('Answer 1')).toBeNull()
+  expect(mocks.queue).not.toHaveBeenCalled()
+})

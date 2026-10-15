@@ -5,7 +5,11 @@ import { expect, it } from 'vitest'
 import { FormField } from './FormField'
 import { SearchHighlight } from './SearchHighlight'
 it('associates labels, required state, helpers and inline errors', () => {
-  render(<FormField label="Calendar" hint="Private" error="Invalid URL" required>{control => <input {...control} />}</FormField>)
+  render(
+    <FormField label="Calendar" hint="Private" error="Invalid URL" required>
+      {(control) => <input {...control} />}
+    </FormField>,
+  )
   const input = screen.getByRole('textbox', { name: /Calendar/ })
   expect(input.getAttribute('aria-invalid')).toBe('true')
   expect(input.hasAttribute('required')).toBe(true)

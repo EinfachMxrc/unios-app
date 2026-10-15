@@ -82,9 +82,15 @@ test('Today refreshes Moodle without leaving and offers sign-in on failure', asy
   let calls = 0
   const originalSetup = await (await page.request.get('/api/setup/status')).json()
   const originalSystem = await (await page.request.get('/api/system')).json()
-  await page.route('**/api/sync/status', route => route.fulfill({ json: {
-    running: false, last_run_id: calls, last_status: calls === 0 ? null : calls === 1 ? 'success' : calls === 2 ? 'warning' : 'error',
-  } }))
+  await page.route('**/api/sync/status', (route) =>
+    route.fulfill({
+      json: {
+        running: false,
+        last_run_id: calls,
+        last_status: calls === 0 ? null : calls === 1 ? 'success' : calls === 2 ? 'warning' : 'error',
+      },
+    }),
+  )
   await page.route('**/api/setup/status', async (route) => {
     await route.fulfill({
       json: {
@@ -127,11 +133,16 @@ test('Today refreshes Moodle without leaving and offers sign-in on failure', asy
 })
 
 test('System also distinguishes completed refreshes with warnings from failures', async ({ page }) => {
-  await page.route('**/api/setup/status', route => route.fulfill({ json: { moodle_available: true, portals: [] } }))
+  await page.route('**/api/setup/status', (route) => route.fulfill({ json: { moodle_available: true, portals: [] } }))
   let finished = false
   const originalSystem = await (await page.request.get('/api/system')).json()
-  await page.route('**/api/sync/status', route => route.fulfill({ json: { running: false, last_run_id: 1, last_status: finished ? 'warning' : null } }))
-  await page.route('**/api/sync', (route) => { finished = true; return route.fulfill({ json: { status: 'warning' } }) })
+  await page.route('**/api/sync/status', (route) =>
+    route.fulfill({ json: { running: false, last_run_id: 1, last_status: finished ? 'warning' : null } }),
+  )
+  await page.route('**/api/sync', (route) => {
+    finished = true
+    return route.fulfill({ json: { status: 'warning' } })
+  })
   await page.route('**/api/system', async (route) => {
     await route.fulfill({
       json: {

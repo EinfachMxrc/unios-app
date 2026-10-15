@@ -66,37 +66,49 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
   const [showPast, setShowPast] = useWorkspaceState(compact ? 'today:past' : 'calendar:past', false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [slotChoices, setSlotChoices] = useState<Record<string, boolean>>({})
-  const { data: slots, error: slotsError, reload: reloadSlots } = useApi<Slot[]>('/api/timetable/selection', {
+  const {
+    data: slots,
+    error: slotsError,
+    reload: reloadSlots,
+  } = useApi<Slot[]>('/api/timetable/selection', {
     enabled: !compact && settingsOpen && !!status?.subscribed,
   })
   useEffect(() => {
-    setSlotChoices(previous => {
-      const pending = Object.entries(previous).filter(([id, visible]) =>
-        !slots?.some(slot => slot.id === id && slot.visible === visible))
+    setSlotChoices((previous) => {
+      const pending = Object.entries(previous).filter(
+        ([id, visible]) => !slots?.some((slot) => slot.id === id && slot.visible === visible),
+      )
       return pending.length === Object.keys(previous).length ? previous : Object.fromEntries(pending)
     })
   }, [slots])
   async function selectSlot(slot: Slot, visible: boolean) {
-    setSlotChoices(previous => ({ ...previous, [slot.id]: visible }))
+    setSlotChoices((previous) => ({ ...previous, [slot.id]: visible }))
     setBusy(true)
     setFailure('')
     try {
       await request('/api/timetable/selection', {
-        method: 'PUT', body: JSON.stringify({ slot_id: slot.id, visible }),
+        method: 'PUT',
+        body: JSON.stringify({ slot_id: slot.id, visible }),
       })
       reloadSlots()
       reloadEvents()
       notifySyncCompleted()
     } catch (cause) {
-      setSlotChoices(previous => Object.fromEntries(Object.entries(previous).filter(([id]) => id !== slot.id)))
+      setSlotChoices((previous) => Object.fromEntries(Object.entries(previous).filter(([id]) => id !== slot.id)))
       setFailure(extractApiErrorMessage(cause))
+    } finally {
+      setBusy(false)
     }
-    finally { setBusy(false) }
   }
   async function change(action: 'subscribe' | 'sync' | 'stop') {
     if (action === 'subscribe') {
-      try { const link = new URL(url.trim()); if (link.protocol !== 'https:' || !link.hostname) throw new Error('INVALID_URL') }
-      catch { setUrlError(quality('invalidCalendar')); return }
+      try {
+        const link = new URL(url.trim())
+        if (link.protocol !== 'https:' || !link.hostname) throw new Error('INVALID_URL')
+      } catch {
+        setUrlError(quality('invalidCalendar'))
+        return
+      }
     }
     setUrlError('')
     setBusy(true)
@@ -120,8 +132,8 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
     }
   }
   function calendarChanged(change: CalendarChange, id?: number) {
-    queryClient.setQueryData<Appointment[]>(['api', `/api/timetable/events?day=${queryDay}`], previous => {
-      const rows = (previous ?? []).filter(event => event.id !== (change.event?.id ?? id))
+    queryClient.setQueryData<Appointment[]>(['api', `/api/timetable/events?day=${queryDay}`], (previous) => {
+      const rows = (previous ?? []).filter((event) => event.id !== (change.event?.id ?? id))
       return change.event ? [...rows, change.event] : rows
     })
     reloadEvents()
@@ -130,9 +142,18 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
   if (compact && !status?.subscribed && !events?.length) return null
   const belongs = (event: Appointment) =>
     !compact || campusClock(timetableDate(event.starts_at), 'Europe/Berlin').day === today
-  const hidden = (events ?? []).filter((event) => belongs(event) && campusClock(timetableDate(event.starts_at), 'Europe/Berlin').day === today && timetableState(event, now) === 'past').length
+  const hidden = (events ?? []).filter(
+    (event) =>
+      belongs(event) &&
+      campusClock(timetableDate(event.starts_at), 'Europe/Berlin').day === today &&
+      timetableState(event, now) === 'past',
+  ).length
   const visible = (events ?? []).filter(
-    (event) => belongs(event) && (campusClock(timetableDate(event.starts_at), 'Europe/Berlin').day !== today || (!compact && showPast) || timetableState(event, now) !== 'past'),
+    (event) =>
+      belongs(event) &&
+      (campusClock(timetableDate(event.starts_at), 'Europe/Berlin').day !== today ||
+        (!compact && showPast) ||
+        timetableState(event, now) !== 'past'),
   )
   const groups = new Map<string, Appointment[]>()
   for (const event of visible) {
@@ -140,11 +161,16 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
     groups.set(key, [...(groups.get(key) ?? []), event])
   }
   if (compact && !visible.length && !eventsLoading && !eventsError && !statusError && !status?.last_error) {
-    return <section id="timetable" className="timetable-summary-empty" aria-label={t('timetableTitle')}>
-      <CalendarDays size={19} aria-hidden="true" />
-      <div><h2>{t('timetableTitle')}</h2><p>{t('noRemainingClasses')}</p></div>
-      <Link to="/deadlines#timetable">{t('timetableOpen')}</Link>
-    </section>
+    return (
+      <section id="timetable" className="timetable-summary-empty" aria-label={t('timetableTitle')}>
+        <CalendarDays size={19} aria-hidden="true" />
+        <div>
+          <h2>{t('timetableTitle')}</h2>
+          <p>{t('noRemainingClasses')}</p>
+        </div>
+        <Link to="/deadlines#timetable">{t('timetableOpen')}</Link>
+      </section>
+    )
   }
   const connectionForm = (
     <form
@@ -155,8 +181,21 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
       }}
     >
       <FormField label={t('timetableUrl')} hint={t('timetablePrivate')} error={urlError} required>
-        {control => <input {...control} className="native-input" type="password" autoComplete="off" value={url}
-          onChange={event => { setUrl(event.target.value); setUrlError('') }} maxLength={8000} placeholder="https://…" />}
+        {(control) => (
+          <input
+            {...control}
+            className="native-input"
+            type="password"
+            autoComplete="off"
+            value={url}
+            onChange={(event) => {
+              setUrl(event.target.value)
+              setUrlError('')
+            }}
+            maxLength={8000}
+            placeholder="https://…"
+          />
+        )}
       </FormField>
       <div className="timetable-actions">
         <Button type="submit" disabled={!canWrite || !status?.keyring_available || !url.trim() || busy}>
@@ -190,13 +229,31 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
           ) : undefined
         }
       >
-        {!compact && <TimetableCalendar day={day} today={today} now={now}
-          events={visible} loading={eventsLoading} view={calendarView} onView={setCalendarView} onDay={setDay}
-          onToday={() => { setDay(''); setShowPast(false) }} canWrite={canWrite} onChanged={calendarChanged} />}
+        {!compact && (
+          <TimetableCalendar
+            day={day}
+            today={today}
+            now={now}
+            events={visible}
+            loading={eventsLoading}
+            view={calendarView}
+            onView={setCalendarView}
+            onDay={setDay}
+            onToday={() => {
+              setDay('')
+              setShowPast(false)
+            }}
+            canWrite={canWrite}
+            onChanged={calendarChanged}
+          />
+        )}
         {!compact && status && !status.subscribed && (
           <>
-            <details className="timetable-settings"><summary>{t('calendarAddSubscription')}</summary>
-              <p className="muted-text">{t('timetableIntro')}</p>{connectionForm}</details>
+            <details className="timetable-settings">
+              <summary>{t('calendarAddSubscription')}</summary>
+              <p className="muted-text">{t('timetableIntro')}</p>
+              {connectionForm}
+            </details>
           </>
         )}
         {compact && (status?.subscribed || !!visible.length) && (
@@ -259,28 +316,43 @@ export function TimetablePanel({ compact = false }: { compact?: boolean }) {
               </label>
             )}
             {status?.subscribed && (
-              <details className="timetable-settings" onToggle={event => {
-                if (event.target === event.currentTarget) setSettingsOpen(event.currentTarget.open)
-              }}>
+              <details
+                className="timetable-settings"
+                onToggle={(event) => {
+                  if (event.target === event.currentTarget) setSettingsOpen(event.currentTarget.open)
+                }}
+              >
                 <summary>{t('timetableSettings')}</summary>
-                {status.last_success_at && <p className="row-subtitle">{quality('lastChecked', { date: localDate(status.last_success_at) })}</p>}
-                {!!slots?.length && <div className="timetable-selection">
-                  <h3>{t('timetableSelection')}</h3>
-                  <p className="row-subtitle">{t('timetableSelectionHint')}</p>
-                  {[...new Set(slots.map(slot => slot.title))].map(title => (
-                    <details key={title}>
-                      <summary>{title}</summary>
-                      {slots.filter(slot => slot.title === title).map(slot => (
-                        <label key={slot.id}>
-                          <input type="checkbox" checked={slotChoices[slot.id] ?? slot.visible} disabled={!canWrite || busy}
-                            onChange={event => void selectSlot(slot, event.target.checked)} />
-                          {new Intl.DateTimeFormat(activeIntlLocale(), { weekday: 'long', timeZone: 'UTC' })
-                            .format(new Date(Date.UTC(2024, 0, 1 + slot.weekday)))} · {slot.start_time}
-                        </label>
-                      ))}
-                    </details>
-                  ))}
-                </div>}
+                {status.last_success_at && (
+                  <p className="row-subtitle">{quality('lastChecked', { date: localDate(status.last_success_at) })}</p>
+                )}
+                {!!slots?.length && (
+                  <div className="timetable-selection">
+                    <h3>{t('timetableSelection')}</h3>
+                    <p className="row-subtitle">{t('timetableSelectionHint')}</p>
+                    {[...new Set(slots.map((slot) => slot.title))].map((title) => (
+                      <details key={title}>
+                        <summary>{title}</summary>
+                        {slots
+                          .filter((slot) => slot.title === title)
+                          .map((slot) => (
+                            <label key={slot.id}>
+                              <input
+                                type="checkbox"
+                                checked={slotChoices[slot.id] ?? slot.visible}
+                                disabled={!canWrite || busy}
+                                onChange={(event) => void selectSlot(slot, event.target.checked)}
+                              />
+                              {new Intl.DateTimeFormat(activeIntlLocale(), { weekday: 'long', timeZone: 'UTC' }).format(
+                                new Date(Date.UTC(2024, 0, 1 + slot.weekday)),
+                              )}{' '}
+                              · {slot.start_time}
+                            </label>
+                          ))}
+                      </details>
+                    ))}
+                  </div>
+                )}
                 {slotsError && <Failure message={slotsError} />}
                 {status.session_link && <p className="row-subtitle">{t('timetableSessionNotice')}</p>}
                 <Button

@@ -26,9 +26,8 @@ export function useSidebarState() {
     context: contextCourse,
     id: contextCourse ?? (Number(read('open-course')) || null),
   }))
-  const openCourse = courseExpansion.context === contextCourse
-    ? courseExpansion.id
-    : contextCourse ?? courseExpansion.id
+  const openCourse =
+    courseExpansion.context === contextCourse ? courseExpansion.id : (contextCourse ?? courseExpansion.id)
   function toggleSidebar() {
     setHidden((previous) => {
       write('hidden', previous ? '0' : '1')

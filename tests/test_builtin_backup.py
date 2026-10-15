@@ -131,3 +131,28 @@ def test_backup_api(settings, factory, coordinator, tmp_path):
         assert client.delete("/api/backup/restore").json()["pending_restore"] is None
         assert client.put("/api/backup/settings", headers={"origin": "https://example.invalid"},
                           json={"folder": str(tmp_path / "x")}).status_code == 403
+
+
+def test_the_builtin_anki_collection_is_backed_up_and_restored(settings, factory, coordinator, tmp_path):
+    seed(settings, factory)
+    anki = settings.local_dir / "anki"
+    (anki / "collection.media").mkdir(parents=True)
+    (anki / "collection.media" / "bild.png").write_bytes(b"png")
+    with sqlite3.connect(anki / "collection.anki2") as collection:
+        collection.execute("CREATE TABLE notes (flds TEXT)")
+        collection.execute("INSERT INTO notes VALUES ('Karte vor dem Backup')")
+    configure(settings, tmp_path)
+    name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
+    with sqlite3.connect(anki / "collection.anki2") as collection:
+        collection.execute("UPDATE notes SET flds = 'Später geändert'")
+
+    restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
+    factory.kw["bind"].dispose()
+    result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
+
+    assert result is not None and result["status"] == "success"
+    with sqlite3.connect(anki / "collection.anki2") as collection:
+        assert collection.execute("SELECT flds FROM notes").fetchone() == ("Karte vor dem Backup",)
+    assert (anki / "collection.media" / "bild.png").read_bytes() == b"png"
+    with sqlite3.connect(settings.local_dir / result["previous"] / "anki" / "collection.anki2") as previous:
+        assert previous.execute("SELECT flds FROM notes").fetchone() == ("Später geändert",)

@@ -102,7 +102,8 @@ export default {
   syncSummary: '{{courses}} Kurse · {{resources}} Ressourcen · {{changes}} Änderungen',
   noSyncHistoryTitle: 'Noch kein Sync',
   syncRunUnavailableTitle: 'Dieser Abgleich ist hier nicht verfügbar',
-  syncRunUnavailableText: 'Der verlinkte Lauf ist nicht im zuletzt geladenen Verlauf enthalten. Im Aktivitätsverlauf findest du die gespeicherte Meldung.',
+  syncRunUnavailableText:
+    'Der verlinkte Lauf ist nicht im zuletzt geladenen Verlauf enthalten. Im Aktivitätsverlauf findest du die gespeicherte Meldung.',
   openSyncActivity: 'Abgleiche im Aktivitätsverlauf ansehen',
   noSyncHistoryText: 'Der automatische Abgleich beginnt nach der Einrichtung von Moodle.',
 }

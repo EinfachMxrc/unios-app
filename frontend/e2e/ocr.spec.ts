@@ -9,10 +9,17 @@ test('gescannte PDF-Seiten lassen sich gezielt für die Suche erkennen', async (
   let processed = false
   await page.route(`**/api/ocr/material/${versionId}`, async (route) => {
     if (route.request().method() === 'POST') processed = true
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-      pending_pages: processed ? 0 : 1, recognized_pages: processed ? 1 : 0,
-      empty_pages: 0, available: true, language: 'deu+eng',
-    }) })
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        pending_pages: processed ? 0 : 1,
+        recognized_pages: processed ? 1 : 0,
+        empty_pages: 0,
+        available: true,
+        language: 'deu+eng',
+      }),
+    })
   })
   await page.goto(`/material/${versionId}`)
   await page.getByRole('button', { name: 'Text für Suche erkennen' }).click()

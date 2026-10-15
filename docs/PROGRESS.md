@@ -24,13 +24,28 @@ Stichprobe senkt den wiederholten Setup-Anteil von 0,13 auf 0,01 Sekunden;
 die Verbesserung auf Windows muss der nächste vollständige CI-Lauf bestätigen.
 
 Parallel ist PR #19 mit weiteren Produktänderungen für dieselbe Version
-0.1.28 erschienen. Die Release-Zusammenstellung ist dafür zur Auswahl gestellt.
+0.1.28 erschienen und inzwischen in main übernommen worden. Die Nachlieferung
+ist auf diesen öffentlichen Hauptzweig abgestimmt; dessen bereits laufende
+Release-Prüfung wird durch diese Arbeit nicht abgebrochen.
 Noch kein neuer Installer und kein Release veröffentlicht.
 
 Nachlieferung lokal geprüft: 1.344 Pythonfälle mit acht Plattform-Skips nach
 der Fixture-Änderung (297,03 Sekunden; vorher 416,54 Sekunden), 1.430
 Frontendtests, 52 Browserfälle, Typecheck, Lint, Ruff, mypy, i18n, OpenAPI,
 Build und Bundle-Grenzen bestanden. Keine native Neuinstallation durchgeführt.
+
+## 15.10.2026 – 0.1.28: KI-Schlüssel, Backup mit Anki, Prüfung der Fremdbefunde, Öffentlichkeit
+
+API-Schlüssel einfügen und Modell aus der Anbieterliste wählen (Schlüsselbund, keine
+Modell-IDs mehr). Zwölf Befunde eines externen Code-Reviews gegen den Code geprüft:
+sieben bestätigt und behoben (Budgetsperre nach abgelehnten Anfragen, Anki fehlt im
+Backup, ausgeblendete Slots im KI-Kontext, unlösbare Nullstellen, Prüfungssperre,
+Desktop-Berechtigung, Deploy-Tags), mehrere widerlegt (Papierkorb wird global
+gefiltert, Hinweisstand 4 ist beabsichtigt, SQLite-Downgrade funktioniert). Python 3.13
+vereinheitlicht, Frontend einmal mit Prettier formatiert. Öffentliches Repository
+`unios-app` mit neuer Historie angelegt. Backend 1359 Tests
+(ein umgebungsbedingter Fehlschlag), Frontend 1427 Tests, Playwright KI-Ablauf grün.
+Keine Windows-/macOS-Pakete gebaut; echter Anthropic-Schlüssel nicht geprüft.
 
 ## 15.10.2026 – Öffentlicher Release 0.1.28 in Vorbereitung
 

@@ -16,11 +16,22 @@ export function DocxView({ data, onError }: { data: ArrayBuffer; onError: (reaso
     if (!target) return
     let cancelled = false
     void import('docx-preview')
-      .then(({ renderAsync }) => renderAsync(data, target, undefined, {
-        className: 'docx', inWrapper: true, breakPages: true, ignoreLastRenderedPageBreak: true,
-        renderHeaders: true, renderFooters: true, renderFootnotes: true, useBase64URL: false, experimental: false,
-      }))
-      .catch((cause: unknown) => { if (!cancelled) onError(cause instanceof Error ? cause.message : String(cause)) })
+      .then(({ renderAsync }) =>
+        renderAsync(data, target, undefined, {
+          className: 'docx',
+          inWrapper: true,
+          breakPages: true,
+          ignoreLastRenderedPageBreak: true,
+          renderHeaders: true,
+          renderFooters: true,
+          renderFootnotes: true,
+          useBase64URL: false,
+          experimental: false,
+        }),
+      )
+      .catch((cause: unknown) => {
+        if (!cancelled) onError(cause instanceof Error ? cause.message : String(cause))
+      })
     return () => {
       cancelled = true
       target.replaceChildren()
@@ -38,18 +49,40 @@ export function XlsxView({ data, onError }: { data: ArrayBuffer; onError: (reaso
     let cancelled = false
     void import('@/lib/xlsxSheets')
       .then(({ readWorkbook }) => readWorkbook(data))
-      .then(result => { if (!cancelled) setSheets(result) })
-      .catch((cause: unknown) => { if (!cancelled) onError(cause instanceof Error ? cause.message : String(cause)) })
-    return () => { cancelled = true }
+      .then((result) => {
+        if (!cancelled) setSheets(result)
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) onError(cause instanceof Error ? cause.message : String(cause))
+      })
+    return () => {
+      cancelled = true
+    }
   }, [data, onError])
   if (!sheets) return <p className="muted-text">{t('viewerLoading')}</p>
   const sheet = sheets[Math.min(active, sheets.length - 1)]
-  return <>
-    {sheets.length > 1 && <div className="sheet-tabs" role="tablist" aria-label={t('viewerSheets')}>
-      {sheets.map((item, index) => <button key={item.name} type="button" role="tab" aria-selected={index === active}
-        onClick={() => setActive(index)}>{item.name}</button>)}
-    </div>}
-    {sheet ? <TableView rows={sheet.rows} truncated={sheet.truncated} label={sheet.name} />
-      : <p className="muted-text">{t('viewerEmptySheet')}</p>}
-  </>
+  return (
+    <>
+      {sheets.length > 1 && (
+        <div className="sheet-tabs" role="tablist" aria-label={t('viewerSheets')}>
+          {sheets.map((item, index) => (
+            <button
+              key={item.name}
+              type="button"
+              role="tab"
+              aria-selected={index === active}
+              onClick={() => setActive(index)}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+      )}
+      {sheet ? (
+        <TableView rows={sheet.rows} truncated={sheet.truncated} label={sheet.name} />
+      ) : (
+        <p className="muted-text">{t('viewerEmptySheet')}</p>
+      )}
+    </>
+  )
 }

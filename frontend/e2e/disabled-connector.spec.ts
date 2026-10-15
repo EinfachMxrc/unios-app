@@ -41,5 +41,8 @@ test('disabled Moodle remains readable and cannot start a sync', async ({ page }
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
   const screenshots = path.resolve(import.meta.dirname, '../test-results/screenshots/phase1')
   await mkdir(screenshots, { recursive: true })
-  await page.screenshot({ path: screenshotPath(path.join(screenshots, 'moodle-disabled-dark-390.png')), fullPage: true })
+  await page.screenshot({
+    path: screenshotPath(path.join(screenshots, 'moodle-disabled-dark-390.png')),
+    fullPage: true,
+  })
 })

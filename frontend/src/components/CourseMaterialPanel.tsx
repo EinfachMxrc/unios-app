@@ -15,7 +15,13 @@ import { queryClient } from '@/offlineCache'
 export function CourseMaterialPanel({ courseId }: { courseId: number }) {
   const { t } = useT('material')
   const canWrite = useWritableHost()
-  const { data, error: initialError, refreshError, loading, reload } = useApi<CourseMaterial>(`/api/courses/${courseId}/material`)
+  const {
+    data,
+    error: initialError,
+    refreshError,
+    loading,
+    reload,
+  } = useApi<CourseMaterial>(`/api/courses/${courseId}/material`)
   const error = initialError ?? refreshError
   const [body, setBody] = useState('')
   const [baseline, setBaseline] = useState<{ body: string; revision: number } | null>(null)
@@ -34,7 +40,7 @@ export function CourseMaterialPanel({ courseId }: { courseId: number }) {
     return true
   })
   useEffect(() => {
-    if (!data || dirty || baseline && data.scratchpad_revision < baseline.revision) return
+    if (!data || dirty || (baseline && data.scratchpad_revision < baseline.revision)) return
     setBody(data.scratchpad)
     setBaseline({ body: data.scratchpad, revision: data.scratchpad_revision })
     // A refetch may hydrate a clean editor, never rebase an unsaved draft.
@@ -48,12 +54,14 @@ export function CourseMaterialPanel({ courseId }: { courseId: number }) {
         body: JSON.stringify({ expected_revision: baseline.revision, body }),
       })
     },
-    { onSuccess: saved => {
-      setBody(saved.scratchpad)
-      setBaseline({ body: saved.scratchpad, revision: saved.scratchpad_revision })
-      queryClient.setQueryData(['api', `/api/courses/${courseId}/material`], saved)
-      reload()
-    } },
+    {
+      onSuccess: (saved) => {
+        setBody(saved.scratchpad)
+        setBaseline({ body: saved.scratchpad, revision: saved.scratchpad_revision })
+        queryClient.setQueryData(['api', `/api/courses/${courseId}/material`], saved)
+        reload()
+      },
+    },
   )
   return (
     <Panel title={t('myAnnotationsTitle')}>
@@ -123,11 +131,7 @@ export function CourseMaterialPanel({ courseId }: { courseId: number }) {
               <Empty
                 icon={MessageCircleQuestion}
                 title={data.annotations.length ? t('noMatchingAnnotations') : t('noAnnotationsYet')}
-                text={
-                  data.annotations.length
-                    ? t('chooseOtherFilter')
-                    : t('markImportantSpot')
-                }
+                text={data.annotations.length ? t('chooseOtherFilter') : t('markImportantSpot')}
               />
             )}
             {data.questions.some((item) => !item.resolved) && (
@@ -136,12 +140,23 @@ export function CourseMaterialPanel({ courseId }: { courseId: number }) {
               </a>
             )}
             <div className="course-scratchpad">
-              {changed && <div><p role="status">{task('propertiesChanged')}</p>
-                <Button size="sm" variant="outline" disabled={save.pending} onClick={() => {
-                  setBody(data.scratchpad)
-                  setBaseline({ body: data.scratchpad, revision: data.scratchpad_revision })
-                  save.reset()
-                }}>{task('discardDraftReload')}</Button></div>}
+              {changed && (
+                <div>
+                  <p role="status">{task('propertiesChanged')}</p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={save.pending}
+                    onClick={() => {
+                      setBody(data.scratchpad)
+                      setBaseline({ body: data.scratchpad, revision: data.scratchpad_revision })
+                      save.reset()
+                    }}
+                  >
+                    {task('discardDraftReload')}
+                  </Button>
+                </div>
+              )}
               <label htmlFor="course-scratchpad">{t('scratchpadLabel')}</label>
               <textarea
                 id="course-scratchpad"

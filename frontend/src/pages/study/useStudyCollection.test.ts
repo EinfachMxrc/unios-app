@@ -9,7 +9,9 @@ const api = vi.hoisted(() => ({ request: vi.fn() }))
 vi.mock('@/api', () => api)
 vi.mock('@/studyQueries', () => ({ invalidateStudyReads: vi.fn() }))
 vi.mock('@/i18n/useT', () => ({
-  useT: () => ({ t: (key: string, values?: Record<string, unknown>) => values ? `${key}:${JSON.stringify(values)}` : key }),
+  useT: () => ({
+    t: (key: string, values?: Record<string, unknown>) => (values ? `${key}:${JSON.stringify(values)}` : key),
+  }),
 }))
 
 beforeEach(() => api.request.mockReset())

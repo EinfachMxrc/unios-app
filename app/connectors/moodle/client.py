@@ -459,7 +459,10 @@ class MoodleClient:
             try:
                 with self.client.stream('GET', url, headers={'Accept-Encoding': 'identity'}) as response:
                     if response.status_code in {301, 302, 303, 307, 308}:
-                        url = urljoin(url, response.headers["location"])
+                        location = response.headers.get("location")
+                        if not location:
+                            raise MoodleError("Datei-Weiterleitung ohne Ziel")
+                        url = urljoin(url, location)
                         if not self._same_origin(url):
                             raise MoodleError("Datei-Weiterleitung verlässt die Moodle-Domain")
                         url = self._download_url_with_token(url)

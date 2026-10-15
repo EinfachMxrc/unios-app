@@ -24,7 +24,16 @@ import { usePreferences } from '@/preferences'
 import { RegistryActions } from '@/components/RegistryActions'
 import { selectCommandPaletteHits } from './commandPaletteHits'
 import { useCommandPaletteSearch } from './useCommandPaletteSearch'
-import { EnterHint, HIT_FILTERS, HIT_ICONS, HitFilters, Highlighted, KEYS, PaletteFooter, type HitFilter } from './CommandPaletteParts'
+import {
+  EnterHint,
+  HIT_FILTERS,
+  HIT_ICONS,
+  HitFilters,
+  Highlighted,
+  KEYS,
+  PaletteFooter,
+  type HitFilter,
+} from './CommandPaletteParts'
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
 /**
  * Cmd/Ctrl+K: one field to open any page, find a PDF passage or note, run an
@@ -35,7 +44,7 @@ export function CommandPalette() {
   const host = useContext(HostContext)
   const online = useHostOnline()
   const preferences = usePreferences()
-  const recent = useRecentObjects().filter(item => {
+  const recent = useRecentObjects().filter((item) => {
     const area = areaForPath(item.to.split('?')[0])
     return area && (!area.module || preferences.modules[area.module])
   })
@@ -59,7 +68,10 @@ export function CommandPalette() {
   const [courseFilter, setCourseFilter] = useState('')
   const search = useCommandPaletteSearch(query, preferences.modules.search && open && online)
   const hits = search?.results
-    ? selectCommandPaletteHits(search.results, { kinds: kindFilter ? HIT_FILTERS[kindFilter] : undefined, course: courseFilter || null })
+    ? selectCommandPaletteHits(search.results, {
+        kinds: kindFilter ? HIT_FILTERS[kindFilter] : undefined,
+        course: courseFilter || null,
+      })
     : []
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -100,7 +112,11 @@ export function CommandPalette() {
     return () => controller.abort()
   }, [open])
   const commands: { label: string; to: string; icon?: LucideIcon }[] = [
-    ...sidebarCatalog(preferences, tNav, tShell, tMore).map((item) => ({ label: item.label, to: item.to, icon: item.icon })),
+    ...sidebarCatalog(preferences, tNav, tShell, tMore).map((item) => ({
+      label: item.label,
+      to: item.to,
+      icon: item.icon,
+    })),
     { label: t('newNote'), to: '/notes?new=1' },
     ...(preferences.modules.courses ? [{ label: t('dueCards'), to: '/study' }] : []),
     { label: t('openQuestions'), to: '/collections?preset=questions' },
@@ -165,13 +181,9 @@ export function CommandPalette() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button
-          variant="outline"
-          className="top-search-trigger"
-          title={t('openButtonTitle')}
-        >
-          <SearchIcon size={17} aria-hidden="true" />{' '}<span>{triggerText}</span>{' '}
-          <kbd>{shortcutHint}</kbd>{' '}<span className="sr-only">{t('openButtonLabel')}</span>
+        <Button variant="outline" className="top-search-trigger" title={t('openButtonTitle')}>
+          <SearchIcon size={17} aria-hidden="true" /> <span>{triggerText}</span> <kbd>{shortcutHint}</kbd>{' '}
+          <span className="sr-only">{t('openButtonLabel')}</span>
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -232,7 +244,9 @@ export function CommandPalette() {
               }}
             />
             <Dialog.Close asChild>
-              <button type="button" className="command-close" aria-label={t('closeLabel')}>{KEYS.escape}</button>
+              <button type="button" className="command-close" aria-label={t('closeLabel')}>
+                {KEYS.escape}
+              </button>
             </Dialog.Close>
           </div>
           <div className="command-list" aria-label={t('commandsLabel')}>
@@ -240,7 +254,9 @@ export function CommandPalette() {
               <section aria-label={t('recentObjects')}>
                 <div className="command-recent-heading">
                   <p className="command-section-label">{t('recentObjects')}</p>
-                  <button type="button" className="command-clear" onClick={clearRecentObjects}>{t('clearRecent')}</button>
+                  <button type="button" className="command-clear" onClick={clearRecentObjects}>
+                    {t('clearRecent')}
+                  </button>
                 </div>
                 {recent.slice(0, 6).map((item) => (
                   <button type="button" key={item.to} className="command-item" onClick={() => runCommand(item.to)}>
@@ -255,8 +271,13 @@ export function CommandPalette() {
                 <p className="command-section-label">
                   {t('contentLabel')} {search?.searching ? t('searching') : ''}
                 </p>
-                <HitFilters kind={kindFilter} onKind={setKindFilter} course={courseFilter} onCourse={setCourseFilter}
-                  courses={preferences.modules.courses ? (courses?.courses ?? []).map((item) => item.name) : []} />
+                <HitFilters
+                  kind={kindFilter}
+                  onKind={setKindFilter}
+                  course={courseFilter}
+                  onCourse={setCourseFilter}
+                  courses={preferences.modules.courses ? (courses?.courses ?? []).map((item) => item.name) : []}
+                />
                 {search?.error && (
                   <p role="alert" className="command-empty">
                     {t('searchFailed', { error: search.error })}
@@ -273,10 +294,19 @@ export function CommandPalette() {
                     >
                       <Icon size={16} aria-hidden="true" />
                       <span className="command-label">
-                        <strong><Highlighted text={item.label} query={typed} /></strong>
-                        <small><Highlighted query={typed} text={t(item.detailKey, {
-                          course: item.course ?? t('withoutCourse'), page: item.page, excerpt: item.excerpt,
-                        })} /></small>
+                        <strong>
+                          <Highlighted text={item.label} query={typed} />
+                        </strong>
+                        <small>
+                          <Highlighted
+                            query={typed}
+                            text={t(item.detailKey, {
+                              course: item.course ?? t('withoutCourse'),
+                              page: item.page,
+                              excerpt: item.excerpt,
+                            })}
+                          />
+                        </small>
                       </span>
                     </button>
                   )
@@ -292,7 +322,7 @@ export function CommandPalette() {
             )}
             {visible.length > 0 && <p className="command-section-label">{t('commandsLabel')}</p>}
             {visible.map((item) => {
-              const Icon = item.to === 'sync' ? RefreshCw : item.icon ?? ArrowRight
+              const Icon = item.to === 'sync' ? RefreshCw : (item.icon ?? ArrowRight)
               return (
                 <button
                   type="button"
@@ -301,15 +331,25 @@ export function CommandPalette() {
                   disabled={item.to === 'sync' && !canSync}
                   onClick={() => void runCommand(item.to)}
                 >
-                  <Icon size={16} aria-hidden="true" className={item.to === 'sync' && sync.busy ? 'animate-spin' : ''} />
-                  <span className="command-label"><Highlighted text={item.label} query={typed} /></span>
+                  <Icon
+                    size={16}
+                    aria-hidden="true"
+                    className={item.to === 'sync' && sync.busy ? 'animate-spin' : ''}
+                  />
+                  <span className="command-label">
+                    <Highlighted text={item.label} query={typed} />
+                  </span>
                   {enterTarget === item.to && <EnterHint />}
                 </button>
               )
             })}
             {!visible.length && !hits.length && <p className="command-empty">{t('noMatchingCommand')}</p>}
           </div>
-          {actionsOpen && <div className="command-panel"><RegistryActions /></div>}
+          {actionsOpen && (
+            <div className="command-panel">
+              <RegistryActions />
+            </div>
+          )}
           {backupConfirm && (
             <section className="command-panel">
               <p>{t('backupConfirm')}</p>

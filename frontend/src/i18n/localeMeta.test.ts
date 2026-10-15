@@ -98,7 +98,7 @@ describe('deep-partial fallback chain (integration, throwaway i18next instance)'
     return instance
   }
 
-  it('uses the test-only language\'s own translation when present', async () => {
+  it("uses the test-only language's own translation when present", async () => {
     const registry = buildLocaleRegistry(fixtureMetaModules)
     const instance = await buildDemoInstance(registry)
     expect(instance.t('demo:greeting')).toBe('Zzzhello')

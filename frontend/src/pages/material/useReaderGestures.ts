@@ -223,7 +223,11 @@ export function useReaderGestures({
     function onWheel(event: WheelEvent) {
       if (event.defaultPrevented || !event.cancelable) return
       // Access deltaMode before delta values, since browsers may normalize lazily.
-      const delta = normalizeReaderWheel({ deltaMode: event.deltaMode, deltaX: event.deltaX, deltaY: event.deltaY }, window.innerHeight, lineHeight)
+      const delta = normalizeReaderWheel(
+        { deltaMode: event.deltaMode, deltaX: event.deltaX, deltaY: event.deltaY },
+        window.innerHeight,
+        lineHeight,
+      )
       if (event.ctrlKey) {
         // Without preventDefault the whole webview would zoom instead of the PDF.
         event.preventDefault()
@@ -246,15 +250,25 @@ export function useReaderGestures({
       // Apply both axes once: canceling the horizontal default cancels vertical scrolling too.
       // Trackpad inertia already arrives as wheel deltas; extra smoothing would add latency.
       event.preventDefault()
-      const position = accumulateReaderPan(panPosition, {
-        left: viewport.scrollLeft,
-        top: window.scrollY,
-        maxLeft: viewport.scrollWidth - viewport.clientWidth,
-        maxTop: Math.max(0, (document.scrollingElement ?? document.documentElement).scrollHeight - window.innerHeight),
-      }, delta)
+      const position = accumulateReaderPan(
+        panPosition,
+        {
+          left: viewport.scrollLeft,
+          top: window.scrollY,
+          maxLeft: viewport.scrollWidth - viewport.clientWidth,
+          maxTop: Math.max(
+            0,
+            (document.scrollingElement ?? document.documentElement).scrollHeight - window.innerHeight,
+          ),
+        },
+        delta,
+      )
       viewport.scrollLeft = position.left
       if (delta.y) window.scrollBy({ left: 0, top: position.top - window.scrollY, behavior: 'instant' })
-      panPosition = { requested: { x: position.left, y: position.top }, observed: { x: viewport.scrollLeft, y: window.scrollY } }
+      panPosition = {
+        requested: { x: position.left, y: position.top },
+        observed: { x: viewport.scrollLeft, y: window.scrollY },
+      }
     }
 
     function onGestureStart(event: SafariGestureEvent) {
@@ -272,7 +286,10 @@ export function useReaderGestures({
       event.preventDefault()
       if (typeof event.scale !== 'number' || !Number.isFinite(event.scale) || event.scale <= 0) return
       // Safari's scale is relative to gesturestart; a late start uses the committed width as base.
-      previewZoom((live.current?.baseWidth ?? committedWidth.current) * event.scale, live.current?.point ?? safariPoint!)
+      previewZoom(
+        (live.current?.baseWidth ?? committedWidth.current) * event.scale,
+        live.current?.point ?? safariPoint!,
+      )
     }
 
     function onGestureEnd(event: SafariGestureEvent) {

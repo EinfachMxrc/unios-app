@@ -19,10 +19,16 @@ test('own file is assigned to a course section and becomes searchable', async ({
   await page.getByRole('status').getByRole('link', { name: 'Eigene_Frage.txt' }).click()
   await expect(page.locator('.resource-row').filter({ hasText: 'Eigene_Frage.txt' })).toBeVisible()
 
-  const original = await page.locator('.resource-row').filter({ hasText: 'Eigene_Frage.txt' })
-    .getByRole('link', { name: 'Herunterladen', exact: true }).getAttribute('href')
-  await page.locator('.resource-row').filter({ hasText: 'Eigene_Frage.txt' })
-    .getByRole('link', { name: 'PDF öffnen' }).click()
+  const original = await page
+    .locator('.resource-row')
+    .filter({ hasText: 'Eigene_Frage.txt' })
+    .getByRole('link', { name: 'Herunterladen', exact: true })
+    .getAttribute('href')
+  await page
+    .locator('.resource-row')
+    .filter({ hasText: 'Eigene_Frage.txt' })
+    .getByRole('link', { name: 'PDF öffnen' })
+    .click()
   await expect(page.getByText('Seite 1 von 1')).toBeVisible()
   await expect(page.locator('.react-pdf__Page__textContent')).toContainText('Warum ist eine Testmatrix invertierbar?')
   const download = await page.request.get(original!)

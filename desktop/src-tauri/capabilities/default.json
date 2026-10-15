@@ -19,6 +19,7 @@
     "allow-install-release-update",
     "process:allow-restart",
     "shell:allow-open",
+    "allow-open-external-url",
     "allow-open-moodle-login",
     "allow-open-portal-login",
     "allow-capture-portal-login",

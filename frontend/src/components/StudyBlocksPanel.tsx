@@ -29,7 +29,11 @@ export function StudyBlocksPanel() {
           {decide.error}
         </p>
       )}
-      {loading && !data ? <Loading /> : error ? <Failure message={error} /> : data?.length ? (
+      {loading && !data ? (
+        <Loading />
+      ) : error ? (
+        <Failure message={error} />
+      ) : data?.length ? (
         <div className="row-list">
           {data.map((item) => (
             <div className="data-row study-block-row" key={item.id}>
@@ -38,21 +42,38 @@ export function StudyBlocksPanel() {
                 {t('blocksMeta', { course: item.course_name, exam: item.exam_title, minutes: item.duration_minutes })}
               </span>
               <p className="study-block-time mt-1 text-sm">{localDate(item.starts_at)}</p>
-              {item.exam_material_id && <p className="row-subtitle mt-1">{t('blocksNewToPractice')} <Link
-                to={`/material/${item.exam_material_id}`}>{item.exam_material_name}</Link></p>}
+              {item.exam_material_id && (
+                <p className="row-subtitle mt-1">
+                  {t('blocksNewToPractice')}{' '}
+                  <Link to={`/material/${item.exam_material_id}`}>{item.exam_material_name}</Link>
+                </p>
+              )}
               {item.status === 'proposed' ? (
                 <div className="study-block-actions mt-2 flex flex-wrap gap-2">
-                  <Button size="sm" disabled={!canWrite || decide.pending} onClick={() => decide.mutate({ id: item.id, action: 'accept' })}>
+                  <Button
+                    size="sm"
+                    disabled={!canWrite || decide.pending}
+                    onClick={() => decide.mutate({ id: item.id, action: 'accept' })}
+                  >
                     {t('blocksAccept')}
                   </Button>
-                  <Button size="sm" variant="outline" disabled={!canWrite || decide.pending}
-                    onClick={() => decide.mutate({ id: item.id, action: 'reject' })}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={!canWrite || decide.pending}
+                    onClick={() => decide.mutate({ id: item.id, action: 'reject' })}
+                  >
                     {t('blocksReject')}
                   </Button>
                 </div>
               ) : (
-                <div className="study-block-actions mt-2 flex flex-wrap items-center gap-3"><p className="row-subtitle">{t('blocksAccepted')}</p>
-                  {item.status === 'accepted' && <Button size="sm" asChild><Link to={focusPath({ kind: 'block', id: item.id })}>{t('focusStart')}</Link></Button>}
+                <div className="study-block-actions mt-2 flex flex-wrap items-center gap-3">
+                  <p className="row-subtitle">{t('blocksAccepted')}</p>
+                  {item.status === 'accepted' && (
+                    <Button size="sm" asChild>
+                      <Link to={focusPath({ kind: 'block', id: item.id })}>{t('focusStart')}</Link>
+                    </Button>
+                  )}
                 </div>
               )}
             </div>

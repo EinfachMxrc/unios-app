@@ -44,29 +44,51 @@ export function EntityActions({ resourceId }: { resourceId: number }) {
     }
   }
 
-  return <section aria-label={t('title')} className="my-4">
-    {running && <div role="status" aria-live="polite">
-      <p>{t('progress', { completed: status?.result.completed ?? 0, total: status?.result.total || '…' })}</p>
-      <progress max={status?.result.total || 1} value={status?.result.completed ?? 0} />
-    </div>}
-    {status?.result.state === 'cancelled' && <p role="status">{t('cancelled')}</p>}
-    {status?.result.state === 'completed' && <p role="status">{t('completed')}</p>}
-    {status?.result.state === 'failed' && <Failure message={t('failed')} />}
-    <details>
-      <summary>{t('title')}</summary>
-      <p className="muted-text">{t('description')}</p>
-      {definitions?.filter((action) => action.requires_confirmation && !action.input_schema.required?.length
-        && (running ? action.id === 'resource.cancel_indexing' : action.id === 'resource.reextract'))
-        .map((action) => <Button key={action.id} size="sm" variant="outline" disabled={!writable || busy}
-          onClick={() => setConfirmation(action.id)}>
-          {action.id === 'resource.reextract' ? t('reextract') : t('cancel')}
-        </Button>)}
-      {confirmation && <div role="group" aria-label={t('confirm')}>
-        <p>{t('confirmDescription')}</p>
-        <Button size="sm" disabled={busy} onClick={() => void run(confirmation)}>{t('confirm')}</Button>{' '}
-        <Button size="sm" variant="ghost" disabled={busy} onClick={() => setConfirmation(null)}>{t('back')}</Button>
-      </div>}
-    </details>
-    {error && <Failure message={error} />}
-  </section>
+  return (
+    <section aria-label={t('title')} className="my-4">
+      {running && (
+        <div role="status" aria-live="polite">
+          <p>{t('progress', { completed: status?.result.completed ?? 0, total: status?.result.total || '…' })}</p>
+          <progress max={status?.result.total || 1} value={status?.result.completed ?? 0} />
+        </div>
+      )}
+      {status?.result.state === 'cancelled' && <p role="status">{t('cancelled')}</p>}
+      {status?.result.state === 'completed' && <p role="status">{t('completed')}</p>}
+      {status?.result.state === 'failed' && <Failure message={t('failed')} />}
+      <details>
+        <summary>{t('title')}</summary>
+        <p className="muted-text">{t('description')}</p>
+        {definitions
+          ?.filter(
+            (action) =>
+              action.requires_confirmation &&
+              !action.input_schema.required?.length &&
+              (running ? action.id === 'resource.cancel_indexing' : action.id === 'resource.reextract'),
+          )
+          .map((action) => (
+            <Button
+              key={action.id}
+              size="sm"
+              variant="outline"
+              disabled={!writable || busy}
+              onClick={() => setConfirmation(action.id)}
+            >
+              {action.id === 'resource.reextract' ? t('reextract') : t('cancel')}
+            </Button>
+          ))}
+        {confirmation && (
+          <div role="group" aria-label={t('confirm')}>
+            <p>{t('confirmDescription')}</p>
+            <Button size="sm" disabled={busy} onClick={() => void run(confirmation)}>
+              {t('confirm')}
+            </Button>{' '}
+            <Button size="sm" variant="ghost" disabled={busy} onClick={() => setConfirmation(null)}>
+              {t('back')}
+            </Button>
+          </div>
+        )}
+      </details>
+      {error && <Failure message={error} />}
+    </section>
+  )
 }

@@ -7,5 +7,6 @@ export default {
   failed: 'Die Bewertung konnte nicht zurückgenommen werden. {{reason}}',
   newerReview: 'Es gibt bereits eine neuere Bewertung. Nur die letzte kann zurückgenommen werden.',
   identityMismatch: 'Der Rücknahmebeleg gehört zu einer anderen Bewertung.',
-  unavailable: 'Die Bewertung bleibt gespeichert. Nach einer neueren Änderung oder einem Neustart kann sie nicht mehr zurückgenommen werden.',
+  unavailable:
+    'Die Bewertung bleibt gespeichert. Nach einer neueren Änderung oder einem Neustart kann sie nicht mehr zurückgenommen werden.',
 } as const

@@ -30,28 +30,55 @@ function ExplanationRow({ item, canWrite }: { item: ExplanationItem; canWrite: b
   const { t } = useT('explanations')
   const [answer, setAnswer] = useState(item.answer)
   const decide = useApiMutation(
-    (status: 'approved' | 'rejected') => request(`${path}/${item.id}`, { method: 'PUT', body: JSON.stringify({ status, answer }) }),
+    (status: 'approved' | 'rejected') =>
+      request(`${path}/${item.id}`, { method: 'PUT', body: JSON.stringify({ status, answer }) }),
     { invalidate: [path, '/api/learning/questions'] },
   )
   const editable = item.status === 'proposed' && canWrite && !decide.pending
 
-  return <article className="data-row block">
-    <p className="row-subtitle mb-2">
-      {item.course_id ? <Link to={`/courses/${item.course_id}`}>{item.course_name}</Link> : item.course_name} · {item.resource_name} ·{' '}
-      {item.status === 'proposed' ? t('statusProposed') : item.status === 'approved' ? t('statusApproved') : t('statusRejected')}
-    </p>
-    {item.course_id ? <Link to={`/learning?all=1#question-${item.question_id}`}>{item.question}</Link> : item.question}
-    <label className="mt-3 grid gap-2 text-sm">{t('explanationLabel')}
-      <textarea className="native-select min-h-28 w-full" value={answer}
-        onChange={(event) => setAnswer(event.target.value)} disabled={!editable} />
-    </label>
-    <p className="row-subtitle mt-2">{t('generatedByHint', { generator: item.generated_by })}</p>
-    {decide.error && <p role="alert" className="text-destructive">{decide.error}</p>}
-    {item.status === 'proposed' && <div className="mt-3 flex gap-2">
-      <Button size="sm" disabled={!editable || !answer.trim()} onClick={() => decide.mutate('approved')}>{t('approveButton')}</Button>
-      <Button size="sm" variant="ghost" disabled={!editable} onClick={() => decide.mutate('rejected')}>{t('rejectButton')}</Button>
-    </div>}
-  </article>
+  return (
+    <article className="data-row block">
+      <p className="row-subtitle mb-2">
+        {item.course_id ? <Link to={`/courses/${item.course_id}`}>{item.course_name}</Link> : item.course_name} ·{' '}
+        {item.resource_name} ·{' '}
+        {item.status === 'proposed'
+          ? t('statusProposed')
+          : item.status === 'approved'
+            ? t('statusApproved')
+            : t('statusRejected')}
+      </p>
+      {item.course_id ? (
+        <Link to={`/learning?all=1#question-${item.question_id}`}>{item.question}</Link>
+      ) : (
+        item.question
+      )}
+      <label className="mt-3 grid gap-2 text-sm">
+        {t('explanationLabel')}
+        <textarea
+          className="native-select min-h-28 w-full"
+          value={answer}
+          onChange={(event) => setAnswer(event.target.value)}
+          disabled={!editable}
+        />
+      </label>
+      <p className="row-subtitle mt-2">{t('generatedByHint', { generator: item.generated_by })}</p>
+      {decide.error && (
+        <p role="alert" className="text-destructive">
+          {decide.error}
+        </p>
+      )}
+      {item.status === 'proposed' && (
+        <div className="mt-3 flex gap-2">
+          <Button size="sm" disabled={!editable || !answer.trim()} onClick={() => decide.mutate('approved')}>
+            {t('approveButton')}
+          </Button>
+          <Button size="sm" variant="ghost" disabled={!editable} onClick={() => decide.mutate('rejected')}>
+            {t('rejectButton')}
+          </Button>
+        </div>
+      )}
+    </article>
+  )
 }
 
 export function ExplanationPage() {
@@ -70,7 +97,8 @@ export function ExplanationPage() {
     setFeedback('')
     try {
       const result = await request<{ created: number }>(`${path}/import`, {
-        method: 'POST', body: JSON.stringify(JSON.parse(raw)),
+        method: 'POST',
+        body: JSON.stringify(JSON.parse(raw)),
       })
       setRaw('')
       reload()
@@ -96,10 +124,20 @@ export function ExplanationPage() {
     setBusy(true)
     setFeedback('')
     try {
-      const result = await request<{ explanations: number; cards: number; exercises: number; rejected: number }>('/api/ai/outbox/process', {
-        method: 'POST',
-      })
-      setFeedback(t('outboxSummary', { explanations: result.explanations, cards: result.cards, exercises: result.exercises, rejected: result.rejected }))
+      const result = await request<{ explanations: number; cards: number; exercises: number; rejected: number }>(
+        '/api/ai/outbox/process',
+        {
+          method: 'POST',
+        },
+      )
+      setFeedback(
+        t('outboxSummary', {
+          explanations: result.explanations,
+          cards: result.cards,
+          exercises: result.exercises,
+          rejected: result.rejected,
+        }),
+      )
       reload()
       reloadOutbox()
     } catch (cause) {
@@ -109,31 +147,74 @@ export function ExplanationPage() {
     }
   }
 
-  return <Shell title={t('pageTitle')} eyebrow={t('pageEyebrow')}>
-    <p className="muted-text mb-5">{t('pageIntro')}</p>
-    <Panel title={t('importPanelTitle')} action={<FileJson size={20} />}>
-      <label className="mb-3 grid gap-2 text-sm">{t('chooseJsonFileLabel')}
-        <Input type="file" accept=".json,application/json" disabled={!canWrite || busy}
-          onChange={(event) => void readFile(event.target.files?.[0])} />
-      </label>
-      <label className="grid gap-2 text-sm">{t('pasteJsonLabel')}
-        <textarea className="native-select min-h-28 w-full" value={raw}
-          onChange={(event) => setRaw(event.target.value)} disabled={!canWrite || busy} />
-      </label>
-      <Button className="mt-3" disabled={!canWrite || busy || !raw.trim()}
-        onClick={() => void importAnswers()}>{t('reviewAnswersButton')}</Button>
-      <p className="muted-text mt-3">{t('pendingOutboxText', { count: outbox?.pending ?? 0 })}</p>
-      <Button className="mt-2" variant="outline" disabled={!canWrite || busy || !outbox?.pending}
-        onClick={() => void collectOutbox()}>{t('collectNowButton')}</Button>
-      {feedback && <p className="mt-2 text-sm" role="status">{feedback}</p>}
-    </Panel>
-    <div className="mt-5"><Panel title={t('reviewPanelTitle')}>
-      {loading && !data ? <Loading /> : error ? <Failure message={error} /> : proposed.length ? (
-        <div className="grid gap-4">{proposed.map((item) => <ExplanationRow item={item} key={item.id} canWrite={canWrite} />)}</div>
-      ) : <Empty title={t('emptyTitle')} text={t('emptyText')} />}
-    </Panel></div>
-    {reviewed.length > 0 && <div className="mt-5"><Panel title={t('decidedPanelTitle')}>
-      <div className="grid gap-4">{reviewed.map((item) => <ExplanationRow item={item} key={item.id} canWrite={false} />)}</div>
-    </Panel></div>}
-  </Shell>
+  return (
+    <Shell title={t('pageTitle')} eyebrow={t('pageEyebrow')}>
+      <p className="muted-text mb-5">{t('pageIntro')}</p>
+      <Panel title={t('importPanelTitle')} action={<FileJson size={20} />}>
+        <label className="mb-3 grid gap-2 text-sm">
+          {t('chooseJsonFileLabel')}
+          <Input
+            type="file"
+            accept=".json,application/json"
+            disabled={!canWrite || busy}
+            onChange={(event) => void readFile(event.target.files?.[0])}
+          />
+        </label>
+        <label className="grid gap-2 text-sm">
+          {t('pasteJsonLabel')}
+          <textarea
+            className="native-select min-h-28 w-full"
+            value={raw}
+            onChange={(event) => setRaw(event.target.value)}
+            disabled={!canWrite || busy}
+          />
+        </label>
+        <Button className="mt-3" disabled={!canWrite || busy || !raw.trim()} onClick={() => void importAnswers()}>
+          {t('reviewAnswersButton')}
+        </Button>
+        <p className="muted-text mt-3">{t('pendingOutboxText', { count: outbox?.pending ?? 0 })}</p>
+        <Button
+          className="mt-2"
+          variant="outline"
+          disabled={!canWrite || busy || !outbox?.pending}
+          onClick={() => void collectOutbox()}
+        >
+          {t('collectNowButton')}
+        </Button>
+        {feedback && (
+          <p className="mt-2 text-sm" role="status">
+            {feedback}
+          </p>
+        )}
+      </Panel>
+      <div className="mt-5">
+        <Panel title={t('reviewPanelTitle')}>
+          {loading && !data ? (
+            <Loading />
+          ) : error ? (
+            <Failure message={error} />
+          ) : proposed.length ? (
+            <div className="grid gap-4">
+              {proposed.map((item) => (
+                <ExplanationRow item={item} key={item.id} canWrite={canWrite} />
+              ))}
+            </div>
+          ) : (
+            <Empty title={t('emptyTitle')} text={t('emptyText')} />
+          )}
+        </Panel>
+      </div>
+      {reviewed.length > 0 && (
+        <div className="mt-5">
+          <Panel title={t('decidedPanelTitle')}>
+            <div className="grid gap-4">
+              {reviewed.map((item) => (
+                <ExplanationRow item={item} key={item.id} canWrite={false} />
+              ))}
+            </div>
+          </Panel>
+        </div>
+      )}
+    </Shell>
+  )
 }

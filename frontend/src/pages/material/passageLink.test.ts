@@ -6,9 +6,15 @@ import { encodeMark, findPassage, pageRects, parseMark } from './passageLink'
 
 describe('mark links', () => {
   it('round-trips a passage with four decimals', () => {
-    const mark = encodeMark([[0.123456, 0.2, 0.5, 0.22], [0.1, 0.23, 0.4, 0.25]])
+    const mark = encodeMark([
+      [0.123456, 0.2, 0.5, 0.22],
+      [0.1, 0.23, 0.4, 0.25],
+    ])
     expect(mark).toBe('0.1235,0.2,0.5,0.22;0.1,0.23,0.4,0.25')
-    expect(parseMark(mark)).toEqual([[0.1235, 0.2, 0.5, 0.22], [0.1, 0.23, 0.4, 0.25]])
+    expect(parseMark(mark)).toEqual([
+      [0.1235, 0.2, 0.5, 0.22],
+      [0.1, 0.23, 0.4, 0.25],
+    ])
   })
   it('refuses anything that is not a passage on the page', () => {
     for (const value of [null, '', 'a,b,c,d', '0.1,0.2,0.3', '0.5,0.2,0.4,0.3', '0,0,2,1', '0.1,0.1,0.2,0.2;'])
@@ -19,7 +25,9 @@ describe('mark links', () => {
 
 it('turns client rectangles into page fractions and drops slivers', () => {
   const page = new DOMRect(100, 200, 400, 800)
-  expect(pageRects([new DOMRect(200, 400, 100, 20), new DOMRect(0, 0, 0.5, 20)], page)).toEqual([[0.25, 0.25, 0.5, 0.275]])
+  expect(pageRects([new DOMRect(200, 400, 100, 20), new DOMRect(0, 0, 0.5, 20)], page)).toEqual([
+    [0.25, 0.25, 0.5, 0.275],
+  ])
 })
 
 describe('findPassage', () => {

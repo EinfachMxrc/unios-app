@@ -5,14 +5,22 @@ import { expect, test } from './fixtures'
 test('Erwähnung wird per Klick zu einem versionierten Rückverweis', async ({ page }) => {
   const courses = await (await page.request.get('/api/courses')).json()
   const courseId = courses.courses.find((item: { name: string }) => item.name === 'Programmieren 1').id
-  const target = await page.request.post('/api/notes', { data: {
-    course_id: courseId, title: 'Stapelrekursion', body: 'Basisfall und rekursiver Aufruf.',
-  } })
+  const target = await page.request.post('/api/notes', {
+    data: {
+      course_id: courseId,
+      title: 'Stapelrekursion',
+      body: 'Basisfall und rekursiver Aufruf.',
+    },
+  })
   expect(target.ok()).toBeTruthy()
   const targetId = (await target.json()).note.id
-  const source = await page.request.post('/api/notes', { data: {
-    course_id: courseId, title: 'Vorlesung zur Rekursion', body: 'Heute haben wir Stapelrekursion verwendet.',
-  } })
+  const source = await page.request.post('/api/notes', {
+    data: {
+      course_id: courseId,
+      title: 'Vorlesung zur Rekursion',
+      body: 'Heute haben wir Stapelrekursion verwendet.',
+    },
+  })
   expect(source.ok()).toBeTruthy()
   const sourceId = (await source.json()).note.id
 

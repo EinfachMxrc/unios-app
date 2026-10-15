@@ -4,10 +4,17 @@ import { expect, test } from './fixtures'
 
 test('reviewed container needs install, approval and activation in that order', async ({ page }) => {
   const item = {
-    id: 'sample_university', package: 'unios-connector-sample', package_version: '1.0.0',
-    capabilities: ['courses.read'], domains: ['example.invalid'], secrets: ['demo_token'],
-    runtime: 'container', fingerprint: 'test-fingerprint', installed: false,
-    approved: false, profile_enabled: true,
+    id: 'sample_university',
+    package: 'unios-connector-sample',
+    package_version: '1.0.0',
+    capabilities: ['courses.read'],
+    domains: ['example.invalid'],
+    secrets: ['demo_token'],
+    runtime: 'container',
+    fingerprint: 'test-fingerprint',
+    installed: false,
+    approved: false,
+    profile_enabled: true,
   }
   let enabled = false
   await page.route('**/api/connectors/**', async (route) => {
@@ -15,12 +22,21 @@ test('reviewed container needs install, approval and activation in that order', 
     if (path.endsWith('/install')) item.installed = true
     if (path.endsWith('/approve')) item.approved = true
     if (path.endsWith('/enable')) enabled = route.request().postDataJSON().enabled
-    if (path.endsWith('/revoke')) { item.approved = false; enabled = false }
-    await route.fulfill({ json: path.endsWith('/registry') ? {
-      connectors: [item], profiles: [{ slug: 'generic', name: 'Eigene Hochschule' }],
-      active_profile: 'generic', pending_profile: 'generic',
-      enabled_connectors: enabled ? [item.id] : [],
-    } : { restart_required: path.endsWith('/enable') } })
+    if (path.endsWith('/revoke')) {
+      item.approved = false
+      enabled = false
+    }
+    await route.fulfill({
+      json: path.endsWith('/registry')
+        ? {
+            connectors: [item],
+            profiles: [{ slug: 'generic', name: 'Eigene Hochschule' }],
+            active_profile: 'generic',
+            pending_profile: 'generic',
+            enabled_connectors: enabled ? [item.id] : [],
+          }
+        : { restart_required: path.endsWith('/enable') },
+    })
   })
   await page.goto('/settings')
   await page.getByRole('switch', { name: 'Erweiterte Ansicht' }).click()

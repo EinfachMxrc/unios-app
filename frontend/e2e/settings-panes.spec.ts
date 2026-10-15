@@ -2,7 +2,13 @@
 
 import { expect, test } from './fixtures'
 
-const labels = { general: 'Allgemein', appearance: 'Darstellung', reminders: 'Erinnerungen', data: 'Daten & Sync', feedback: 'Feedback' }
+const labels = {
+  general: 'Allgemein',
+  appearance: 'Darstellung',
+  reminders: 'Erinnerungen',
+  data: 'Daten & Sync',
+  feedback: 'Feedback',
+}
 type Section = keyof typeof labels
 
 for (const width of [1440, 390]) {
@@ -20,7 +26,11 @@ for (const width of [1440, 390]) {
       await expect(active).toHaveAttribute('id', section)
       await expect(active.getByRole('heading', { name: labels[section], exact: true })).toBeVisible()
       if (width === 390) await expect(mobileSection).toHaveValue(section)
-      else await expect(navigation.getByRole('link', { name: labels[section], exact: true })).toHaveAttribute('aria-current', 'page')
+      else
+        await expect(navigation.getByRole('link', { name: labels[section], exact: true })).toHaveAttribute(
+          'aria-current',
+          'page',
+        )
     }
 
     await expect(active).toHaveAttribute('id', 'appearance')
@@ -44,7 +54,9 @@ for (const width of [1440, 390]) {
     await page.getByRole('textbox', { name: 'Deine Beschreibung', exact: true }).fill(message)
     await select('data')
     await page.locator('#data details > summary').click()
-    const exportPanel = page.locator('#data .glass-card').filter({ has: page.getByRole('heading', { name: 'Daten exportieren', exact: true }) })
+    const exportPanel = page
+      .locator('#data .glass-card')
+      .filter({ has: page.getByRole('heading', { name: 'Daten exportieren', exact: true }) })
     await exportPanel.getByRole('checkbox').check()
     // Inactive sections remain mounted, while their controls leave the visible
     // interaction path. No hidden input is used to bypass the selected section.

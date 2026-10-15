@@ -36,7 +36,7 @@ export function freezeStudySession(deck: string, due: StudyDueResponse): StudySe
     deck,
     scope: due.scope && { ...due.scope },
     counts: { ...due.counts },
-    cards: due.cards.map(card => ({ ...card, fsrs: { ...card.fsrs }, tags: [...card.tags] })),
+    cards: due.cards.map((card) => ({ ...card, fsrs: { ...card.fsrs }, tags: [...card.tags] })),
   }
 }
 
@@ -44,12 +44,29 @@ export function validStudySession(value: unknown): value is StudySessionSnapshot
   if (value === null) return true
   if (!value || typeof value !== 'object') return false
   const session = value as Partial<StudySessionSnapshot>
-  return typeof session.deck === 'string' && typeof session.generated_at === 'string' &&
-    typeof session.has_more === 'boolean' && !!session.counts &&
-    [session.counts.new, session.counts.learning, session.counts.review].every(count => Number.isSafeInteger(count) && count >= 0) &&
-    (session.deck === '' ? session.scope === null : !!session.scope &&
-      Number.isSafeInteger(session.scope.deck_id) && session.scope.deck_id > 0 &&
-      session.scope.deck_name === session.deck && session.scope.includes_subdecks === true) &&
-    Array.isArray(session.cards) && session.cards.every(card => Number.isSafeInteger(card.id) && card.id > 0 &&
-      typeof card.front_html === 'string' && typeof card.back_html === 'string' && typeof card.deck === 'string')
+  return (
+    typeof session.deck === 'string' &&
+    typeof session.generated_at === 'string' &&
+    typeof session.has_more === 'boolean' &&
+    !!session.counts &&
+    [session.counts.new, session.counts.learning, session.counts.review].every(
+      (count) => Number.isSafeInteger(count) && count >= 0,
+    ) &&
+    (session.deck === ''
+      ? session.scope === null
+      : !!session.scope &&
+        Number.isSafeInteger(session.scope.deck_id) &&
+        session.scope.deck_id > 0 &&
+        session.scope.deck_name === session.deck &&
+        session.scope.includes_subdecks === true) &&
+    Array.isArray(session.cards) &&
+    session.cards.every(
+      (card) =>
+        Number.isSafeInteger(card.id) &&
+        card.id > 0 &&
+        typeof card.front_html === 'string' &&
+        typeof card.back_html === 'string' &&
+        typeof card.deck === 'string',
+    )
+  )
 }

@@ -64,11 +64,17 @@ export function ReaderPage({
       data-reader-page={number}
       style={{ width, height: width * ratio }}
     >
-      {citationCount > 0 && onCitations && <button type="button" className="reader-page-citations"
-        onClick={onCitations} title={t('citationsBadge', { count: citationCount })}
-        aria-label={t('citationsBadge', { count: citationCount })}>
-        <Quote size={12} aria-hidden="true" /> {citationCount}
-      </button>}
+      {citationCount > 0 && onCitations && (
+        <button
+          type="button"
+          className="reader-page-citations"
+          onClick={onCitations}
+          title={t('citationsBadge', { count: citationCount })}
+          aria-label={t('citationsBadge', { count: citationCount })}
+        >
+          <Quote size={12} aria-hidden="true" /> {citationCount}
+        </button>
+      )}
       {visible && (
         <ReaderPageContent
           number={number}
@@ -85,7 +91,13 @@ export function ReaderPage({
 }
 
 function ReaderPageContent({
-  number, width, ratio, originalColors, annotations, pendingSelection, onSelect,
+  number,
+  width,
+  ratio,
+  originalColors,
+  annotations,
+  pendingSelection,
+  onSelect,
 }: {
   number: number
   width: number
@@ -104,18 +116,28 @@ function ReaderPageContent({
   const readyAfterSelection = useRef<number | null>(null)
   const desiredWidth = useRef(width)
   const { t } = useT('material')
-  useLayoutEffect(() => { desiredWidth.current = width }, [width])
-  const acceptRendered = useCallback((renderWidth: number) => {
-    if (renderWidth !== desiredWidth.current) return
-    const selection = window.getSelection()
-    if (selection && !selection.isCollapsed && selection.anchorNode && frame.current?.contains(selection.anchorNode)) {
-      // Keep the selected text DOM until capture/focus has released it.
-      readyAfterSelection.current = renderWidth
-      return
-    }
-    readyAfterSelection.current = null
-    rendered(renderWidth)
-  }, [rendered])
+  useLayoutEffect(() => {
+    desiredWidth.current = width
+  }, [width])
+  const acceptRendered = useCallback(
+    (renderWidth: number) => {
+      if (renderWidth !== desiredWidth.current) return
+      const selection = window.getSelection()
+      if (
+        selection &&
+        !selection.isCollapsed &&
+        selection.anchorNode &&
+        frame.current?.contains(selection.anchorNode)
+      ) {
+        // Keep the selected text DOM until capture/focus has released it.
+        readyAfterSelection.current = renderWidth
+        return
+      }
+      readyAfterSelection.current = null
+      rendered(renderWidth)
+    },
+    [rendered],
+  )
   useEffect(() => {
     const releaseSelection = () => {
       if (readyAfterSelection.current !== null) acceptRendered(readyAfterSelection.current)
@@ -142,7 +164,7 @@ function ReaderPageContent({
       onMouseUp={onSelect}
       onTouchEnd={onSelect}
     >
-      {renderWidths.map(renderWidth => (
+      {renderWidths.map((renderWidth) => (
         <ReaderRenderLayer
           key={renderWidth}
           number={number}
@@ -153,14 +175,30 @@ function ReaderPageContent({
           onRendered={acceptRendered}
           onFailed={layers.failed}
         >
-          {renderWidth === layers.currentWidth && <div className="material-overlays" aria-hidden="true">
-            {annotations
-              .filter((item) => item.anchor.status === 'matched' && item.anchor.page === number)
-              .flatMap((item) =>
-                item.anchor.rects.map((rect, index) => (
+          {renderWidth === layers.currentWidth && (
+            <div className="material-overlays" aria-hidden="true">
+              {annotations
+                .filter((item) => item.anchor.status === 'matched' && item.anchor.page === number)
+                .flatMap((item) =>
+                  item.anchor.rects.map((rect, index) => (
+                    <span
+                      key={`${item.id}-${index}`}
+                      className={`material-mark ${item.kind === 'question' ? 'question' : ''}`}
+                      style={{
+                        left: `${rect[0] * 100}%`,
+                        top: `${rect[1] * 100}%`,
+                        width: `${(rect[2] - rect[0]) * 100}%`,
+                        height: `${(rect[3] - rect[1]) * 100}%`,
+                      }}
+                    />
+                  )),
+                )}
+              {/* The browser drops its own selection once the comment field takes focus; keep the passage visible. */}
+              {pendingSelection?.page === number &&
+                pendingSelection.rects.map((rect, index) => (
                   <span
-                    key={`${item.id}-${index}`}
-                    className={`material-mark ${item.kind === 'question' ? 'question' : ''}`}
+                    key={`pending-${index}`}
+                    className={`material-mark pending${pendingSelection.cited ? ' cited' : ''}`}
                     style={{
                       left: `${rect[0] * 100}%`,
                       top: `${rect[1] * 100}%`,
@@ -168,26 +206,16 @@ function ReaderPageContent({
                       height: `${(rect[3] - rect[1]) * 100}%`,
                     }}
                   />
-                )),
-              )}
-            {/* The browser drops its own selection once the comment field takes focus; keep the passage visible. */}
-            {pendingSelection?.page === number &&
-              pendingSelection.rects.map((rect, index) => (
-                <span
-                  key={`pending-${index}`}
-                  className={`material-mark pending${pendingSelection.cited ? ' cited' : ''}`}
-                  style={{
-                    left: `${rect[0] * 100}%`,
-                    top: `${rect[1] * 100}%`,
-                    width: `${(rect[2] - rect[0]) * 100}%`,
-                    height: `${(rect[3] - rect[1]) * 100}%`,
-                  }}
-                />
-              ))}
-          </div>}
+                ))}
+            </div>
+          )}
         </ReaderRenderLayer>
       ))}
-      {layers.hasError && <div style={{ position: 'absolute', inset: '0 0 auto', zIndex: 5 }}><Failure message={t('pdfLoadFailed')} /></div>}
+      {layers.hasError && (
+        <div style={{ position: 'absolute', inset: '0 0 auto', zIndex: 5 }}>
+          <Failure message={t('pdfLoadFailed')} />
+        </div>
+      )}
     </div>
   )
 }
@@ -210,8 +238,11 @@ export function AnnotationRow({
 }) {
   const { t } = useT('material')
   const { t: study } = useT('study')
-  const [comment, setComment] = useWorkspaceState(`reader:annotation:${item.id}:${item.revision}:comment`, item.comment,
-    { persist: false })
+  const [comment, setComment] = useWorkspaceState(
+    `reader:annotation:${item.id}:${item.revision}:comment`,
+    item.comment,
+    { persist: false },
+  )
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [commentPreview, setCommentPreview] = useState(false)
@@ -273,18 +304,30 @@ export function AnnotationRow({
           rows={2}
         />
       </label>
-      {comment.trim() && <details open={commentPreview}
-        onToggle={event => setCommentPreview(event.currentTarget.open)}>
-        <summary>{t('commentPreviewSummary')}</summary>
-        {commentPreview && <AssessmentQuestion text={comment} />}
-      </details>}
+      {comment.trim() && (
+        <details open={commentPreview} onToggle={(event) => setCommentPreview(event.currentTarget.open)}>
+          <summary>{t('commentPreviewSummary')}</summary>
+          {commentPreview && <AssessmentQuestion text={comment} />}
+        </details>
+      )}
       <div className="material-annotation-actions">
-        {onCreateCard && item.anchor.status === 'matched' && Number.isSafeInteger(item.anchor.page) &&
-          (item.anchor.page ?? 0) > 0 && item.revision > 0 && item.quote.trim() &&
-          <Button type="button" size="sm" variant="ghost" disabled={busy} data-manual-card-source={item.id}
-            onClick={() => onCreateCard(item)}>
-            {study('manual.createAction')}
-          </Button>}
+        {onCreateCard &&
+          item.anchor.status === 'matched' &&
+          Number.isSafeInteger(item.anchor.page) &&
+          (item.anchor.page ?? 0) > 0 &&
+          item.revision > 0 &&
+          item.quote.trim() && (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              disabled={busy}
+              data-manual-card-source={item.id}
+              onClick={() => onCreateCard(item)}
+            >
+              {study('manual.createAction')}
+            </Button>
+          )}
         <Button
           size="sm"
           variant="outline"

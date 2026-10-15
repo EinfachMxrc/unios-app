@@ -39,25 +39,36 @@ export const test = base.extend({
       }
     }
     const browserErrors = new Set<string>()
-    page.on('console', message => {
+    page.on('console', (message) => {
       if (message.type() === 'error') browserErrors.add(`Console: ${message.text()}`)
     })
-    page.on('pageerror', error => browserErrors.add(error.message))
+    page.on('pageerror', (error) => browserErrors.add(error.message))
     page.on('crash', () => browserErrors.add('Browser page crashed'))
-    page.on('requestfailed', request => {
-      if (request.url().startsWith('http://127.0.0.1:')) browserErrors.add(`${request.method()} ${request.url().split('?')[0]} ${request.failure()?.errorText}`)
+    page.on('requestfailed', (request) => {
+      if (request.url().startsWith('http://127.0.0.1:'))
+        browserErrors.add(`${request.method()} ${request.url().split('?')[0]} ${request.failure()?.errorText}`)
     })
     try {
       await provide(page)
       if (testInfo.status !== testInfo.expectedStatus) {
-        await testInfo.attach('browser-errors.json', { body: JSON.stringify({ url: page.url(), browserErrors: [...browserErrors] }), contentType: 'application/json' })
+        await testInfo.attach('browser-errors.json', {
+          body: JSON.stringify({ url: page.url(), browserErrors: [...browserErrors] }),
+          contentType: 'application/json',
+        })
         if (!page.isClosed()) {
-          try { await testInfo.attach('failed-view.png', { body: await page.screenshot({ timeout: 3000 }), contentType: 'image/png' }) }
-          catch { /* A blocked or crashed renderer can still leave the error log. */ }
+          try {
+            await testInfo.attach('failed-view.png', {
+              body: await page.screenshot({ timeout: 3000 }),
+              contentType: 'image/png',
+            })
+          } catch {
+            /* A blocked or crashed renderer can still leave the error log. */
+          }
         }
       }
+    } finally {
+      if (!page.isClosed()) await page.unrouteAll({ behavior: 'wait' })
     }
-    finally { if (!page.isClosed()) await page.unrouteAll({ behavior: 'wait' }) }
   },
 })
 

@@ -7,5 +7,9 @@ export function insertStudyMarkdown(editor: Editor, markdown: string, range: { f
   if (editor.isDestroyed || !editor.markdown) return false
   const content = editor.markdown.parse(markdown).content ?? []
   if (!content.length) return false
-  return editor.chain().focus().insertContentAt(range, [...content, { type: 'paragraph' }]).run()
+  return editor
+    .chain()
+    .focus()
+    .insertContentAt(range, [...content, { type: 'paragraph' }])
+    .run()
 }
