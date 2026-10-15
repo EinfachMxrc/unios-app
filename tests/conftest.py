@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import shutil
 import sqlite3
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from pathlib import Path
 # settings without a developer's .env, study directory or credential store.
 import pytest
 from sqlalchemy import create_engine, event, text
+from sqlalchemy.engine import make_url
 
 from app.config import Settings
 from app.db.models import Base
@@ -71,12 +73,7 @@ def _stamp_current_schema(engine) -> None:
         connection.execute(text("INSERT INTO alembic_version VALUES (:version)"), {"version": head})
 
 
-@pytest.fixture
-def factory(settings, coordinator):
-    engine = create_engine(settings.database_url, connect_args={"check_same_thread": False})
-    @event.listens_for(engine, "connect")
-    def foreign_keys(connection, _record):
-        connection.execute("PRAGMA foreign_keys=ON")
+def _create_test_schema(engine):
     Base.metadata.create_all(engine)
     from app.assessment.index_schema import install as install_assessment_index
     from app.coding.index_schema import install as install_coding_index
@@ -117,5 +114,39 @@ def factory(settings, coordinator):
                                 "VALUES ('delete', old.course_id, old.body); "
                                 "INSERT INTO course_scratchpads_fts(rowid, body) "
                                 "VALUES (new.course_id, new.body); END"))
-    yield make_session_factory(engine)
-    engine.dispose()
+
+
+@pytest.fixture(scope="session")
+def _schema_template(tmp_path_factory):
+    # Build only an empty synthetic schema, once per pytest worker. Close every
+    # connection before copying it: each test still owns a separate real SQLite
+    # file with the original durability, foreign keys, indexes and FTS triggers.
+    path = tmp_path_factory.mktemp("empty-schema") / "template.sqlite3"
+    engine = create_engine(f"sqlite:///{path}")
+    try:
+        _create_test_schema(engine)
+    finally:
+        engine.dispose()
+    return path
+
+
+@pytest.fixture
+def factory(settings, coordinator, _schema_template):
+    url = make_url(settings.database_url)
+    database = Path(url.database) if url.get_backend_name() == "sqlite" and url.database not in {None, ":memory:"} else None
+    copied = database is not None and not database.exists()
+    if copied:
+        database.parent.mkdir(parents=True, exist_ok=True)
+        with database.open("xb") as target, _schema_template.open("rb") as source:
+            shutil.copyfileobj(source, target)
+    engine = create_engine(settings.database_url, connect_args={"check_same_thread": False})
+    @event.listens_for(engine, "connect")
+    def foreign_keys(connection, _record):
+        connection.execute("PRAGMA foreign_keys=ON")
+    if not copied:
+        # Preserve tests that explicitly provide a database or in-memory URL.
+        _create_test_schema(engine)
+    try:
+        yield make_session_factory(engine)
+    finally:
+        engine.dispose()

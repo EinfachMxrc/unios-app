@@ -46,7 +46,7 @@ Geist-Glyphen als Vektorpfade (Gewicht 650). `docs/brand/v2/Geist-OFL.txt` enth�
 deren OFL-1.1-Lizenz. Das originale U-/Buch-Zeichen ist separat als eigene
 SVG-Geometrie gestaltet; Herkunft und Entwurf stehen im Brand-Kit.
 
-Direkte Frontend-Laufzeitpakete, gepr?ft am 14.10.2026 gegen
+Direkte Frontend-Laufzeitpakete, geprüft am 15.10.2026 gegen
 `frontend/package-lock.json` und die installierten Paketmetadaten:
 
 | Paket | Version | Lizenz |
@@ -54,9 +54,9 @@ Direkte Frontend-Laufzeitpakete, gepr?ft am 14.10.2026 gegen
 | `@fontsource-variable/geist` | 5.3.0 | OFL-1.1 |
 | `@fontsource/fira-code` | 5.3.0 | OFL-1.1 |
 | `@tailwindcss/vite` | 4.3.3 | MIT |
-| `@tanstack/react-query` | 5.104.0 | MIT |
-| `@tanstack/react-query-persist-client` | 5.104.0 | MIT |
-| `@tauri-apps/api` | 2.12.0 | Apache-2.0 OR MIT |
+| `@tanstack/react-query` | 5.104.2 | MIT |
+| `@tanstack/react-query-persist-client` | 5.104.2 | MIT |
+| `@tauri-apps/api` | 2.12.3 | Apache-2.0 OR MIT |
 | `@tauri-apps/plugin-process` | 2.4.0 | MIT OR Apache-2.0 |
 | `@tiptap/core` | 3.31.4 | MIT |
 | `@tiptap/extension-code-block-lowlight` | 3.31.4 | MIT |
@@ -80,10 +80,10 @@ Direkte Frontend-Laufzeitpakete, gepr?ft am 14.10.2026 gegen
 | `jszip` | 3.10.2 | (MIT OR GPL-3.0-or-later) |
 | `katex` | 0.19.0 | MIT |
 | `lowlight` | 3.3.0 | MIT |
-| `lucide-react` | 1.48.0 | ISC |
-| `mathlive` | 0.111.0 | MIT |
+| `lucide-react` | 1.55.0 | ISC |
+| `mathlive` | 0.111.1 | MIT |
 | `monaco-editor` | 0.57.0 | MIT |
-| `radix-ui` | 1.7.0 | MIT |
+| `radix-ui` | 1.8.0 | MIT |
 | `react` | 19.3.0 | MIT |
 | `react-dom` | 19.3.0 | MIT |
 | `react-i18next` | 17.0.15 | MIT |
@@ -93,9 +93,8 @@ Direkte Frontend-Laufzeitpakete, gepr?ft am 14.10.2026 gegen
 | `ts-fsrs` | 5.4.2 | MIT |
 | `tw-animate-css` | 1.4.0 | MIT |
 
-`cn` wurde als ungenutztes CLI-Paket entfernt. KaTeX liefert eigene Typen;
-`@types/katex` wurde ebenfalls entfernt. Vor einem ?ffentlichen Release
-zus?tzlich die tats?chlich ausgelieferten transitiven Pakete pr?fen.
+KaTeX liefert eigene Typen;
+`@types/katex` wurde ebenfalls entfernt. Die Sperrdatei dokumentiert zusätzlich die tatsächlich aufgelösten transitiven Pakete.
 
 ## Wasmtime für ausführbare Addons
 
@@ -159,11 +158,11 @@ Die Implementierung benutzt veröffentlichte Pakete. Architektur und Format: [NO
 
 ## Visuelle Formeleingabe und Logik (07.10.2026)
 
-- MathLive 0.111.0, Arno Gourdol, MIT. Quelle:
-  https://github.com/arnog/mathlive/tree/b8c11c9c13935ca58f10971977bd5d8060746118.
+- MathLive 0.111.1, Arno Gourdol, MIT. Quelle:
+  https://github.com/arnog/mathlive/tree/30ad20a7a47ea43a2f6915808023202c78f37742.
   Visuelles Formelfeld mit Cursor, Vorlagen und virtueller Tastatur, ohne einen
   eigenen Formeleditor nachzubauen. Unveränderte MIT-Lizenz:
-  `docs/licenses/mathlive-0.111.0.txt`.
+  `docs/licenses/mathlive-0.111.1.txt`.
 - KaTeX 0.19.0, Khan Academy und Mitwirkende, MIT. Quelle:
   https://github.com/KaTeX/KaTeX/tree/6ea2dc97188f0cc282e05a9690418ae7fe5457ba.
   Lokale HTML-/MathML-Darstellung gespeicherter Formeln. Unveränderte MIT-Lizenz:
