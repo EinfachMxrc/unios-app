@@ -98,7 +98,8 @@ test('feedback creates an explicit GitHub draft with no automatic diagnostics', 
   const href = await page.getByRole('link', { name: 'Bericht auf GitHub öffnen' }).getAttribute('href')
   const url = new URL(href!)
   expect(url.origin + url.pathname).toBe('https://github.com/EinfachMxrc/unios-app/issues/new')
-  expect(url.searchParams.get('body')).toContain('Die Ansicht blieb leer.')
+  expect(url.searchParams.get('template')).toBe('bug.yml')
+  expect(url.searchParams.get('expected')).toContain('Die Ansicht blieb leer.')
   expect(url.search).not.toMatch(/diagnostics|schema_version|error_codes|generation/)
 })
 

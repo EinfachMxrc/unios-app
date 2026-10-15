@@ -18,8 +18,9 @@ und [DESKTOP_PACKAGES](DESKTOP_PACKAGES.md).
    README-Bilder müssen zur Version passen.
 5. **README prüfen:** Der Download-Link zeigt auf `releases/latest`. Keine feste
    Versionsnummer im Fließtext, außer in diesem Ablauf und in Release-Notizen.
-6. **Pakete** bauen (`scripts/stage_desktop_release.py`), `SHA256SUMS.txt` und
-   `verification.json` erzeugen. Nur Plattformen auflisten, die wirklich gebaut und geprüft wurden.
+6. **Pakete** bauen: Qualitätsmatrix auf dem Commit laufen lassen, dann den Workflow „Desktop-Pakete“ mit
+   `release_draft` starten. Er legt einen Release-Entwurf mit Installern, `SHA256SUMS.txt` und `latest.json`
+   (Update-Feed) an. Nur Plattformen auflisten, die wirklich gebaut und geprüft wurden.
    Das Staging-Skript erwartet das vollständige signierte Vier-Plattform-Set.
    Für die öffentliche manuelle Windows-/Linux-Ausgabe stattdessen die erzeugten
    CI-Pakete gegen `build-verification.json` und `startup-check.json` am selben

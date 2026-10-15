@@ -8,13 +8,12 @@ zugesagte LTS-Unterstützung, Reaktionsfrist oder bezahlte Bug-Bounty.
 
 ## Vertraulich melden
 
-Auf der GitHub-Repository-Seite **Security → Report a vulnerability** verwenden,
-wenn private Meldungen für das Repository verfügbar sind. Diese Dokumentation
-behauptet nicht, dass der Maintainer diese GitHub-Einstellung bereits aktiviert hat.
-Wenn die Schaltfläche fehlt, zunächst ein Issue mit der neutralen Bitte um einen
-privaten Meldekanal öffnen; dort **keine Schwachstellendetails, Geheimnisse oder
-privaten Dateien** veröffentlichen. Der Maintainer muss vor einer öffentlichen
-Beta einen tatsächlich erreichbaren vertraulichen Kanal bestätigen.
+Auf der GitHub-Repository-Seite **Security → Report a vulnerability** verwenden
+([direkter Link](https://github.com/EinfachMxrc/unios-app/security/advisories/new)).
+Die Meldung ist privat und nur für die Maintainer sichtbar. **Keine
+Schwachstellendetails, Geheimnisse oder privaten Dateien** in öffentliche Issues
+oder Diskussionen schreiben. Fehlt die Schaltfläche, öffne ein Issue mit der neutralen
+Bitte um einen privaten Meldekanal, ohne Details.
 
 Eine Meldung nennt betroffene Version/Plattform, Voraussetzungen, Auswirkungen
 und eine minimale Reproduktion mit erfundenen Daten. Keine echten Portal-Sessions,

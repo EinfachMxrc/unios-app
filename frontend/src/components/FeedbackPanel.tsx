@@ -72,12 +72,18 @@ export function FeedbackPanel() {
       setBusy(false)
     }
   }
+  // Opens the matching issue form of the public repository, prefilled; nothing is sent from here.
   const issueUrl = new URL('https://github.com/EinfachMxrc/unios-app/issues/new')
+  issueUrl.searchParams.set('template', kind === 'problem' ? 'bug.yml' : 'idea.yml')
   issueUrl.searchParams.set('title', `${t('panelTitle')}: ${message.trim().split('\n')[0].slice(0, 100)}`)
-  issueUrl.searchParams.set(
-    'body',
-    `${t('goalLabel')}\n${goal.trim().slice(0, 600)}\n\n${t('descriptionLabel')}\n${message.trim().slice(0, 2400)}`,
-  )
+  if (kind === 'problem') {
+    const where = page ? `${t('affectedPagePrefix', { page })}\n\n` : ''
+    issueUrl.searchParams.set('steps', `${where}${goal.trim().slice(0, 600)}`.trim())
+    issueUrl.searchParams.set('expected', message.trim().slice(0, 2400))
+  } else {
+    issueUrl.searchParams.set('problem', goal.trim().slice(0, 600))
+    issueUrl.searchParams.set('idea', message.trim().slice(0, 2400))
+  }
   return (
     <Panel title={t('panelTitle')}>
       <p className="muted-text mb-4">{t('intro')}</p>

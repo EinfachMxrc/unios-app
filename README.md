@@ -119,6 +119,12 @@ Grenzen, die du vor dem Einrichten kennen solltest:
 | Entwicklung | [Beitragen](.github/CONTRIBUTING.md) · [Fortschritt](docs/PROGRESS.md) · [Roadmap](docs/ROADMAP.md) · [Änderungen](CHANGELOG.md) |
 | Vertrauen | [Sicherheit](.github/SECURITY.md) · [Release-Abnahme](docs/RELEASE_READINESS.md) |
 
-Für Feedback nenne Version, Betriebssystem und konkrete Schritte, mit erfundenen Beispieldaten. Hochschulmails, Noten, Session-URLs und Zugangsdaten gehören nicht in öffentliche Issues.
+## Fehler melden und Fragen stellen
+
+- **Fehler oder Idee:** In der App unter *Einstellungen → Feedback* (oder über „Problem mit dieser Seite melden“ am Seitenende) öffnet UniOS ein vorausgefülltes GitHub-Formular. Direkt: [Fehler melden](https://github.com/EinfachMxrc/unios-app/issues/new?template=bug.yml) · [Idee vorschlagen](https://github.com/EinfachMxrc/unios-app/issues/new?template=idea.yml). Nötig ist ein GitHub-Konto.
+- **Frage oder Hilfe:** [Diskussionen](https://github.com/EinfachMxrc/unios-app/discussions).
+- **Sicherheitslücke:** vertraulich über [Security → Report a vulnerability](https://github.com/EinfachMxrc/unios-app/security/advisories/new), nicht als Issue.
+
+Nenne Version, Betriebssystem und konkrete Schritte, mit erfundenen Beispieldaten. Hochschulmails, Noten, Session-URLs und Zugangsdaten gehören nicht in öffentliche Issues.
 
 UniOS steht unter **AGPL-3.0-or-later**: [Lizenz](LICENSE) · [Drittsoftware](THIRD_PARTY_NOTICES.md).

@@ -46,3 +46,29 @@ def test_stage_desktop_release_includes_msi_and_checks_version(tmp_path, monkeyp
     with pytest.raises(SystemExit):
         main()
     assert not (tmp_path / "wrong-version").exists()
+
+
+def test_platforms_that_were_not_built_are_left_out_of_the_update_feed(tmp_path, monkeypatch):
+    version = json.loads((Path(__file__).resolve().parents[1] / "desktop" / "src-tauri" /
+                          "tauri.conf.json").read_text(encoding="utf-8"))["version"]
+    artifacts = tmp_path / "artifacts"
+    for platform, names in {"windows-x64": [f"UniOS_{version}_x64-setup.exe", f"UniOS_{version}_x64.msi"],
+                            "linux-x64": [f"UniOS_{version}_amd64.AppImage", f"UniOS_{version}_amd64.deb"]}.items():
+        (artifacts / platform).mkdir(parents=True)
+        for name in names:
+            (artifacts / platform / name).write_bytes(b"example")
+            if name.endswith((".exe", ".AppImage")):
+                (artifacts / platform / f"{name}.sig").write_text("example-signature", encoding="utf-8")
+
+    output = tmp_path / "release"
+    monkeypatch.setattr(sys, "argv", ["stage_desktop_release.py", version, str(artifacts), str(output)])
+    main()
+
+    manifest = json.loads((output / "latest.json").read_text(encoding="utf-8"))
+    assert sorted(manifest["platforms"]) == ["linux-x86_64", "windows-x86_64"]
+
+    empty = tmp_path / "none"
+    empty.mkdir()
+    monkeypatch.setattr(sys, "argv", ["stage_desktop_release.py", version, str(empty), str(tmp_path / "out2")])
+    with pytest.raises(SystemExit):
+        main()

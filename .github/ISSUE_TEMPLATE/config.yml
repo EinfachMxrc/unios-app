@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 blank_issues_enabled: false
 contact_links:
+  - name: Frage oder Hilfe zur Einrichtung
+    url: https://github.com/EinfachMxrc/unios-app/discussions
+    about: Fragen, Ideen zur Diskussion und Hilfe zur Einrichtung gehören in die Diskussionen, nicht in Issues.
   - name: Sicherheitslücke melden
-    url: https://github.com/EinfachMxrc/unios-app/blob/main/.github/SECURITY.md
-    about: Sicherheitsprobleme bitte vertraulich nach SECURITY.md melden, nicht als öffentliches Issue.
+    url: https://github.com/EinfachMxrc/unios-app/security/advisories/new
+    about: Sicherheitsprobleme bitte vertraulich melden, nicht als öffentliches Issue.

@@ -86,7 +86,7 @@ def sha256(path: Path) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("version", help="SemVer ohne v, z. B. 0.2.0")
-    parser.add_argument("artifacts", type=Path, help="Ordner mit vier entpackten CI-Artefakten")
+    parser.add_argument("artifacts", type=Path, help="Ordner mit den entpackten CI-Artefakten je gebauter Plattform")
     parser.add_argument("output", type=Path, help="Neuer Staging-Ordner")
     parser.add_argument("--notes", default="UniOS aktualisiert")
     parser.add_argument("--channel", choices=CHANNELS, default='beta')
@@ -123,6 +123,10 @@ def main() -> None:
     staged: list[Path] = []
     for folder_name, (target, pattern, suffix) in TARGETS.items():
         folder = args.artifacts / folder_name
+        if not folder.is_dir():
+            # A platform that was not built is left out of latest.json; a built one must be complete.
+            print(f"Übersprungen (nicht gebaut): {folder_name}")
+            continue
         signature = only_match(folder, pattern)
         signature_text = read_signature(signature)
         asset = signature.with_suffix("")
@@ -143,6 +147,8 @@ def main() -> None:
             extra_destination = args.output / f"UniOS-{args.version}-{target}{extra_suffix}"
             copy_asset(extra, extra_destination)
             staged.append(extra_destination)
+    if not platforms:
+        parser.error("Kein Plattform-Artefakt gefunden")
     manifest["platforms"] = platforms
     (args.output / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
                                              encoding="utf-8")
