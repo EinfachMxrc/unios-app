@@ -11,17 +11,14 @@
 
 Kurse, PDFs, Notizen, Aufgaben und Karteikarten in einer App – lokal oder auf deinem eigenen Server.
 
-[**Neueste Version herunterladen**](https://github.com/EinfachMxrc/unios-app/releases/latest) · [Demo testen](#demo-ohne-hochschulzugang) · [Dokumentation](docs/README.md) · [English](docs/README.en.md)
+[**Neueste Version herunterladen**](https://github.com/EinfachMxrc/unios-app/releases/latest) · [Demo testen](#demo-ohne-hochschulzugang) · [Projektseite](https://einfachmxrc.github.io/unios-app/) · [Dokumentation](docs/README.md) · [English](docs/README.en.md)
 
 [![Lizenz: AGPL-3.0-or-later](https://img.shields.io/badge/Lizenz-AGPL--3.0--or--later-285b67)](LICENSE)
 [![Prüfungen](https://github.com/EinfachMxrc/unios-app/actions/workflows/quality.yml/badge.svg)](https://github.com/EinfachMxrc/unios-app/actions/workflows/quality.yml)
 
 </div>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/current/heute-dark.png">
-  <img src="docs/readme/current/heute-light.png" alt="UniOS Heute: nächster Lernschritt, anstehende Termine und neue Unterlagen" width="1440">
-</picture>
+![Kurze Tour durch UniOS: Heute, Kurs, PDF lesen, Notizen, Lernen](docs/readme/current/demo.gif)
 
 *Echte Oberfläche mit ausschließlich erfundenen Demo-Daten, [Herkunft der Bilder](docs/readme/current/SCREENSHOTS.md).*
 
@@ -68,6 +65,7 @@ Das responsive Layout ist kein Nachweis einer veröffentlichten iOS-/Android-App
 1. Lade auf der [Release-Seite](https://github.com/EinfachMxrc/unios-app/releases/latest) das passende Paket herunter und vergleiche es bei Bedarf mit `SHA256SUMS.txt`.
 2. Installiere und öffne UniOS. Der Installer enthält Oberfläche und Hintergrunddienst; Python und Node.js brauchst du nicht.
 3. Verbinde die App mit deinem eigenen HTTPS-Server und bestätige die einmalige Gerätekopplung: [Server-Anleitung](docs/SERVER.md).
+   **Aktuell braucht die installierte Desktop-App dafür einen eigenen Server.** Ein Modus „nur auf diesem Gerät“ ist geplant ([#26](https://github.com/EinfachMxrc/unios-app/issues/26)). Bis dahin geht UniOS ohne Server nur aus dem Quellcode (siehe Demo unten; dort laufen auch Moodle und lokale Daten ohne Server) oder als Demo.
 4. Wähle Hochschule und Studiengang und richte die gewünschten Quellen ein.
 
 Welche Plattformen ein Release enthält, steht in dessen Beschreibung; der Stand je Plattform in [DESKTOP_PACKAGES](docs/DESKTOP_PACKAGES.md). **Vor einem Update eines vorhandenen Datenbestands** einen Snapshot erstellen und prüfen: [Migration und Wiederherstellung](docs/SERVER.md).
@@ -126,6 +124,7 @@ Alle Dokumente stehen in der [Dokumentationsübersicht](docs/README.md). Die wic
 ## Fehler melden und Fragen stellen
 
 - **Fehler oder Idee:** In der App unter *Einstellungen → Feedback* (oder über „Problem mit dieser Seite melden“ am Seitenende) öffnet UniOS ein vorausgefülltes GitHub-Formular. Direkt: [Fehler melden](https://github.com/EinfachMxrc/unios-app/issues/new?template=bug.yml) · [Idee vorschlagen](https://github.com/EinfachMxrc/unios-app/issues/new?template=idea.yml). Nötig ist ein GitHub-Konto.
+- **Mitmachen:** Einsteigerfreundliche Aufgaben tragen das Label [good first issue](https://github.com/EinfachMxrc/unios-app/labels/good%20first%20issue), etwa eine UI-Sprache oder ein Hochschulprofil ergänzen.
 - **Frage oder Hilfe:** [Diskussionen](https://github.com/EinfachMxrc/unios-app/discussions).
 - **Sicherheitslücke:** vertraulich über [Security → Report a vulnerability](https://github.com/EinfachMxrc/unios-app/security/advisories/new), nicht als Issue.
 

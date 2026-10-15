@@ -25,3 +25,16 @@ node scripts/readme_screenshots.mjs
 Nur einen neuen, getrennten Demo-Ordner verwenden. Danach jedes Bild ansehen. Das
 Skript schreibt nach `docs/readme/current/`; `README_SHOTS_DIR` überschreibt das Ziel.
 Ältere Aufnahmen liegen unter `alpha-0.1.19/` und `archive/`.
+
+## Demo-GIF und Vorschaubild
+
+`docs/readme/current/demo.gif` zeigt eine Tour durch das Demo-Semester (Heute, Kurs, PDF, Notizen, Lernen).
+Aufnahme gegen denselben getrennten Demo-Dienst auf Port 8767:
+
+```sh
+node scripts/readme_demo_gif.mjs      # schreibt .tmp/demo-video/*.webm
+ffmpeg -i .tmp/demo-video/*.webm -vf "fps=10,scale=880:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=96:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" docs/readme/current/demo.gif
+```
+
+`docs/brand/social-preview.png` (1280 × 640) ist das Vorschaubild für geteilte Links. Es wird in den
+Repository-Einstellungen unter *Social preview* hochgeladen; eine Kopie liegt für die Projektseite in `docs/site/assets/`.
