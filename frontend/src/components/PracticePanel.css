@@ -1,0 +1,39 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@layer workspace {
+  .practice-panel,
+  .practice-panel .glass-card,
+  .practice-panel [data-slot='card-header'],
+  .practice-panel [data-slot='card-content'] {
+    min-width: 0;
+    width: 100%;
+  }
+  .practice-panel .practice-item,
+  .practice-panel .practice-history-item {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .practice-panel .practice-item > div,
+  .practice-panel .practice-item fieldset,
+  .practice-panel .practice-item label {
+    min-width: 0;
+  }
+  .practice-panel .practice-item textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+  .practice-panel .practice-question {
+    margin: .7rem 0;
+    font-size: .95rem;
+    line-height: 1.65;
+  }
+  .practice-panel .practice-item label > input[type='radio'] {
+    flex-shrink: 0;
+    margin-top: .25rem;
+  }
+  .practice-panel .practice-item label > .assessment-inline {
+    min-width: 0;
+  }
+}

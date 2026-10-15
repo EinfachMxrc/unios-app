@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Beitragen · UniOS Handbuch" /><title>Beitragen · UniOS</title>
+<link rel="stylesheet" href="../docs.css" /><script src="../docs-index.js" defer></script><script src="../docs.js" defer></script></head>
+<body data-docs-root="../"><a class="skip-link" href="#main">Zum Inhalt springen</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html" aria-label="UniOS Projektseite"><span class="brand-mark">U</span><span>UniOS</span></a><span class="brand-divider" aria-hidden="true"></span><span class="brand-section">Entwickler</span>
+<nav class="header-links" aria-label="Bereiche"><a href="../docs.html">Hilfe</a><a class="current" href="../developers.html">Entwickler</a><a href="https://github.com/EinfachMxrc/unios-app">GitHub ↗</a></nav>
+<button class="menu-toggle" type="button" aria-controls="docs-nav" aria-expanded="false">Menü</button></div></header>
+<div class="docs-layout"><aside class="docs-sidebar" id="docs-nav" aria-label="Dokumentationsnavigation"><a class="sidebar-home" href="../developers.html">◫ Übersicht Entwickler</a>
+<p class="sidebar-label">Loslegen</p>
+<a href="../developer/entwicklungsumgebung.html">Entwicklungsumgebung</a>
+<a href="../developer/tests.html">Tests und Fake-Daten</a>
+<p class="sidebar-label">Architektur</p>
+<a href="../developer/architektur.html">Backend-Schichten</a>
+<a href="../developer/frontend.html">Frontend und PWA</a>
+<a href="../developer/speicher.html">Dateien und Suche</a>
+<p class="sidebar-label">Schnittstellen</p>
+<a href="../developer/rest-api.html">REST API</a>
+<a href="../developer/cli.html">CLI</a>
+<a href="../developer/entities.html">Entitäten und Beziehungen</a>
+<a href="../developer/api-referenz.html">API-Referenz</a>
+<p class="sidebar-label">API-Referenz</p>
+<a href="../developer/api-courses.html">Kurse und Material</a>
+<a href="../developer/api-notes.html">Notizen und Links</a>
+<a href="../developer/api-intake.html">Eingang</a>
+<a href="../developer/api-learning.html">Lernen</a>
+<a href="../developer/api-flashcards.html">Karteikarten und Anki</a>
+<a href="../developer/api-ai.html">KI</a>
+<a href="../developer/api-organization.html">Organisation</a>
+<a href="../developer/api-portals.html">Hochschulportale</a>
+<a href="../developer/api-connectors.html">Connectoren</a>
+<a href="../developer/api-operations.html">Host und Einrichtung</a>
+<a href="../developer/api-other.html">Weitere Endpunkte</a>
+<p class="sidebar-label">Erweiterungen</p>
+<a href="../developer/connectoren.html">Connector API v1</a>
+<a href="../developer/profile.html">Hochschulprofile</a>
+<a href="../developer/addons.html">Feature- und UI-Addons</a>
+<p class="sidebar-label">Betrieb &amp; Beiträge</p>
+<a href="../developer/self-hosting.html">Self-Hosting</a>
+<a href="../developer/mitarbeiten.html" class="active" aria-current="page">Beitragen</a>
+<div class="sidebar-bottom"><span class="status-dot" aria-hidden="true"></span> Alpha · lokal betrieben</div></aside>
+<main id="main" class="docs-main"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../developers.html">Entwickler</a><span>/</span><span>Betrieb &amp; Beiträge</span><span>/</span><span aria-current="page">Beitragen</span></nav><div class="search-wrap"><label class="search-box" for="docs-search"><span aria-hidden="true">⌕</span><input id="docs-search" type="search" placeholder="Alle Themen und API-Pfade durchsuchen …" autocomplete="off" aria-controls="search-results" aria-expanded="false" /><kbd>/</kbd></label><div id="search-results" class="search-results" role="region" aria-label="Suchergebnisse" hidden></div></div><div class="article-layout"><article class="docs-article"><p class="article-kicker">Betrieb &amp; Beiträge</p><h1>Beitragen</h1><p class="article-lead">Beiträge sollen nachvollziehbar, testbar und frei von persönlichen Hochschuldaten sein. UI-Texte und Dokumentation sind deutsch; Code-Bezeichner sind englisch.</p><nav class="inline-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#vor-dem-pull-request">Vor dem Pull Request</a><a href="#connector-beitrage">Connector-Beiträge</a></nav>
+<h2 id="vor-dem-pull-request">Vor dem Pull Request</h2>
+<p>Lies AGENTS.md und den aktuellen Bauauftrag. Nutze lokale Fake-Server und erfundene Daten. Führe die betroffenen Tests und statischen Checks aus, danach die zum geänderten Ablauf passenden Browserprüfungen. Neue Textdateien brauchen einen SPDX-Header.</p>
+<h2 id="connector-beitrage">Connector-Beiträge</h2>
+<p>Ein Connector-PR dokumentiert Quelle, Lizenz, begründete Domains und Fähigkeiten, reproduzierbaren Build, festen Digest und Tests. Ein menschliches Review der Quelle und des Builds ist nötig, bevor die Registry einen Container als verifiziert führen kann. <a href="https://github.com/EinfachMxrc/unios-app/blob/main/.github/PULL_REQUEST_TEMPLATE/connector.md">PR-Vorlage</a>.</p><div class="article-source"><a class="source-link" href="https://github.com/EinfachMxrc/unios-app/blob/main/docs/handbook/developer/mitarbeiten.md">Quelltext bearbeiten ↗</a></div><nav class="page-pagination" aria-label="Weitere Themen"><a href="self-hosting.html"><small>← Vorheriges Thema</small><strong>Self-Hosting</strong></a></nav></article><aside class="page-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#vor-dem-pull-request">Vor dem Pull Request</a><a href="#connector-beitrage">Connector-Beiträge</a></aside></div><footer class="docs-footer"><span>UniOS · Alpha-Dokumentation</span><a href="../docs.html">Hilfe →</a></footer></main></div></body></html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="KI · UniOS Handbuch" /><title>KI · UniOS</title>
+<link rel="stylesheet" href="../docs.css" /><script src="../docs-index.js" defer></script><script src="../docs.js" defer></script></head>
+<body data-docs-root="../"><a class="skip-link" href="#main">Zum Inhalt springen</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html" aria-label="UniOS Projektseite"><span class="brand-mark">U</span><span>UniOS</span></a><span class="brand-divider" aria-hidden="true"></span><span class="brand-section">Entwickler</span>
+<nav class="header-links" aria-label="Bereiche"><a href="../docs.html">Hilfe</a><a class="current" href="../developers.html">Entwickler</a><a href="https://github.com/EinfachMxrc/unios-app">GitHub ↗</a></nav>
+<button class="menu-toggle" type="button" aria-controls="docs-nav" aria-expanded="false">Menü</button></div></header>
+<div class="docs-layout"><aside class="docs-sidebar" id="docs-nav" aria-label="Dokumentationsnavigation"><a class="sidebar-home" href="../developers.html">◫ Übersicht Entwickler</a>
+<p class="sidebar-label">Loslegen</p>
+<a href="../developer/entwicklungsumgebung.html">Entwicklungsumgebung</a>
+<a href="../developer/tests.html">Tests und Fake-Daten</a>
+<p class="sidebar-label">Architektur</p>
+<a href="../developer/architektur.html">Backend-Schichten</a>
+<a href="../developer/frontend.html">Frontend und PWA</a>
+<a href="../developer/speicher.html">Dateien und Suche</a>
+<p class="sidebar-label">Schnittstellen</p>
+<a href="../developer/rest-api.html">REST API</a>
+<a href="../developer/cli.html">CLI</a>
+<a href="../developer/entities.html">Entitäten und Beziehungen</a>
+<a href="../developer/api-referenz.html">API-Referenz</a>
+<p class="sidebar-label">API-Referenz</p>
+<a href="../developer/api-courses.html">Kurse und Material</a>
+<a href="../developer/api-notes.html">Notizen und Links</a>
+<a href="../developer/api-intake.html">Eingang</a>
+<a href="../developer/api-learning.html">Lernen</a>
+<a href="../developer/api-flashcards.html">Karteikarten und Anki</a>
+<a href="../developer/api-ai.html" class="active" aria-current="page">KI</a>
+<a href="../developer/api-organization.html">Organisation</a>
+<a href="../developer/api-portals.html">Hochschulportale</a>
+<a href="../developer/api-connectors.html">Connectoren</a>
+<a href="../developer/api-operations.html">Host und Einrichtung</a>
+<a href="../developer/api-other.html">Weitere Endpunkte</a>
+<p class="sidebar-label">Erweiterungen</p>
+<a href="../developer/connectoren.html">Connector API v1</a>
+<a href="../developer/profile.html">Hochschulprofile</a>
+<a href="../developer/addons.html">Feature- und UI-Addons</a>
+<p class="sidebar-label">Betrieb &amp; Beiträge</p>
+<a href="../developer/self-hosting.html">Self-Hosting</a>
+<a href="../developer/mitarbeiten.html">Beitragen</a>
+<div class="sidebar-bottom"><span class="status-dot" aria-hidden="true"></span> Alpha · lokal betrieben</div></aside>
+<main id="main" class="docs-main"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../developers.html">Entwickler</a><span>/</span><span>API-Referenz</span><span>/</span><span aria-current="page">KI</span></nav><div class="search-wrap"><label class="search-box" for="docs-search"><span aria-hidden="true">⌕</span><input id="docs-search" type="search" placeholder="Alle Themen und API-Pfade durchsuchen …" autocomplete="off" aria-controls="search-results" aria-expanded="false" /><kbd>/</kbd></label><div id="search-results" class="search-results" role="region" aria-label="Suchergebnisse" hidden></div></div><div class="article-layout"><article class="docs-article"><p class="article-kicker">API-Referenz</p><h1>KI</h1><p class="article-lead">32 Endpunkte aus dem aktuellen OpenAPI-Schema.</p><nav class="inline-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#operationen">Operationen</a></nav><p>Diese Liste wird bei jedem Dokumentations-Build aus <a href="https://github.com/EinfachMxrc/unios-app/blob/main/frontend/openapi.json">frontend/openapi.json</a> erzeugt. Das Schema ist der technische Vertrag für Parameter, Antworten und Fehler. Schreibende Aufrufe benötigen die jeweils dokumentierten Berechtigungen und den aktiven Host.</p><h2 id="operationen">Operationen (32)</h2><ul class="api-operations"><li><span class="http-method method-get">GET</span> <code>/api/ai/access</code><span>Access</span></li>
+<li><span class="http-method method-put">PUT</span> <code>/api/ai/access/{scope}/{key}</code><span>Change Access</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/adapter/propose</code><span>Adapter Propose</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/adapter/status</code><span>Adapter Status</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/costs</code><span>Costs</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/exercises</code><span>Queue</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/exercises/import</code><span>Import Exercises</span></li>
+<li><span class="http-method method-put">PUT</span> <code>/api/ai/exercises/{item_id}</code><span>Decide</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/explanations</code><span>Queue</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/explanations/import</code><span>Import Explanations</span></li>
+<li><span class="http-method method-put">PUT</span> <code>/api/ai/explanations/{item_id}</code><span>Decide</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/anki-status</code><span>Get Anki Status</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/audit</code><span>Access Log</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/mcp/cards</code><span>Submit Anki Candidates</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/changes</code><span>Get Changes</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/courses</code><span>List Courses</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/courses/{course_id}/week</code><span>Get Weekly Study Context</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/deadlines</code><span>Get Deadlines</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/exam-status</code><span>Get Exam Status</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/mcp/exercises</code><span>Submit Exercises</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/projects</code><span>List Projects</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/projects/{project_id}/search</code><span>Search Project Repo</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/resource/{resource_id}/text</code><span>Get Resource Text</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/schema</code><span>Get Public Schema</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/search</code><span>Search</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/state</code><span>Mcp State</span></li>
+<li><span class="http-method method-put">PUT</span> <code>/api/ai/mcp/state</code><span>Change Mcp State</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/mcp/submission-status</code><span>Get Submission Status</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/outbox/process</code><span>Import Outbox</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/outbox/status</code><span>Outbox Status</span></li>
+<li><span class="http-method method-post">POST</span> <code>/api/ai/package</code><span>Package</span></li>
+<li><span class="http-method method-get">GET</span> <code>/api/ai/package/resources</code><span>Package Resources</span></li></ul><div class="article-source"><a class="source-link" href="https://github.com/EinfachMxrc/unios-app/blob/main/frontend/openapi.json">OpenAPI-Schema ↗</a></div><nav class="page-pagination" aria-label="Weitere Themen"><a href="api-flashcards.html"><small>← Vorheriges Thema</small><strong>Karteikarten und Anki</strong></a><a href="api-organization.html"><small>Nächstes Thema →</small><strong>Organisation</strong></a></nav></article><aside class="page-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#operationen">Operationen</a></aside></div><footer class="docs-footer"><span>UniOS · Alpha-Dokumentation</span><a href="../docs.html">Hilfe →</a></footer></main></div></body></html>

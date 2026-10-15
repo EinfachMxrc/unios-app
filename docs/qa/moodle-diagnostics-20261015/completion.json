@@ -1,0 +1,29 @@
+{
+  "activation": {
+    "time_utc": "2026-10-15T09:13:00.118679+00:00",
+    "healthy": true,
+    "topology_preserved": true,
+    "https_health": true,
+    "private_api_unauthenticated": 401,
+    "migration": false,
+    "schema_unchanged": true
+  },
+  "remaining_updates": {
+    "utc": "2026-10-15T09:06:17.199051+00:00",
+    "umami_version": "3.4.0",
+    "umami_backup_restore_verified": true,
+    "remaining_apt_updates": 0,
+    "failed_systemd_units": 0,
+    "reboot_required": false
+  },
+  "containers_running": 15,
+  "health_checks_passed": 6,
+  "failed_systemd_units": 0,
+  "license": "AGPL-3.0-or-later",
+  "moodle_status": "ok",
+  "moodle_latest_sync_status": "success",
+  "moodle_generic_warning_present": false,
+  "moodle_restriction_notice_present": true,
+  "mac_app_installed": true,
+  "mac_signature_verified": true
+}

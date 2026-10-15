@@ -1,0 +1,10 @@
+{
+  "_spdx": "AGPL-3.0-or-later",
+  "fixture_only": true,
+  "os": "Windows",
+  "python": "3.13.5",
+  "available": false,
+  "state": "unavailable",
+  "limits": "One generated raster-only page; no real scans, accounts or native-device acceptance.",
+  "reason": "No local German or English Tesseract language data."
+}

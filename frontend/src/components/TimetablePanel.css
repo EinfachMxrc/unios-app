@@ -1,0 +1,196 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.timetable-selection { display: grid; gap: 10px; margin-block: 16px; }
+.timetable-selection h3, .timetable-selection p { margin: 0; }
+.timetable-selection details { padding: 10px 12px; border: 1px solid var(--app-border); border-radius: 8px; }
+.timetable-selection summary { cursor: pointer; overflow-wrap: anywhere; }
+.timetable-selection label { display: flex; align-items: center; gap: 10px; padding-top: 10px; font-size: .9rem; }
+.timetable-panel {
+  margin: 1.25rem 0 2rem;
+}
+.timetable-summary-empty {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  padding: 1rem 1.25rem;
+  background: var(--card);
+}
+.timetable-summary-empty > svg { color: var(--muted-foreground); flex-shrink: 0; }
+.timetable-summary-empty > div { flex: 1; min-width: 0; }
+.timetable-summary-empty h2 { font-size: .85rem; font-weight: 600; }
+.timetable-summary-empty p { font-size: .8rem; color: var(--muted-foreground); margin-top: .25rem; }
+.timetable-summary-empty a { font-size: .8rem; }
+.timetable-navigation {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.5rem;
+  flex-wrap: wrap;
+}
+.timetable-navigation > div {
+  display: grid;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 12rem;
+}
+.timetable-navigation strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.timetable-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1.25rem;
+  margin: 1rem 0;
+}
+.timetable-day {
+  min-width: 0;
+}
+.timetable-day h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: capitalize;
+}
+.timetable-appointment {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0.75rem;
+  margin-bottom: 0.4rem;
+  border-left: 2px solid var(--border);
+  background: var(--muted);
+  border-radius: 0 0.5rem 0.5rem 0;
+  align-items: flex-start;
+}
+.timetable-appointment time {
+  display: grid;
+  gap: 0.15rem;
+  flex: 0 0 3.25rem;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+.timetable-appointment time span:first-child {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.timetable-event-content {
+  min-width: 0;
+}
+.timetable-appointment strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.timetable-event-content p {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+.timetable-event-content p svg {
+  flex-shrink: 0;
+}
+.timetable-appointment.is-current {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.timetable-appointment.is-past {
+  opacity: 0.65;
+}
+.timetable-current {
+  display: inline-block;
+  margin-top: 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--card);
+}
+.timetable-settings {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: 1.25rem;
+}
+.timetable-settings > summary {
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+.timetable-settings p {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+.timetable-subscription {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 40rem;
+  padding-top: 1rem;
+}
+.timetable-subscription label {
+  display: grid;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+}
+.timetable-subscription input {
+  width: 100%;
+  min-width: 0;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.7rem 0.85rem;
+}
+.timetable-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.timetable-stop {
+  margin-top: 1rem;
+}
+.timetable-show-past {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+.timetable-open {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+.timetable-panel.is-compact .timetable-days {
+  grid-template-columns: 1fr;
+}
+@media (max-width: 520px) {
+  .timetable-summary-empty { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: .5rem .75rem; align-items: start; }
+  .timetable-summary-empty > div { grid-column: 2; }
+  .timetable-summary-empty a { grid-column: 2; margin-left: 0; max-width: 100%; width: fit-content; white-space: normal; }
+  .timetable-panel [data-slot='card-header'] {
+    flex-wrap: wrap;
+  }
+  .timetable-navigation {
+    display: grid;
+    grid-template-columns: max-content max-content minmax(0, 1fr);
+    gap: .75rem;
+  }
+  .timetable-navigation > div {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-width: 0;
+    order: 0;
+  }
+  .timetable-navigation > button:last-child { justify-self: end; }
+  .timetable-appointment {
+    gap: 0.75rem;
+  }
+}

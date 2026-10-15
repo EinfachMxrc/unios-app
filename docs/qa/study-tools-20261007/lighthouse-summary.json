@@ -1,0 +1,224 @@
+{
+  "syntheticFixturesOnly": true,
+  "method": "Lighthouse snapshots of actual open dialogs",
+  "measuredAt": "2026-10-07T21:05:27.100Z",
+  "buildIndexSha256": "3945423cc165be696abe2e7116d2da75c492ea4dc8806477ef56e3a38fa1ec95",
+  "reports": [
+    {
+      "kind": "formula",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "kv",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "number",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "diagram",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "recall",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "clip",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "formula",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "kv",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "number",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "diagram",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "recall",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "clip",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "formula",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "kv",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "number",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "diagram",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "recall",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "clip",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "formula",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "kv",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "number",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "diagram",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "recall",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "clip",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    }
+  ]
+}

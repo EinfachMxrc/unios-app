@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Entitäten und Beziehungen · UniOS Handbuch" /><title>Entitäten und Beziehungen · UniOS</title>
+<link rel="stylesheet" href="../docs.css" /><script src="../docs-index.js" defer></script><script src="../docs.js" defer></script></head>
+<body data-docs-root="../"><a class="skip-link" href="#main">Zum Inhalt springen</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html" aria-label="UniOS Projektseite"><span class="brand-mark">U</span><span>UniOS</span></a><span class="brand-divider" aria-hidden="true"></span><span class="brand-section">Entwickler</span>
+<nav class="header-links" aria-label="Bereiche"><a href="../docs.html">Hilfe</a><a class="current" href="../developers.html">Entwickler</a><a href="https://github.com/EinfachMxrc/unios-app">GitHub ↗</a></nav>
+<button class="menu-toggle" type="button" aria-controls="docs-nav" aria-expanded="false">Menü</button></div></header>
+<div class="docs-layout"><aside class="docs-sidebar" id="docs-nav" aria-label="Dokumentationsnavigation"><a class="sidebar-home" href="../developers.html">◫ Übersicht Entwickler</a>
+<p class="sidebar-label">Loslegen</p>
+<a href="../developer/entwicklungsumgebung.html">Entwicklungsumgebung</a>
+<a href="../developer/tests.html">Tests und Fake-Daten</a>
+<p class="sidebar-label">Architektur</p>
+<a href="../developer/architektur.html">Backend-Schichten</a>
+<a href="../developer/frontend.html">Frontend und PWA</a>
+<a href="../developer/speicher.html">Dateien und Suche</a>
+<p class="sidebar-label">Schnittstellen</p>
+<a href="../developer/rest-api.html">REST API</a>
+<a href="../developer/cli.html">CLI</a>
+<a href="../developer/entities.html" class="active" aria-current="page">Entitäten und Beziehungen</a>
+<a href="../developer/api-referenz.html">API-Referenz</a>
+<p class="sidebar-label">API-Referenz</p>
+<a href="../developer/api-courses.html">Kurse und Material</a>
+<a href="../developer/api-notes.html">Notizen und Links</a>
+<a href="../developer/api-intake.html">Eingang</a>
+<a href="../developer/api-learning.html">Lernen</a>
+<a href="../developer/api-flashcards.html">Karteikarten und Anki</a>
+<a href="../developer/api-ai.html">KI</a>
+<a href="../developer/api-organization.html">Organisation</a>
+<a href="../developer/api-portals.html">Hochschulportale</a>
+<a href="../developer/api-connectors.html">Connectoren</a>
+<a href="../developer/api-operations.html">Host und Einrichtung</a>
+<a href="../developer/api-other.html">Weitere Endpunkte</a>
+<p class="sidebar-label">Erweiterungen</p>
+<a href="../developer/connectoren.html">Connector API v1</a>
+<a href="../developer/profile.html">Hochschulprofile</a>
+<a href="../developer/addons.html">Feature- und UI-Addons</a>
+<p class="sidebar-label">Betrieb &amp; Beiträge</p>
+<a href="../developer/self-hosting.html">Self-Hosting</a>
+<a href="../developer/mitarbeiten.html">Beitragen</a>
+<div class="sidebar-bottom"><span class="status-dot" aria-hidden="true"></span> Alpha · lokal betrieben</div></aside>
+<main id="main" class="docs-main"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../developers.html">Entwickler</a><span>/</span><span>Schnittstellen</span><span>/</span><span aria-current="page">Entitäten und Beziehungen</span></nav><div class="search-wrap"><label class="search-box" for="docs-search"><span aria-hidden="true">⌕</span><input id="docs-search" type="search" placeholder="Alle Themen und API-Pfade durchsuchen …" autocomplete="off" aria-controls="search-results" aria-expanded="false" /><kbd>/</kbd></label><div id="search-results" class="search-results" role="region" aria-label="Suchergebnisse" hidden></div></div><div class="article-layout"><article class="docs-article"><p class="article-kicker">Schnittstellen</p><h1>Entitäten und Beziehungen</h1><p class="article-lead">Schemaversion: 1. Quelle: <code>app/entities/schema.py</code>.</p><nav class="inline-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#kurs-course">Kurs (`course`)</a><a href="#material-resource">Material (`resource`)</a><a href="#schnellerfassung-jot">Schnellerfassung (`jot`)</a><a href="#notiz-note">Notiz (`note`)</a><a href="#projekt-project">Projekt (`project`)</a><a href="#lernthema-topic">Lernthema (`topic`)</a><a href="#aufgabe-assignment">Aufgabe (`assignment`)</a><a href="#prufung-exam">Prüfung (`exam`)</a><a href="#ubung-exercise">Übung (`exercise`)</a><a href="#beziehungen">Beziehungen</a></nav>
+<p>REST: <code>/api/schema</code>, <code>/api/schema/{kind}</code>, <code>/api/entities/{kind}</code> und <code>/api/entities/{kind}/{id}</code>. Listen akzeptieren <code>q</code>, <code>offset</code> und <code>limit</code>. CLI: <code>unios schema</code>, <code>unios describe</code>, <code>unios entity</code>. MCP: <code>get_entity_schema</code> gibt nur den Vertrag zurück, keine Studiendaten. <code>get_weekly_study_context(course_id, days)</code> liefert für einen freigegebenen Kurs aktuelle Materialverweise und offene Aufgaben. Materialtexte können anschließend mit <code>get_resource_text</code> pro Quelle gelesen werden. Kurs-, Material- und Fristenfreigaben gelten auch für diesen Überblick.</p>
+<h2 id="kurs-course">Kurs (<code>course</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>name</code> | <code>string</code> | Anzeigename | | <code>short_name</code> | <code>string</code> | Kurzname | | <code>semester_id</code> | <code>integer</code> | Semester |</p>
+<h2 id="material-resource">Material (<code>resource</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>name</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>kind</code> | <code>string</code> | Art |</p>
+<h2 id="schnellerfassung-jot">Schnellerfassung (<code>jot</code>)</h2>
+<p>Kennung: <code>uuid</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>string</code> | Stabile Kennung | | <code>body</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>kind</code> | <code>string</code> | Art |</p>
+<h2 id="notiz-note">Notiz (<code>note</code>)</h2>
+<p>Kennung: <code>uuid</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>string</code> | Stabile Kennung | | <code>title</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>current_revision</code> | <code>integer</code> | Version |</p>
+<h2 id="projekt-project">Projekt (<code>project</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>name</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>deadline_at</code> | <code>datetime</code> | Frist |</p>
+<h2 id="lernthema-topic">Lernthema (<code>topic</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>name</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>slug</code> | <code>string</code> | Kurzform |</p>
+<h2 id="aufgabe-assignment">Aufgabe (<code>assignment</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>title</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>due_at</code> | <code>datetime</code> | Frist |</p>
+<h2 id="prufung-exam">Prüfung (<code>exam</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>title</code> | <code>string</code> | Anzeigename | | <code>course_id</code> | <code>integer</code> | Kurs | | <code>exam_at</code> | <code>datetime</code> | Termin |</p>
+<h2 id="ubung-exercise">Übung (<code>exercise</code>)</h2>
+<p>Kennung: <code>integer</code>. Fähigkeiten: read, list, search, relate, unlink.</p>
+<p>| Feld | Typ | Beschreibung | | --- | --- | --- | | <code>id</code> | <code>integer</code> | Stabile Kennung | | <code>question</code> | <code>string</code> | Anzeigename | | <code>topic_id</code> | <code>integer</code> | Lernthema |</p>
+<h2 id="beziehungen">Beziehungen</h2>
+<p>| Typ | Hinweg | Rückweg | | --- | --- | --- | | <code>related</code> | verknüpft mit | verknüpft mit | | <code>prerequisite</code> | Voraussetzung für | setzt voraus | | <code>explains</code> | erklärt | wird erklärt durch | | <code>exercise_for</code> | ist Übung zu | hat Übung | | <code>part_of</code> | ist Teil von | enthält | | <code>duplicate</code> | ist Duplikat von | ist Duplikat von | | <code>prepares_for</code> | bereitet vor auf | wird vorbereitet durch |</p>
+<p>Beziehungen sind gerichtet, außer <code>related</code> und <code>duplicate</code>. Eingehende Kanten erscheinen automatisch als Rückverweise. <code>unios relate</code> und <code>unios unlink</code> verlangen <code>--yes</code>; <code>--dry-run</code> prüft nur die beabsichtigte Änderung.</p><div class="article-source"><a class="source-link" href="https://github.com/EinfachMxrc/unios-app/blob/main/docs/handbook/developer/entities.md">Quelltext bearbeiten ↗</a></div><nav class="page-pagination" aria-label="Weitere Themen"><a href="cli.html"><small>← Vorheriges Thema</small><strong>CLI</strong></a><a href="api-referenz.html"><small>Nächstes Thema →</small><strong>API-Referenz</strong></a></nav></article><aside class="page-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#kurs-course">Kurs (`course`)</a><a href="#material-resource">Material (`resource`)</a><a href="#schnellerfassung-jot">Schnellerfassung (`jot`)</a><a href="#notiz-note">Notiz (`note`)</a><a href="#projekt-project">Projekt (`project`)</a><a href="#lernthema-topic">Lernthema (`topic`)</a><a href="#aufgabe-assignment">Aufgabe (`assignment`)</a><a href="#prufung-exam">Prüfung (`exam`)</a><a href="#ubung-exercise">Übung (`exercise`)</a><a href="#beziehungen">Beziehungen</a></aside></div><footer class="docs-footer"><span>UniOS · Alpha-Dokumentation</span><a href="../docs.html">Hilfe →</a></footer></main></div></body></html>

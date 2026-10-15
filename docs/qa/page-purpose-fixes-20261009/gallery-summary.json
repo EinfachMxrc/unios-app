@@ -1,0 +1,223 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "synthetic_only": true,
+  "records": [
+    {
+      "name": "today",
+      "theme": "light",
+      "width": 1440,
+      "route": "/",
+      "title": "Heute",
+      "overflow": false,
+      "height": 1358
+    },
+    {
+      "name": "courses",
+      "theme": "light",
+      "width": 1440,
+      "route": "/courses",
+      "title": "Kurse",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "learning",
+      "theme": "light",
+      "width": 1440,
+      "route": "/learning",
+      "title": "Lernen",
+      "overflow": false,
+      "height": 2386
+    },
+    {
+      "name": "notes",
+      "theme": "light",
+      "width": 1440,
+      "route": "/notes?id=abbdb3d8-c8a0-4828-9f73-aa228412cd2a",
+      "title": "Notizen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "calendar",
+      "theme": "light",
+      "width": 1440,
+      "route": "/deadlines#timetable",
+      "title": "Termine",
+      "overflow": false,
+      "height": 1916
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 1440,
+      "route": "/settings#appearance",
+      "title": "Einstellungen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "today",
+      "theme": "light",
+      "width": 390,
+      "route": "/",
+      "title": "Heute",
+      "overflow": false,
+      "height": 1611
+    },
+    {
+      "name": "courses",
+      "theme": "light",
+      "width": 390,
+      "route": "/courses",
+      "title": "Kurse",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "learning",
+      "theme": "light",
+      "width": 390,
+      "route": "/learning",
+      "title": "Lernen",
+      "overflow": false,
+      "height": 3761
+    },
+    {
+      "name": "notes",
+      "theme": "light",
+      "width": 390,
+      "route": "/notes?id=abbdb3d8-c8a0-4828-9f73-aa228412cd2a",
+      "title": "Notizen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "calendar",
+      "theme": "light",
+      "width": 390,
+      "route": "/deadlines#timetable",
+      "title": "Termine",
+      "overflow": false,
+      "height": 1812
+    },
+    {
+      "name": "settings",
+      "theme": "light",
+      "width": 390,
+      "route": "/settings#appearance",
+      "title": "Einstellungen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "today",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/",
+      "title": "Heute",
+      "overflow": false,
+      "height": 1358
+    },
+    {
+      "name": "courses",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/courses",
+      "title": "Kurse",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "learning",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/learning",
+      "title": "Lernen",
+      "overflow": false,
+      "height": 2386
+    },
+    {
+      "name": "notes",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/notes?id=abbdb3d8-c8a0-4828-9f73-aa228412cd2a",
+      "title": "Notizen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "calendar",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/deadlines#timetable",
+      "title": "Termine",
+      "overflow": false,
+      "height": 1916
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 1440,
+      "route": "/settings#appearance",
+      "title": "Einstellungen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "today",
+      "theme": "dark",
+      "width": 390,
+      "route": "/",
+      "title": "Heute",
+      "overflow": false,
+      "height": 1611
+    },
+    {
+      "name": "courses",
+      "theme": "dark",
+      "width": 390,
+      "route": "/courses",
+      "title": "Kurse",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "learning",
+      "theme": "dark",
+      "width": 390,
+      "route": "/learning",
+      "title": "Lernen",
+      "overflow": false,
+      "height": 3761
+    },
+    {
+      "name": "notes",
+      "theme": "dark",
+      "width": 390,
+      "route": "/notes?id=abbdb3d8-c8a0-4828-9f73-aa228412cd2a",
+      "title": "Notizen",
+      "overflow": false,
+      "height": 1000
+    },
+    {
+      "name": "calendar",
+      "theme": "dark",
+      "width": 390,
+      "route": "/deadlines#timetable",
+      "title": "Termine",
+      "overflow": false,
+      "height": 1812
+    },
+    {
+      "name": "settings",
+      "theme": "dark",
+      "width": 390,
+      "route": "/settings#appearance",
+      "title": "Einstellungen",
+      "overflow": false,
+      "height": 1000
+    }
+  ],
+  "errors": []
+}

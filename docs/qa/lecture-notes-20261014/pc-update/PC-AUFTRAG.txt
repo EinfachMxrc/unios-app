@@ -1,0 +1,60 @@
+SPDX-License-Identifier: AGPL-3.0-or-later
+
+Aktualisiere meinen bestehenden UniOS-Server mit dem beigefügten, festen
+Quellpaket 0.1.23 / bf978b23267ab9e2e5ed1d480a343b8bae45c2f1.
+Nutze den vorhandenen SSH-Zugang dieses PCs. Dokumentierter Zielserver:
+root@203.0.113.10, öffentliche Adresse https://unios.example.org/unios/.
+Bitte selbstständig vorbereiten und prüfen. Kein GitHub-Push nötig.
+
+1. Paket mit verify-package.py prüfen. SHA256 des tar.gz:
+31aefa4979b1dd7564ad2f32428d18ba4122fd5028286cdb23b4755cfab6132b
+Nur in einen frischen Ordner entpacken. Keine Dateien überschreiben.
+Lies AGENTS.md des echten Checkouts und docs/SERVER.md. Diese Dateien sind
+nicht Teil des Docker-Baukontexts; nutze die vorhandene Projektkopie ergänzend.
+Keine echten data/local/.env-Inhalte, Zugangsdaten, private Notizen oder
+Schlüsselwerte lesen oder protokollieren. Keine Hochschul-Anmeldung durchführen.
+
+2. SSH mit StrictHostKeyChecking=yes. Nur technische Metadaten des laufenden
+unios-server prüfen: Image-ID, Compose-Projekt, Arbeitsordner, geordnete
+Compose-Dateien, Mount-Ziele/-Quellpfade, Ports, Netzwerke, Benutzer und
+Sicherheitsoptionen. Niemals Config.Env, Compose-Secrets oder Containerlogs
+ausgeben. Alte Hardcodierungen aus deploy-023.sh NICHT unverändert verwenden.
+Der tatsächliche Serverstand war vom Mac nicht erreichbar und ist unbekannt.
+
+3. Frisches Verzeichnis unter /opt/unios/releases/ und eindeutigen Image-Tag
+verwenden. Dockerbuild mit deploy/server/Dockerfile und OCI-Labels
+org.opencontainers.image.version=0.1.23 sowie vollständiger source_commit.
+Bau-/Prüflogs und Image-ID im neuen Release behalten. Keine alten Images löschen.
+
+4. Kandidaten-Smoke ausschließlich mit erfundenen Testdaten: --network none,
+--read-only, --user 10001:10001, --cap-drop ALL,
+--security-opt no-new-privileges und /tmp als tmpfs. Keine echten Volumes,
+Env-Dateien, Ports oder Schlüssel. Fernet-Testschlüssel in /tmp generieren,
+configure_server_keyring, desktop.backend.prepare_database und
+TestClient(create_app(settings, connectors=[], start_scheduler=False)).
+Prüfe /health=200, /api/courses ohne Auth=401, /=200,
+/manifest.webmanifest=200, /sw.js=200. Zusätzlich:
+app.notes.store._clean("Test", "") akzeptiert leeren Text;
+app.corpus.contracts.Fetch(refs=["/material/1?page=2"]) akzeptiert Seitenverweis.
+Keine GPT-Anfrage an private Quellen für diesen Test.
+
+5. Alembic-Quell-Head des aktiven Images und des Kandidaten in isolierten
+Containern vergleichen. Unterschiedliche Heads bedeuten STOP vor Aktivierung;
+eine nötige echte Migration erfordert vorher Marcs geprüften Snapshot.
+Gleiche Quell-Heads allein beweisen den echten DB-Stand nicht; die vorhandenen
+Betriebs-/Backupnachweise berücksichtigen. Keine Datenbank selbst auslesen.
+
+6. Vor Aktivierung alle vorhandenen Compose-Dateien in bisheriger Reihenfolge
+und dieselbe Umgebungsdatei (nur Pfad, keine Inhalte) beibehalten. Neue Override-
+Datei ändert ausschließlich das Image des tatsächlich ermittelten API-Service.
+Prüfe die Konfiguration ohne Ausgabe privater Werte. Bestehende Mounts,
+Netzwerke, Ports, Auth, Schlüssel und Reverse-Proxy unverändert übernehmen.
+Nur diesen Service ersetzen, kein compose down und keine Neu-Provisionierung.
+Danach lokalen und öffentlichen Healthcheck sowie unauthentifizierten API-
+Schutz prüfen; Metadaten und Versionswechsel belegen. Bei Fehlern keine
+automatische Rückstufung: neue Version könnte bereits Journale geschrieben
+haben. Kandidat und Nachweise behalten und vorwärts reparieren.
+
+7. Berichte Commit/Image-ID, Ergebnisse und offene Punkte. Erst nach echtem
+Serverupdate sind leere body-Notizen und neue lookup.fetch-Materialverweise
+live verfügbar. Neue Nutzerdaten niemals als Testfixture verwenden.

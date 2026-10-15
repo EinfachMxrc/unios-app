@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "syntheticFixturesOnly": true,
+    "buildIndexSha256": "9d1e9b762815ff0c5c8cc5cd8fc794f03cb9811276ec4751bf5d7a98c2fb0710"
+  },
+  "reports": [
+    {
+      "route": "/study",
+      "lighthouseVersion": "13.5.0",
+      "fetchTime": "2026-10-07T00:27:20.950Z",
+      "accessibilityScore": 100,
+      "numericAuditsChecked": 23,
+      "belowFullScoreIncludingUnweighted": [],
+      "zeroWeightNumericAuditsChecked": 1,
+      "runtimeError": null,
+      "runWarnings": []
+    },
+    {
+      "route": "/study/session/Uni%3A%3AB",
+      "lighthouseVersion": "13.5.0",
+      "fetchTime": "2026-10-07T00:27:58.944Z",
+      "accessibilityScore": 100,
+      "numericAuditsChecked": 17,
+      "belowFullScoreIncludingUnweighted": [],
+      "zeroWeightNumericAuditsChecked": 0,
+      "runtimeError": null,
+      "runWarnings": []
+    }
+  ]
+}

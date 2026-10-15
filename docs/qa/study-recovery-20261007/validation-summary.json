@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "package": "Multiwindow manual drafts and native review recovery",
+    "baseCommit": "f94103e",
+    "syntheticFixturesOnly": true,
+    "privateDataUsed": false,
+    "liveMigrationPerformed": false,
+    "pushedOrDeployed": false,
+    "buildIndexSha256": "be366997c9ab7483e688c9c5da59cc7f6fc752ef60dd2506abc85caf3b710566"
+  },
+  "baselines": {
+    "multiwindowDraft": {
+      "oldBuildIndexSha256": "dc897040c163a2ba2bf54e69a5c83f2718f1e57ca05852cd35549f5057a21fcd",
+      "realBrowserFailure": "Reload of two shared-IDB windows loses the first question",
+      "unexpected": 1
+    },
+    "offlineQueue": {
+      "failingTests": 2,
+      "failures": [
+        "Concurrent independent modules overwrite one rating",
+        "A new rating appended during HTTP acknowledgement is removed"
+      ]
+    },
+    "learningProgress": {
+      "realBrowserFailure": "Acknowledged review still shows zero topic repetitions on immediate SPA return",
+      "unexpected": 1
+    },
+    "receiptAfterNativeDeletion": {
+      "sdkReproFailures": 2,
+      "oldResult": "404 after committed native receipt, SQL503, then delete/reimport"
+    }
+  },
+  "tests": {
+    "frontend": {
+      "passed": 628,
+      "files": 67,
+      "durationSeconds": 8.21
+    },
+    "browserFocused": {
+      "startTime": "2026-10-07T02:36:16.946Z",
+      "duration": 54248.844000000005,
+      "expected": 13,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "targetedBackendReviewBridge": {
+      "passed": 24,
+      "durationSeconds": 40.7
+    },
+    "browserFull": {
+      "startTime": "2026-10-07T02:38:06.019Z",
+      "duration": 537910.068,
+      "expected": 312,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "pythonFull": {
+      "passed": 984,
+      "skipped": 12,
+      "durationSeconds": 979.41,
+      "selection": "Git-listed tests/test_*.py plus the two new bridge test files at process start; synthetic factory; fresh .test-rb5 basetemp"
+    }
+  },
+  "staticChecks": {
+    "ruff": "passed: tracked sources plus six new Python files",
+    "mypy": "passed: 566 source files",
+    "typecheck": "passed",
+    "eslintFull": "passed",
+    "i18n": "passed: 61 namespaces",
+    "openapi": "passed",
+    "generatedApiTypes": "passed",
+    "auditScriptNodeSyntax": "passed",
+    "spdx": "passed: 1513 first-party text files"
+  },
+  "accessibility": {
+    "reportFile": "lighthouse-accessibility-summary.json",
+    "states": 16,
+    "minimumScore": 100,
+    "numericAuditsCheckedIncludingUnweighted": 358,
+    "numericFailures": 0,
+    "runtimeErrors": 0,
+    "warnings": 0,
+    "desktopSourceVisibilityChecked": true
+  },
+  "build": {
+    "passed": true,
+    "newDependencies": 0,
+    "gzipBytes": {
+      "index": 147841,
+      "MaterialPage": 205623,
+      "NotesPage": 280470,
+      "pdf.worker.min": 376093,
+      "editor.api": 698349,
+      "tsMode": 305088,
+      "ts.worker": 1491546,
+      "editor.worker": 92838
+    },
+    "pwaPrecache": {
+      "manifestEntries": 239,
+      "uniqueFiles": 236,
+      "rawBytes": 16517720,
+      "rawBudgetBytes": 18874368,
+      "gzipBytes": 4449336,
+      "gzipBudgetBytes": 5242880
+    }
+  },
+  "screenshots": {
+    "method": "Actual finite animation completion; default allow; visibility and sticky desktop source guards before and after capture",
+    "inspectedBy": "Primary agent, all sixteen final original images",
+    "files": [
+      {
+        "file": "cards-dark-1440.png",
+        "sha256": "997baaae29ce752f78d17311431447864839508afef83a6dfeb56eb5a3dbe4e7",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-dark-390.png",
+        "sha256": "9c9d36af151e8a6f6a143a72d0064072eddca5026500f4f55759c0640be0a5bd",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-light-1440.png",
+        "sha256": "a05941289ef74923b1dabfd9596443047907a1624630673c9b4626390d230ac1",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-light-390.png",
+        "sha256": "44bbbeb36b48f57eece8a0baee5e184ef9df13c533056f94999bd974efa0509e",
+        "visuallyInspected": true
+      },
+      {
+        "file": "conflict-dark-1440.png",
+        "sha256": "de389b89ff5b66ff6720f524c2fb3d7bfbfbbfa9566bc71c1451ad70fe0d2d80",
+        "visuallyInspected": true
+      },
+      {
+        "file": "conflict-dark-390.png",
+        "sha256": "27a4521aaff25b65f278b3108d0e7da0ac5439a8f2367ac999e87bde47815e83",
+        "visuallyInspected": true
+      },
+      {
+        "file": "conflict-light-1440.png",
+        "sha256": "1b26e59ebdb597668293df8d79241fee7cfeb118ab8a5a3c08aa976153608861",
+        "visuallyInspected": true
+      },
+      {
+        "file": "conflict-light-390.png",
+        "sha256": "5ab3ff2c0b774771f2b1e8f74aba23ea86a02987576fdc050c1f24b01899d7a1",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-dark-1440.png",
+        "sha256": "a58d0997280f65288311854969664a41a5e4ae0b7f0a4a749107790e927b3421",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-dark-390.png",
+        "sha256": "9780ed5ee3f531507058bf25f4f54a88eac7e041ffbd34e416bce9ba10846198",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-light-1440.png",
+        "sha256": "a675069b280063b5193d136813db12f727996eb3576828b14d344bdefba2e14d",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-light-390.png",
+        "sha256": "208acf0739044eb7774e5c6b1fcddada7cdba3ccf343fd418d4b7271710924f8",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-dark-1440.png",
+        "sha256": "4f84cb35f58af3bef54dd61c74952802ec8297add9a567cf652e9d1f35c156cc",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-dark-390.png",
+        "sha256": "8f1217cc53bcfdfcfb303f6176bfb8fb001057a91468ed2bb538780cf2441f93",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-light-1440.png",
+        "sha256": "9cbaf47f82f323e3e8a265e65c493324a293345f55a322d8d4f8ed0568730e7d",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-light-390.png",
+        "sha256": "f98c31c5a0ce81efab7d91d51dc16b5e8777835522bae77d70da79e36b5256da",
+        "visuallyInspected": true
+      }
+    ]
+  },
+  "limits": {
+    "physicalMacBookSafariAndNativeWebView": "not verified",
+    "liveExternalAnkiAndInstaller": "not verified",
+    "dockerSmoke": "engine unavailable",
+    "legacyReceiptsWithoutMetadata": "native ACK without invented SQL history",
+    "historicalRepairAfterDeletion": "canonical manual GUID with exactly one existing SQL binding only; legacy AI markers require a separate identity contract",
+    "nativeImport": "synthetic note-ID reassignment and official SDK delete/reimport, no live APKG claim"
+  },
+  "ownership": {
+    "historicalQaOriginalsPreserved": 188,
+    "unrelatedTimetableImages": "preserved",
+    "rawLogsAndBackups": "not committed",
+    "historicalRegeneratedPhotosRestored": 18
+  }
+}

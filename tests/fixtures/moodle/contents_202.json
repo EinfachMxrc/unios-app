@@ -1,0 +1,10 @@
+[
+  {
+    "id": 302, "name": "Übungen",
+    "modules": [
+      {"id": 504, "modname": "resource", "name": "Blatt_01.pptx", "contents": [
+        {"type": "file", "filename": "Blatt_01.pptx", "fileurl": "https://moodle.example.invalid/webservice/pluginfile.php/20/Blatt_01.pptx", "timemodified": 1727000000, "filesize": 14}
+      ]}
+    ]
+  }
+]

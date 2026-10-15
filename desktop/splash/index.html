@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UniOS startet</title>
+<style>
+  :root { color-scheme: light dark; font: 16px system-ui, sans-serif; }
+  body { min-height: 100vh; display: grid; place-items: center; margin: 0; background: #f8f9f7; color: #202625; }
+  main { width: min(29rem, calc(100vw - 3rem)); }
+  .mark { display: block; width: 2.8rem; height: 2.8rem; }
+  h1 { font-size: 1.6rem; letter-spacing: -.04em; }
+  p { color: #596360; line-height: 1.5; }
+  .actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .actions[hidden] { display: none; }
+  button { padding: .75rem 1rem; border: 1px solid #899790; background: transparent; color: inherit; border-radius: .6rem; font: inherit; cursor: pointer; }
+  button:focus-visible { outline: 3px solid #5985ab; outline-offset: 3px; }
+  button:disabled { opacity: .5; cursor: wait; }
+  @media (prefers-color-scheme: dark) { body { background: #151b1a; color: #f2f5f1; } p { color: #b8c4bd; } }
+</style>
+<main><img class="mark" src="brand-v2.svg" width="45" height="45" alt="" aria-hidden="true"><h1>UniOS startet</h1><p id="status" role="status">Dein Studienplatz wird geöffnet …</p>
+  <div class="actions" id="recovery-actions" hidden><button type="button" data-mode="safe">Sicher öffnen</button><button type="button" data-mode="normal">Erneut starten</button></div>
+</main>
+<script>
+const english = navigator.language.startsWith('en');
+const buttons = document.querySelectorAll('button[data-mode]');
+if (english) { buttons[0].textContent = 'Open safely'; buttons[1].textContent = 'Restart'; }
+buttons.forEach(button => button.addEventListener('click', async () => {
+  buttons.forEach(item => item.disabled = true);
+  document.getElementById('status').textContent = english ? 'Opening UniOS …' : 'UniOS wird geöffnet …';
+  try { await window.__TAURI_INTERNALS__.invoke('restart_backend', { mode: button.dataset.mode }); }
+  catch { document.getElementById('status').textContent = english ? 'UniOS could not open. Your originals were not changed.' : 'UniOS konnte nicht öffnen. Deine Originale wurden nicht verändert.'; buttons.forEach(item => item.disabled = false); }
+}));
+</script>
+</html>

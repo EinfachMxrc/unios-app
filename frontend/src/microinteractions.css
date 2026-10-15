@@ -1,0 +1,150 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* Quiet, local feedback for actions that change study data. */
+.campus-sync-indicator {
+  position: fixed;
+  z-index: 45;
+  right: 24px;
+  bottom: 24px;
+  display: grid;
+  gap: 5px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: 0 6px 24px #00000012;
+  font-size: 0.8rem;
+}
+.campus-sync-summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.campus-sync-summary svg {
+  flex: none;
+}
+.campus-sync-hint {
+  color: var(--app-muted);
+  padding-left: 26px;
+  font-size: 0.74rem;
+}
+.campus-sync-indicator > a {
+  margin-left: 26px;
+  justify-self: start;
+}
+.campus-sync-indicator[data-state='error'] .campus-sync-summary svg {
+  color: var(--destructive);
+}
+@media (max-width: 760px) {
+  .campus-sync-indicator {
+    right: 16px;
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.action-feedback {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 24px;
+  margin: 8px 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.action-feedback svg {
+  flex: none;
+}
+
+.app-main > .content {
+  animation: none;
+}
+.app-sidebar {
+  backdrop-filter: none;
+}
+.action-feedback-pending {
+  color: var(--app-muted);
+}
+.action-feedback-success {
+  color: #176849;
+}
+.dark .action-feedback-success {
+  color: #72d9aa;
+}
+.action-feedback-error {
+  color: var(--destructive);
+}
+.action-feedback-spinner {
+  animation: action-feedback-spin 0.8s linear infinite;
+}
+@keyframes action-feedback-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.note-form-fieldset {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+
+/* Navigation and document controls acknowledge hover and press without moving the layout. */
+.app-shell
+  :is(
+    .nav-item,
+    .sidebar-child,
+    .sidebar-bottom a,
+    .topbar-sidebar-toggle,
+    .sidebar-visibility,
+    .sidebar-toggle,
+    .sidebar-course-toggle,
+    .note-list-item,
+    .note-writing-bar button,
+    .setting-switch
+  ) {
+  transition:
+    background-color var(--ui-color-duration) var(--ui-color-ease),
+    border-color var(--ui-color-duration) var(--ui-color-ease),
+    color var(--ui-color-duration) var(--ui-color-ease);
+}
+.app-shell
+  :is(
+    .nav-item,
+    .sidebar-child,
+    .sidebar-bottom a,
+    .topbar-sidebar-toggle,
+    .sidebar-visibility,
+    .sidebar-toggle,
+    .sidebar-course-toggle,
+    .note-list-item,
+    .note-writing-bar button
+  ):active {
+  filter: brightness(0.96);
+}
+.dark
+  .app-shell
+  :is(
+    .nav-item,
+    .sidebar-child,
+    .sidebar-bottom a,
+    .topbar-sidebar-toggle,
+    .sidebar-visibility,
+    .sidebar-toggle,
+    .sidebar-course-toggle,
+    .note-list-item,
+    .note-writing-bar button
+  ):active {
+  filter: brightness(1.12);
+}
+.note-index .note-list-item:not(.is-selected):hover {
+  border-color: var(--ring);
+  background: var(--app-surface-alt);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action-feedback-spinner,
+  .app-main > .content {
+    animation: none;
+  }
+}

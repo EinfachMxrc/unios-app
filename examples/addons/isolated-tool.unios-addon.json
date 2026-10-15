@@ -1,0 +1,22 @@
+{
+  "manifest": {
+    "schema_version": 2,
+    "api_version": 2,
+    "id": "org.example.isolated-tool",
+    "name": "Isoliertes Beispiel",
+    "author": "UniOS Beispiel",
+    "version": "1.0.0",
+    "description": "Ein tatsächlich isoliertes WASM-Werkzeug ohne Dateneingabe.",
+    "kind": "feature",
+    "runtime": "wasm",
+    "permissions": [],
+    "network_domains": [],
+    "widgets": [],
+    "page": {
+      "view": "text",
+      "title": "Isoliertes Werkzeug"
+    },
+    "wasm_sha256": "7f73e33553f66307ede0d6b61762f2376fd6f2dac70dcee1d2dd8a722c29d483"
+  },
+  "module_base64": "AGFzbQEAAAABDAJgAX8Bf2ACf38BfgMDAgABBQUBAQGAAgcYAwZtZW1vcnkCAAVhbGxvYwAAA3J1bgABCg4CBgBBgMAACwUAQuQACwtqAQBBAAtkeyJ0aXRsZSI6ICJXQVNNIGJlcmVpdCIsICJib2R5IjogIkRpZXNlcyBXZXJremV1ZyBsw6R1ZnQgaXNvbGllcnQgb2huZSBEYXRlaXp1Z3JpZmYgb2RlciBOZXR6d2Vyay4ifQ=="
+}

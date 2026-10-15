@@ -1,0 +1,33 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "date": "2026-10-10",
+  "private_data_used": false,
+  "typecheck": "passed",
+  "eslint": "passed",
+  "i18n_namespaces": 67,
+  "vitest": { "files": 4, "passed": 29 },
+  "browser": {
+    "passed": 21,
+    "failed": 0,
+    "duration_seconds": 23.1,
+    "specs": ["sidebar-workspace.spec.ts", "sidebar-customize.spec.ts", "recent-navigation.spec.ts", "navigation-cleanup.spec.ts"],
+    "synthetic_courses_stress_count": 30,
+    "stress_text_scale_percent": 150,
+    "separate_visual_workflow_passed": 1
+  },
+  "build": "passed",
+  "screenshots": [
+    "sidebar-detail-dark-1791627547852.png",
+    "sidebar-detail-light-1791627547682.png",
+    "sidebar-dark-1440-1791627547811.png",
+    "sidebar-light-1440-1791627547646.png",
+    "sidebar-dark-1280-1791627547889.png",
+    "sidebar-light-1280-1791627547727.png",
+    "sidebar-dark-390-1791627547925.png",
+    "sidebar-light-390-1791627547763.png"
+  ],
+  "windows_release_created": false,
+  "installed_app_updated": false,
+  "server_updated": false,
+  "github_pushed": false
+}

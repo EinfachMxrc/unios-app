@@ -1,0 +1,284 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.22",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "release_status": "draft",
+  "windows_install": {
+    "installed_at": "2026-10-09T13:20:28.4565044Z",
+    "exit_code": 0,
+    "installer_sha256": "72fc39eebd2cecefae2396de815039c7ea52a7e3bb2dfe82918c7c228dc805a4",
+    "app_version": "0.1.22",
+    "private_profile_untouched": true,
+    "installer_downloaded_from_github": true
+  },
+  "windows_verification": {
+    "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+    "version": "0.1.22",
+    "program_files_matching": 2891,
+    "ui_files_matching": 290,
+    "backend_executable_matching": true,
+    "client_health": {
+      "status": "ok",
+      "mode": "client"
+    },
+    "pairing_preserved": true,
+    "server_connection": "https://unios.example.org/unios",
+    "remote_host_mode": "host",
+    "remote_topology": "server"
+  },
+  "server": {
+    "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+    "version": "0.1.22",
+    "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+    "image": "unios-server:0.1.22-workspace-6f3f39ae3b5e",
+    "image_id": "sha256:0cd1c8d2355aab2ce3eed5db731d06a4dc2af71295942b682ababdc1314f22f9",
+    "healthy": true,
+    "mounts_preserved": true,
+    "topology_preserved": true,
+    "unchanged_schema_head": "ff98c7da0320",
+    "https_health": 200,
+    "unauthenticated_api": 401,
+    "activated_at": "2026-10-09T13:19:33Z"
+  },
+  "checks": {
+    "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+    "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+    "backend": {
+      "passed": 1053,
+      "skipped": 12,
+      "failed": 0
+    },
+    "frontend": {
+      "passed": 790,
+      "files": 91,
+      "failed": 0
+    },
+    "browser": {
+      "startTime": "2026-10-09T12:56:20.930Z",
+      "duration": 690251.7069999999,
+      "expected": 379,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "critical_keyboard_dialog_flows": {
+      "passed": 15,
+      "repeats_per_flow": 3
+    },
+    "typecheck_lint_mypy_ruff_api_openapi_i18n": "passed",
+    "profile_scope": "synthetic only",
+    "github_quality": {
+      "run_id": 37934023250,
+      "url": "https://github.com/EinfachMxrc/unios-app/actions/runs/37934023250",
+      "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+      "status": "blocked_before_jobs",
+      "jobs_started": 0,
+      "reason": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings",
+      "complete_exact_revision_matrix": false
+    },
+    "dependency_advisories": {
+      "status": "existing build dependencies remain vulnerable; not fixed",
+      "sharp": {
+        "version": "0.35.4",
+        "advisory": "GHSA-wq5f-xc86-pv6w",
+        "path": "PWA assets tool; regular build does not activate generator; optional CLI input public/favicon.svg"
+      },
+      "source_map_js": {
+        "version": "1.2.1",
+        "advisory": "GHSA-68fv-2mgg-jv7q",
+        "path": "Node PostCSS/Vite/Tailwind build and test consumers"
+      },
+      "deployed_app_consumer_found": false,
+      "interpretation": "No implicated user input path found in inspected source and Windows UI artifacts; not a general security clearance."
+    },
+    "lighthouse": {
+      "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+      "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+      "verified_at_utc": "2026-10-09T13:19:05.4683470Z",
+      "minimum_accessibility_score": 97,
+      "failed_measurements": 0,
+      "measurements": 12,
+      "lighthouse_version": "13.5.0",
+      "measurement_mode": "Snapshots of fully rendered Source/Today/calendar with actual synthetic API and PDF canvas",
+      "summary_path": "lighthouse/summary.json",
+      "immutable_bundle": ".tmp/workspace-022-pwa",
+      "index_sha256": "50ee826a8eb5e2bb98d2401cec3b83d66090570f0a5e2e601bc1d05de270c606",
+      "bundle_index_unchanged": true,
+      "synthetic_only": true,
+      "browser_errors": [],
+      "blocked_external_requests": [],
+      "details": [
+        {
+          "id": "source-light-1440",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/source-light-1440.json",
+          "screenshot": "lighthouse/source-light-1440.png",
+          "failed_audits": []
+        },
+        {
+          "id": "today-light-1440",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/today-light-1440.json",
+          "screenshot": "lighthouse/today-light-1440.png",
+          "failed_audits": []
+        },
+        {
+          "id": "calendar-light-1440",
+          "accessibility_score": 97,
+          "receipt": "lighthouse/calendar-light-1440.json",
+          "screenshot": "lighthouse/calendar-light-1440.png",
+          "failed_audits": [
+            "label-content-name-mismatch",
+            "target-size"
+          ]
+        },
+        {
+          "id": "source-light-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/source-light-390.json",
+          "screenshot": "lighthouse/source-light-390.png",
+          "failed_audits": []
+        },
+        {
+          "id": "today-light-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/today-light-390.json",
+          "screenshot": "lighthouse/today-light-390.png",
+          "failed_audits": []
+        },
+        {
+          "id": "calendar-light-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/calendar-light-390.json",
+          "screenshot": "lighthouse/calendar-light-390.png",
+          "failed_audits": []
+        },
+        {
+          "id": "source-dark-1440",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/source-dark-1440.json",
+          "screenshot": "lighthouse/source-dark-1440.png",
+          "failed_audits": []
+        },
+        {
+          "id": "today-dark-1440",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/today-dark-1440.json",
+          "screenshot": "lighthouse/today-dark-1440.png",
+          "failed_audits": []
+        },
+        {
+          "id": "calendar-dark-1440",
+          "accessibility_score": 97,
+          "receipt": "lighthouse/calendar-dark-1440.json",
+          "screenshot": "lighthouse/calendar-dark-1440.png",
+          "failed_audits": [
+            "label-content-name-mismatch",
+            "target-size"
+          ]
+        },
+        {
+          "id": "source-dark-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/source-dark-390.json",
+          "screenshot": "lighthouse/source-dark-390.png",
+          "failed_audits": []
+        },
+        {
+          "id": "today-dark-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/today-dark-390.json",
+          "screenshot": "lighthouse/today-dark-390.png",
+          "failed_audits": []
+        },
+        {
+          "id": "calendar-dark-390",
+          "accessibility_score": 100,
+          "receipt": "lighthouse/calendar-dark-390.json",
+          "screenshot": "lighthouse/calendar-dark-390.png",
+          "failed_audits": []
+        }
+      ],
+      "limits": [
+        "No claim about production network performance, real Safari/MacBook trackpad behavior, software keyboards or handwriting-equivalent speed.",
+        "Calendar desktop score 97 reports small target areas and label/name mismatch; every measured view exceeds the 90 accessibility threshold."
+      ]
+    },
+    "installed_startup": {
+      "mode": "client",
+      "runs": [
+        {
+          "seconds": 0.8049,
+          "client_seconds": 0.5073
+        },
+        {
+          "seconds": 0.7962,
+          "client_seconds": 0.5159
+        }
+      ],
+      "median_seconds": 0.8005
+    }
+  },
+  "github_quality": {
+    "run_id": 37934023250,
+    "url": "https://github.com/EinfachMxrc/unios-app/actions/runs/37934023250",
+    "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+    "status": "blocked_before_jobs",
+    "jobs_started": 0,
+    "reason": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings",
+    "complete_exact_revision_matrix": false
+  },
+  "macos_dmg": "not_built",
+  "linux_desktop": "not_built",
+  "signature_and_autoupdater_feed": "not_published",
+  "artifacts": {
+    "UniOS_0.1.22_x64-setup.exe": {
+      "sha256": "72fc39eebd2cecefae2396de815039c7ea52a7e3bb2dfe82918c7c228dc805a4",
+      "bytes": 304102874
+    },
+    "UniOS_0.1.22_x64_en-US.msi": {
+      "sha256": "953fb16bb64067098f22d5484eaba5c59f3d319a09f17313f92d60d10a8a9a70",
+      "bytes": 370995234
+    },
+    "UniOS-0.1.22-server-source.tar.gz": {
+      "sha256": "2ef16ae9d66641b2b3fd22f5161bd3e3946b7b5f074a283613d89ac1104fd0d3",
+      "bytes": 1972967
+    },
+    "UniOS-0.1.22-source.zip": {
+      "sha256": "508801a872365777e0b633b0df6bed32415b903eff1e17906184f3f73ef179b1",
+      "bytes": 35098434
+    },
+    "UniOS-0.1.22-RELEASE-INFO.txt": {
+      "sha256": "37c656b37e5f595cf282e5544fa4eec1e240a44fe7a76818b37c103af36e11d0",
+      "bytes": 2128
+    },
+    "windows-install-verification.json": {
+      "sha256": "3856e45343133249427bbed9dec497388ee484422877c6dcb68f4503783c2fd1",
+      "bytes": 414
+    },
+    "server-verification.json": {
+      "sha256": "a87af8600d754180ac920fadba76c08eb0f389198dbb621cb5f57e2ef14df8f8",
+      "bytes": 512
+    },
+    "quality-summary.json": {
+      "sha256": "5da931173af57098e1aa5536bd5d284a6da53548addf0e850f23c014b034d74a",
+      "bytes": 1833
+    },
+    "source-and-bundle-verification.json": {
+      "sha256": "e584b73f7078cb75ec27db254529ff4d66ab042a480d60de0343aa5f66908433",
+      "bytes": 3952
+    },
+    "lighthouse-summary.json": {
+      "sha256": "9b82c35b23423c9d6203b155a42c268d313bb5f5a865d88da167c71566453b97",
+      "bytes": 3858
+    },
+    "server-source-integrity.json": {
+      "sha256": "34c7536206576f56b6957a4cff0f351637d76848e3ce2d66a33435ac5c39ea5b",
+      "bytes": 346
+    },
+    "deployment-runbook.md": {
+      "sha256": "632870139282b273d3ae98928d23a9198d9237ceab74d1adce382e3250503a2a",
+      "bytes": 11412
+    }
+  }
+}

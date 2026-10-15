@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-portal-scroll"
+description = "Enables the portal_scroll command without any pre-configured scope."
+commands.allow = ["portal_scroll"]
+
+[[permission]]
+identifier = "deny-portal-scroll"
+description = "Denies the portal_scroll command without any pre-configured scope."
+commands.deny = ["portal_scroll"]

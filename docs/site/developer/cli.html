@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="CLI · UniOS Handbuch" /><title>CLI · UniOS</title>
+<link rel="stylesheet" href="../docs.css" /><script src="../docs-index.js" defer></script><script src="../docs.js" defer></script></head>
+<body data-docs-root="../"><a class="skip-link" href="#main">Zum Inhalt springen</a>
+<header class="site-header"><div class="header-inner"><a class="brand" href="../index.html" aria-label="UniOS Projektseite"><span class="brand-mark">U</span><span>UniOS</span></a><span class="brand-divider" aria-hidden="true"></span><span class="brand-section">Entwickler</span>
+<nav class="header-links" aria-label="Bereiche"><a href="../docs.html">Hilfe</a><a class="current" href="../developers.html">Entwickler</a><a href="https://github.com/EinfachMxrc/unios-app">GitHub ↗</a></nav>
+<button class="menu-toggle" type="button" aria-controls="docs-nav" aria-expanded="false">Menü</button></div></header>
+<div class="docs-layout"><aside class="docs-sidebar" id="docs-nav" aria-label="Dokumentationsnavigation"><a class="sidebar-home" href="../developers.html">◫ Übersicht Entwickler</a>
+<p class="sidebar-label">Loslegen</p>
+<a href="../developer/entwicklungsumgebung.html">Entwicklungsumgebung</a>
+<a href="../developer/tests.html">Tests und Fake-Daten</a>
+<p class="sidebar-label">Architektur</p>
+<a href="../developer/architektur.html">Backend-Schichten</a>
+<a href="../developer/frontend.html">Frontend und PWA</a>
+<a href="../developer/speicher.html">Dateien und Suche</a>
+<p class="sidebar-label">Schnittstellen</p>
+<a href="../developer/rest-api.html">REST API</a>
+<a href="../developer/cli.html" class="active" aria-current="page">CLI</a>
+<a href="../developer/entities.html">Entitäten und Beziehungen</a>
+<a href="../developer/api-referenz.html">API-Referenz</a>
+<p class="sidebar-label">API-Referenz</p>
+<a href="../developer/api-courses.html">Kurse und Material</a>
+<a href="../developer/api-notes.html">Notizen und Links</a>
+<a href="../developer/api-intake.html">Eingang</a>
+<a href="../developer/api-learning.html">Lernen</a>
+<a href="../developer/api-flashcards.html">Karteikarten und Anki</a>
+<a href="../developer/api-ai.html">KI</a>
+<a href="../developer/api-organization.html">Organisation</a>
+<a href="../developer/api-portals.html">Hochschulportale</a>
+<a href="../developer/api-connectors.html">Connectoren</a>
+<a href="../developer/api-operations.html">Host und Einrichtung</a>
+<a href="../developer/api-other.html">Weitere Endpunkte</a>
+<p class="sidebar-label">Erweiterungen</p>
+<a href="../developer/connectoren.html">Connector API v1</a>
+<a href="../developer/profile.html">Hochschulprofile</a>
+<a href="../developer/addons.html">Feature- und UI-Addons</a>
+<p class="sidebar-label">Betrieb &amp; Beiträge</p>
+<a href="../developer/self-hosting.html">Self-Hosting</a>
+<a href="../developer/mitarbeiten.html">Beitragen</a>
+<div class="sidebar-bottom"><span class="status-dot" aria-hidden="true"></span> Alpha · lokal betrieben</div></aside>
+<main id="main" class="docs-main"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../developers.html">Entwickler</a><span>/</span><span>Schnittstellen</span><span>/</span><span aria-current="page">CLI</span></nav><div class="search-wrap"><label class="search-box" for="docs-search"><span aria-hidden="true">⌕</span><input id="docs-search" type="search" placeholder="Alle Themen und API-Pfade durchsuchen …" autocomplete="off" aria-controls="search-results" aria-expanded="false" /><kbd>/</kbd></label><div id="search-results" class="search-results" role="region" aria-label="Suchergebnisse" hidden></div></div><div class="article-layout"><article class="docs-article"><p class="article-kicker">Schnittstellen</p><h1>CLI</h1><p class="article-lead">Die CLI heißt unios und spricht viele der lokalen Funktionen des Hosts an. Zeige die vollständigen Optionen mit uv run unios --help oder für einen Unterbefehl mit --help an.</p><nav class="inline-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#haufige-befehle">Häufige Befehle</a><a href="#vorsicht-bei-anderungen">Vorsicht bei Änderungen</a></nav>
+<h2 id="haufige-befehle">Häufige Befehle</h2>
+<ul>
+<li>uv run unios status zeigt den lokalen Zustand.</li>
+<li>uv run unios courses listet Kurse.</li>
+<li>uv run unios search SUCHBEGRIFF sucht im lokalen Bestand.</li>
+<li>uv run unios doctor prüft die lokale Installation.</li>
+<li>uv run unios host status zeigt die Hostrolle.</li>
+<li>uv run unios demo create und demo serve starten eine isolierte Demo.</li>
+<li>uv run unios schema --json zeigt den gemeinsamen Entitäts- und Beziehungsvertrag.</li>
+<li>uv run unios describe note --json erklärt einen Objekttyp; <code>describe host status</code> beschreibt weiterhin einen CLI-Befehl.</li>
+<li>uv run unios entity list course --json und <code>entity get note ID --json</code> lesen öffentliche Felder.</li>
+<li>uv run unios entity search note SUCHWORT --json sucht in öffentlichen Titelfeldern; <code>entity links note ID --json</code> zeigt gerichtete Beziehungen und Rückverweise.</li>
+<li>uv run unios relate topic 1 prerequisite topic 2 --dry-run zeigt eine geplante Verbindung; <code>--yes</code> führt sie aus.</li>
+<li>uv run unios unlink topic 1 KANTEN_ID --dry-run prüft einen Rückverweis; <code>--yes</code> löst ihn.</li>
+</ul>
+<p>Die bisherigen Vorschlagsformate bleiben mit <code>unios schema cards</code>, <code>exercises</code>, <code>explanations</code> oder <code>all</code> erreichbar.</p>
+<h2 id="vorsicht-bei-anderungen">Vorsicht bei Änderungen</h2>
+<p>Hostwechsel, Sync, Backup und API-Schreibmethoden haben eigene Vorbedingungen. Prüfe die Hilfe und erstelle vor Migrationen einen Snapshot. Der Quellcode der <a href="https://github.com/EinfachMxrc/unios-app/blob/main/app/cli/main.py">CLI</a> ist für die aktuelle Optionsliste maßgeblich.</p><div class="article-source"><a class="source-link" href="https://github.com/EinfachMxrc/unios-app/blob/main/docs/handbook/developer/cli.md">Quelltext bearbeiten ↗</a></div><nav class="page-pagination" aria-label="Weitere Themen"><a href="rest-api.html"><small>← Vorheriges Thema</small><strong>REST API</strong></a><a href="entities.html"><small>Nächstes Thema →</small><strong>Entitäten und Beziehungen</strong></a></nav></article><aside class="page-toc" aria-label="Auf dieser Seite"><strong>Auf dieser Seite</strong><a href="#haufige-befehle">Häufige Befehle</a><a href="#vorsicht-bei-anderungen">Vorsicht bei Änderungen</a></aside></div><footer class="docs-footer"><span>UniOS · Alpha-Dokumentation</span><a href="../docs.html">Hilfe →</a></footer></main></div></body></html>

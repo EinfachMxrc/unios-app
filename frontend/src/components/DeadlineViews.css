@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@layer workspace {
+  .deadline-table-row > *,
+  .deadline-timeline .data-row > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .deadline-table-row .today-peek-trigger,
+  .deadline-timeline .today-peek-trigger {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}

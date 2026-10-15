@@ -1,0 +1,3297 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "method": "Lighthouse snapshots of built calendar views and event dialogs",
+  "measuredAt": "2026-10-09T10:42:44.355Z",
+  "buildIndexSha256": "e6b8d99a55845b7af75598e1a90feabdb1d0e74ea418cb58fe4b24ede17c5cb0",
+  "reports": [
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 97,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 477,
+                    "bottom": 485,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 565,
+                    "bottom": 573,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-12-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 653,
+                    "bottom": 661,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Übungsgruppe ändern\">",
+                  "nodeLabel": "Beginn von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-14-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 709,
+                    "bottom": 717,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Übungsgruppe ändern\">",
+                  "nodeLabel": "Ende von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-15-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-17-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 885,
+                    "bottom": 893,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-18-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-20-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-21-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-23-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-24-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Projektarbeit ändern\">",
+                  "nodeLabel": "Beginn von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-26-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 821,
+                    "bottom": 829,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Projektarbeit ändern\">",
+                  "nodeLabel": "Ende von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 96,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 477,
+                    "bottom": 485,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 565,
+                    "bottom": 573,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-12-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 653,
+                    "bottom": 661,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Übungsgruppe ändern\">",
+                  "nodeLabel": "Beginn von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-14-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 709,
+                    "bottom": 717,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Übungsgruppe ändern\">",
+                  "nodeLabel": "Ende von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-15-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-17-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 885,
+                    "bottom": 893,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-18-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-20-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-21-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-23-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-24-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Projektarbeit ändern\">",
+                  "nodeLabel": "Beginn von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-26-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 821,
+                    "bottom": 829,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Projektarbeit ändern\">",
+                  "nodeLabel": "Ende von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 97,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 477,
+                    "bottom": 485,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 565,
+                    "bottom": 573,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-12-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 653,
+                    "bottom": 661,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Übungsgruppe ändern\">",
+                  "nodeLabel": "Beginn von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-14-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 709,
+                    "bottom": 717,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Übungsgruppe ändern\">",
+                  "nodeLabel": "Ende von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-15-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-17-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 885,
+                    "bottom": 893,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-18-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-20-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-21-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-23-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-24-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Projektarbeit ändern\">",
+                  "nodeLabel": "Beginn von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-26-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 821,
+                    "bottom": 829,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Projektarbeit ändern\">",
+                  "nodeLabel": "Ende von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 96,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 477,
+                    "bottom": 485,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 565,
+                    "bottom": 573,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-1-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 477,
+                          "bottom": 573,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n08:00 – 09:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 370,
+                    "right": 501,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-4-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 367,
+                          "right": 504,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n10:00 – 11:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 517,
+                    "right": 648,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-7-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 514,
+                          "right": 651,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                  "nodeLabel": "Beginn von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 664,
+                    "right": 722,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                  "nodeLabel": "Ende von Mathematik ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-10-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 661,
+                          "right": 725,
+                          "width": 64,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Mathematik\n10:00 – 11:30\nR101"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-12-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 653,
+                    "bottom": 661,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Übungsgruppe ändern\">",
+                  "nodeLabel": "Beginn von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-14-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 709,
+                    "bottom": 717,
+                    "left": 737,
+                    "right": 795,
+                    "width": 58,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Übungsgruppe ändern\">",
+                  "nodeLabel": "Ende von Übungsgruppe ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (58.1px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 653,
+                          "bottom": 717,
+                          "left": 734,
+                          "right": 798,
+                          "width": 64,
+                          "height": 64
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-15-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                  "nodeLabel": "Beginn von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-17-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 885,
+                    "bottom": 893,
+                    "left": 664,
+                    "right": 795,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                  "nodeLabel": "Ende von Programmieren ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 893,
+                          "left": 661,
+                          "right": 798,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Programmieren\n13:00 – 14:30\nR203"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-18-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 605,
+                    "bottom": 613,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-20-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 693,
+                    "bottom": 701,
+                    "left": 811,
+                    "right": 943,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 605,
+                          "bottom": 701,
+                          "left": 808,
+                          "right": 946,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "English Workshop\n10:00 – 11:30\nR301"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-21-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 541,
+                    "bottom": 549,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                  "nodeLabel": "Beginn von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-23-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 629,
+                    "bottom": 637,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                  "nodeLabel": "Ende von Digitale Systeme ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 8px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 541,
+                          "bottom": 637,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 96
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-24-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 797,
+                    "bottom": 805,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Projektarbeit ändern\">",
+                  "nodeLabel": "Beginn von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-26-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 821,
+                    "bottom": 829,
+                    "left": 959,
+                    "right": 1090,
+                    "width": 131,
+                    "height": 8
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Projektarbeit ändern\">",
+                  "nodeLabel": "Ende von Projektarbeit ändern",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size (131.2px by 8px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 0px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,5,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 797,
+                          "bottom": 829,
+                          "left": 956,
+                          "right": 1093,
+                          "width": 137,
+                          "height": 32
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                        "nodeLabel": "Projektarbeit\n13:00\nLab 2"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    }
+  ]
+}

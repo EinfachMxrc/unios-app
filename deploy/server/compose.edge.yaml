@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Optional integration with an existing Caddy/Cloudflare edge network.
+services:
+  api:
+    # Keep runner traffic on the approved private UniOS bridge, even with an edge network.
+    networks:
+      default:
+        gw_priority: 1
+      edge:
+        gw_priority: 0
+networks:
+  edge:
+    external: true
+    name: ${UNIOS_EDGE_NETWORK:-edge}

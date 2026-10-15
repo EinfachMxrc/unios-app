@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-portal-guard"
+description = "Enables the portal_guard command without any pre-configured scope."
+commands.allow = ["portal_guard"]
+
+[[permission]]
+identifier = "deny-portal-guard"
+description = "Denies the portal_guard command without any pre-configured scope."
+commands.deny = ["portal_guard"]

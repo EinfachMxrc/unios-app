@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+services:
+  api:
+    build:
+      context: .
+      dockerfile: deploy/linux/Dockerfile.api
+    env_file: .env
+    environment:
+      DATA_DIR: /app/data
+      LOCAL_DIR: /app/local
+      SERVE_REACT: "true"
+      DEVICE_NAME: "${DEVICE_NAME:-Docker-Host}"
+    volumes:
+      - ./data:/app/data
+      - ./local:/app/local
+      - ${RESTIC_LOCAL_PATH:-./backup}:/app/backup
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped

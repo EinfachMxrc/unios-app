@@ -1,0 +1,23 @@
+{
+  "license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "user": [
+    {"section": "Erste Schritte", "pages": [["was-ist-unios", "Was ist UniOS?"], ["demo", "Demo ausprobieren"], ["installation", "Installation"], ["hochschule", "Hochschule verbinden"]]},
+    {"section": "Grundlagen", "pages": [["datenmodell", "Daten und Kurse"], ["suche", "Suche und Verknüpfungen"]]},
+    {"section": "Heute", "pages": [["tagesuebersicht", "Tagesübersicht"]]},
+    {"section": "Kurse & Material", "pages": [["kursuebersicht", "Kursübersicht"], ["dateiversionen", "Dateiversionen"], ["pdf-leser", "PDF lesen und markieren"], ["ocr", "Gescannte PDFs"]]},
+    {"section": "Notizen", "pages": [["notizen", "Notizen schreiben"], ["wikilinks", "Wikilinks und Rückverweise"]]},
+    {"section": "Lernen", "pages": [["lernuebersicht", "Lernübersicht"], ["uebungen", "Übungen und Lernstand"], ["karteikarten", "Karteikarten und Anki"]]},
+    {"section": "Eingang", "pages": [["eingang", "Inhalte sammeln"], ["einordnen", "Inhalte einordnen"]]},
+    {"section": "Organisation", "pages": [["termine", "Termine und Aufgaben"], ["projekte", "Projekte"], ["noten", "Noten und ECTS"]]},
+    {"section": "Mehrere Geräte", "pages": [["host", "Host und Standby"], ["backup", "Snapshots und Backups"], ["wiederherstellung", "Wiederherstellung"]]},
+    {"section": "Datenschutz & Sicherheit", "pages": [["hochschul-login", "Hochschul-Login"], ["berechtigungen", "Connector-Berechtigungen"]]},
+    {"section": "Probleme lösen", "pages": [["sync-probleme", "Sync und Material"], ["diagnose", "Diagnose"]]}
+  ],
+  "developer": [
+    {"section": "Loslegen", "pages": [["entwicklungsumgebung", "Entwicklungsumgebung"], ["tests", "Tests und Fake-Daten"]]},
+    {"section": "Architektur", "pages": [["architektur", "Backend-Schichten"], ["frontend", "Frontend und PWA"], ["speicher", "Dateien und Suche"]]},
+    {"section": "Schnittstellen", "pages": [["rest-api", "REST API"], ["cli", "CLI"], ["entities", "Entitäten und Beziehungen"], ["api-referenz", "API-Referenz"]]},
+    {"section": "Erweiterungen", "pages": [["connectoren", "Connector API v1"], ["profile", "Hochschulprofile"], ["addons", "Feature- und UI-Addons"]]},
+    {"section": "Betrieb & Beiträge", "pages": [["self-hosting", "Self-Hosting"], ["mitarbeiten", "Beitragen"]]}
+  ]
+}

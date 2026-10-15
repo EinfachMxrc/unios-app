@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+repos:
+  - repo: local
+    hooks:
+      - id: blocked-local-files
+        name: Keine lokalen Daten im Commit
+        entry: .venv/bin/python scripts/check_staged_paths.py
+        language: system
+        always_run: true
+        pass_filenames: false
+      - id: secret-scan
+        name: Geheimnisse erkennen
+        entry: .venv/bin/detect-secrets-hook --baseline .secrets.baseline
+        language: system
+        types: [text]
+        exclude: ^(LICENSE|uv\.lock|frontend/package-lock\.json)$
+      - id: spdx-headers
+        name: SPDX-Kennungen prüfen
+        entry: .venv/bin/python scripts/check_spdx.py
+        language: system
+        always_run: true
+        pass_filenames: false
+      - id: ruff
+        name: Python mit Ruff prüfen
+        entry: .venv/bin/ruff check
+        language: system
+        types: [python]
+      - id: openapi-contract
+        name: OpenAPI-Vertrag prüfen
+        entry: .venv/bin/python scripts/export_openapi.py --check
+        language: system
+        always_run: true
+        pass_filenames: false
+      - id: prettier
+        name: Frontend mit Prettier prüfen
+        entry: frontend/node_modules/.bin/prettier --check
+        language: system
+        files: ^frontend/.*\.(ts|tsx|css|json|html)$
+        exclude: ^frontend/(package-lock\.json|openapi\.json|src/generated/api\.d\.ts)$

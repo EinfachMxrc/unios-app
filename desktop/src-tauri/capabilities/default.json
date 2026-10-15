@@ -1,0 +1,39 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Nur die lokale UniOS-Oberfläche darf signierte Updates prüfen, die App neu starten, http(s)-Links im Standardbrowser öffnen und die Anmeldefenster für Moodle, myCampus und PRIMUSS starten",
+  "windows": [
+    "main"
+  ],
+  "remote": {
+    "urls": [
+      "http://127.0.0.1:8000/*",
+      "http://127.0.0.1:8001/*",
+      "http://127.0.0.1:8002/*"
+    ]
+  },
+  "permissions": [
+    "core:default",
+    "allow-restart-backend",
+    "allow-check-release-updates",
+    "allow-install-release-update",
+    "process:allow-restart",
+    "shell:allow-open",
+    "allow-open-moodle-login",
+    "allow-open-portal-login",
+    "allow-capture-portal-login",
+    "allow-portal-capture-capabilities",
+    "allow-snapshot-portal-page",
+    "allow-portal-status",
+    "allow-portal-links",
+    "allow-portal-navigate",
+    "allow-portal-click",
+    "allow-portal-scroll",
+    "allow-portal-guard",
+    "allow-close-portal-login",
+    "allow-open-university-mail",
+    "allow-open-room-booking",
+    "allow-fill-room-booking",
+    "allow-read-room-booking"
+  ]
+}

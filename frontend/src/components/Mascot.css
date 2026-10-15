@@ -1,0 +1,116 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@layer theme, base, components, utilities, workspace, interactions, accessibility;
+@layer workspace {
+  /* Uli takes the brand teal; the beak is the only warm colour in the app. */
+  .mascot {
+    --mascot-body: #2f6f7d;
+    --mascot-wing: #245863;
+    --mascot-belly: #e8f1f2;
+    --mascot-beak: #f2a541;
+    --mascot-ink: #14262b;
+    --mascot-shadow: rgb(0 0 0 / 0.08);
+    flex: none;
+    overflow: visible;
+  }
+  .dark .mascot {
+    --mascot-body: #5aa6b6;
+    --mascot-wing: #47909f;
+    --mascot-belly: #1d3138;
+    --mascot-ink: #0b1416;
+    --mascot-shadow: rgb(0 0 0 / 0.35);
+  }
+  /* A slow blink, now and then; nothing moves when the reader asked for less motion. */
+  .mascot-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: mascot-blink 8.6s infinite;
+  }
+  @keyframes mascot-blink {
+    0%,
+    39%,
+    43%,
+    91%,
+    96%,
+    100% {
+      transform: scaleY(1);
+    }
+    40%,
+    42%,
+    93%,
+    95% {
+      transform: scaleY(0.08);
+    }
+  }
+  .mascot-cheer {
+    animation: mascot-hop 0.85s var(--ui-enter-ease) 2;
+    transform-origin: bottom center;
+  }
+  @keyframes mascot-hop {
+    0%,
+    70%,
+    100% {
+      transform: translateY(0);
+    }
+    80% {
+      transform: translateY(-4px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mascot-eyes,
+    .mascot-cheer {
+      animation: none;
+    }
+  }
+}
+
+@layer workspace {
+  .mascot-face {
+    transform-box: view-box;
+    transform-origin: 48px 43px;
+    transition: transform 0.3s var(--ui-enter-ease);
+  }
+  .mascot-brows {
+    opacity: 0.6;
+    transform-origin: 48px 30px;
+    transition: transform 0.3s var(--ui-enter-ease);
+  }
+  .mascot-wide .mascot-brows {
+    transform: translateY(-3px);
+  }
+  .mascot-cheeks {
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  .mascot-wide .mascot-cheeks,
+  .mascot-cheer .mascot-cheeks {
+    opacity: 0.4;
+  }
+  .mascot-sleepy .mascot-figure {
+    transform-box: view-box;
+    transform-origin: 48px 88px;
+    animation: uli-breathe 5s ease-in-out infinite;
+  }
+  @keyframes uli-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.015, 0.98);
+    }
+  }
+  html[data-reduce-motion='true'] .mascot * {
+    animation: none !important;
+    transition: none !important;
+  }
+  html[data-reduce-motion='true'] .mascot {
+    animation: none !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mascot *,
+    .mascot {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}

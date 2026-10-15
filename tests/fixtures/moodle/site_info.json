@@ -1,0 +1,14 @@
+{
+  "userid": 42,
+  "version": "4.5",
+  "functions": [
+    {"name": "core_enrol_get_users_courses"},
+    {"name": "core_course_get_contents"},
+    {"name": "core_course_get_updates_since"},
+    {"name": "mod_assign_get_assignments"},
+    {"name": "mod_forum_get_forum_discussions"},
+    {"name": "core_calendar_get_action_events_by_timesort"},
+    {"name": "mod_url_get_urls_by_courses"},
+    {"name": "core_group_get_course_user_groups"}
+  ]
+}

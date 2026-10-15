@@ -1,0 +1,156 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.studio-dialog.study-insert-dialog.truth-dialog {
+  width: min(940px, calc(100vw - 24px));
+  scroll-padding-block: 24px 100px;
+}
+.truth-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+.truth-controls .study-field {
+  flex: 0 1 220px;
+}
+.truth-controls .logic-options {
+  flex: 1 1 260px;
+}
+.truth-input-help {
+  font-size: 0.82rem;
+  color: var(--app-muted);
+}
+.truth-input-help summary {
+  cursor: pointer;
+}
+.truth-board-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0 14px;
+}
+.truth-board-heading > .truth-board-math {
+  font-size: 1.12rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
+}
+.truth-board-heading > .muted-text {
+  font-size: 0.8rem;
+}
+.truth-board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.truth-board-no-results {
+  grid-template-columns: minmax(0, 1fr);
+}
+.truth-board-scroll {
+  max-height: none;
+  border-radius: 10px;
+}
+.truth-board-table {
+  font-size: 0.95rem;
+}
+.truth-board-table :is(th, td) {
+  padding: 7px 10px;
+  height: 38px;
+}
+.truth-board-table th {
+  z-index: 1;
+  font-weight: 600;
+}
+.truth-board-table .truth-board-term {
+  border-left: 2px solid var(--app-border);
+}
+.truth-board-table .truth-board-output {
+  border-left: 2px solid var(--app-border);
+  width: 56px;
+}
+.truth-board-table .truth-row-one {
+  background: var(--app-blue-soft);
+}
+.truth-board-table .truth-row-one .truth-board-term {
+  color: var(--app-text);
+}
+.truth-board-table .truth-result {
+  display: inline-flex;
+  min-width: 26px;
+  min-height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.truth-board-table .truth-row-one .truth-result {
+  background: var(--app-text);
+  color: var(--app-surface);
+  font-weight: 750;
+}
+.truth-board-sum {
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--app-surface-alt);
+  min-width: 0;
+}
+.truth-board-sum h3,
+.truth-intermediate h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+.truth-board-sum > p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+.truth-board-equation {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 1.04rem;
+  overflow-x: auto;
+  padding-block: 4px;
+}
+.truth-sum-term {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 0;
+  white-space: nowrap;
+}
+.truth-sum-term > span:first-child:not(.truth-board-math) {
+  margin-left: -14px;
+  width: 8px;
+}
+.truth-sum-term + .truth-sum-term {
+  margin-top: 4px;
+}
+.truth-board-hint {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+.truth-intermediate {
+  margin-top: 20px;
+}
+@media (max-width: 700px) {
+  .truth-board-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .truth-controls {
+    gap: 0 12px;
+  }
+  .truth-controls .study-field {
+    flex-basis: 100%;
+    margin-bottom: 0;
+  }
+  .truth-board-table :is(th, td) {
+    padding: 6px 8px;
+  }
+}

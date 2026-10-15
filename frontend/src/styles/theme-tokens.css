@@ -1,0 +1,128 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/*
+ * The only colour source for UniOS. Elevation follows one rule in both themes:
+ * the page is a neutral grey, work surfaces (sidebar, panels, reader paper
+ * frame) are raised one step, overlays one more. Hue is reserved for the
+ * brand accent and for status, never for surfaces, so a selected item or a
+ * warning is the only thing on screen that carries colour.
+ * Neutral surface model; values chosen for UniOS.
+ */
+@layer workspace {
+  :root {
+    color-scheme: light;
+    /* Surfaces: page → raised → overlay */
+    --app-bg: #f2f2f2;
+    --app-surface: #fff;
+    --app-surface-strong: #fff;
+    --app-surface-alt: #f7f7f7;
+    --app-sidebar: #fff;
+    --app-border: #e2e2e2;
+    --app-text: #111;
+    --app-muted: #666;
+    /* Brand accent: the UniOS teal, used for primary actions and selection only. */
+    --app-accent: #285b67;
+    --app-blue: #285b67;
+    --app-blue-soft: #e5eff1;
+    /* Status: always paired with an icon or label, never colour alone. */
+    --positive: #00873d;
+    --caution: #ab7a00;
+    --destructive: #c42b1c;
+    --app-danger: var(--destructive);
+
+    --background: var(--app-bg);
+    --foreground: var(--app-text);
+    --card: var(--app-surface);
+    --card-foreground: var(--app-text);
+    --popover: #fff;
+    --popover-foreground: var(--app-text);
+    --primary: var(--app-accent);
+    --primary-foreground: #fff;
+    --secondary: #f2f2f2;
+    --secondary-foreground: var(--app-text);
+    --muted: #f2f2f2;
+    --muted-foreground: var(--app-muted);
+    --accent: #ececec;
+    --accent-foreground: var(--app-text);
+    --border: var(--app-border);
+    --input: #d4d4d4;
+    --ring: #3a8195;
+    --radius: 0.625rem;
+    --sidebar: var(--app-sidebar);
+    --sidebar-foreground: var(--app-text);
+    --sidebar-accent: #ececec;
+    --sidebar-accent-foreground: var(--app-text);
+    --sidebar-border: var(--app-border);
+    --nav-foreground: #1a1a1a;
+    --nav-muted: #666;
+    --nav-hover: #f2f2f2;
+    --nav-active: #ececec;
+
+    /* Geometry: radii are roles, not a single value. */
+    --ui-row-height: 34px;
+    --ui-radius-control: 6px;
+    --ui-radius-item: 8px;
+    --ui-radius-panel: 10px;
+    --ui-radius-overlay: 14px;
+    --ui-overlay: var(--popover);
+    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / .05), 0 10px 30px rgb(0 0 0 / .10);
+    --ui-panel-shadow: 0 1px 2px rgb(0 0 0 / .04);
+    /* Motion: colour changes are quick and linear-ish; entrances settle softly. */
+    --ui-color-duration: 150ms;
+    --ui-color-ease: cubic-bezier(.4, 0, .2, 1);
+    --ui-enter-duration: 160ms;
+    --ui-enter-ease: cubic-bezier(.22, 1, .36, 1);
+    --ui-scrollbar: color-mix(in srgb, var(--app-text) 20%, transparent);
+    --ui-scrollbar-hover: color-mix(in srgb, var(--app-text) 38%, transparent);
+  }
+  .dark {
+    color-scheme: dark;
+    --app-bg: #0b0b0b;
+    --app-surface: #1a1a1a;
+    --app-surface-strong: #1f1f1f;
+    --app-surface-alt: #151515;
+    --app-sidebar: #141414;
+    --app-border: #2a2a2a;
+    --app-text: #ededed;
+    --app-muted: #a0a0a0;
+    --app-accent: #8cc5d3;
+    --app-blue: #8cc5d3;
+    --app-blue-soft: #1d3138;
+    --positive: #2fd27a;
+    --caution: #ffcc47;
+    --destructive: #ff6b5e;
+
+    /* Aliases repeat so a `.dark` subtree resolves them against its own values. */
+    --app-danger: var(--destructive);
+    --background: var(--app-bg);
+    --foreground: var(--app-text);
+    --card: var(--app-surface);
+    --card-foreground: var(--app-text);
+    --popover-foreground: var(--app-text);
+    --primary: var(--app-accent);
+    --secondary-foreground: var(--app-text);
+    --muted-foreground: var(--app-muted);
+    --accent-foreground: var(--app-text);
+    --border: var(--app-border);
+    --sidebar: var(--app-sidebar);
+    --sidebar-foreground: var(--app-text);
+    --sidebar-accent-foreground: var(--app-text);
+    --sidebar-border: var(--app-border);
+    --ui-overlay: var(--popover);
+    --ui-scrollbar: color-mix(in srgb, var(--app-text) 20%, transparent);
+    --ui-scrollbar-hover: color-mix(in srgb, var(--app-text) 38%, transparent);
+    --popover: #1f1f1f;
+    --primary-foreground: #0b1f24;
+    --secondary: #1f1f1f;
+    --muted: #1f1f1f;
+    --accent: #262626;
+    --input: #3a3a3a;
+    --ring: #6fb3c4;
+    --sidebar-accent: #262626;
+    --nav-foreground: #ededed;
+    --nav-muted: #a0a0a0;
+    --nav-hover: #1f1f1f;
+    --nav-active: #262626;
+    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px rgb(0 0 0 / .5);
+    --ui-panel-shadow: none;
+  }
+}

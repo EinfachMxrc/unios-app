@@ -1,0 +1,154 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.mensa-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.mensa-toolbar label {
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  min-width: 12rem;
+}
+.mensa-toolbar select {
+  width: 100%;
+  color: var(--foreground);
+}
+.mensa-toolbar > button {
+  margin-left: auto;
+}
+.menu-day-navigation {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+.menu-day-navigation h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  text-transform: capitalize;
+}
+.menu-day-navigation > div {
+  flex: 1;
+  min-width: 0;
+}
+.menu-date-picker {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+}
+.menu-date-picker input {
+  min-width: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+}
+.menu-category > h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem;
+}
+.mensa-page .mensa-grid {
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+}
+.mensa-page .mensa-meal {
+  padding: 0;
+  overflow: hidden;
+  background: var(--card);
+}
+.meal-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: var(--muted);
+}
+.mensa-page .mensa-meal[hidden],
+.mensa-page .menu-category[hidden] {
+  display: none;
+}
+.meal-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  color: var(--muted-foreground);
+  background: linear-gradient(135deg, var(--muted), var(--card));
+  border-bottom: 1px solid var(--border);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+.meal-photo-symbol {
+  display: grid;
+  place-items: center;
+  width: 4.1rem;
+  height: 4.1rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--foreground);
+  opacity: 0.5;
+}
+.meal-content {
+  padding: 1.1rem;
+}
+.meal-allergens {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 0.75rem;
+}
+.meal-allergens summary {
+  cursor: pointer;
+}
+.meal-allergens p {
+  padding-top: 0.5rem;
+  line-height: 1.6;
+}
+.menu-source {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.lunch-settings {
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+  margin-top: 2rem;
+}
+.lunch-settings > summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.lunch-settings > p {
+  margin-top: 1rem;
+}
+@media (max-width: 600px) {
+  .mensa-toolbar label {
+    flex: 1 1 100%;
+  }
+  .menu-day-navigation {
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .menu-date-picker {
+    flex-wrap: wrap;
+  }
+  .menu-day-navigation h2 {
+    font-size: 1rem;
+  }
+}

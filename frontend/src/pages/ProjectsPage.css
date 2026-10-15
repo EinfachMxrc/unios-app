@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.project-form { display: grid; gap: 18px; }
+.project-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.project-form label:not(.project-check) { display: grid; gap: 6px; min-width: 0; font-size: .82rem; font-weight: 600; }
+.project-form input:not([type='checkbox']), .project-form select, .project-form textarea, .project-inline input { width: 100%; min-width: 0; border: 1px solid var(--app-border); border-radius: 9px; background: var(--app-surface-strong); color: var(--app-text); padding: 9px 11px; font: inherit; }
+.project-form fieldset { min-width: 0; border: 1px solid var(--app-border); border-radius: 12px; padding: 13px; }
+.project-form legend { padding: 0 5px; font-weight: 700; font-size: .83rem; }
+.project-inline { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+.project-check { display: flex; align-items: center; gap: 9px; margin: 9px 0; font-size: .85rem; }
+.project-check input { accent-color: var(--app-accent); }
+.project-done { text-decoration: line-through; color: var(--app-muted); }
+.project-todo { min-height: 44px; margin: 0; padding-block: 6px; cursor: pointer; }
+.project-todo input { width: 18px; height: 18px; flex-shrink: 0; }
+.project-todo > span { flex: 1; overflow-wrap: anywhere; }
+.project-todo-pending { color: var(--app-muted); animation: project-todo-spin 1s linear infinite; flex-shrink: 0; }
+.project-todo-feedback { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-height: 36px; gap: 8px; font-size: .75rem; color: var(--app-muted); }
+.project-todo-error { color: var(--destructive); font-size: .8rem; line-height: 1.45; margin-top: 8px; }
+@keyframes project-todo-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .project-todo-pending { animation: none; } }
+.project-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.project-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.project-github { display: grid; gap: 10px; margin-top: 14px; }
+.project-github section { border-top: 1px solid var(--app-border); padding-top: 12px; }
+.project-github h3 { margin: 0 0 7px; font-size: .86rem; }
+.project-github p { margin: 6px 0; overflow-wrap: anywhere; }
+.project-repo-search { border-top: 1px solid var(--app-border); margin-top: 16px; padding-top: 16px; }
+.project-archive-link { display: inline-block; margin-left: 12px; font-size: .84rem; font-weight: 600; }
+.project-repo-search form { display: grid; gap: 8px; }
+.project-repo-search form label { font-size: .84rem; font-weight: 700; }
+.project-repo-search-controls { display: flex; gap: 8px; }
+.project-repo-search-controls input { flex: 1; min-width: 0; border: 1px solid var(--app-border); border-radius: 9px; background: var(--app-surface-strong); color: var(--app-text); padding: 9px 11px; font: inherit; }
+.project-repo-matches { display: grid; gap: 8px; margin-top: 15px; }
+.project-repo-matches p { display: grid; gap: 3px; margin: 0; padding: 10px; border: 1px solid var(--app-border); border-radius: 9px; overflow-wrap: anywhere; }
+.project-repo-matches span { color: var(--app-muted); white-space: pre-wrap; }
+@media (max-width: 650px) { .project-form-grid, .project-inline { grid-template-columns: 1fr; } .project-archive-link { display: block; margin: 12px 0 0; } }

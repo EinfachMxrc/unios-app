@@ -1,0 +1,52 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "backend": {
+    "passed": 1053,
+    "skipped": 12,
+    "failed": 0
+  },
+  "frontend": {
+    "passed": 790,
+    "files": 91,
+    "failed": 0
+  },
+  "browser": {
+    "startTime": "2026-10-09T12:56:20.930Z",
+    "duration": 690251.7069999999,
+    "expected": 379,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "critical_keyboard_dialog_flows": {
+    "passed": 15,
+    "repeats_per_flow": 3
+  },
+  "typecheck_lint_mypy_ruff_api_openapi_i18n": "passed",
+  "profile_scope": "synthetic only",
+  "github_quality": {
+    "run_id": 37934023250,
+    "url": "https://github.com/EinfachMxrc/unios-app/actions/runs/37934023250",
+    "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+    "status": "blocked_before_jobs",
+    "jobs_started": 0,
+    "reason": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings",
+    "complete_exact_revision_matrix": false
+  },
+  "dependency_advisories": {
+    "status": "existing build dependencies remain vulnerable; not fixed",
+    "sharp": {
+      "version": "0.35.4",
+      "advisory": "GHSA-wq5f-xc86-pv6w",
+      "path": "PWA assets tool; regular build does not activate generator; optional CLI input public/favicon.svg"
+    },
+    "source_map_js": {
+      "version": "1.2.1",
+      "advisory": "GHSA-68fv-2mgg-jv7q",
+      "path": "Node PostCSS/Vite/Tailwind build and test consumers"
+    },
+    "deployed_app_consumer_found": false,
+    "interpretation": "No implicated user input path found in inspected source and Windows UI artifacts; not a general security clearance."
+  }
+}

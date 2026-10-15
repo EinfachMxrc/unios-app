@@ -1,0 +1,65 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "05e56cfad86b110e2d1be505adad2b58e3ab6d2a",
+  "recorded_at": "2026-10-09T14:06:20.208510+00:00",
+  "synthetic_only": true,
+  "database": "in-memory SQLite",
+  "network_listener": false,
+  "scope": "Actual project_router, ORM persistence and DTO validation; writer gate is a fixture stub",
+  "bug_reproduced": true,
+  "records": [
+    {
+      "case": "control-without-deadline",
+      "post_status": 201,
+      "get_status": 200,
+      "deadline_at": null
+    },
+    {
+      "case": "naive-input-rejected",
+      "post_status": 422
+    },
+    {
+      "case": "aware-utc-deadline-post-then-fresh-get",
+      "submitted_deadline": "2026-10-26T08:15:00.000Z",
+      "project_id": 2,
+      "post_status": 201,
+      "post_deadline": "2026-10-26T08:15:00Z",
+      "get_status": 500,
+      "get_body": "Internal Server Error",
+      "list_status": 200,
+      "list_deadline": "2026-10-26T08:15:00",
+      "fresh_sqlalchemy_deadline": "2026-10-26T08:15:00",
+      "fresh_sqlalchemy_tzinfo": null
+    },
+    {
+      "case": "archive-restore-commit-before-response-validation",
+      "archive_status": 500,
+      "archive_committed": true,
+      "restore_status": 500,
+      "restore_committed": true
+    },
+    {
+      "case": "underlying-exception",
+      "exception_type": "ValidationError",
+      "model": "ProjectView",
+      "validation": [
+        {
+          "loc": [
+            "deadline_at"
+          ],
+          "type": "value_error",
+          "message": "Value error, Frist benötigt eine Zeitzone"
+        }
+      ],
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\docs\\qa\\page-purpose-audit-20261009\\reproduce_project_deadline_get.py\", line 118, in run\n    client.get(f\"/api/projects/{project_id}\")\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 1113, in get\n    return self.request(\n           ~~~~~~~~~~~~^\n        \"GET\",\n        ^^^^^^\n    ...<7 lines>...\n        extensions=extensions,\n        ^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\testclient.py\", line 463, in request\n    return super().request(\n           ~~~~~~~~~~~~~~~^\n        method,\n        ^^^^^^^\n    ...<11 lines>...\n        extensions=extensions,\n        ^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 797, in request\n    return self.send(request, auth=auth, follow_redirects=follow_redirects)\n           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 980, in send\n    response = self._send_handling_auth(\n        request,\n    ...<2 lines>...\n        history=[],\n    )\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 1008, in _send_handling_auth\n    response = self._send_handling_redirects(\n        request,\n        follow_redirects=follow_redirects,\n        history=history,\n    )\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 1043, in _send_handling_redirects\n    response = self._send_single_request(request)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\httpx2\\_client.py\", line 1076, in _send_single_request\n    response = transport.handle_request(request)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\testclient.py\", line 360, in handle_request\n    raise exc\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\testclient.py\", line 357, in handle_request\n    portal.call(self.app, scope, receive, send)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\anyio\\from_thread.py\", line 340, in call\n    return cast(T_Retval, self.start_task_soon(func, *args).result())\n                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\einfa\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\Lib\\concurrent\\futures\\_base.py\", line 456, in result\n    return self.__get_result()\n           ~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Users\\einfa\\AppData\\Roaming\\uv\\python\\cpython-3.13-windows-x86_64-none\\Lib\\concurrent\\futures\\_base.py\", line 401, in __get_result\n    raise self._exception\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\anyio\\from_thread.py\", line 265, in _call_func\n    retval = await retval_or_awaitable\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\applications.py\", line 1163, in __call__\n    await super().__call__(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\applications.py\", line 96, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\middleware\\errors.py\", line 186, in __call__\n    raise exc\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\middleware\\errors.py\", line 164, in __call__\n    await self.app(scope, receive, _send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\middleware\\asyncexitstack.py\", line 18, in __call__\n    await self.app(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\routing.py\", line 676, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 2734, in app\n    await route.handle(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 1780, in handle\n    await self.original_router.handle(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 2789, in handle\n    await included_router._handle_selected(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 1800, in _handle_selected\n    await original_route.handle(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 1279, in handle\n    await app(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 158, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 144, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 706, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n    )\n    ^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 354, in run_endpoint_function\n    return await run_in_threadpool(dependant.call, **values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\starlette\\concurrency.py\", line 34, in run_in_threadpool\n    return await anyio.to_thread.run_sync(func)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\anyio\\to_thread.py\", line 65, in run_sync\n    return await get_async_backend().run_sync_in_worker_thread(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py\", line 2706, in run_sync_in_worker_thread\n    return await future\n           ^^^^^^^^^^^^\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py\", line 1100, in run\n    result = context.run(func, *args)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\app\\projects\\api.py\", line 240, in get_project\n    return _view(session, item)\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\app\\projects\\api.py\", line 204, in _view\n    return ProjectView(\n        id=project.id, name=project.name, course_id=project.course_id, course_name=course.name,\n    ...<8 lines>...\n        archived_at=project.archived_at, created_at=project.created_at, updated_at=project.updated_at,\n    )\n  File \"C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\.venv\\Lib\\site-packages\\pydantic\\main.py\", line 263, in __init__\n    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)\npydantic_core._pydantic_core.ValidationError: 1 validation error for ProjectView\ndeadline_at\n  Value error, Frist benötigt eine Zeitzone [type=value_error, input_value=datetime.datetime(2026, 10, 26, 8, 15), input_type=datetime]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\n"
+    }
+  ],
+  "root_cause": {
+    "response_inherits_input_validator": "app/projects/api.py:103–108/152",
+    "fresh_get_passes_naive_persisted_deadline_to_view": "app/projects/api.py:197–206/234–241",
+    "sqlite_datetime_timezone_true_loses_tzinfo": "app/db/models.py:382",
+    "post_retains_aware_datetime_in_session": "app/db/session.py:53 (expire_on_commit=False)"
+  },
+  "coverage_gap": "tests/test_projects.py lifecycle payload has no deadline_at and does not GET a dated project detail",
+  "production_changes": false
+}

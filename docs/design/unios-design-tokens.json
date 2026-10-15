@@ -1,0 +1,98 @@
+{
+  "license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "status": "proposed-specification-not-runtime-configuration",
+  "version": "2026-10-09",
+  "font": {
+    "family": "Geist Variable",
+    "fallback": "system-ui, sans-serif",
+    "sizes": [
+      12,
+      13,
+      14,
+      16,
+      18,
+      24
+    ],
+    "lineHeights": [
+      16,
+      18,
+      20,
+      26,
+      26,
+      32
+    ],
+    "weights": [
+      400,
+      500,
+      600,
+      650
+    ]
+  },
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48
+  ],
+  "radius": {
+    "control": 6,
+    "card": 8,
+    "dialog": 12,
+    "sheet": 16
+  },
+  "size": {
+    "sidebar": 224,
+    "sidebarMin": 184,
+    "sidebarMax": 304,
+    "sidebarRail": 56,
+    "topbar": 48,
+    "topbarMobile": 56,
+    "row": 44,
+    "rowCompact": 36,
+    "button": 32,
+    "primaryButton": 40,
+    "mobileTarget": 44,
+    "context": 280,
+    "documentMax": 760,
+    "editorMin": 320,
+    "sourceMin": 320
+  },
+  "breakpoint": {
+    "singleWorkspacePane": 960,
+    "optionalThirdPane": 1280
+  },
+  "motionMs": {
+    "hover": 120,
+    "overlay": 180,
+    "successFeedback": 2000
+  },
+  "light": {
+    "background": "#fbfaf8",
+    "surface": "#ffffff",
+    "raised": "#ffffff",
+    "sidebar": "#f5f4f1",
+    "text": "#252525",
+    "muted": "#706f6b",
+    "border": "#e8e6e1",
+    "accent": "#2b5870",
+    "accentSoft": "#e9f0f2",
+    "popover": "#ffffff",
+    "primaryForeground": "#ffffff"
+  },
+  "dark": {
+    "background": "#1b1b1a",
+    "surface": "#222221",
+    "raised": "#252524",
+    "sidebar": "#222220",
+    "text": "#eae9e6",
+    "muted": "#aca9a3",
+    "border": "#393936",
+    "accent": "#a4c6d6",
+    "accentSoft": "#2e4048",
+    "popover": "#292927",
+    "primaryForeground": "#18252b"
+  }
+}

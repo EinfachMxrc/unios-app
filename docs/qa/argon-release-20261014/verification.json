@@ -1,0 +1,96 @@
+{
+  "spdx_license_identifier": "AGPL-3.0-or-later",
+  "version": "0.1.24",
+  "source_commit": "c636da4dd93a773fcf28fd7260e9c2d57c8cb8e5",
+  "windows_build_commit": "a5e3f417f8f49d2069bf255f737e224aca1be190",
+  "runtime_sources_identical": true,
+  "source_differences": [
+    ".github/workflows/quality.yml",
+    "frontend/playwright.config.ts"
+  ],
+  "tests": {
+    "python_passed": 1280,
+    "python_skipped": 12,
+    "frontend_passed": 1407,
+    "playwright_passed": 509,
+    "static_checks_passed": true,
+    "synthetic_docker_smoke_passed": true
+  },
+  "server": {
+    "snapshot_confirmed_by_user": true,
+    "activated_utc": "2026-10-14T15:03:11Z",
+    "image": "unios-server:0.1.24-argon-c636da4dd93a",
+    "image_id": "sha256:6443fa48aaeb7c4ce2833e45daff08510e66f1e6d9c467f1be68a1b85d2c2650",
+    "container_health": "healthy",
+    "runtime_user": "10001:10001",
+    "public_health": "ok",
+    "unauthenticated_private_api_status": 401,
+    "previous_image_retained": true,
+    "deployment_topology_preserved": true
+  },
+  "windows": {
+    "ok": true,
+    "version": "0.1.24",
+    "installer_exit": 0,
+    "matched_files": 2825,
+    "physical_paths_exact": true,
+    "startup_ok": true,
+    "private_state_accessed": false,
+    "error": null
+  },
+  "client": {
+    "health": "ok",
+    "mode": "client",
+    "paired": true,
+    "keyring_available": true,
+    "expected_server": true,
+    "paired_host_mode": "host",
+    "paired_host_topology": "server"
+  },
+  "github": {
+    "release_draft": true,
+    "release_url": "https://github.com/EinfachMxrc/unios-app/releases/tag/untagged-bf6285bb58205dad32fc",
+    "actions": "blocked_by_account_billing_or_spending_limit",
+    "actions_run": 38584797311,
+    "original_assets_sha256_verified": [
+      {
+        "name": "program-manifest.json",
+        "sha256": "9aecd089de60e562af40afcd05b99eeb5e65081f49bbfa5234b3bc6a7f9d7f17",
+        "size": 523841
+      },
+      {
+        "name": "SHA256SUMS",
+        "sha256": "3412f4365721c5cbfe2493413bc078602d8322a7e12315765c03b3ebefe4cc49",
+        "size": 296
+      },
+      {
+        "name": "UniOS-0.1.24-server-source.tar.gz",
+        "sha256": "8dd24341585568406e3a588ce96bb9ea74e40e91e0d63469fe08cf2c7f00569d",
+        "size": 2294734
+      },
+      {
+        "name": "UniOS-0.1.24-Windows-und-Server.zip",
+        "sha256": "489ad6cf9b71e9e1988b1c167e16ad2a932959186d0675dfa0ddbdbe6efd3782",
+        "size": 677979586
+      },
+      {
+        "name": "UniOS-0.1.24-windows-x64-setup.exe",
+        "sha256": "ca8bc6c51b21bbea1db2d4cc3f4dd7d59fcab9b3a75b9c807327902254744f01",
+        "size": 304176513
+      },
+      {
+        "name": "UniOS-0.1.24-windows-x64.msi",
+        "sha256": "a855d91670b73d19f381ccad7ed86cac5fb95c413905a6bafee3614a8db5c8d8",
+        "size": 370983548
+      }
+    ]
+  },
+  "native_manifest": {
+    "name": "program-manifest-v2.json",
+    "sha256": "ade53bb151d79ba7be24242c2bf23957305d6bfe75feafc39b4ade2ba6be1280",
+    "package_type": "nsis",
+    "exe_sha256": "1573a646c9e1981e246210fc88dcedded40ec008cd041831fee10eab5d2e62e9",
+    "cargo_manifest_superseded_for_installed_native_exe": true
+  },
+  "private_state_directly_accessed": false
+}

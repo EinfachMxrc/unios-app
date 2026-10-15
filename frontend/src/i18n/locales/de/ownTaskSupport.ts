@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+export default {
+  title: 'Dein Arbeitsstand',
+  open: 'Offen',
+  working: 'In Arbeit',
+  done: 'Erledigt',
+  saving: 'Speichere …',
+  saved: 'Arbeitsstand gespeichert',
+  undone: 'Änderung zurückgenommen',
+  undo: 'Rückgängig',
+  undoExpired: 'Der Eintrag wurde inzwischen weiterbearbeitet. Rückgängig ist für diesen Schritt nicht mehr verfügbar.',
+  loading: 'Lade Arbeitsstand …',
+  retry: 'Erneut laden',
+  deadlineSaved: 'Termin bestätigt',
+  invalidTime: 'Bitte einen gültigen Zeitpunkt wählen. Diese Uhrzeit gibt es bei der Zeitumstellung nicht.',
+  todoSaved: '„{{title}}“ ist {{state}}',
+  todoSaving: 'Speichere „{{title}}“ …',
+  todoUndone: 'To-do-Änderung zurückgenommen',
+  propertiesChanged: 'Die Eigenschaften wurden inzwischen geändert. Dein Entwurf bleibt hier erhalten.',
+  discardDraftReload: 'Entwurf verwerfen und neu laden',
+  loadPropertiesFirst: 'Bitte die Eigenschaften zuerst laden.',
+}

@@ -1,0 +1,44 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@layer workspace {
+  .exercise-proposal-row.data-row {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .exercise-proposal-row > div,
+  .exercise-proposal-row fieldset,
+  .exercise-proposal-row label {
+    min-width: 0;
+  }
+  .exercise-proposal-row textarea,
+  .exercise-proposal-row input {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .exercise-proposal-heading {
+    margin-bottom: .65rem;
+    font-weight: 600;
+  }
+  .exercise-proposal-row > .assessment-question-document {
+    margin-bottom: .7rem;
+  }
+  .exercise-proposal-preview {
+    min-width: 0;
+    padding: .7rem .85rem;
+    border: 1px solid var(--app-border);
+    border-radius: var(--ui-radius-control);
+  }
+  .exercise-proposal-preview summary {
+    cursor: pointer;
+    color: var(--app-muted);
+  }
+  .exercise-proposal-preview[open] > .assessment-question-document {
+    margin-top: .85rem;
+  }
+  @media (max-width: 520px) {
+    .content:has(> .exercise-queue-intro) > .page-heading h1 {
+      font-size: clamp(1.5rem, 8vw, 2rem);
+    }
+  }
+}

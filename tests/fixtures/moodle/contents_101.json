@@ -1,0 +1,12 @@
+[
+  {
+    "id": 301, "name": "04 Schleifen",
+    "modules": [
+      {"id": 501, "modname": "resource", "name": "04_Schleifen.pdf", "contents": [
+        {"type": "file", "filename": "04_Schleifen.pdf", "fileurl": "https://moodle.example.invalid/webservice/pluginfile.php/10/04_Schleifen.pdf", "timemodified": 1727000000, "filesize": 14}
+      ]},
+      {"id": 502, "modname": "url", "instance": 602, "name": "Python-Dokumentation", "url": "https://moodle.example.invalid/mod/url/view.php?id=502", "contents": []},
+      {"id": 503, "modname": "forum", "instance": 601, "name": "Ankündigungen", "contents": []}
+    ]
+  }
+]

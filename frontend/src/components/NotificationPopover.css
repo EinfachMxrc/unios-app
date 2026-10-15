@@ -1,0 +1,292 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.notification-popover {
+  z-index: 70;
+  width: min(420px, calc(100vw - 24px));
+  max-height: min(680px, var(--radix-popover-content-available-height, 80dvh));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay);
+  background: var(--ui-overlay);
+  color: var(--app-text);
+  box-shadow: var(--ui-overlay-shadow);
+  overflow: hidden;
+  transform-origin: var(--radix-popover-content-transform-origin);
+}
+.notification-popover[data-state='open'] {
+  animation: notification-detail-enter var(--ui-enter-duration) var(--ui-enter-ease);
+}
+.notification-popover[data-state='closed'] {
+  animation: notification-detail-leave var(--ui-enter-duration) var(--ui-enter-ease);
+}
+@keyframes notification-detail-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes notification-detail-leave {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(3px) scale(0.985);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notification-popover {
+    animation: none !important;
+  }
+}
+html[data-reduce-motion='true'] .notification-popover {
+  animation: none;
+}
+.notification-popover-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 20px 8px;
+}
+.notification-popover-heading h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+}
+.notification-popover-heading p {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--app-muted);
+}
+.notification-popover-actions {
+  padding: 0 12px 10px;
+  border-bottom: 1px solid var(--app-border);
+}
+.notification-popover-actions button {
+  font-size: 0.78rem;
+}
+.notification-popover-list {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.notification-preview {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 20px;
+  border: 0;
+  border-bottom: 1px solid var(--app-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--app-text);
+  text-align: left;
+  box-shadow: none;
+  white-space: normal;
+}
+.notification-preview:last-child {
+  border-bottom: 0;
+}
+.notification-preview:hover,
+.notification-preview:focus-visible {
+  background: var(--nav-hover);
+}
+.notification-preview-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--app-surface-alt);
+  color: var(--app-muted);
+}
+.notification-preview.is-unread .notification-preview-icon {
+  color: var(--primary);
+}
+.notification-preview-copy {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 5px;
+}
+.notification-preview-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 550;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.notification-unread-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+.notification-preview-body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.notification-preview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+.notification-preview-arrow {
+  flex: none;
+  margin-top: 3px;
+  color: var(--app-muted);
+}
+.notification-popover-status {
+  margin: 12px 20px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.notification-popover-empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 32px 24px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.notification-popover-empty > svg,
+.notification-popover-empty p {
+  color: var(--app-muted);
+}
+.notification-popover-empty p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.notification-popover-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--app-border);
+  font-size: 0.8rem;
+}
+.notification-popover-footer:hover {
+  background: var(--nav-hover);
+  text-decoration: none;
+}
+
+.notification-popover-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 14px 12px;
+  flex-wrap: wrap;
+}
+.notification-preview-filters {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--app-surface-alt);
+}
+.notification-preview-filters button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 10px;
+  color: var(--app-muted);
+  background: transparent;
+  font-size: 0.78rem;
+}
+.notification-preview-filters button[aria-pressed='true'] {
+  background: var(--app-surface);
+  color: var(--app-text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.08);
+}
+.notification-preview-filters button span {
+  font-variant-numeric: tabular-nums;
+  color: var(--primary);
+}
+.notification-preview-group h3 {
+  margin: 0;
+  padding: 14px 20px 6px;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--app-muted);
+}
+.notification-preview-row {
+  position: relative;
+  display: flex;
+  border-bottom: 1px solid var(--app-border);
+  margin: 0 10px;
+  border-radius: 12px;
+}
+.notification-preview-row:last-child {
+  border: 0;
+}
+.notification-preview-row:has(.is-unread) {
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+.notification-preview-row .notification-preview {
+  border: 0;
+  padding: 14px 10px;
+  border-radius: 12px;
+  min-width: 0;
+}
+.notification-preview-icon {
+  border-radius: 11px;
+  width: 36px;
+  height: 36px;
+}
+.notification-preview.is-unread .notification-preview-icon {
+  background: color-mix(in srgb, var(--primary) 10%, var(--app-surface));
+}
+.notification-preview-read {
+  align-self: start;
+  margin: 15px 5px 0 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border: 0;
+  border-radius: 8px;
+  color: var(--app-muted);
+  background: transparent;
+}
+.notification-preview-read:hover,
+.notification-preview-read:focus-visible {
+  color: var(--primary);
+  background: var(--nav-hover);
+}
+.notification-preview-read:disabled {
+  opacity: 0.45;
+}
+.notification-preview-filters button:focus-visible,
+.notification-preview-read:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

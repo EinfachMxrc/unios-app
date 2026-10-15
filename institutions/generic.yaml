@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Eigene Hochschule
+connectors:
+  example_university:
+    enabled: true
+    config: {}
+moodle_url: null
+primuss:
+  base_url: null
+  login_start_url: null
+  selectors: {}
+mycampus:
+  base_url: null
+  login_start_url: null
+  selectors: {}
+mail:
+  protocol: null
+  host: null
+  port: null
+  sender_rules: []
+public_deadline_urls: []
+grading:
+  scale: null
+  weighting: null

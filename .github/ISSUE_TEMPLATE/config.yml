@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+blank_issues_enabled: false
+contact_links:
+  - name: Sicherheitslücke melden
+    url: https://github.com/EinfachMxrc/unios-app/blob/main/.github/SECURITY.md
+    about: Sicherheitsprobleme bitte vertraulich nach SECURITY.md melden, nicht als öffentliches Issue.

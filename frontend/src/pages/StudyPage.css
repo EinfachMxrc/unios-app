@@ -1,0 +1,141 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+@keyframes study-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes study-card-leave {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+.study-card-flow {
+  animation: study-card-enter 140ms ease-out both;
+}
+.study-card-flow.is-leaving {
+  animation: study-card-leave 120ms ease-in both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .study-card-flow,
+  .study-card-flow.is-leaving {
+    animation: none;
+  }
+}
+
+.study-session {
+  min-height: 100dvh;
+  background: var(--background);
+  color: var(--foreground);
+}
+.study-session-shell {
+  width: min(100% - 32px, 780px);
+  margin: 0 auto;
+}
+.study-session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 76px;
+  border-bottom: 1px solid var(--border);
+}
+.study-session-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+.study-session-back:hover { color: var(--foreground); }
+.study-session-brand { font-size: 13px; color: var(--muted-foreground); }
+.study-session-main { padding: clamp(28px, 7vh, 76px) 0 60px; }
+.study-session-heading { margin-bottom: 28px; }
+.study-session-eyebrow {
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  color: var(--muted-foreground);
+}
+.study-session-heading h1 {
+  font-size: clamp(25px, 4vw, 36px);
+  font-weight: 650;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.study-session-heading .muted-text { margin-top: 9px; font-size: 14px; }
+.study-session-progress {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 99px;
+  background: var(--muted);
+}
+.study-session-progress::-webkit-progress-bar { background: var(--muted); }
+.study-session-progress::-webkit-progress-value { background: var(--primary); border-radius: 99px; }
+.study-session-progress::-moz-progress-bar { background: var(--primary); border-radius: 99px; }
+.study-session-flow { display: grid; gap: 20px; }
+.study-session-card {
+  min-height: min(42vh, 340px);
+  padding: clamp(24px, 5vw, 48px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+  box-shadow: 0 12px 40px -32px rgb(0 0 0 / .25);
+  overflow-wrap: anywhere;
+}
+.study-session-card-label {
+  margin-bottom: 20px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: .04em;
+  color: var(--muted-foreground);
+}
+.study-session-card-content { font-size: clamp(19px, 2.7vw, 25px); line-height: 1.55; }
+.study-session-card-content img { max-width: 100%; height: auto; }
+.study-session-source {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 18px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--app-blue);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.study-session-card-content hr { margin: 24px 0; border-color: var(--border); }
+.study-session-actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.study-session-actions button { min-height: 52px; }
+.study-session-actions button[data-variant='default'] { color: var(--primary-foreground); }
+.study-session-actions kbd { font-family: inherit; font-size: 12px; }
+.study-session-reveal { min-height: 52px; color: var(--primary-foreground); }
+.study-session-shortcut { margin-left: 8px; font-size: 12px; }
+.study-session-done { display: grid; justify-items: center; gap: 16px; padding: 70px 20px; text-align: center; }
+.study-session-done h1, .study-session-done h2 { font-size: 24px; font-weight: 650; }
+.study-session-note { margin-top: 18px; text-align: center; font-size: 13px; color: var(--muted-foreground); }
+.study-deck-link { text-decoration: none; }
+.study-deck-link:hover { background: var(--muted); }
+.study-deck-link:is(:hover, :focus-visible) .row-subtitle { color: var(--foreground); }
+.study-footer-link { text-decoration: underline; text-underline-offset: .2em; }
+@media (max-width: 600px) {
+  .study-session-brand { display: none; }
+  .study-session-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .study-session-card { min-height: 33vh; }
+}

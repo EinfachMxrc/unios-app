@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.trash-undo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 8px 0 12px; padding: 8px 12px; border: 1px solid var(--app-border); border-radius: 10px; background: var(--app-surface); font-size: .85rem; }
+.trash-undo > svg { flex: none; color: var(--app-muted); }
+.trash-undo > span { flex: 1 1 14rem; min-width: 0; overflow-wrap: anywhere; }
+.trash-undo-action { padding: 2px 8px; border: 1px solid var(--app-border); border-radius: 7px; background: var(--app-surface-strong); color: var(--app-text); font: inherit; font-weight: 600; cursor: pointer; }
+.trash-undo-action:hover:not(:disabled) { background: var(--app-surface-alt); }
+.trash-undo-action:disabled { opacity: .6; cursor: progress; }
+.trash-undo-link { color: var(--app-blue); font-weight: 600; }
+/* The quiet trash control at the end of a quick note's heading. */
+.jot-trash { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-left: auto; border: 0; border-radius: 7px; background: none; color: var(--app-muted); cursor: pointer; }
+.jot-trash:hover { background: var(--app-surface-alt); color: var(--destructive); }

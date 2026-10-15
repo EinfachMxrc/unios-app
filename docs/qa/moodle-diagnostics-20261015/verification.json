@@ -1,0 +1,31 @@
+{
+  "license": "AGPL-3.0-or-later",
+  "utc": "2026-10-15T08:07:51.484069+00:00",
+  "versions": {
+    "ubuntu": "Ubuntu 26.04.1 LTS",
+    "kernel": "7.0.0-38-generic",
+    "docker": "29.9.1",
+    "compose": "5.6.0",
+    "postgres": "postgres (PostgreSQL) 16.15"
+  },
+  "reboot_verified": true,
+  "ssh_verified": true,
+  "systemd_failed_units": 0,
+  "dpkg_audit_clean": true,
+  "container_count": 15,
+  "container_health_checks_passed": 6,
+  "all_containers_running": true,
+  "reboot_required": false,
+  "unios_image_id": "sha256:cdc898a4c85fefa92a63b28f3ee1f5593e91f719eee5a439ce53483812ae3daf",
+  "unios_https_health": 200,
+  "unios_private_api_without_pairing": 401,
+  "runner_private_api_without_auth": 401,
+  "runner_socket_boot_order_fixed": true,
+  "umami_update_pending_snapshot": true,
+  "apt_upgraded": 53,
+  "apt_deferred_by_phasing": [
+    "open-vm-tools",
+    "python3-software-properties",
+    "software-properties-common"
+  ]
+}

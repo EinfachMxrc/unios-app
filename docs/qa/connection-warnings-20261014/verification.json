@@ -1,0 +1,94 @@
+{
+  "spdx_license_identifier": "AGPL-3.0-or-later",
+  "version": "0.1.25",
+  "source_commit": "f7a32cdb234c3cead860bf97c4219d198ab20f4b",
+  "windows_build_commit": "f7a32cdb234c3cead860bf97c4219d198ab20f4b",
+  "tests": {
+    "python_passed": 1290,
+    "python_skipped": 12,
+    "frontend_passed": 1409,
+    "playwright_passed": 514,
+    "targeted_browser_passed": 13,
+    "static_checks_passed": true,
+    "visual_review": {
+      "widths": [
+        1440,
+        390
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "horizontal_overflow": false
+    }
+  },
+  "server": {
+    "activated_utc": "2026-10-14T16:16:16Z",
+    "image": "unios-server:0.1.25-argon-f7a32cdb234c",
+    "image_id": "sha256:1002ccb118b7662ca6c68d5493a8a77f9667884e76d3d6918dfc90128084886e",
+    "health": "healthy",
+    "public_health": "ok",
+    "private_api_without_pairing": 401,
+    "synthetic_smoke_passed": true,
+    "schema": "ff99e3b1a721",
+    "new_migration_since_verified_0_1_24": false,
+    "deployment_topology_preserved": true,
+    "previous_image_retained": true
+  },
+  "windows": {
+    "ok": true,
+    "version": "0.1.25",
+    "installer_exit": 0,
+    "matched_files": 2825,
+    "physical_paths_exact": true,
+    "startup_ok": true,
+    "private_state_accessed": false,
+    "error": null
+  },
+  "client": {
+    "health": "ok",
+    "mode": "client",
+    "paired": true,
+    "keyring_available": true,
+    "expected_server": true,
+    "host_mode": "host",
+    "topology": "server",
+    "campus_import_state": "idle",
+    "campus_login_required": false
+  },
+  "github": {
+    "release_draft": true,
+    "release_url": "https://github.com/EinfachMxrc/unios-app/releases/tag/untagged-196b1e0b7983c84bb7eb",
+    "actions_run": 38596505580,
+    "actions": "blocked_before_first_step_by_account_billing_or_spending_limit",
+    "uploaded_assets_sha256_verified": [
+      {
+        "name": "program-manifest.json",
+        "sha256": "e70f3e855d3a31a04593f4a5d30bff62b4708fab411fdc979c070c5e45ed74d0",
+        "size": 523865
+      },
+      {
+        "name": "SHA256SUMS",
+        "sha256": "6e79f98b5d5f4c8b5d286b5da5e0757e9fdc97ad98f8b37b3f15634ce8bb439e",
+        "size": 388
+      },
+      {
+        "name": "UniOS-0.1.25-server-source.tar.gz",
+        "sha256": "e3d4f91f9f974325751482bad877f1032f8e08d0ec94abab690f519ada305845",
+        "size": 2290852
+      },
+      {
+        "name": "UniOS-0.1.25-windows-x64-setup.exe",
+        "sha256": "1de13e8325f89625fc2437a68f6158573d53454bc30c4c0e6a4594e1d1f8d2cb",
+        "size": 304199546
+      },
+      {
+        "name": "UniOS-0.1.25-windows-x64.msi",
+        "sha256": "df78ecaa7f44466a42834745f8630be26792d62a55ad93cf18758fc00d3fe5d4",
+        "size": 370971260
+      }
+    ]
+  },
+  "private_state_directly_accessed": false,
+  "real_university_login_or_import_tested": false
+}

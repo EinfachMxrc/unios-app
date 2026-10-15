@@ -1,0 +1,49 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "focus": {
+    "version_id": 3,
+    "next_version_id": 4,
+    "resource_id": 4,
+    "course_id": 1,
+    "deck_name": "Uni::Analysis – Fokusbeispiel",
+    "quote": "Das synthetische Prinzip verbindet Begriffe mit ihrer urspruenglichen Quelle.",
+    "page": 12,
+    "annotation": {
+      "id": "04c60976-f1a2-44d7-93dc-18a1dd686c23",
+      "resource_id": 4,
+      "source_version_id": 3,
+      "kind": "question",
+      "quote": "Das synthetische Prinzip verbindet Begriffe mit ihrer urspruenglichen Quelle.",
+      "comment": "Wie bleiben Begriffe mit ihrer Quelle verbunden?",
+      "resolved": false,
+      "revision": 1,
+      "created_at": "2026-10-09T13:41:37.738276",
+      "updated_at": "2026-10-09T13:41:37.738276",
+      "anchor": {
+        "status": "matched",
+        "page": 12,
+        "rects": [
+          [
+            0.11765,
+            0.14629,
+            0.74234,
+            0.16424
+          ]
+        ]
+      }
+    },
+    "block_id": 1,
+    "cycle_id": 1,
+    "topic_id": 1,
+    "course_name": "Analysis – Fokusbeispiel",
+    "exam_at": "2026-10-14T13:41:37.750320+00:00",
+    "exercise_id": 1,
+    "note_id": "7fcbceef-8b83-4f2e-82fa-981b2717c2bf",
+    "foreign_note_id": "c14d979d-5125-4e17-8ab1-77f0958deb1a",
+    "foreign_version_id": 5,
+    "foreign_course_id": 2
+  },
+  "deck": 1791553297926,
+  "note": "57c077ea-954e-48dc-bcff-43b9a0011b1e",
+  "synthetic_only": true
+}

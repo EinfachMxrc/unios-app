@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Marc prüft und aktualisiert diese Preise selbst; Einträge älter als 90 Tage
+# werden vom Kostenrechner deutlich als veraltet markiert.
+as_of: "2026-01-01"
+models:
+  - name: "Claude Opus"
+    input_per_million: 15.00
+    output_per_million: 75.00
+    batch_discount_percent: 50
+  - name: "Claude Sonnet"
+    input_per_million: 3.00
+    output_per_million: 15.00
+    batch_discount_percent: 50
+  - name: "Claude Haiku"
+    input_per_million: 0.80
+    output_per_million: 4.00
+    batch_discount_percent: 50

@@ -1,0 +1,6 @@
+{
+  "courses": [
+    {"id": 101, "assignments": [{"id": 701, "name": "Schleifen üben", "duedate": 2200000000, "url": "https://moodle.example.invalid/mod/assign/view.php?id=701"}]},
+    {"id": 202, "assignments": []}
+  ]
+}

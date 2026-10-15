@@ -1,0 +1,38 @@
+{
+  "ubuntu": {
+    "passed": 1017,
+    "skipped": 10,
+    "seconds": 729.97
+  },
+  "macos": {
+    "passed": 1019,
+    "skipped": 8,
+    "seconds": 418.63
+  },
+  "windows": {
+    "passed": 1018,
+    "skipped": 9,
+    "seconds": 3464.62
+  },
+  "coverage_percent": 83.59,
+  "frontend_passed": 672,
+  "browser_passed": 320,
+  "source_revision": "e54c37fdd93f7e7219eacdfb578d46eff3156250",
+  "quality_run": "https://github.com/EinfachMxrc/unios-app/actions/runs/37577907697",
+  "quality_status": "success",
+  "release_is_draft": false,
+  "targeted_browser_passed": 16,
+  "visuals_reviewed": 4,
+  "screenshots": {
+    "setup-disconnected-dark-320.png": "d09eb8c01d70561d35ab54fc1668637748308d32f9ecc8df76d92ea3730053ac",
+    "setup-disconnected-dark-390.png": "a6c5b4d033aac0134751961ce552768d0f004e092c638abc9aa3b4a4171977fd",
+    "setup-disconnected-light-320.png": "d2480bd689fadb3ff4b68394885d5e8bcee1cf58ad43b9d02565abcd6ccee02c",
+    "setup-disconnected-light-390.png": "6d07161050df9a4dd0941268da7765e1949c11e3ee1798401cfd3ccf039b71c2"
+  },
+  "bundle_sha256": "44491392a4f344a0cd60ec7d907816a2ba87faea72656dce01dc0314e443707d",
+  "installed_windows": "0.1.20",
+  "server_version": "0.1.20",
+  "runtime_mismatches": 0,
+  "data_fixture": "synthetic tests only; operational metadata for deployment",
+  "release_url": "https://github.com/EinfachMxrc/unios-app/releases/tag/v0.1.20"
+}

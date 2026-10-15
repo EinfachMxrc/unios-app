@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+[project]
+name = "unios-connector-example"
+version = "0.1.0"
+description = "Vorlagen-Connector für UniOS: Ausgangspunkt für eine andere Hochschule"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+unios-connector-worker = "unios_connector_example.worker:main"
+
+[project.entry-points."unios.connectors.v1"]
+example_university = "unios_connector_example.connector:ExampleUniversityConnector"
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

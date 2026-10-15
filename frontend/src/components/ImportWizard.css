@@ -1,0 +1,20 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.import-wizard { border: 1px solid var(--border); border-radius: 1rem; padding: clamp(1rem, 3vw, 1.75rem); background: var(--card); margin: 1.5rem 0; }
+.import-wizard header { display: flex; align-items: flex-start; gap: .8rem; }
+.import-wizard header > svg { color: var(--primary); flex-shrink: 0; }
+.import-wizard h2 { font-size: 1.15rem; }
+.import-wizard p { color: var(--muted-foreground); margin: .8rem 0 1.25rem; line-height: 1.5; }
+.import-wizard-kinds { display: flex; flex-wrap: wrap; gap: .5rem; }
+.import-wizard-kinds button { padding: .6rem .8rem; border: 1px solid var(--border); border-radius: .5rem; min-height: 44px; }
+.import-wizard-kinds button[aria-pressed=true] { border-color: var(--primary); background: var(--muted); }
+.import-wizard input[type=file], .import-wizard select { display: block; width: 100%; max-width: 100%; margin: .6rem 0 1.25rem; }
+.import-wizard input[type=file]::file-selector-button { border: 1px solid var(--border); border-radius: .5rem; background: var(--muted); color: var(--foreground); padding: .6rem .8rem; margin-right: .75rem; min-height: 44px; cursor: pointer; }
+.import-wizard select { background: var(--background); border: 1px solid var(--border); border-radius: .5rem; padding: .6rem; }
+.import-wizard ul { max-height: 240px; overflow-y: auto; padding-left: 1.25rem; margin: .75rem 0; }
+.import-wizard li { overflow-wrap: anywhere; line-height: 1.6; }
+.import-wizard-preview { max-height: 300px; overflow: auto; border: 1px solid var(--border); border-radius: .5rem; padding: .75rem .75rem .75rem 2rem; margin: 1rem 0; }
+.import-wizard-preview p { white-space: pre-wrap; font-size: .85rem; margin: .3rem 0 .75rem; }
+.import-wizard-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.import-wizard button { min-height: 44px; height: auto; white-space: normal; }
+.import-wizard progress { width: 100%; accent-color: var(--primary); }
+.import-wizard-support { font-size: .8rem; border-top: 1px solid var(--border); padding-top: 1rem; }

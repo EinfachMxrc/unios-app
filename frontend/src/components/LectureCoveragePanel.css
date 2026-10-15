@@ -1,0 +1,64 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.lecture-coverage-panel {
+  margin-block: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+}
+.lecture-coverage-panel > summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.lecture-coverage-panel > summary span {
+  margin-left: auto;
+  color: var(--app-muted);
+}
+.lecture-coverage-content {
+  padding: 0 12px 12px;
+  font-size: 0.85rem;
+}
+.lecture-coverage-fields {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.lecture-coverage-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.lecture-coverage-fields input {
+  width: 100%;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-control);
+  background: var(--app-surface);
+  color: var(--app-text);
+}
+.lecture-coverage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.lecture-source-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.lecture-source-picker select {
+  max-width: 100%;
+  padding: 7px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-control);
+  background: var(--app-surface);
+  color: var(--app-text);
+}

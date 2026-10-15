@@ -1,0 +1,531 @@
+{
+  "source_commit": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "immutable_bundle": ".tmp/workspace-022-pwa",
+  "index_sha256": "50ee826a8eb5e2bb98d2401cec3b83d66090570f0a5e2e601bc1d05de270c606",
+  "bundle_index_unchanged": true,
+  "synthetic_only": true,
+  "ports": {
+    "preview": 4273,
+    "api": 8273
+  },
+  "chrome_profile": "isolated temporary chrome-launcher profile",
+  "blocked_external_requests": [],
+  "browser_errors": [],
+  "accessibility_threshold": 90,
+  "snapshots": [
+    {
+      "id": "source-light-1440",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Fokussiert lernen",
+        "theme": "",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": "true",
+        "pdf_nonwhite_pixels": 2801,
+        "notes_field_visible": true,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "today-light-1440",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Heute",
+        "theme": "",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-light-1440",
+      "scores": {
+        "accessibility": 97
+      },
+      "evidence": {
+        "heading": "Termine",
+        "theme": "",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": true
+      },
+      "failed_audits": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "score": 0,
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,1,DIV,1,BUTTON",
+                "selector": "div.calendar-workspace > div.calendar-interaction-hint > div.calendar-zoom > button",
+                "boundingRect": {
+                  "top": 358,
+                  "bottom": 390,
+                  "left": 1285,
+                  "right": 1322,
+                  "width": 37,
+                  "height": 32
+                },
+                "snippet": "<button type=\"button\" aria-label=\"Stundenhöhe zurücksetzen\">",
+                "nodeLabel": "100%",
+                "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+              }
+            }
+          ]
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "score": 0,
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-1-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                "boundingRect": {
+                  "top": 623,
+                  "bottom": 687,
+                  "left": 367,
+                  "right": 558,
+                  "width": 191,
+                  "height": 64
+                },
+                "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                "nodeLabel": "English Workshop\n10:00 – 11:00\nTestbau A-12",
+                "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-2-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 623,
+                        "bottom": 647,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                      "nodeLabel": "Beginn von English Workshop ändern"
+                    }
+                  },
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 663,
+                        "bottom": 687,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                      "nodeLabel": "Ende von English Workshop ändern"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-4-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                "boundingRect": {
+                  "top": 735,
+                  "bottom": 799,
+                  "left": 367,
+                  "right": 558,
+                  "width": 191,
+                  "height": 64
+                },
+                "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                "nodeLabel": "English Workshop\n11:45 – 12:45\nTestbau A-12",
+                "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-5-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 735,
+                        "bottom": 759,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                      "nodeLabel": "Beginn von English Workshop ändern"
+                    }
+                  },
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-6-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 775,
+                        "bottom": 799,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                      "nodeLabel": "Ende von English Workshop ändern"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "source-light-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Fokussiert lernen",
+        "theme": "",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": "true",
+        "pdf_nonwhite_pixels": 915,
+        "notes_field_visible": true,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "today-light-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Heute",
+        "theme": "",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-light-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Termine",
+        "theme": "",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": true
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "source-dark-1440",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Fokussiert lernen",
+        "theme": "dark",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": "true",
+        "pdf_nonwhite_pixels": 2801,
+        "notes_field_visible": true,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "today-dark-1440",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Heute",
+        "theme": "dark",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-dark-1440",
+      "scores": {
+        "accessibility": 97
+      },
+      "evidence": {
+        "heading": "Termine",
+        "theme": "dark",
+        "width": 1440,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": true
+      },
+      "failed_audits": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "score": 0,
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,1,DIV,1,BUTTON",
+                "selector": "div.calendar-workspace > div.calendar-interaction-hint > div.calendar-zoom > button",
+                "boundingRect": {
+                  "top": 358,
+                  "bottom": 390,
+                  "left": 1285,
+                  "right": 1322,
+                  "width": 37,
+                  "height": 32
+                },
+                "snippet": "<button type=\"button\" aria-label=\"Stundenhöhe zurücksetzen\">",
+                "nodeLabel": "100%",
+                "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+              }
+            }
+          ]
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "score": 0,
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-1-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                "boundingRect": {
+                  "top": 623,
+                  "bottom": 687,
+                  "left": 367,
+                  "right": 558,
+                  "width": 191,
+                  "height": 64
+                },
+                "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                "nodeLabel": "English Workshop\n10:00 – 11:00\nTestbau A-12",
+                "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-2-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 623,
+                        "bottom": 647,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                      "nodeLabel": "Beginn von English Workshop ändern"
+                    }
+                  },
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 663,
+                        "bottom": 687,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                      "nodeLabel": "Ende von English Workshop ändern"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-4-BUTTON",
+                "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                "boundingRect": {
+                  "top": 735,
+                  "bottom": 799,
+                  "left": 367,
+                  "right": 558,
+                  "width": 191,
+                  "height": 64
+                },
+                "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+                "nodeLabel": "English Workshop\n11:45 – 12:45\nTestbau A-12",
+                "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-5-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 735,
+                        "bottom": 759,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                      "nodeLabel": "Beginn von English Workshop ändern"
+                    }
+                  },
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-6-BUTTON",
+                      "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                      "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                      "boundingRect": {
+                        "top": 775,
+                        "bottom": 799,
+                        "left": 370,
+                        "right": 555,
+                        "width": 185,
+                        "height": 24
+                      },
+                      "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                      "nodeLabel": "Ende von English Workshop ändern"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "source-dark-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Fokussiert lernen",
+        "theme": "dark",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": "true",
+        "pdf_nonwhite_pixels": 915,
+        "notes_field_visible": true,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "today-dark-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Heute",
+        "theme": "dark",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": false
+      },
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-dark-390",
+      "scores": {
+        "accessibility": 100
+      },
+      "evidence": {
+        "heading": "Termine",
+        "theme": "dark",
+        "width": 390,
+        "horizontal_overflow": false,
+        "pdf_render_complete": null,
+        "pdf_nonwhite_pixels": null,
+        "notes_field_visible": false,
+        "synthetic_calendar_visible": true
+      },
+      "failed_audits": []
+    }
+  ],
+  "supplementary_navigation": [],
+  "passed": true
+}

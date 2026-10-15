@@ -1,0 +1,13 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.note-references { padding: 18px 23px 8px; border-top: 1px solid var(--app-border); }
+.note-references > h3 { margin: 0 0 18px; font-size: .86rem; font-weight: 670; }
+.note-reference-group { margin-bottom: 20px; }
+.note-reference-group h4 { display: flex; align-items: center; gap: 7px; margin: 0 0 8px; color: var(--app-muted); font-size: .74rem; font-weight: 620; }
+.note-reference-group h4 span { margin-left: auto; font-variant-numeric: tabular-nums; }
+.note-reference { padding: 10px 0; border-top: 1px solid var(--app-border); }
+.note-reference .study-peek-anchor > a { font-size: .81rem; font-weight: 630; }
+.note-reference small { display: block; margin-top: 2px; color: var(--app-muted); font-size: .69rem; }
+.note-reference p { margin: 6px 0 8px; color: var(--app-muted); font-size: .75rem; line-height: 1.5; overflow-wrap: anywhere; }
+.note-reference-empty { margin: 0; padding: 4px 0; color: var(--app-muted); font-size: .75rem; }
+@media (max-width: 600px) { .note-references { padding: 16px 15px 5px; } }

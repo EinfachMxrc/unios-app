@@ -1,0 +1,114 @@
+{
+  "SPDX-License-Identifier": "AGPL-3.0-or-later",
+  "date": "2026-10-10",
+  "baseline_commit": "631efbf",
+  "scope": "Aufgabenansichten und acht Antworttypen; synthetische Browserdaten, keine vollständige fachliche Prüfung persönlicher Einzelaufgaben.",
+  "assessment_types": [
+    "multiple_choice",
+    "free_recall",
+    "symbolic_math",
+    "parsons",
+    "ordering",
+    "oral",
+    "matching",
+    "numeric"
+  ],
+  "checks": {
+    "vitest_focused": {
+      "files": 5,
+      "passed": 85
+    },
+    "vitest_all": {
+      "files": 120,
+      "passed": 1031,
+      "seconds": 16.1
+    },
+    "typecheck": "passed",
+    "eslint_all": "passed",
+    "i18n_de_en_namespaces": 67,
+    "pwa_build": "passed",
+    "playwright_combined": {
+      "passed": 41,
+      "duration_display": "1.1m"
+    },
+    "playwright_final_mobile_adjustment": {
+      "passed": 3,
+      "seconds": 11.6
+    }
+  },
+  "display_matrix": {
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "viewports": [
+      "1280x720",
+      "390x844"
+    ],
+    "font_percent": [
+      100,
+      150
+    ]
+  },
+  "source_sha256": {
+    "docs/PROGRESS.md": "31f5b7a66a4e1c5e46b287457edca3c6f30af8c73d084c1c439cb0c4e8494598",
+    "frontend/e2e/assessment-workspace.spec.ts": "f305e741997a00d305ff026276e9f2878a0dc887771c5af9d1cec324d43b632b",
+    "frontend/e2e/exercise-proposals.spec.ts": "23c7a8321d912f6a8336375831d5d71385b90f1dd4d23a4cc02498d13fe0d857",
+    "frontend/src/components/AssessmentQuestion.tsx": "95751e77ee7ed517f00118adc07fb9b327054b3b3776a19bcfb611eff4944eb0",
+    "frontend/src/components/AssignmentDeadline.tsx": "1a938b47a522e23df6933a7f08e88a18be11eaba7e8e9f7ba3ff0c1b101d1a2f",
+    "frontend/src/components/DeadlineViews.tsx": "8aef9bb32c859c426be9dbf8c74f086234ae77944c60bb720c92443e6ed11f58",
+    "frontend/src/components/PracticePanel.css": "992de9d38d94f0fd20e1bd80b634b1e022e86af939d6f6bf1f40495f6f11ede0",
+    "frontend/src/components/PracticePanel.test.tsx": "8bdd63181fad95cc7f8963160ad78a2e85c98fd761de045efe4267ce2520a2f1",
+    "frontend/src/components/PracticePanel.tsx": "d9f2c0f29da6bc03f7d5b30f8374219bc658b03219bc621c2ed6120e0b1776cd",
+    "frontend/src/components/TaskPeekDrawer.css": "58051088efc6dc0f391dffca46f40f2c540bcc548c951248b135b56b57a0b827",
+    "frontend/src/i18n/locales/de/assessment.ts": "73aab0d6ee103f0372aea01b1e6a9feba0472712de6bf4e6da96e9cc875857ec",
+    "frontend/src/i18n/locales/de/exerciseQueue.ts": "f92ebbe25f3fa9f3ca0d394274f12e374c04a7369373d085cc59626fc704e3a4",
+    "frontend/src/i18n/locales/en/assessment.ts": "f98860bc9cc469c554193385fc5d5702c9441ad2c73012f025dfa535fe32ad3c",
+    "frontend/src/i18n/locales/en/exerciseQueue.ts": "9eb61a2224e9eb1be96884f97d5ed24de6632b9f17f8f274ecff8b4bc3b0e46e",
+    "frontend/src/lib/assessmentQuestion.test.ts": "37a9bf3d88f1571d70e9bf3cb03be866574168a4c0768515e36c97b06ce8fa15",
+    "frontend/src/lib/assessmentQuestion.ts": "72fc11fcf1fd210a232a466f329da7dd154ed4ca604d8c93a29c7745a18dd811",
+    "frontend/src/pages/AssessmentPage.css": "b664abfbf0bd4afa2cc5a516a9d6dd0eec375e1b0877b0ed80e91a4bf1ba4bca",
+    "frontend/src/pages/AssessmentPage.tsx": "fe1e8938beb163b2020f5f3cb97b05122de9b90b2a60ded3f6c8426e5e321452",
+    "frontend/src/pages/CodingPage.ack.test.tsx": "0ca33c8451039fcbb0ab78ce8c0a299d699b9d37468009522f8aef630093fedc",
+    "frontend/src/pages/CodingPage.css": "aabdbe5e3362d0d33fa0b49c8d5a704fe86a34f04a0db89b78d130c0d33c639d",
+    "frontend/src/pages/CodingPage.tsx": "41dc0b7d46f3a60007ea7d4f3e1b2afe6499dd673b20f2b228815c629be409b4",
+    "frontend/src/pages/CoursePage.tsx": "d06fe192cfd0f17d7df8d24f270cf26c28e5f47a88e10ad3c1558d265533978e",
+    "frontend/src/pages/ExercisePage.test.tsx": "701d387055afd43d474321d45caa69cb7d43968771e9d5c8da9c3e3faade91d8",
+    "frontend/src/pages/ExercisePage.tsx": "de4005a0050e1192716fcb82670f5fce8f1652745ecfa6ff8eafa2d4d33cb475",
+    "frontend/e2e/task-presentation.spec.ts": "85b13eff8071f83f0e6cfa0d5786df569f57c590b483b4d7a8174879a3fa2455",
+    "frontend/e2e/task-content-surfaces.spec.ts": "cab5c38affd6893055dd33813aed7c53a8ff5a3bc488be471eade5c504cf3bed",
+    "frontend/src/components/AssessmentQuestion.css": "a20ef4611633f51fa66974693f7255c197be844183625cbf3d7de81295a17e1b",
+    "frontend/src/components/AssessmentQuestion.test.tsx": "ee5130a5a0c0e77d2db8bb2ec7350634909c6fc75b4a0d0791a4a727911c6ed7",
+    "frontend/src/pages/ExercisePage.css": "248de88e5655bb1afca1a3ba9acb63d73fbb2c6fe77ad8f6e1765a91f0b5c9bb",
+    "frontend/src/components/DeadlineViews.css": "14659a974509bcb52d741841474a47b6067429a18d67d68b7f10e9a538d272e5",
+    "docs/qa/task-presentation-20261010/README.md": "e614fd7f6a66fd79f9f7ae127a5626abffead780e54dc466515b7928bed0ac05"
+  },
+  "images": [
+    {
+      "file": "task-logic-code-light-1280-720-1791629317562.png",
+      "sha256": "a290a22c2538dae5c3d1db14fb091836edf860a9c05c3e681198699644f8b44d"
+    },
+    {
+      "file": "task-logic-code-dark-1280-720-1791629318367.png",
+      "sha256": "775e4e8b6f7439f08e0e20da2218d5a48ab951a2ce232dba6195b3543bfcf4af"
+    },
+    {
+      "file": "task-choice-answer-light-390-font150-1791629320254.png",
+      "sha256": "38c9ae70f4cee96f26567d99bb0ae0cae11063f9f9fcb800f411d0ac80d8bc63"
+    },
+    {
+      "file": "task-choice-answer-dark-390-font150-1791629320581.png",
+      "sha256": "0dde3902009b835cfbc16e2edb941e9915b3d41a0ebf02a91cc3d6aad5875c60"
+    },
+    {
+      "file": "task-practice-light-1280-720-1791629533860.png",
+      "sha256": "215a8c40e9ef7396dd5484461ff235e1e7f9dad188c280c75458a127e66c2f4e"
+    },
+    {
+      "file": "task-proposal-dark-390-font150-1791629535955.png",
+      "sha256": "7d9e5f60d6b772a9c4ec846ff913f4a2b0cf2629603944615342f1f2bbcf09a8"
+    }
+  ],
+  "release": "Lokales Änderungspaket. Kein neuer Windows- oder Serverrelease.",
+  "source_hash_normalization": "UTF-8 bytes with CRLF normalized to LF"
+}

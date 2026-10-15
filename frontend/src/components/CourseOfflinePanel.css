@@ -1,0 +1,61 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.course-offline {
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+}
+.course-offline > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+}
+.course-offline > summary::-webkit-details-marker {
+  display: none;
+}
+.course-offline-summary {
+  margin-left: auto;
+  color: var(--app-muted);
+}
+.course-offline-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.course-offline-content p {
+  line-height: 1.6;
+}
+.course-offline-content dl {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 2rem;
+}
+.course-offline-content dl > div {
+  display: flex;
+  gap: 0.8rem;
+}
+.course-offline-content dd {
+  color: var(--app-muted);
+}
+.course-offline-content button {
+  max-width: 100%;
+  white-space: normal;
+  height: auto;
+  min-height: 2rem;
+}
+@media (max-width: 520px) {
+  .course-offline {
+    padding: 0.75rem;
+  }
+  .course-offline-summary {
+    margin-left: 0;
+    flex-basis: 100%;
+    padding-left: 1.5rem;
+  }
+}

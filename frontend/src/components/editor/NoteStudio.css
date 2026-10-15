@@ -1,0 +1,856 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.note-studio {
+  min-width: 0;
+  color: var(--app-text);
+  position: relative;
+  container: note-studio / inline-size;
+}
+.studio-bar,
+.studio-toolbar,
+.studio-contextbar,
+.studio-block-actions,
+.studio-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+/* One bar for the whole editor. It steps back while you read and comes
+   forward as soon as the pointer or the cursor is in the note. */
+.studio-bar {
+  justify-content: space-between;
+  row-gap: 4px;
+  min-height: 40px;
+  margin: 0 0 18px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--app-border);
+  transition: opacity var(--ui-color-duration) var(--ui-color-ease);
+}
+.note-studio:not(:hover, :focus-within) .studio-bar {
+  opacity: 0.55;
+}
+.studio-bar-end {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.studio-card-create {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 6px;
+  min-height: 32px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.studio-modes,
+.studio-view-actions {
+  display: flex;
+  gap: 2px;
+}
+.studio-modes {
+  padding: 2px;
+  border-radius: var(--ui-radius-item);
+  background: var(--app-surface-alt);
+}
+.note-studio button,
+.studio-dialog button {
+  cursor: pointer;
+}
+.studio-modes button {
+  color: var(--app-muted);
+  font-size: 0.73rem;
+  font-weight: 560;
+  padding: 3px 7px;
+  border-radius: var(--ui-radius-control);
+  transition:
+    background-color var(--ui-color-duration) var(--ui-color-ease),
+    color var(--ui-color-duration) var(--ui-color-ease);
+}
+.studio-modes button[aria-pressed='true'] {
+  color: var(--app-text);
+  background: var(--app-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+.studio-view-actions button,
+.studio-toolbar button,
+.studio-block-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-muted);
+  transition:
+    background-color var(--ui-color-duration) var(--ui-color-ease),
+    color var(--ui-color-duration) var(--ui-color-ease);
+}
+.studio-view-actions button:hover:not(:disabled),
+.studio-toolbar button:hover:not(:disabled),
+.studio-block-actions button:hover:not(:disabled) {
+  color: var(--app-text);
+}
+.note-studio button:hover:not(:disabled),
+.studio-dialog button:hover:not(:disabled) {
+  background: var(--nav-hover);
+}
+.note-studio button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.note-studio button[aria-pressed='true']:not(.studio-modes button) {
+  background: var(--app-surface-alt);
+  color: var(--primary);
+}
+.note-studio :is(button, select, input):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+.studio-toolbar {
+  gap: 2px;
+}
+.studio-toolbar select {
+  width: 104px;
+}
+.studio-toolbar select,
+.studio-contextbar select {
+  max-width: 150px;
+  background: transparent;
+  border: 0;
+  padding: 4px 6px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-text);
+  font-size: 0.8rem;
+}
+.studio-toolbar select:hover {
+  background: var(--nav-hover);
+}
+.studio-toolbar-divider {
+  height: 16px;
+  width: 1px;
+  background: var(--app-border);
+  margin-inline: 3px;
+}
+.studio-toolbar button.studio-add {
+  width: auto;
+  gap: 5px;
+  margin-left: 6px;
+  padding-inline: 8px;
+  font-size: 0.78rem;
+  font-weight: 560;
+}
+.studio-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+.studio-writing {
+  flex: 1;
+  min-width: 0;
+}
+.studio-document {
+  min-height: 340px;
+  outline: none;
+}
+/* Calm reading type: modest heading steps, one rhythm unit between blocks. */
+.studio-document,
+.rendered-note .tiptap {
+  line-height: 1.7;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+:is(.studio-document, .rendered-note .tiptap) > * {
+  margin-block: 0.5em;
+}
+:is(.studio-document, .rendered-note .tiptap) > :first-child {
+  margin-top: 0;
+}
+:is(.studio-document, .rendered-note .tiptap) :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 620;
+  margin: 1.4em 0 0.4em;
+}
+:is(.studio-document, .rendered-note .tiptap) h1 {
+  font-size: 1.5rem;
+}
+:is(.studio-document, .rendered-note .tiptap) h2 {
+  font-size: 1.3rem;
+}
+:is(.studio-document, .rendered-note .tiptap) h3 {
+  font-size: 1.12rem;
+}
+:is(.studio-document, .rendered-note .tiptap) h4 {
+  font-size: 1rem;
+}
+:is(.studio-document, .rendered-note .tiptap) h5 {
+  font-size: 0.95rem;
+}
+:is(.studio-document, .rendered-note .tiptap) h6 {
+  font-size: 0.9rem;
+  color: var(--app-muted);
+}
+:is(.studio-document, .rendered-note .tiptap) :is(ul, ol) {
+  padding-left: 1.5em;
+}
+:is(.studio-document, .rendered-note .tiptap) ul {
+  list-style-type: disc;
+}
+:is(.studio-document, .rendered-note .tiptap) ul ul {
+  list-style-type: circle;
+}
+:is(.studio-document, .rendered-note .tiptap) ul ul ul {
+  list-style-type: square;
+}
+:is(.studio-document, .rendered-note .tiptap) ol {
+  list-style-type: decimal;
+}
+:is(.studio-document, .rendered-note .tiptap) li p {
+  margin: 0.2em 0;
+}
+:is(.studio-document, .rendered-note .tiptap) blockquote {
+  border-left: 2px solid color-mix(in srgb, var(--primary) 45%, var(--app-border));
+  padding-left: 0.9em;
+  margin-inline: 0;
+  color: var(--app-muted);
+}
+:is(.studio-document, .rendered-note .tiptap) pre {
+  background: var(--app-surface-alt);
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+  padding: 12px 14px;
+  font-size: 0.86em;
+  overflow-x: auto;
+  max-width: 100%;
+}
+:is(.studio-document, .rendered-note .tiptap) code {
+  font-family: 'Fira Code', monospace;
+  font-variant-ligatures: contextual;
+  font-feature-settings:
+    'liga' 1,
+    'calt' 1;
+  font-size: 0.85em;
+}
+:is(.studio-document, .rendered-note .tiptap) pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  white-space: pre;
+}
+:is(.studio-document, .rendered-note .tiptap) :not(pre) > code {
+  background: var(--app-surface-alt);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+:is(.studio-document, .rendered-note .tiptap) .tableWrapper {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  margin-block: 16px;
+}
+:is(.studio-document, .rendered-note .tiptap) .tableWrapper:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+:is(.studio-document, .rendered-note .tiptap) table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;
+  min-width: 280px;
+}
+:is(.studio-document, .rendered-note .tiptap) :is(th, td) {
+  border: 1px solid var(--app-border);
+  padding: 9px 12px;
+  vertical-align: top;
+  position: relative;
+  min-width: 5rem;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+:is(.studio-document, .rendered-note .tiptap) th {
+  background: var(--app-surface-alt);
+  font-weight: 650;
+}
+.studio-document .selectedCell {
+  background: color-mix(in srgb, var(--primary) 14%, var(--app-surface));
+}
+:is(.studio-document, .rendered-note .tiptap) ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0;
+}
+:is(.studio-document, .rendered-note .tiptap) li[data-type='taskItem'] {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+:is(.studio-document, .rendered-note .tiptap) li[data-type='taskItem'] > label {
+  margin-top: 5px;
+  flex: 0 0 auto;
+}
+:is(.studio-document, .rendered-note .tiptap) li[data-type='taskItem'] input {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+:is(.studio-document, .rendered-note .tiptap) li[data-checked='true'] > div {
+  color: var(--app-muted);
+  text-decoration: line-through;
+}
+.studio-document p.is-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--app-muted);
+  pointer-events: none;
+  height: 0;
+}
+/* The label and icon identify meaning independently of colour. */
+.studio-callout {
+  --callout-accent: var(--primary);
+  background: color-mix(in srgb, var(--callout-accent) 5%, var(--app-surface));
+  border: 1px solid color-mix(in srgb, var(--callout-accent) 23%, var(--app-border));
+  border-left: 4px solid var(--callout-accent);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-block: 20px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.studio-callout > strong {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--callout-accent);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 9px;
+}
+.studio-callout > strong svg {
+  flex: 0 0 auto;
+}
+.studio-callout[data-kind='definition'] {
+  --callout-accent: #2454a4;
+}
+.studio-callout[data-kind='memory'] {
+  --callout-accent: #805813;
+}
+.studio-callout[data-kind='example'] {
+  --callout-accent: #21694c;
+}
+.studio-callout[data-kind='tip'] {
+  --callout-accent: #246777;
+}
+.studio-callout[data-kind='question'] {
+  --callout-accent: #704596;
+}
+.studio-callout[data-kind='warning'],
+.studio-callout[data-kind='pitfall'] {
+  --callout-accent: #a13939;
+}
+.dark .studio-callout[data-kind='definition'] {
+  --callout-accent: #98baff;
+}
+.dark .studio-callout[data-kind='memory'] {
+  --callout-accent: #eac480;
+}
+.dark .studio-callout[data-kind='example'] {
+  --callout-accent: #8bd3b1;
+}
+.dark .studio-callout[data-kind='tip'] {
+  --callout-accent: #88cedd;
+}
+.dark .studio-callout[data-kind='question'] {
+  --callout-accent: #c4a2e7;
+}
+.dark .studio-callout[data-kind='warning'],
+.dark .studio-callout[data-kind='pitfall'] {
+  --callout-accent: #f4aaa5;
+}
+.studio-callout p {
+  margin-block: 0.4em;
+}
+@media (max-width: 480px) {
+  .studio-callout {
+    padding: 13px 14px;
+    margin-block: 16px;
+  }
+}
+.studio-entity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface-alt);
+  border-radius: 9px;
+  margin-block: 16px;
+}
+.studio-entity > div {
+  flex: 1;
+  min-width: 0;
+}
+.studio-entity small {
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  display: block;
+}
+.studio-entity a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-weight: 550;
+  color: var(--primary);
+  text-decoration: none;
+}
+.studio-wiki {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--primary) 7%, transparent);
+}
+.studio-media {
+  margin-block: 18px;
+}
+.studio-media :is(img, video) {
+  display: block;
+  max-width: 100%;
+  max-height: 560px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+.studio-media audio {
+  width: 100%;
+}
+.studio-media small {
+  display: block;
+  text-align: center;
+  color: var(--app-muted);
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+.studio-media p {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--app-muted);
+}
+.studio-raw {
+  white-space: pre-wrap;
+}
+.studio-outline {
+  width: 170px;
+  flex: 0 0 170px;
+  border-left: 1px solid var(--app-border);
+  padding-left: 16px;
+  position: sticky;
+  top: 80px;
+}
+.studio-outline strong {
+  font-size: 0.72rem;
+  display: block;
+  color: var(--app-muted);
+  margin-bottom: 10px;
+}
+.studio-outline button {
+  display: block;
+  text-align: left;
+  width: 100%;
+  color: var(--app-muted);
+  font-size: 0.76rem;
+  padding: 5px;
+  border-radius: 4px;
+}
+.studio-outline button[data-level='3'],
+.studio-outline button[data-level='4'] {
+  padding-left: 14px;
+}
+.studio-outline button[data-level='5'],
+.studio-outline button[data-level='6'] {
+  padding-left: 22px;
+}
+.studio-outline p {
+  font-size: 0.76rem;
+  color: var(--app-muted);
+}
+.studio-command-menu {
+  position: relative;
+  z-index: 4;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px #00000018;
+  padding: 8px;
+  margin: -12px 0 20px;
+  max-width: 400px;
+}
+.studio-command-menu [role='listbox'] {
+  display: grid;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.studio-command-menu [role='option'] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  text-align: left;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+.studio-command-menu [aria-selected='true'] {
+  background: var(--app-surface-alt);
+}
+.studio-command-menu input {
+  margin-bottom: 8px;
+}
+.studio-menu-close {
+  color: var(--app-muted);
+  font-size: 0.72rem;
+  padding: 5px 8px;
+}
+.studio-contextbar {
+  background: var(--app-surface-alt);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 0.74rem;
+  margin: -10px 0 16px;
+}
+.studio-contextbar button {
+  padding: 5px;
+  border-radius: 4px;
+}
+/* Footer: tools for the block under the cursor, then hint and word count. */
+.studio-footer {
+  justify-content: flex-end;
+  gap: 12px;
+  min-height: 36px;
+  margin-top: 16px;
+  padding-top: 6px;
+  border-top: 1px solid var(--app-border);
+  color: var(--app-muted);
+  font-size: 0.72rem;
+}
+.studio-footer .studio-block-actions {
+  gap: 2px;
+  margin-right: auto;
+}
+.studio-block-actions > span {
+  font-size: 0.72rem;
+  margin-right: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.studio-footer-hint {
+  min-width: 0;
+}
+.studio-feedback {
+  font-size: 0.8rem;
+  margin-top: 12px;
+  color: var(--app-muted);
+}
+.studio-dialog {
+  max-width: min(480px, calc(100vw - 32px));
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+.studio-dialog > h2 {
+  font-size: 1.1rem;
+  font-weight: 650;
+  padding-right: 20px;
+}
+.studio-dialog > p {
+  color: var(--app-muted);
+  line-height: 1.6;
+  font-size: 0.85rem;
+}
+.studio-dialog .studio-dialog-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  padding: 6px;
+  border: 0;
+}
+.studio-dialog label {
+  display: grid;
+  gap: 7px;
+  font-size: 0.85rem;
+}
+.studio-dialog label .native-select {
+  max-width: none;
+}
+.studio-dialog > button:not([data-slot='dialog-close']) {
+  padding: 9px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 7px;
+}
+.studio-dialog input[type='file'] {
+  max-width: 100%;
+  font-size: 0.8rem;
+}
+.studio-entity-results {
+  display: grid;
+  gap: 4px;
+  max-height: 270px;
+  overflow-y: auto;
+}
+.studio-entity-results button {
+  display: flex;
+  gap: 8px;
+  text-align: left;
+  align-items: center;
+  border-radius: 6px;
+  padding: 10px;
+}
+.notes-layout:not(.index-open):has(.studio-focused),
+.note-content-grid:has(.studio-focused) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.notes-layout:not(.index-open):has(.studio-focused) .note-index,
+.note-content-grid:has(.studio-focused) .note-side-panel {
+  display: none;
+}
+.studio-document .hljs-keyword,
+.rendered-note .hljs-keyword {
+  color: #8a4264;
+}
+.studio-document .hljs-string,
+.rendered-note .hljs-string {
+  color: #32684b;
+}
+.studio-document .hljs-number,
+.rendered-note .hljs-number {
+  color: #805c23;
+}
+.studio-document .hljs-comment,
+.rendered-note .hljs-comment {
+  color: #68737a;
+}
+.studio-document .hljs-title,
+.rendered-note .hljs-title {
+  color: #2a5c7b;
+}
+.dark :is(.studio-document, .rendered-note) .hljs-keyword {
+  color: #e3a4bc;
+}
+.dark :is(.studio-document, .rendered-note) .hljs-string {
+  color: #a1c6a8;
+}
+.dark :is(.studio-document, .rendered-note) .hljs-number {
+  color: #e0b46b;
+}
+.dark :is(.studio-document, .rendered-note) .hljs-comment {
+  color: #a1a6aa;
+}
+.dark :is(.studio-document, .rendered-note) .hljs-title {
+  color: #aacbdf;
+}
+@media (max-width: 700px) {
+  .studio-modes button,
+  .studio-view-actions button,
+  .studio-toolbar button,
+  .studio-block-actions button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .studio-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .studio-outline {
+    order: -1;
+    position: static;
+    width: 100%;
+    flex-basis: auto;
+    border-left: 0;
+    border-bottom: 1px solid var(--app-border);
+    padding: 0 0 12px;
+  }
+  .studio-document {
+    min-height: 290px;
+  }
+  .studio-toolbar-divider {
+    display: none;
+  }
+  .studio-toolbar button.studio-add {
+    margin-left: 0;
+  }
+  .studio-toolbar select {
+    max-width: 125px;
+  }
+  .studio-command-menu {
+    max-width: 100%;
+  }
+  :is(.studio-document, .rendered-note .tiptap) pre {
+    padding: 12px;
+  }
+  .studio-footer {
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* A gutter for the drag handle, outside the text column. */
+.studio-writing {
+  position: relative;
+  margin-left: -26px;
+  padding-left: 26px;
+}
+.studio-drag-handle {
+  cursor: grab;
+  color: var(--app-muted);
+  padding: 4px 2px;
+  border-radius: var(--ui-radius-control);
+  background: transparent;
+  opacity: 0.7;
+  transition:
+    opacity var(--ui-color-duration) var(--ui-color-ease),
+    background-color var(--ui-color-duration) var(--ui-color-ease);
+}
+.studio-drag-handle:hover {
+  opacity: 1;
+}
+.studio-drag-handle:active {
+  cursor: grabbing;
+}
+.studio-drag-handle:hover {
+  background: var(--app-surface-alt);
+}
+@media (max-width: 600px) {
+  .studio-writing {
+    margin-left: 0;
+    padding-left: 22px;
+  }
+  .studio-footer-hint {
+    display: none;
+  }
+}
+.note-studio .math-typing-guide {
+  margin-top: 20px;
+  border-top: 1px solid var(--app-border);
+  border-bottom: 0;
+}
+/* Narrow editors (split view, phones): the insert button keeps only its icon. */
+@container note-studio (max-width: 560px) {
+  .studio-card-create {
+    width: 36px;
+    min-height: 36px;
+  }
+  .studio-card-create span {
+    display: none;
+  }
+  .studio-toolbar button.studio-add {
+    gap: 0;
+    padding-inline: 5px;
+    font-size: 0;
+  }
+  .studio-toolbar select {
+    width: 88px;
+  }
+  .studio-bar {
+    margin-bottom: 12px;
+  }
+}
+/* Outline and focus mode belong to the full note page, not the column beside a PDF. */
+.reader-continuous-note .studio-view-actions {
+  display: none;
+}
+
+/* Meaningful colours with readable foregrounds in both themes. */
+.studio-highlight {
+  color: #382c10;
+  background: #fae5a0;
+  border-radius: 3px;
+  padding-block: 0.08em;
+}
+.studio-highlight[data-color='green'] {
+  color: #153c2b;
+  background: #b8e4c9;
+}
+.studio-highlight[data-color='blue'] {
+  color: #193554;
+  background: #c2dbf8;
+}
+.studio-highlight[data-color='pink'] {
+  color: #512b42;
+  background: #f1c6df;
+}
+.dark .studio-highlight {
+  color: #fff0c3;
+  background: #645024;
+}
+.dark .studio-highlight[data-color='green'] {
+  color: #c8f5dc;
+  background: #27563e;
+}
+.dark .studio-highlight[data-color='blue'] {
+  color: #d7eaff;
+  background: #2f4e73;
+}
+.dark .studio-highlight[data-color='pink'] {
+  color: #ffe1f1;
+  background: #673b55;
+}
+.studio-fold {
+  margin-block: 18px;
+  border: 1px solid var(--app-border);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.studio-fold-header {
+  background: var(--app-surface-alt);
+}
+.studio-fold-header button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  text-align: left;
+  padding: 13px 16px;
+  color: var(--app-text);
+  font-weight: 600;
+}
+.studio-fold-header button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -3px;
+}
+.studio-fold-header svg {
+  flex: 0 0 auto;
+  transition: transform 160ms ease;
+}
+.studio-fold[data-open='true'] > .studio-fold-header svg {
+  transform: rotate(90deg);
+}
+.studio-fold-body {
+  padding: 6px 18px 14px;
+  overflow-wrap: anywhere;
+}
+.studio-fold[data-open='false'] > .studio-fold-body {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-fold-header svg {
+    transition: none;
+  }
+}
+@media print {
+  .studio-fold-body {
+    display: block !important;
+  }
+}
+
+.studio-fold-footer {
+  padding: 6px 16px 10px;
+}
+.studio-fold-footer button {
+  font-size: 0.78rem;
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

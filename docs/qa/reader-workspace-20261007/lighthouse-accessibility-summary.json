@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "generatedAt": "2026-10-06T23:30:37.091436+00:00",
+    "syntheticFixturesOnly": true,
+    "buildIndexSha256": "78a40737752632c0e7b79ba9bf45b702b529266c471eb393fbea4435f0eddc4d",
+    "buildIndexModifiedAt": "2026-10-06T23:26:54.839004+00:00",
+    "auditCommandFlags": [
+      "--fake-data",
+      "--accessibility-only",
+      "--skip-build"
+    ],
+    "failureComparison": "Every numeric audit score < 1, including unweighted audits",
+    "limitations": "Automated accessibility audit only; keyboard usability and physical trackpad testing are assessed separately"
+  },
+  "pages": {
+    "home": {
+      "requestedUrl": "http://127.0.0.1:4173/",
+      "finalUrl": "http://127.0.0.1:4173/",
+      "fetchTime": "2026-10-06T23:29:45.160Z",
+      "accessibilityScore": 100,
+      "lighthouseVersion": "13.5.0",
+      "runWarnings": [],
+      "runtimeError": null,
+      "runtimeErrorCount": 0,
+      "belowFullScoreAuditCount": 0,
+      "belowFullScoreAudits": [],
+      "labelContentNameMismatchScore": 1,
+      "screenshot": "home-lighthouse.png",
+      "screenshotVisuallyInspected": true
+    },
+    "reader": {
+      "requestedUrl": "http://127.0.0.1:4173/material/1",
+      "finalUrl": "http://127.0.0.1:4173/material/1",
+      "fetchTime": "2026-10-06T23:30:01.782Z",
+      "accessibilityScore": 100,
+      "lighthouseVersion": "13.5.0",
+      "runWarnings": [],
+      "runtimeError": null,
+      "runtimeErrorCount": 0,
+      "belowFullScoreAuditCount": 0,
+      "belowFullScoreAudits": [],
+      "labelContentNameMismatchScore": 1,
+      "screenshot": "reader-lighthouse.png",
+      "screenshotVisuallyInspected": true,
+      "loadEvidence": {
+        "method": "Visual inspection of the original Lighthouse full-page screenshot",
+        "title": "04_Schleifen.pdf",
+        "course": "Programmieren 1",
+        "renderedPdfPages": 2,
+        "visibleSyntheticPdfText": [
+          "Schleifen und Python Beispiele",
+          "Rekursionstiefe und Funktionsaufrufe"
+        ],
+        "recoveryOrLoadingView": false
+      }
+    }
+  },
+  "releasedLocalPorts": [
+    4173,
+    8173
+  ]
+}

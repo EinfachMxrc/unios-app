@@ -1,0 +1,607 @@
+{
+  "license": "AGPL-3.0-or-later",
+  "documents": [
+    {
+      "key": "Rekursion",
+      "title": "Lehrkonzept Rekursion",
+      "text": "Ein Basisfall beendet die Rekursion. Jeder Rekursionsschritt verkleinert das Problem."
+    },
+    {
+      "key": "Binärbaum",
+      "title": "Lehrkonzept Binärbaum",
+      "text": "Ein Binärbaum hat höchstens zwei Kinder pro Knoten."
+    },
+    {
+      "key": "Quicksort",
+      "title": "Lehrkonzept Quicksort",
+      "text": "Quicksort zerlegt das Array um ein Pivot und sortiert die Teilbereiche."
+    },
+    {
+      "key": "MergeSort",
+      "title": "Lehrkonzept MergeSort",
+      "text": "MergeSort teilt und vereinigt sortierte Listen."
+    },
+    {
+      "key": "Hashing",
+      "title": "Lehrkonzept Hashing",
+      "text": "Hashing ordnet Schlüsseln Tabellenplätze zu. Kollisionen brauchen eine Behandlung."
+    },
+    {
+      "key": "Polymorphie",
+      "title": "Lehrkonzept Polymorphie",
+      "text": "Polymorphie erlaubt verschiedene Implementierungen einer gemeinsamen Schnittstelle."
+    },
+    {
+      "key": "Vererbung",
+      "title": "Lehrkonzept Vererbung",
+      "text": "Vererbung spezialisiert Klassen und übernimmt ihre Eigenschaften."
+    },
+    {
+      "key": "Kapselung",
+      "title": "Lehrkonzept Kapselung",
+      "text": "Kapselung schützt den inneren Zustand eines Objekts."
+    },
+    {
+      "key": "Transaktion",
+      "title": "Lehrkonzept Transaktion",
+      "text": "Eine Transaktion gruppiert Datenbankoperationen atomar."
+    },
+    {
+      "key": "Normalisierung",
+      "title": "Lehrkonzept Normalisierung",
+      "text": "Normalisierung vermeidet Redundanz in relationalen Tabellen."
+    },
+    {
+      "key": "Primärschlüssel",
+      "title": "Lehrkonzept Primärschlüssel",
+      "text": "Ein Primärschlüssel identifiziert jede Zeile eindeutig."
+    },
+    {
+      "key": "Fremdschlüssel",
+      "title": "Lehrkonzept Fremdschlüssel",
+      "text": "Ein Fremdschlüssel verknüpft Tabellen über referenzierte Werte."
+    },
+    {
+      "key": "Deadlock",
+      "title": "Lehrkonzept Deadlock",
+      "text": "Ein Deadlock entsteht bei zyklischem Warten auf Ressourcen."
+    },
+    {
+      "key": "Semaphore",
+      "title": "Lehrkonzept Semaphore",
+      "text": "Eine Semaphore begrenzt gleichzeitige Zugriffe auf gemeinsame Ressourcen."
+    },
+    {
+      "key": "Mutex",
+      "title": "Lehrkonzept Mutex",
+      "text": "Ein Mutex schützt einen kritischen Abschnitt vor gleichzeitigen Zugriffen."
+    },
+    {
+      "key": "Heap",
+      "title": "Lehrkonzept Heap",
+      "text": "Ein Heap erfüllt eine Ordnungsbedingung zwischen Eltern und Kindern."
+    },
+    {
+      "key": "Dijkstra",
+      "title": "Lehrkonzept Dijkstra",
+      "text": "Dijkstra bestimmt kürzeste Wege bei nichtnegativen Kantengewichten."
+    },
+    {
+      "key": "Stack",
+      "title": "Lehrkonzept Stack",
+      "text": "Ein Stack entnimmt zuletzt eingefügte Elemente zuerst."
+    },
+    {
+      "key": "Queue",
+      "title": "Lehrkonzept Queue",
+      "text": "Eine Queue entnimmt zuerst eingefügte Elemente zuerst."
+    },
+    {
+      "key": "BigO",
+      "title": "Lehrkonzept BigO",
+      "text": "BigO beschreibt eine obere asymptotische Schranke."
+    }
+  ],
+  "cases": [
+    {
+      "id": "Rekursion-0",
+      "query": "Rekursion",
+      "expected_key": "Rekursion"
+    },
+    {
+      "id": "Rekursion-1",
+      "query": "Erkläre Rekursion",
+      "expected_key": "Rekursion"
+    },
+    {
+      "id": "Rekursion-2",
+      "query": "Lehrkonzept Rekursion",
+      "expected_key": "Rekursion"
+    },
+    {
+      "id": "Rekursion-3",
+      "query": "Wo wird Rekursion erklärt?",
+      "expected_key": "Rekursion"
+    },
+    {
+      "id": "Rekursion-4",
+      "query": "Warum brauchen selbstaufrufende Funktionen eine Stoppregel?",
+      "expected_key": "Rekursion"
+    },
+    {
+      "id": "Binärbaum-0",
+      "query": "Binärbaum",
+      "expected_key": "Binärbaum"
+    },
+    {
+      "id": "Binärbaum-1",
+      "query": "Erkläre Binärbaum",
+      "expected_key": "Binärbaum"
+    },
+    {
+      "id": "Binärbaum-2",
+      "query": "Lehrkonzept Binärbaum",
+      "expected_key": "Binärbaum"
+    },
+    {
+      "id": "Binärbaum-3",
+      "query": "Wo wird Binärbaum erklärt?",
+      "expected_key": "Binärbaum"
+    },
+    {
+      "id": "Binärbaum-4",
+      "query": "Welche Struktur erlaubt genau linke und rechte Nachfolger?",
+      "expected_key": "Binärbaum"
+    },
+    {
+      "id": "Quicksort-0",
+      "query": "Quicksort",
+      "expected_key": "Quicksort"
+    },
+    {
+      "id": "Quicksort-1",
+      "query": "Erkläre Quicksort",
+      "expected_key": "Quicksort"
+    },
+    {
+      "id": "Quicksort-2",
+      "query": "Lehrkonzept Quicksort",
+      "expected_key": "Quicksort"
+    },
+    {
+      "id": "Quicksort-3",
+      "query": "Wo wird Quicksort erklärt?",
+      "expected_key": "Quicksort"
+    },
+    {
+      "id": "Quicksort-4",
+      "query": "Welche Definition gibt es für Quicksort?",
+      "expected_key": "Quicksort"
+    },
+    {
+      "id": "MergeSort-0",
+      "query": "MergeSort",
+      "expected_key": "MergeSort"
+    },
+    {
+      "id": "MergeSort-1",
+      "query": "Erkläre MergeSort",
+      "expected_key": "MergeSort"
+    },
+    {
+      "id": "MergeSort-2",
+      "query": "Lehrkonzept MergeSort",
+      "expected_key": "MergeSort"
+    },
+    {
+      "id": "MergeSort-3",
+      "query": "Wo wird MergeSort erklärt?",
+      "expected_key": "MergeSort"
+    },
+    {
+      "id": "MergeSort-4",
+      "query": "Welche Definition gibt es für MergeSort?",
+      "expected_key": "MergeSort"
+    },
+    {
+      "id": "Hashing-0",
+      "query": "Hashing",
+      "expected_key": "Hashing"
+    },
+    {
+      "id": "Hashing-1",
+      "query": "Erkläre Hashing",
+      "expected_key": "Hashing"
+    },
+    {
+      "id": "Hashing-2",
+      "query": "Lehrkonzept Hashing",
+      "expected_key": "Hashing"
+    },
+    {
+      "id": "Hashing-3",
+      "query": "Wo wird Hashing erklärt?",
+      "expected_key": "Hashing"
+    },
+    {
+      "id": "Hashing-4",
+      "query": "Welche Definition gibt es für Hashing?",
+      "expected_key": "Hashing"
+    },
+    {
+      "id": "Polymorphie-0",
+      "query": "Polymorphie",
+      "expected_key": "Polymorphie"
+    },
+    {
+      "id": "Polymorphie-1",
+      "query": "Erkläre Polymorphie",
+      "expected_key": "Polymorphie"
+    },
+    {
+      "id": "Polymorphie-2",
+      "query": "Lehrkonzept Polymorphie",
+      "expected_key": "Polymorphie"
+    },
+    {
+      "id": "Polymorphie-3",
+      "query": "Wo wird Polymorphie erklärt?",
+      "expected_key": "Polymorphie"
+    },
+    {
+      "id": "Polymorphie-4",
+      "query": "Welche Definition gibt es für Polymorphie?",
+      "expected_key": "Polymorphie"
+    },
+    {
+      "id": "Vererbung-0",
+      "query": "Vererbung",
+      "expected_key": "Vererbung"
+    },
+    {
+      "id": "Vererbung-1",
+      "query": "Erkläre Vererbung",
+      "expected_key": "Vererbung"
+    },
+    {
+      "id": "Vererbung-2",
+      "query": "Lehrkonzept Vererbung",
+      "expected_key": "Vererbung"
+    },
+    {
+      "id": "Vererbung-3",
+      "query": "Wo wird Vererbung erklärt?",
+      "expected_key": "Vererbung"
+    },
+    {
+      "id": "Vererbung-4",
+      "query": "Welche Definition gibt es für Vererbung?",
+      "expected_key": "Vererbung"
+    },
+    {
+      "id": "Kapselung-0",
+      "query": "Kapselung",
+      "expected_key": "Kapselung"
+    },
+    {
+      "id": "Kapselung-1",
+      "query": "Erkläre Kapselung",
+      "expected_key": "Kapselung"
+    },
+    {
+      "id": "Kapselung-2",
+      "query": "Lehrkonzept Kapselung",
+      "expected_key": "Kapselung"
+    },
+    {
+      "id": "Kapselung-3",
+      "query": "Wo wird Kapselung erklärt?",
+      "expected_key": "Kapselung"
+    },
+    {
+      "id": "Kapselung-4",
+      "query": "Welche Definition gibt es für Kapselung?",
+      "expected_key": "Kapselung"
+    },
+    {
+      "id": "Transaktion-0",
+      "query": "Transaktion",
+      "expected_key": "Transaktion"
+    },
+    {
+      "id": "Transaktion-1",
+      "query": "Erkläre Transaktion",
+      "expected_key": "Transaktion"
+    },
+    {
+      "id": "Transaktion-2",
+      "query": "Lehrkonzept Transaktion",
+      "expected_key": "Transaktion"
+    },
+    {
+      "id": "Transaktion-3",
+      "query": "Wo wird Transaktion erklärt?",
+      "expected_key": "Transaktion"
+    },
+    {
+      "id": "Transaktion-4",
+      "query": "Welche Definition gibt es für Transaktion?",
+      "expected_key": "Transaktion"
+    },
+    {
+      "id": "Normalisierung-0",
+      "query": "Normalisierung",
+      "expected_key": "Normalisierung"
+    },
+    {
+      "id": "Normalisierung-1",
+      "query": "Erkläre Normalisierung",
+      "expected_key": "Normalisierung"
+    },
+    {
+      "id": "Normalisierung-2",
+      "query": "Lehrkonzept Normalisierung",
+      "expected_key": "Normalisierung"
+    },
+    {
+      "id": "Normalisierung-3",
+      "query": "Wo wird Normalisierung erklärt?",
+      "expected_key": "Normalisierung"
+    },
+    {
+      "id": "Normalisierung-4",
+      "query": "Welche Definition gibt es für Normalisierung?",
+      "expected_key": "Normalisierung"
+    },
+    {
+      "id": "Primärschlüssel-0",
+      "query": "Primärschlüssel",
+      "expected_key": "Primärschlüssel"
+    },
+    {
+      "id": "Primärschlüssel-1",
+      "query": "Erkläre Primärschlüssel",
+      "expected_key": "Primärschlüssel"
+    },
+    {
+      "id": "Primärschlüssel-2",
+      "query": "Lehrkonzept Primärschlüssel",
+      "expected_key": "Primärschlüssel"
+    },
+    {
+      "id": "Primärschlüssel-3",
+      "query": "Wo wird Primärschlüssel erklärt?",
+      "expected_key": "Primärschlüssel"
+    },
+    {
+      "id": "Primärschlüssel-4",
+      "query": "Welche Definition gibt es für Primärschlüssel?",
+      "expected_key": "Primärschlüssel"
+    },
+    {
+      "id": "Fremdschlüssel-0",
+      "query": "Fremdschlüssel",
+      "expected_key": "Fremdschlüssel"
+    },
+    {
+      "id": "Fremdschlüssel-1",
+      "query": "Erkläre Fremdschlüssel",
+      "expected_key": "Fremdschlüssel"
+    },
+    {
+      "id": "Fremdschlüssel-2",
+      "query": "Lehrkonzept Fremdschlüssel",
+      "expected_key": "Fremdschlüssel"
+    },
+    {
+      "id": "Fremdschlüssel-3",
+      "query": "Wo wird Fremdschlüssel erklärt?",
+      "expected_key": "Fremdschlüssel"
+    },
+    {
+      "id": "Fremdschlüssel-4",
+      "query": "Welche Definition gibt es für Fremdschlüssel?",
+      "expected_key": "Fremdschlüssel"
+    },
+    {
+      "id": "Deadlock-0",
+      "query": "Deadlock",
+      "expected_key": "Deadlock"
+    },
+    {
+      "id": "Deadlock-1",
+      "query": "Erkläre Deadlock",
+      "expected_key": "Deadlock"
+    },
+    {
+      "id": "Deadlock-2",
+      "query": "Lehrkonzept Deadlock",
+      "expected_key": "Deadlock"
+    },
+    {
+      "id": "Deadlock-3",
+      "query": "Wo wird Deadlock erklärt?",
+      "expected_key": "Deadlock"
+    },
+    {
+      "id": "Deadlock-4",
+      "query": "Welche Definition gibt es für Deadlock?",
+      "expected_key": "Deadlock"
+    },
+    {
+      "id": "Semaphore-0",
+      "query": "Semaphore",
+      "expected_key": "Semaphore"
+    },
+    {
+      "id": "Semaphore-1",
+      "query": "Erkläre Semaphore",
+      "expected_key": "Semaphore"
+    },
+    {
+      "id": "Semaphore-2",
+      "query": "Lehrkonzept Semaphore",
+      "expected_key": "Semaphore"
+    },
+    {
+      "id": "Semaphore-3",
+      "query": "Wo wird Semaphore erklärt?",
+      "expected_key": "Semaphore"
+    },
+    {
+      "id": "Semaphore-4",
+      "query": "Welche Definition gibt es für Semaphore?",
+      "expected_key": "Semaphore"
+    },
+    {
+      "id": "Mutex-0",
+      "query": "Mutex",
+      "expected_key": "Mutex"
+    },
+    {
+      "id": "Mutex-1",
+      "query": "Erkläre Mutex",
+      "expected_key": "Mutex"
+    },
+    {
+      "id": "Mutex-2",
+      "query": "Lehrkonzept Mutex",
+      "expected_key": "Mutex"
+    },
+    {
+      "id": "Mutex-3",
+      "query": "Wo wird Mutex erklärt?",
+      "expected_key": "Mutex"
+    },
+    {
+      "id": "Mutex-4",
+      "query": "Welche Definition gibt es für Mutex?",
+      "expected_key": "Mutex"
+    },
+    {
+      "id": "Heap-0",
+      "query": "Heap",
+      "expected_key": "Heap"
+    },
+    {
+      "id": "Heap-1",
+      "query": "Erkläre Heap",
+      "expected_key": "Heap"
+    },
+    {
+      "id": "Heap-2",
+      "query": "Lehrkonzept Heap",
+      "expected_key": "Heap"
+    },
+    {
+      "id": "Heap-3",
+      "query": "Wo wird Heap erklärt?",
+      "expected_key": "Heap"
+    },
+    {
+      "id": "Heap-4",
+      "query": "Welche Definition gibt es für Heap?",
+      "expected_key": "Heap"
+    },
+    {
+      "id": "Dijkstra-0",
+      "query": "Dijkstra",
+      "expected_key": "Dijkstra"
+    },
+    {
+      "id": "Dijkstra-1",
+      "query": "Erkläre Dijkstra",
+      "expected_key": "Dijkstra"
+    },
+    {
+      "id": "Dijkstra-2",
+      "query": "Lehrkonzept Dijkstra",
+      "expected_key": "Dijkstra"
+    },
+    {
+      "id": "Dijkstra-3",
+      "query": "Wo wird Dijkstra erklärt?",
+      "expected_key": "Dijkstra"
+    },
+    {
+      "id": "Dijkstra-4",
+      "query": "Welche Definition gibt es für Dijkstra?",
+      "expected_key": "Dijkstra"
+    },
+    {
+      "id": "Stack-0",
+      "query": "Stack",
+      "expected_key": "Stack"
+    },
+    {
+      "id": "Stack-1",
+      "query": "Erkläre Stack",
+      "expected_key": "Stack"
+    },
+    {
+      "id": "Stack-2",
+      "query": "Lehrkonzept Stack",
+      "expected_key": "Stack"
+    },
+    {
+      "id": "Stack-3",
+      "query": "Wo wird Stack erklärt?",
+      "expected_key": "Stack"
+    },
+    {
+      "id": "Stack-4",
+      "query": "Welche Definition gibt es für Stack?",
+      "expected_key": "Stack"
+    },
+    {
+      "id": "Queue-0",
+      "query": "Queue",
+      "expected_key": "Queue"
+    },
+    {
+      "id": "Queue-1",
+      "query": "Erkläre Queue",
+      "expected_key": "Queue"
+    },
+    {
+      "id": "Queue-2",
+      "query": "Lehrkonzept Queue",
+      "expected_key": "Queue"
+    },
+    {
+      "id": "Queue-3",
+      "query": "Wo wird Queue erklärt?",
+      "expected_key": "Queue"
+    },
+    {
+      "id": "Queue-4",
+      "query": "Welche Definition gibt es für Queue?",
+      "expected_key": "Queue"
+    },
+    {
+      "id": "BigO-0",
+      "query": "BigO",
+      "expected_key": "BigO"
+    },
+    {
+      "id": "BigO-1",
+      "query": "Erkläre BigO",
+      "expected_key": "BigO"
+    },
+    {
+      "id": "BigO-2",
+      "query": "Lehrkonzept BigO",
+      "expected_key": "BigO"
+    },
+    {
+      "id": "BigO-3",
+      "query": "Wo wird BigO erklärt?",
+      "expected_key": "BigO"
+    },
+    {
+      "id": "BigO-4",
+      "query": "Welche Definition gibt es für BigO?",
+      "expected_key": "BigO"
+    }
+  ]
+}

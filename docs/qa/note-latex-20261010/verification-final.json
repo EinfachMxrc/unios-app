@@ -1,0 +1,200 @@
+{
+  "SPDX": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "date": "2026-10-10",
+  "scope": "Lokale synthetische Notiz-, LaTeX-, PDF- und Fokusabnahme",
+  "private_data_accessed": false,
+  "deployed": false,
+  "checks": {
+    "frontend": {
+      "files": 124,
+      "tests": 1080,
+      "passed": true,
+      "seconds": 19.38
+    },
+    "typecheck": "passed",
+    "eslint": "passed, including final changed browser specs",
+    "i18n": {
+      "namespaces": 67,
+      "languages": [
+        "de",
+        "en"
+      ],
+      "passed": true
+    },
+    "build": "passed; existing bundled MathLive font and chunk-size warnings; offline formula browser test passed",
+    "browsers": {
+      "unique_cases": 61,
+      "combined_passed": 60,
+      "new_note_latex_cases": 10,
+      "corrected_focus_selector_passed": 1,
+      "navigation_repeat_passed": 8,
+      "passed": true,
+      "note": "Combined run first encountered an outdated h3 selector. Updated to current assessment document without weakening layout assertions; targeted case passed."
+    },
+    "visuals": {
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "viewports": [
+        "1280x720",
+        "390x844"
+      ],
+      "font_scales": [
+        "100%",
+        "150%"
+      ],
+      "passed": true,
+      "capture_note": "Full-page screenshots can place fixed mobile navigation inside the document image."
+    }
+  },
+  "source_hashes": [
+    {
+      "path": "frontend/src/components/NoteMarkdownEditor.tsx",
+      "sha256_lf": "2d264077f277716d5a0825f90964dd6b0e18ed3d1f3f60f9836a60a6faea3c9a"
+    },
+    {
+      "path": "frontend/src/components/NoteMarkdownEditor.test.tsx",
+      "sha256_lf": "26c51ebfb3c521248b014616b536b1f46a49d19768cc1ec928cc1c72b403a19e"
+    },
+    {
+      "path": "frontend/src/components/editor/NoteStudio.css",
+      "sha256_lf": "3df392554f566d375fba5f55da228da5e9ea0a132d838c52752b3fe705f035d9"
+    },
+    {
+      "path": "frontend/src/components/editor/NoteStudio.tsx",
+      "sha256_lf": "96ad0d40d01d3c8637e0e9253b71f812e6c3f1ed02ff1d1b14bcd5e8c05c6f83"
+    },
+    {
+      "path": "frontend/src/components/editor/StudyInsert.css",
+      "sha256_lf": "6261ca42ab3d0ef84381586d1e0df0d6b0135b4f004c57069cd7465cf0475b72"
+    },
+    {
+      "path": "frontend/src/components/editor/StudyInsertTools.tsx",
+      "sha256_lf": "5e5f3c1d622592ac7f58db6ca68db741692990794ed1b1e1194eae3cc6f7373b"
+    },
+    {
+      "path": "frontend/src/components/editor/extensions.test.ts",
+      "sha256_lf": "dad8ed0c322e307cf4f1330aa6bb4e6cbd5a9644239e5ba4c391a15aa6668095"
+    },
+    {
+      "path": "frontend/src/components/editor/extensions.tsx",
+      "sha256_lf": "ea9315313c3659f9b15a4e302d9934c0cd8a6919aa761df29865d382b93f749a"
+    },
+    {
+      "path": "frontend/src/components/editor/mathExtensions.tsx",
+      "sha256_lf": "a19eb6d84182e7a8c6b9021078d446610d9f869b4d4677a2baef1449c90c9703"
+    },
+    {
+      "path": "frontend/src/components/editor/mathExtensions.test.ts",
+      "sha256_lf": "8ea6324c4cbd972739b8022b846b94d771dfcabe3918736b4837381d5d386963"
+    },
+    {
+      "path": "frontend/src/components/editor/mathSyntax.ts",
+      "sha256_lf": "1fcf7fbf58f74b6ee4b6c921b79077bd98ea5036ebad3d272fbf0e2c234fe6ed"
+    },
+    {
+      "path": "frontend/src/components/editor/mathSyntax.test.ts",
+      "sha256_lf": "14333294989ac02146c4b60a899c34173f8adb7e4a5f403a6861aefdface4644"
+    },
+    {
+      "path": "frontend/src/components/editor/MathTypingGuide.tsx",
+      "sha256_lf": "14f7c1949aafc332e8eb88f6bd5eccfca4b26feafafdbc6c6306fe3caca28b0a"
+    },
+    {
+      "path": "frontend/src/components/editor/MathTypingGuide.css",
+      "sha256_lf": "458b3aa5b2cbba0575867d2ebd99a9bd90edebd2a282e74e16b7fa4695d67008"
+    },
+    {
+      "path": "frontend/src/i18n/locales/de/material.ts",
+      "sha256_lf": "d19453e9da90c1be09725733c61e98573639bd28d7b194fa2e94667f66436a70"
+    },
+    {
+      "path": "frontend/src/i18n/locales/de/notes.ts",
+      "sha256_lf": "e6c0d3f1f67821442916c5e7ffa4777eb2871433d4afbc064a7bc75af9d71792"
+    },
+    {
+      "path": "frontend/src/i18n/locales/en/material.ts",
+      "sha256_lf": "0e03c890b7d55ed53d01bbc12a73ba18b0b61684b97b940dc0a582205370be7f"
+    },
+    {
+      "path": "frontend/src/i18n/locales/en/notes.ts",
+      "sha256_lf": "d46674d1da40c1c9ff154e58be58ecdab6d0291955d7df60b232820427c97573"
+    },
+    {
+      "path": "frontend/src/pages/material/ReaderParts.tsx",
+      "sha256_lf": "e492452f9d58702e12bfc0bff1d24ec76cbd7c3f4be9ff6e4fd2144c1e7f53af"
+    },
+    {
+      "path": "frontend/src/pages/material/ReaderParts.comments.test.tsx",
+      "sha256_lf": "ccee7f83475a00107182d772fa71a00ec7cff0dc8a7b6aba417660076aa8feb0"
+    },
+    {
+      "path": "frontend/src/styles/workspace-layout.css",
+      "sha256_lf": "a6e093fecbb9f76c0e5b9328d0cdf3f5a2cedcf8705aa2d5e59ba420789a29b7"
+    },
+    {
+      "path": "frontend/e2e/note-latex-typing.spec.ts",
+      "sha256_lf": "9d68e5adc4b785e8b6b90fd3c0d17a6af509eec02758c9a524e418474132469e"
+    },
+    {
+      "path": "frontend/e2e/focus-workspace.spec.ts",
+      "sha256_lf": "059b35600c671e252078ef8548d550fcaedb073fcfe10898d449d3703086b7fd"
+    },
+    {
+      "path": "docs/PROGRESS.md",
+      "sha256_lf": "2a3f29a61ca1c554bf45b904911d45c2db58d7feca2d18a2406f14e3d617057e"
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/README.md",
+      "sha256_lf": "3a7a618fca4f19777d3efff473dfcb390d24ee2dcdbe9a814878398ab1bec137"
+    }
+  ],
+  "images": [
+    {
+      "path": "docs/qa/note-latex-20261010/note-latex-dark-1280-editor-1791631205660.png",
+      "sha256": "9d2c7dff182e14eb3e88579e72dd8d2b2b3a8e184468e675120ce68cbe24cafb",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/note-latex-dark-390-font150-readonly-1791631207203.png",
+      "sha256": "826e2a3c97095c9a727122d8e97f30a776fba512445ae8e774050adc0957dc37",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/note-latex-light-1280-editor-1791631202685.png",
+      "sha256": "67c16a736b166879c2411e4717cec57fd85079c401eaf8fb17a0ed8f6af9692a",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/note-latex-light-390-font150-readonly-1791631204229.png",
+      "sha256": "c23770ce84b61e239d158194f1eebdbc58803a7ed054c40a146047310648a2f7",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/reader-dark-1440.png",
+      "sha256": "1610a98bb9fdc2250e958759b667c25035050412da5e4f36a9431293c7637d69",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/reader-dark-390.png",
+      "sha256": "57dc12b79486cdb02b8b5d4a9cfba28c817683a08995e80c77cd8efbf19b4192",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/reader-light-1440.png",
+      "sha256": "3e3ce73ac08537ab37cc7958883f7e0f73f64b26398553c08e341aa022ca8826",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/reader-light-390.png",
+      "sha256": "426c74bf54706763d6b26296a955a20f9353bb03b2cff152ec51baae3ba0cb59",
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/qa/note-latex-20261010/reader-selection-120-pages.png",
+      "sha256": "cc573413532d3a53aa4abbfb256921b5ad3845b540d37827b75731347c0f7b7e",
+      "visually_reviewed": true
+    }
+  ]
+}

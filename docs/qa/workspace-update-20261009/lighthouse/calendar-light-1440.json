@@ -1,0 +1,229 @@
+{
+  "id": "calendar-light-1440",
+  "kind": "snapshot of fully rendered interactive view",
+  "url": "http://127.0.0.1:4273/deadlines#timetable",
+  "lighthouse_version": "13.5.0",
+  "fetch_time": "2026-10-09T13:17:11.125Z",
+  "scores": {
+    "accessibility": 97
+  },
+  "evidence": {
+    "heading": "Termine",
+    "theme": "",
+    "width": 1440,
+    "horizontal_overflow": false,
+    "pdf_render_complete": null,
+    "pdf_nonwhite_pixels": null,
+    "notes_field_visible": false,
+    "synthetic_calendar_visible": true
+  },
+  "failed_audits": [
+    {
+      "id": "label-content-name-mismatch",
+      "title": "Elements with visible text labels do not have matching accessible names.",
+      "score": 0,
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-0-BUTTON",
+            "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,1,DIV,1,BUTTON",
+            "selector": "div.calendar-workspace > div.calendar-interaction-hint > div.calendar-zoom > button",
+            "boundingRect": {
+              "top": 358,
+              "bottom": 390,
+              "left": 1285,
+              "right": 1322,
+              "width": 37,
+              "height": 32
+            },
+            "snippet": "<button type=\"button\" aria-label=\"Stundenhöhe zurücksetzen\">",
+            "nodeLabel": "100%",
+            "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+          }
+        }
+      ]
+    },
+    {
+      "id": "target-size",
+      "title": "Touch targets do not have sufficient size or spacing.",
+      "score": 0,
+      "items": [
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-1-BUTTON",
+            "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+            "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+            "boundingRect": {
+              "top": 623,
+              "bottom": 687,
+              "left": 367,
+              "right": 558,
+              "width": 191,
+              "height": 64
+            },
+            "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+            "nodeLabel": "English Workshop\n10:00 – 11:00\nTestbau A-12",
+            "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 623,
+                    "bottom": 647,
+                    "left": 370,
+                    "right": 555,
+                    "width": 185,
+                    "height": 24
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern"
+                }
+              },
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 663,
+                    "bottom": 687,
+                    "left": 370,
+                    "right": 555,
+                    "width": 185,
+                    "height": 24
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "node": {
+            "type": "node",
+            "lhId": "1-4-BUTTON",
+            "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+            "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+            "boundingRect": {
+              "top": 735,
+              "bottom": 799,
+              "left": 367,
+              "right": 558,
+              "width": 191,
+              "height": 64
+            },
+            "snippet": "<button type=\"button\" data-calendar-trigger=\"true\">",
+            "nodeLabel": "English Workshop\n11:45 – 12:45\nTestbau A-12",
+            "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 191px by 16px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+          },
+          "subItems": {
+            "type": "subitems",
+            "items": [
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 735,
+                    "bottom": 759,
+                    "left": 370,
+                    "right": 555,
+                    "width": 185,
+                    "height": 24
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                  "nodeLabel": "Beginn von English Workshop ändern"
+                }
+              },
+              {
+                "relatedNode": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,2,SECTION,0,DIV,1,DIV,0,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                  "boundingRect": {
+                    "top": 775,
+                    "bottom": 799,
+                    "left": 370,
+                    "right": 555,
+                    "width": 185,
+                    "height": 24
+                  },
+                  "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                  "nodeLabel": "Ende von English Workshop ändern"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "run_warnings": [],
+  "config": {
+    "output": "json",
+    "maxWaitForFcp": 30000,
+    "maxWaitForLoad": 45000,
+    "pauseAfterFcpMs": 5250,
+    "pauseAfterLoadMs": 5250,
+    "networkQuietThresholdMs": 5250,
+    "cpuQuietThresholdMs": 5250,
+    "formFactor": "desktop",
+    "throttling": {
+      "rttMs": 150,
+      "throughputKbps": 1638.4,
+      "requestLatencyMs": 562.5,
+      "downloadThroughputKbps": 1474.5600000000002,
+      "uploadThroughputKbps": 675,
+      "cpuSlowdownMultiplier": 4
+    },
+    "throttlingMethod": "provided",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": true
+    },
+    "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+    "auditMode": false,
+    "gatherMode": false,
+    "clearStorageTypes": [
+      "file_systems",
+      "shader_cache",
+      "service_workers",
+      "cache_storage"
+    ],
+    "disableStorageReset": false,
+    "debugNavigation": false,
+    "channel": "node",
+    "usePassiveGathering": false,
+    "disableFullPageScreenshot": false,
+    "skipAboutBlank": false,
+    "blankPage": "about:blank",
+    "ignoreStatusCode": false,
+    "locale": "en-US",
+    "blockedUrlPatterns": null,
+    "additionalTraceCategories": null,
+    "extraHeaders": null,
+    "precomputedLanternData": null,
+    "onlyAudits": null,
+    "onlyCategories": [
+      "accessibility"
+    ],
+    "skipAudits": null
+  }
+}

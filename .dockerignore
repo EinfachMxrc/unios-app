@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+.git
+.venv
+.env*
+data
+local
+.pytest_cache
+frontend/node_modules
+frontend/dist
+frontend/test-results
+frontend/playwright-report
+__pycache__
+*.pyc
+build
+desktop/target
+desktop/src-tauri/target
+desktop/node_modules
+desktop/voice-model
+tests
+.tmp
+.phase6*

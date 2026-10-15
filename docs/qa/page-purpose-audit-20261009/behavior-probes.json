@@ -1,0 +1,195 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "05e56cfad86b110e2d1be505adad2b58e3ab6d2a",
+  "synthetic_only": true,
+  "records": [
+    {
+      "id": "coding-newer-edit-during-save",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": true,
+      "sent_files": {
+        "Solution.py": "def solve(values):\n        return values[::-1]\n        # STAND_A\n        "
+      },
+      "recovery_before": {
+        "unios:coding-draft:v1:1:2026-10-09T13:55:37.740196": "{\"revision\":0,\"files\":{\"Solution.py\":\"def solve(values):\\n        return values[::-1]\\n        # STAND_B_WEITERGETIPPT\\n        \"}}"
+      },
+      "recovery_after": {},
+      "server_files": {
+        "Solution.py": "def solve(values):\n        return values[::-1]\n        # STAND_A\n        "
+      },
+      "after_reload_contains_newer_edit": false
+    },
+    {
+      "id": "course-passive-page-replace-focus",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": true,
+      "before": {
+        "tag": "TEXTAREA",
+        "name": null
+      },
+      "after": {
+        "tag": "H1",
+        "name": null,
+        "text": "Fokussiert lernen"
+      },
+      "note": "Button click plus reader metadata replacement; global heading takes focus on course only."
+    },
+    {
+      "id": "project-deadline-Europe-Berlin",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": false,
+      "input_campus_time": "2026-10-26T09:15",
+      "expected_campus_utc": "2026-10-26T08:15:00.000Z",
+      "submitted_utc": "2026-10-26T08:15:00.000Z",
+      "http_status": 201,
+      "created_project": 1
+    },
+    {
+      "id": "project-deadline-UTC",
+      "zone": "UTC",
+      "bug_reproduced": true,
+      "input_campus_time": "2026-10-26T09:15",
+      "expected_campus_utc": "2026-10-26T08:15:00.000Z",
+      "submitted_utc": "2026-10-26T09:15:00.000Z",
+      "http_status": 201,
+      "created_project": 2
+    },
+    {
+      "id": "normal-project-detail",
+      "probe_failure": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: 'Bearbeiten', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('button', { name: 'Bearbeiten', exact: true }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'Bearbeiten', exact: true })\n",
+      "url": "http://127.0.0.1:4173/projects/2",
+      "main_text": "Projekt\nDaten konnten nicht geladen werden\n\nBitte versuche es erneut. Falls das Problem bleibt, prüfe die Verbindung unter Einstellungen.\n\nDaten erneut laden\nVerbindung prüfen\nProblem mit dieser Seite melden",
+      "product_failure": true,
+      "interpretation": "Created deadline-bearing project GET returns 500, independently reproduced with actual router and in-memory SQLite.",
+      "followup_reproduction": "project-deadline-get-repro.json"
+    },
+    {
+      "id": "inbox-newer-edit-during-save",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": true,
+      "submitted": {
+        "kind": "text",
+        "title": "Erfundener Stand A",
+        "url": null,
+        "body": "Erste Nachricht A",
+        "course_id": null
+      },
+      "typed_after_submit": "Weitergetippter Stand B",
+      "after_ack": ""
+    },
+    {
+      "id": "course-search-leaks-into-overview",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": true,
+      "underlying_resource_count": 3,
+      "overview_text": "Analysis – Fokusbeispiel\n← Alle Kurse\nArbeitsbereich öffnen\nNeue Notiz\nKurseinstellungen\nÜbersicht\nUnterlagen\n0\nAufgaben\n1\nNotizen\n2\nUnterlagen im Blick\nAlle Unterlagen\nNoch keine Unterlagen\n\nDateien aus Moodle erscheinen nach dem nächsten Sync.\n\nAufgaben\nSchleifen üben\n19.09.2039, 01:06\nNotizen\nNeue Notiz\nErfundene Mitschrift · Analysis\nVersion 1 · 09.10.2026, 15:41\nMeine Grenzwert-Erklärung\nVersion 1 · 09.10.2026, 15:41\nAnkündigungen\nWillkommen\n22.09.2024, 12:13\nWeitere Werkzeuge\nMarkierungen, Freitext und Zusammenhänge\nKursverlauf\nProblem mit dieser Seite melden"
+    },
+    {
+      "id": "normal-study-session",
+      "zone": "Europe/Berlin",
+      "session_reached": true,
+      "note": "Deck name, reveal accessible name includes keyboard hint."
+    },
+    {
+      "id": "normal-project-without-deadline",
+      "zone": "Europe/Berlin",
+      "project_reached": true,
+      "created_project": 3,
+      "note": "Project without deadline; deadline-bearing detail GET is separately investigated."
+    },
+    {
+      "id": "study-card-newer-edit-during-save",
+      "zone": "Europe/Berlin",
+      "bug_reproduced": true,
+      "submitted": {
+        "front": "Erfundener Kartenstand A",
+        "back": "A-Karte 001: Was erklärt das erfundene Beispiel? Die synthetische Erklärung für A-001."
+      },
+      "typed_after_submit": "Erfundener Kartenstand B",
+      "editor_closed_after_ack": true,
+      "card_endpoint": "http://127.0.0.1:4173/api/anki/study/cards/1791553297942",
+      "server_card": {
+        "id": 1791553297942,
+        "note_id": 1791553297942,
+        "front": "Erfundener Kartenstand A",
+        "back": "Erfundener Kartenstand A A-Karte 001: Was erklärt das erfundene Beispiel? Die synthetische Erklärung für A-001.",
+        "front_html": "Erfundener Kartenstand A",
+        "back_html": "Erfundener Kartenstand A<hr/>A-Karte 001: Was erklärt das erfundene Beispiel? Die synthetische Erklärung für A-001.",
+        "deck": "Uni::A",
+        "tags": [
+          "semester::1",
+          "uni::synthetisch::deck-scope"
+        ],
+        "due": 1,
+        "queue": 0,
+        "fsrs": {
+          "due": "2026-10-09T13:59:46.708106+00:00",
+          "stability": 0,
+          "difficulty": 0,
+          "elapsed_days": 0,
+          "scheduled_days": 0,
+          "learning_steps": 0,
+          "reps": 0,
+          "lapses": 0,
+          "state": 0,
+          "last_review": null
+        },
+        "source": null
+      },
+      "evaluation_note": "The original endsWith uppercase Stand predicate was case-sensitive; evaluated against captured exact draft/server values."
+    },
+    {
+      "id": "proposal-bulk-approval-ignores-visible-draft",
+      "bug_reproduced": true,
+      "visible_before": "Sichtbar korrigierter Vorschlag B",
+      "http_status": 200,
+      "submitted": {
+        "ids": [
+          1
+        ]
+      },
+      "approved_front": "Erfundener Originalvorschlag A",
+      "approved_status": "approved"
+    },
+    {
+      "id": "reader-initial-page-course",
+      "requested_page": 12,
+      "actual_page": 12,
+      "actual_url": "http://127.0.0.1:4173/learning/focus/course/1?mode=source&version=3&page=12",
+      "source_text": "Fokussiert lernen\nFokusmodus\nKurs öffnen\nAnalysis – Fokusbeispiel\n\nGrenzwerte · Arrays und Indizes · audit\n\nKurskarten lernen\nQuelle & Mitschrift\nKursnotizen\nKurskarten\nKursübungen\n\nQuellen, Notizen, Karten und Übungen werden kursbezogen angeboten. Eine genaue Themenzuordnung ist nicht vollständig vorhanden.\n\nAktuelle Quelle\nAndere Quelle wählen\nVersion\n2\n1\nMarkierungen & Fragen (1)\nMitschrift\nMehr\n\nDu kannst im Dokument suchen, Text markieren oder die Seitenzahl direkt eingeben.\n\nSeite 12 von 120\nIm Dokument suchen\nSuchen\nAnsicht\nBildausschnitt\n\nText im PDF auswählen und dann markieren oder als offene Frage speichern.\n\nErfundenes Lernskript V1 Seite 10\n\n\nSynthetisches Kapitel 10: Begriffe und Beispiele.\nErfundenes Lernskript V1 Seite 11\n\n\nSynthetisches Kapitel 11: Begriffe und Beispiele.\nErfundenes Lernskript V1 Seite 12\n\n\nDas synthetische Prinzip verbindet Begriffe mit ihrer urspruenglichen Quelle.\nErfundenes Lernskript V1 Seite 13\n\n\nSynthetisches Kapitel 13: Begriffe und Beispiele.\nMarkierungen & Fragen\n\nFragen, Markierungen und Zusammenhänge zu diesem Dokument.\n\nMarkierungen\nMitschrift\nWiederholen\n\nWähle Text im PDF und übernimm ihn mit Quellenlink in deine Mitschrift. Markdown ist direkt bearbeitbar.\n\nNotiztitel\nNotizinhalt\nFormel\nGleichung\nWahrheitstabelle\nLernwerkzeuge\nVorschau\n\n/bruch · /matrix · /integral · /wahrheit + Enter oder Tab\n\nNotiz anlegen\nProblem mit dieser Seite melden",
+      "bug_reproduced": false,
+      "evaluation_note": "Page input locator unavailable; evaluated captured reader text and unchanged URL."
+    },
+    {
+      "id": "reader-initial-page-block",
+      "requested_page": 12,
+      "actual_page": 12,
+      "actual_url": "http://127.0.0.1:4173/learning/focus/block/1?mode=source&version=3&page=12",
+      "source_text": "Fokussiert lernen\nFokusmodus\nZur Lernübersicht\nGrenzwerte\nAnalysis – Fokusbeispiel\n\nGrenzwerte\n\nAnalysis – Beispielprüfung · Gespeicherter Prüfungstermin: 14.10.2026, 15:41\n\nKurskarten lernen\nQuelle & Mitschrift\nKursnotizen\nKurskarten\nKursübungen\n\nQuellen, Notizen, Karten und Übungen werden kursbezogen angeboten. Eine genaue Themenzuordnung ist nicht vollständig vorhanden.\n\nTimer für diesen Lernblock\nAktuelle Quelle\nAndere Quelle wählen\nVersion\n2\n1\nMarkierungen & Fragen (1)\nMitschrift\nMehr\n\nDu kannst im Dokument suchen, Text markieren oder die Seitenzahl direkt eingeben.\n\nSeite 12 von 120\nIm Dokument suchen\nSuchen\nAnsicht\nBildausschnitt\n\nText im PDF auswählen und dann markieren oder als offene Frage speichern.\n\nErfundenes Lernskript V1 Seite 10\n\n\nSynthetisches Kapitel 10: Begriffe und Beispiele.\nErfundenes Lernskript V1 Seite 11\n\n\nSynthetisches Kapitel 11: Begriffe und Beispiele.\nErfundenes Lernskript V1 Seite 12\n\n\nDas synthetische Prinzip verbindet Begriffe mit ihrer urspruenglichen Quelle.\nErfundenes Lernskript V1 Seite 13\n\n\nSynthetisches Kapitel 13: Begriffe und Beispiele.\nMarkierungen & Fragen\n\nFragen, Markierungen und Zusammenhänge zu diesem Dokument.\n\nMarkierungen\nMitschrift\nWiederholen\n\nWähle Text im PDF und übernimm ihn mit Quellenlink in deine Mitschrift. Markdown ist direkt bearbeitbar.\n\nNotiztitel\nNotizinhalt\nFormel\nGleichung\nWahrheitstabelle\nLernwerkzeuge\nVorschau\n\n/bruch · /matrix · /integral · /wahrheit + Enter oder Tab\n\nNotiz anlegen\nProblem mit dieser Seite melden",
+      "bug_reproduced": false,
+      "evaluation_note": "Page input locator unavailable; evaluated captured reader text and unchanged URL."
+    }
+  ],
+  "previous_fixture_attempts": [
+    {
+      "id": "inbox-newer-edit-during-save",
+      "probe_failure": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.inbox-form').getByLabel('Text', { exact: true })\u001b[22m\n",
+      "url": "http://127.0.0.1:4173/inbox",
+      "main_text": "Eingang\n\nNEUE INHALTE\n\nWas möchtest du einordnen?\nHier sammelst du eigene Links, Dateien und Gedanken. Moodle-Unterlagen und Aufgaben werden automatisch ihrem Kurs zugeordnet.\nEtwas hinzufügen\nSchließen\nWebseite oder Text speichern\nWebsite\nText\nSprache\nTitel\nText\nKurs\nNoch zuordnen\nAnalysis – Fokusbeispiel\nProgrammierung – anderes Fach\nIm Eingang speichern\nEingegangen\nOffen\nSpäter\nErledigt\nEigene Datei\n·\n09.10.2026, 15:41\nNeu\nEigene_Frage.txt\nDatei öffnen und importieren\nKurs\nNoch zuordnen\nAnalysis – Fokusbeispiel\nProgrammierung – anderes Fach\nZuordnen\nSpäter\nIgnorieren\nMehr\nAus dem Browser\n\nMarkiere Text auf einer Webseite und sende Titel, Adresse und Auswahl an UniOS.\n\nBrowserknopf kopieren\nDen kopierten Code als Adresse eines Lesezeichens einfügen. Auf dem Handy geht auch „Teilen“ mit der installierten App.\nDatei oder Foto\n\nPDFs, Bilder und andere Dateien kannst du direkt hier ablegen. Nach der Kurszuordnung wird unterstützter Text durchsuchbar.\n\nDatei hinzufügen\nWeitere Quellen\nUni-Mail öffnen\nGitHub-Projekte öffnen\nProblem mit dieser Seite melden"
+    },
+    {
+      "id": "course-search-leaks-into-overview",
+      "probe_failure": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox', { name: 'Unterlagen durchsuchen …', exact: true })\u001b[22m\n",
+      "url": "http://127.0.0.1:4173/courses/1",
+      "main_text": "Analysis – Fokusbeispiel\n← Alle Kurse\nArbeitsbereich öffnen\nNeue Notiz\nKurseinstellungen\nÜbersicht\nUnterlagen\n3\nAufgaben\n1\nNotizen\n2\nGruppenzuordnung\n\nWelche Abschnitte gehören zu deiner Gruppe? Du kannst die Zuordnung jederzeit ändern.\n\nGruppe SchmidtBitte bestätigen\nVorschlag: Andere Gruppe\nBitte zuordnen\nMeine Gruppe\nAndere Gruppe\nAllgemein\nVorschlag bestätigen\nMaterial anderer Gruppen herunterladen\nUnterlagen\n04 Schleifen\n04_Schleifen.pdf\n04 Schleifen\nHerunterladen\nPDF öffnen\nMehr\nPython-Dokumentation\n04 Schleifen\nLink öffnen\nSonstiges\nSynthetisches_Lernskript.pdf\nSonstiges\nHerunterladen\nPDF öffnen\nMehr\nProblem mit dieser Seite melden"
+    },
+    {
+      "id": "normal-study-session",
+      "probe_failure": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: 'Antwort zeigen', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('button', { name: 'Antwort zeigen', exact: true }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'Antwort zeigen', exact: true })\n",
+      "url": "http://127.0.0.1:4173/study/session/Uni%3A%3AA",
+      "main_text": "Alle Stapel\nUniOS · Karteikarten\n\nLERNSESSION\n\nA\n\n0 von 100 Karten bearbeitet\n\n101 neu · 0 lernen · 0 wiederholen\n\nKartenauswahl vom 09.10.2026, 15:56\nFrage\nA-Karte 001: Was erklärt das erfundene Beispiel?\nAntwort zeigen\nLeertaste"
+    }
+  ],
+  "readonly_walk_origin": "http://127.0.0.1:4373",
+  "behavior_probe_origin": "http://127.0.0.1:4173"
+}

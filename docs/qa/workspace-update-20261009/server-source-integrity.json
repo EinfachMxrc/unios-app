@@ -1,0 +1,8 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "server_members_matching_git": 1235,
+  "server_archive_sha256": "2ef16ae9d66641b2b3fd22f5161bd3e3946b7b5f074a283613d89ac1104fd0d3",
+  "personal_data_excluded": true,
+  "rejected_local_commit_excluded": true
+}

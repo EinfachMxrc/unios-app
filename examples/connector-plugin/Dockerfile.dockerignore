@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Only public SDK and example source enter the image build context.
+**
+!app
+!app/__init__.py
+!app/connectors
+!app/connectors/__init__.py
+!app/connectors/base.py
+!app/connectors/manifest.py
+!app/connectors/sdk.py
+!app/connectors/container_worker.py
+!examples
+!examples/connector-plugin
+!examples/connector-plugin/pyproject.toml
+!examples/connector-plugin/README.md
+!examples/connector-plugin/src
+!examples/connector-plugin/src/unios_connector_example
+!examples/connector-plugin/src/unios_connector_example/*.py

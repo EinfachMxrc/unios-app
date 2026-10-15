@@ -1,0 +1,162 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.task-peek {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: min(440px, 100vw);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-inline-start: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay) 0 0 var(--ui-radius-overlay);
+  background: var(--ui-overlay);
+  color: var(--app-text);
+  box-shadow: var(--ui-overlay-shadow);
+}
+.task-peek::backdrop {
+  background: rgb(10 18 32 / 0.45);
+}
+.task-peek-content {
+  height: 100%;
+  overflow-y: auto;
+  padding: 23px;
+}
+.task-peek header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--app-border);
+  color: var(--app-muted);
+  font-size: 0.76rem;
+}
+.task-peek header button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--ui-radius-control);
+}
+.task-peek header button:hover {
+  background: var(--app-surface-alt);
+}
+.task-peek h2 {
+  margin: 22px 0;
+  font-size: 1.28rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.task-peek-facts {
+  display: grid;
+  gap: 14px;
+  padding: 0 0 21px;
+  margin: 0 0 22px;
+  border-bottom: 1px solid var(--app-border);
+}
+.task-peek-facts div {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 0.8rem;
+}
+.task-peek-facts dt {
+  color: var(--app-muted);
+}
+.task-peek-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.task-peek-warning {
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--app-surface-alt);
+  font-size: 0.78rem;
+}
+.task-peek-open {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 24px;
+  color: var(--app-blue);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+.task-peek-open:hover {
+  text-decoration: underline;
+}
+@keyframes task-peek-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes task-peek-leave {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+}
+@keyframes task-peek-backdrop-enter {
+  from {
+    background: transparent;
+  }
+  to {
+    background: rgb(10 18 32 / 0.45);
+  }
+}
+@keyframes task-peek-backdrop-leave {
+  from {
+    background: rgb(10 18 32 / 0.45);
+  }
+  to {
+    background: transparent;
+  }
+}
+.task-peek[open] {
+  animation: task-peek-enter var(--ui-enter-duration) var(--ui-enter-ease) both;
+}
+.task-peek[open]::backdrop {
+  animation: task-peek-backdrop-enter var(--ui-enter-duration) var(--ui-enter-ease) both;
+}
+.task-peek.is-closing {
+  animation: task-peek-leave var(--ui-enter-duration) var(--ui-enter-ease) both;
+  pointer-events: none;
+}
+.task-peek.is-closing::backdrop {
+  animation: task-peek-backdrop-leave var(--ui-enter-duration) var(--ui-enter-ease) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .task-peek[open],
+  .task-peek[open]::backdrop,
+  .task-peek.is-closing,
+  .task-peek.is-closing::backdrop {
+    animation: none;
+  }
+}
+@media (max-width: 520px) {
+  .task-peek { border-radius: 0; }
+  .task-peek-content {
+    padding: 17px;
+  }
+}
+@media (pointer: coarse) {
+  .task-peek header button { width: 44px; height: 44px; }
+}
+html[data-reduce-motion='true'] :is(.task-peek[open], .task-peek.is-closing),
+html[data-reduce-motion='true'] :is(.task-peek[open], .task-peek.is-closing)::backdrop { animation: none; }

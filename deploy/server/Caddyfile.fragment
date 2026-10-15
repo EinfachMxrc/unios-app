@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Insert into the existing site block; no changes to other routes.
+redir /unios /unios/ 308
+handle_path /unios/* {
+    header Cache-Control "private, no-store"
+    # Personal feed tokens and pairing codes must never enter edge logs.
+    log_skip
+    reverse_proxy unios-server:8000 {
+        header_up Host {host}
+        header_up X-Forwarded-Proto https
+        # The device bridge header is needed by authenticated native clients;
+        # its session is verified by UniOS before any MCP credential is used.
+    }
+}

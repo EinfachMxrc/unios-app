@@ -1,0 +1,107 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+[project]
+name = "unios"
+version = "0.1.27"
+description = "Persönliche Studienplattform"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "sqlalchemy>=2.0,<3",
+  "alembic>=1.13,<2",
+  "apscheduler>=3.10,<4",
+  "httpx>=0.27,<1",
+  "pydantic-settings>=2.5,<3",
+  "filetype>=1.2,<2",
+  "moodle-dl==2.3.13",
+  "pymupdf>=1.24,<2",
+  "python-docx>=1.1,<2",
+  "python-pptx>=1.0,<2",
+  "icalendar>=7.3,<8",
+  "typer>=0.16,<1",
+  "filelock>=4,<5",
+  "keyring>=25,<26",
+  "pyyaml>=6,<7",
+  "python-multipart>=0.0.32,<1",
+  "beautifulsoup4>=4.12,<5",
+  "rfc3161ng>=2.1,<3",
+  "anki==26.9.3",
+  "recurring-ical-events>=3.8,<4",
+  "wasmtime==49.0.0",
+  "sympy==1.14.0",
+  "pywin32>=312; sys_platform == 'win32'",
+]
+
+[project.scripts]
+unios = "app.cli.main:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10", "pytest-cov>=5,<8"]
+portals = ["playwright>=1.51,<2"]
+mcp = [
+    "mcp>=2,<3",
+    "cryptography>=45,<51",
+]
+ai = ["anthropic>=1,<2"]
+package = ["pyinstaller==6.22.3"]
+voice = [
+    "faster-whisper>=1.2,<2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<10",
+    "pytest-cov>=5,<8",
+    "ruff>=0.16,<1",
+    "mypy>=2.3,<3",
+    "pre-commit>=4,<5",
+    "detect-secrets>=1.5,<2",
+    "types-pyyaml>=6,<7",
+    "pytest-xdist>=3.8.0",
+    "mcp>=2,<3",
+]
+
+[tool.mypy]
+python_version = "3.12"
+# Lets tests/test_connector_plugin_example.py import the example plug-in
+# package (installed nowhere, added to sys.path only at test time) with
+# real type checking instead of an import-not-found error or a blanket
+# ignore.
+mypy_path = ["examples/connector-plugin/src"]
+
+[[tool.mypy.overrides]]
+  module = ["filetype", "icalendar", "recurring_ical_events", "apscheduler.*", "moodle_dl.*", "rfc3161ng", "pyasn1.*", "playwright.*", "faster_whisper.*", "av", "av.*", "numpy", "numpy.*", "sympy", "sympy.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+  module = ["win32api", "win32con", "win32event", "win32file", "win32job", "win32process", "pywintypes"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+  module = ["anthropic", "anthropic.*"]
+ignore_missing_imports = true
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*", "institutions*", "config*"]
+
+[tool.setuptools.package-data]
+"institutions" = ["*.yaml"]
+"config" = ["*.yaml"]
+"app.connectors" = ["registry.json"]
+"app.addons" = ["registry.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

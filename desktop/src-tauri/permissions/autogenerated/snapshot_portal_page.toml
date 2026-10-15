@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-snapshot-portal-page"
+description = "Enables the snapshot_portal_page command without any pre-configured scope."
+commands.allow = ["snapshot_portal_page"]
+
+[[permission]]
+identifier = "deny-snapshot-portal-page"
+description = "Denies the snapshot_portal_page command without any pre-configured scope."
+commands.deny = ["snapshot_portal_page"]

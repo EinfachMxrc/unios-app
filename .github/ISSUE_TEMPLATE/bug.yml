@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Fehler melden
+description: Etwas funktioniert in UniOS nicht wie erwartet.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Verwende erfundene Beispieldaten. Hochschulmails, Noten, Session-URLs und Zugangsdaten gehören nicht in ein Issue.
+  - type: input
+    id: version
+    attributes:
+      label: UniOS-Version
+      placeholder: z. B. 0.1.27
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Betriebssystem und Betriebsart
+      placeholder: z. B. Windows 11, Desktop-App mit eigenem Server
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Nachstellen
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartet und tatsächlich
+    validations:
+      required: true

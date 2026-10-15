@@ -1,0 +1,572 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "05e56cfad86b110e2d1be505adad2b58e3ab6d2a",
+  "areas": [
+    {
+      "id": "today",
+      "path": "/",
+      "group": "primary",
+      "module": null,
+      "parent": null,
+      "label_key": "today"
+    },
+    {
+      "id": "courses",
+      "path": "/courses",
+      "group": "primary",
+      "module": "courses",
+      "parent": null,
+      "label_key": "courses"
+    },
+    {
+      "id": "learning",
+      "path": "/learning",
+      "group": "primary",
+      "module": "courses",
+      "parent": null,
+      "label_key": "learning"
+    },
+    {
+      "id": "notes",
+      "path": "/notes",
+      "group": "primary",
+      "module": null,
+      "parent": null,
+      "label_key": "notes"
+    },
+    {
+      "id": "deadlines",
+      "path": "/deadlines",
+      "group": "primary",
+      "module": "deadlines",
+      "parent": null,
+      "label_key": "deadlines"
+    },
+    {
+      "id": "inbox",
+      "path": "/inbox",
+      "group": "quick",
+      "module": null,
+      "parent": null,
+      "label_key": "inbox"
+    },
+    {
+      "id": "search",
+      "path": "/search",
+      "group": "quick",
+      "module": "search",
+      "parent": null,
+      "label_key": "search"
+    },
+    {
+      "id": "jots",
+      "path": "/jots",
+      "group": "quick",
+      "module": null,
+      "parent": null,
+      "label_key": "quickCaptures"
+    },
+    {
+      "id": "notifications",
+      "path": "/notifications",
+      "group": "quick",
+      "module": "notifications",
+      "parent": null,
+      "label_key": "notifications"
+    },
+    {
+      "id": "collections",
+      "path": "/collections",
+      "group": "knowledge",
+      "module": null,
+      "parent": null,
+      "label_key": "collections"
+    },
+    {
+      "id": "voice",
+      "path": "/voice",
+      "group": "knowledge",
+      "module": null,
+      "parent": null,
+      "label_key": "voiceNotes"
+    },
+    {
+      "id": "drop",
+      "path": "/drop",
+      "group": "knowledge",
+      "module": "courses",
+      "parent": null,
+      "label_key": "ownFiles"
+    },
+    {
+      "id": "universityDocuments",
+      "path": "/university-documents",
+      "group": "knowledge",
+      "module": null,
+      "parent": null,
+      "label_key": "universityDocuments"
+    },
+    {
+      "id": "study",
+      "path": "/study",
+      "group": "learning",
+      "module": "courses",
+      "parent": "learning",
+      "label_key": "flashcards"
+    },
+    {
+      "id": "assessment",
+      "path": "/assessment",
+      "group": "learning",
+      "module": "courses",
+      "parent": "learning",
+      "label_key": "practice"
+    },
+    {
+      "id": "coding",
+      "path": "/coding",
+      "group": "learning",
+      "module": "courses",
+      "parent": "learning",
+      "label_key": "coding"
+    },
+    {
+      "id": "analytics",
+      "path": "/analytics",
+      "group": "learning",
+      "module": "courses",
+      "parent": "learning",
+      "label_key": "learningAnalytics"
+    },
+    {
+      "id": "journal",
+      "path": "/journal",
+      "group": "learning",
+      "module": null,
+      "parent": null,
+      "label_key": "studyDays"
+    },
+    {
+      "id": "digest",
+      "path": "/digest",
+      "group": "learning",
+      "module": "notifications",
+      "parent": null,
+      "label_key": "weeklyOverview"
+    },
+    {
+      "id": "projects",
+      "path": "/projects",
+      "group": "organization",
+      "module": "projects",
+      "parent": null,
+      "label_key": "projects"
+    },
+    {
+      "id": "grades",
+      "path": "/grades",
+      "group": "organization",
+      "module": "grades",
+      "parent": null,
+      "label_key": "gradesAndEcts"
+    },
+    {
+      "id": "mail",
+      "path": "/mail",
+      "group": "organization",
+      "module": "mail",
+      "parent": null,
+      "label_key": "universityMail"
+    },
+    {
+      "id": "mensa",
+      "path": "/mensa",
+      "group": "organization",
+      "module": null,
+      "parent": null,
+      "label_key": "mensa"
+    },
+    {
+      "id": "rooms",
+      "path": "/rooms",
+      "group": "organization",
+      "module": null,
+      "parent": null,
+      "label_key": "rooms"
+    },
+    {
+      "id": "campus",
+      "path": "/campus",
+      "group": "organization",
+      "module": null,
+      "parent": null,
+      "label_key": "myCampus"
+    },
+    {
+      "id": "rules",
+      "path": "/rules",
+      "group": "automation",
+      "module": null,
+      "parent": null,
+      "label_key": "rules"
+    },
+    {
+      "id": "anki",
+      "path": "/anki",
+      "group": "automation",
+      "module": "ai",
+      "parent": null,
+      "label_key": "cardSuggestions"
+    },
+    {
+      "id": "exercises",
+      "path": "/exercises",
+      "group": "automation",
+      "module": "ai",
+      "parent": null,
+      "label_key": "exercises"
+    },
+    {
+      "id": "explanations",
+      "path": "/explanations",
+      "group": "automation",
+      "module": "ai",
+      "parent": null,
+      "label_key": "aiExplanations"
+    },
+    {
+      "id": "ai",
+      "path": "/ai",
+      "group": "automation",
+      "module": "ai",
+      "parent": null,
+      "label_key": "aiPackage"
+    },
+    {
+      "id": "addons",
+      "path": "/addons",
+      "group": "tools",
+      "module": "addons",
+      "parent": null,
+      "label_key": "addons"
+    },
+    {
+      "id": "marketplace",
+      "path": "/marketplace",
+      "group": "tools",
+      "module": "addons",
+      "parent": null,
+      "label_key": "marketplace"
+    },
+    {
+      "id": "jobs",
+      "path": "/jobs",
+      "group": "tools",
+      "module": null,
+      "parent": null,
+      "label_key": "jobs"
+    },
+    {
+      "id": "system",
+      "path": "/system",
+      "group": "tools",
+      "module": null,
+      "parent": null,
+      "label_key": "connectionsAndSystem"
+    },
+    {
+      "id": "activity",
+      "path": "/activity",
+      "group": "settings",
+      "module": null,
+      "parent": null,
+      "label_key": "activityHistory"
+    },
+    {
+      "id": "settings",
+      "path": "/settings",
+      "group": "settings",
+      "module": null,
+      "parent": null,
+      "label_key": "settings"
+    },
+    {
+      "id": "more",
+      "path": "/more",
+      "group": "settings",
+      "module": null,
+      "parent": null,
+      "label_key": "more"
+    }
+  ],
+  "routes": [
+    {
+      "path": "/",
+      "page": "today",
+      "area": "today"
+    },
+    {
+      "path": "/courses",
+      "page": "courses",
+      "module": "courses",
+      "area": "courses"
+    },
+    {
+      "path": "/courses/:id",
+      "page": "course",
+      "module": "courses",
+      "area": "courses"
+    },
+    {
+      "path": "/material/:id",
+      "page": "material",
+      "module": "courses",
+      "area": "courses"
+    },
+    {
+      "path": "/learning",
+      "page": "learning",
+      "module": "courses",
+      "area": "learning"
+    },
+    {
+      "path": "/learning/focus/:kind/:id",
+      "page": "learningFocus",
+      "module": "courses",
+      "area": "learning"
+    },
+    {
+      "path": "/notes",
+      "page": "notes",
+      "area": "notes"
+    },
+    {
+      "path": "/deadlines",
+      "page": "deadlines",
+      "module": "deadlines",
+      "area": "deadlines"
+    },
+    {
+      "path": "/inbox",
+      "page": "inbox",
+      "area": "inbox"
+    },
+    {
+      "path": "/search",
+      "page": "search",
+      "module": "search",
+      "area": "search"
+    },
+    {
+      "path": "/jots",
+      "page": "jots",
+      "area": "jots"
+    },
+    {
+      "path": "/notifications",
+      "page": "notifications",
+      "module": "notifications",
+      "area": "notifications"
+    },
+    {
+      "path": "/collections",
+      "page": "collections",
+      "area": "collections"
+    },
+    {
+      "path": "/voice",
+      "page": "voice",
+      "area": "voice"
+    },
+    {
+      "path": "/drop",
+      "page": "drop",
+      "module": "courses",
+      "area": "drop"
+    },
+    {
+      "path": "/university-documents",
+      "page": "universityDocuments",
+      "area": "universityDocuments"
+    },
+    {
+      "path": "/study",
+      "page": "study",
+      "module": "courses",
+      "area": "study"
+    },
+    {
+      "path": "/study/session/:deck",
+      "page": "studySession",
+      "module": "courses",
+      "area": "study"
+    },
+    {
+      "path": "/study/cards",
+      "page": "studyCards",
+      "module": "courses",
+      "area": "study"
+    },
+    {
+      "path": "/assessment",
+      "page": "assessment",
+      "module": "courses",
+      "area": "assessment"
+    },
+    {
+      "path": "/coding",
+      "page": "coding",
+      "module": "courses",
+      "area": "coding"
+    },
+    {
+      "path": "/analytics",
+      "page": "analytics",
+      "module": "courses",
+      "area": "analytics"
+    },
+    {
+      "path": "/journal",
+      "page": "journal",
+      "area": "journal"
+    },
+    {
+      "path": "/journal/:day",
+      "page": "journal",
+      "area": "journal"
+    },
+    {
+      "path": "/digest",
+      "page": "digest",
+      "module": "notifications",
+      "area": "digest"
+    },
+    {
+      "path": "/projects",
+      "page": "projects",
+      "module": "projects",
+      "area": "projects"
+    },
+    {
+      "path": "/projects/:id",
+      "page": "project",
+      "module": "projects",
+      "area": "projects"
+    },
+    {
+      "path": "/grades",
+      "page": "grades",
+      "module": "grades",
+      "area": "grades"
+    },
+    {
+      "path": "/mail",
+      "page": "mail",
+      "module": "mail",
+      "area": "mail"
+    },
+    {
+      "path": "/mensa",
+      "page": "mensa",
+      "area": "mensa"
+    },
+    {
+      "path": "/rooms",
+      "page": "rooms",
+      "area": "rooms"
+    },
+    {
+      "path": "/campus",
+      "page": "campus",
+      "area": "campus"
+    },
+    {
+      "path": "/rules",
+      "page": "rules",
+      "area": "rules"
+    },
+    {
+      "path": "/anki",
+      "page": "anki",
+      "module": "ai",
+      "area": "anki"
+    },
+    {
+      "path": "/exercises",
+      "page": "exercises",
+      "module": "ai",
+      "area": "exercises"
+    },
+    {
+      "path": "/explanations",
+      "page": "explanations",
+      "module": "ai",
+      "area": "explanations"
+    },
+    {
+      "path": "/ai",
+      "page": "ai",
+      "module": "ai",
+      "area": "ai"
+    },
+    {
+      "path": "/addons",
+      "page": "addons",
+      "module": "addons",
+      "area": "addons"
+    },
+    {
+      "path": "/addons/:id",
+      "page": "addon",
+      "module": "addons",
+      "area": "addons"
+    },
+    {
+      "path": "/marketplace",
+      "page": "marketplace",
+      "module": "addons",
+      "area": "marketplace"
+    },
+    {
+      "path": "/jobs",
+      "page": "jobs",
+      "area": "jobs"
+    },
+    {
+      "path": "/system",
+      "page": "system",
+      "area": "system"
+    },
+    {
+      "path": "/activity",
+      "page": "activity",
+      "area": "activity"
+    },
+    {
+      "path": "/settings",
+      "page": "settings",
+      "area": "settings"
+    },
+    {
+      "path": "/more",
+      "page": "more",
+      "area": "more"
+    },
+    {
+      "path": "/welcome",
+      "page": "onboarding"
+    },
+    {
+      "path": "/import",
+      "page": "import"
+    },
+    {
+      "path": "/setup",
+      "page": "setup"
+    },
+    {
+      "path": "*",
+      "page": "notFound"
+    }
+  ]
+}

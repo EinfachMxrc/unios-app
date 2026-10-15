@@ -1,0 +1,70 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "basedOnCommit": "e1cc9a98e11a71eb4b4a2b17e544fe97847d9ec0",
+    "package": "native-deck-sessions",
+    "buildIndexSha256": "9d1e9b762815ff0c5c8cc5cd8fc794f03cb9811276ec4751bf5d7a98c2fb0710",
+    "syntheticFixturesOnly": true,
+    "goalRemainsActive": true
+  },
+  "python": {
+    "passed": 908,
+    "skipped": 12,
+    "failed": 0,
+    "durationSeconds": 869.65,
+    "testSourcesListedThroughGit": true,
+    "shortBasetemp": ".test-q7"
+  },
+  "vitest": {
+    "passed": 565,
+    "files": 60,
+    "failed": 0
+  },
+  "playwright": {
+    "passed": 299,
+    "skipped": 0,
+    "failed": 0,
+    "flaky": 0,
+    "durationSeconds": 480.61644,
+    "freshFakeServers": true,
+    "fullSuite": true,
+    "targetedFinalUiPassed": 3
+  },
+  "staticChecks": {
+    "ruff": "passed",
+    "mypy": {
+      "result": "passed",
+      "sourceFiles": 548,
+      "testSourcesListedThroughGit": true
+    },
+    "typescript": "passed",
+    "eslint": "passed",
+    "i18n": "passed",
+    "openapiSchema": "current",
+    "generatedApiTypes": "current",
+    "productionBuild": "passed"
+  },
+  "bundle": {
+    "allIndividualGzipBudgets": "passed",
+    "precacheUniqueAssets": 236,
+    "precacheRawBytes": 16467422,
+    "precacheGzipBytes": 4435389,
+    "rawBudgetBytes": 18874368,
+    "gzipBudgetBytes": 5242880
+  },
+  "accessibility": {
+    "report": "lighthouse-accessibility-summary.json",
+    "deckOverviewScore": 100,
+    "scopedSessionScore": 100,
+    "belowFullScoreAuditsIncludingUnweighted": 0,
+    "runtimeErrors": 0
+  },
+  "limits": [
+    "Docker-Smoke mangels erreichbarer lokaler Engine nicht ausgeführt.",
+    "Keine physische MacBook-Trackpad-, native WebView- oder Installer-Abnahme.",
+    "Synthetische Szenarien messen weder reale Lernleistung noch eingesparte Lernzeit.",
+    "Keine Migration privater Bestände, kein Push oder Deployment.",
+    "Dauerhafte eigene Quellkarten, Konzeptcanvas und mathematisches Notizrendering bleiben offene Folgepakete."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "schema_version": 1,
+  "addons": [
+    {
+      "schema_version": 1,
+      "id": "org.unios.course-glance",
+      "name": "Kursblick",
+      "author": "UniOS",
+      "version": "1.0.0",
+      "description": "Zeigt bis zu drei eigene Kurse als kleine Karte auf Heute an.",
+      "kind": "ui",
+      "permissions": ["courses.read"],
+      "network_domains": [],
+      "runtime": "declarative",
+      "widgets": [{"slot": "today.secondary", "view": "courses", "title": "Deine Kurse", "limit": 3}]
+    },
+    {
+      "schema_version": 1,
+      "id": "org.unios.focus-timer",
+      "name": "Fokus-Timer",
+      "author": "UniOS",
+      "version": "1.0.0",
+      "description": "Ergänzt einen einfachen Fokus-Timer mit Arbeits- und Pausenzeit.",
+      "kind": "feature",
+      "permissions": [],
+      "network_domains": [],
+      "runtime": "declarative",
+      "page": {"view": "focus_timer", "title": "Fokus-Timer", "body": "Arbeite in einem festen Zeitraum und mach danach eine kurze Pause.", "duration_minutes": 25, "break_minutes": 5}
+    },
+    {
+      "schema_version": 1,
+      "id": "org.unios.study-blocks",
+      "name": "Lernblöcke kompakt",
+      "author": "UniOS",
+      "version": "1.0.0",
+      "description": "Zeigt angenommene Lernblöcke als kleine Liste im Lernbereich.",
+      "kind": "ui",
+      "permissions": ["study_blocks.read"],
+      "network_domains": [],
+      "runtime": "declarative",
+      "widgets": [{"slot": "learning.tools", "view": "study_blocks", "title": "Nächste Lernblöcke", "limit": 3}]
+    }
+  ]
+}

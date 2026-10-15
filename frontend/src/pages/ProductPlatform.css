@@ -1,0 +1,171 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.notification-center .data-row {
+  flex-wrap: wrap;
+}
+.notification-center .data-row > div:first-child {
+  flex: 1 1 18rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.notification-center .page-actions {
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.notification-center .page-actions button {
+  max-width: 100%;
+  white-space: normal;
+  height: auto;
+  min-height: 2.25rem;
+}
+@media (max-width: 600px) {
+  .notification-center .data-row > div:first-child {
+    flex-basis: 100%;
+  }
+}
+
+.deadline-sources {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+.deadline-sources > summary {
+  cursor: pointer;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+.deadline-sources[open] > summary {
+  margin-bottom: 1.5rem;
+}
+.marketplace-page > p,
+.jobs-page > p {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+  max-width: 48rem;
+}
+.marketplace-page h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+}
+.marketplace-page label,
+.jobs-page label {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  min-width: 0;
+}
+.marketplace-page input,
+.jobs-page input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--background);
+  padding: 0.65rem 0.8rem;
+  color: var(--foreground);
+}
+.marketplace-page > label {
+  max-width: 36rem;
+}
+.marketplace-page .collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 1rem;
+}
+.marketplace-page .panel {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+  overflow-wrap: anywhere;
+}
+.marketplace-page .panel h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.marketplace-page .panel p {
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+  margin: 0.65rem 0;
+  line-height: 1.6;
+}
+.marketplace-page .panel details {
+  margin: 0.85rem 0;
+  font-size: 0.8rem;
+}
+.marketplace-page .panel summary {
+  cursor: pointer;
+}
+.marketplace-page .page-actions,
+.jobs-page .page-actions {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.marketplace-page button {
+  white-space: normal;
+  height: auto;
+  min-height: 2.25rem;
+}
+.jobs-page form {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+  padding: 1.25rem;
+  align-items: end;
+}
+.jobs-page form label {
+  flex: 1 1 15rem;
+}
+.jobs-page .data-row {
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.jobs-page .data-row > div {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+.jobs-page .data-row h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.jobs-page .data-row p,
+.jobs-page .data-row details {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin-top: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.jobs-page progress {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.mail-settings {
+  margin-top: 2rem;
+  border-top: 1px solid var(--app-border);
+  padding-top: 1.25rem;
+}
+.mail-settings > summary {
+  cursor: pointer;
+  color: var(--app-muted);
+  font-size: 0.85rem;
+}
+.mail-settings[open] > summary {
+  margin-bottom: 1.5rem;
+}
+.mail-settings details > summary {
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.mail-settings input[type='file'] {
+  max-width: 100%;
+  font-size: 0.85rem;
+}
+/* Rights as three labelled groups; the manifest's own name for a right stays small beside the readable one. */
+.market-rights { display: grid; gap: 10px; margin: 10px 0; }
+.market-rights dt { margin-bottom: 2px; color: var(--app-muted); font-size: .7rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
+.market-rights dd { margin: 0; padding-left: 10px; border-left: 2px solid var(--app-border); line-height: 1.7; }
+.market-rights-none { color: var(--app-muted); }
+.market-right-key { margin-left: 6px; color: var(--app-muted); font-size: .75rem; }

@@ -1,0 +1,11 @@
+{
+  "verified_at": "2026-10-09T13:28:33.6454999Z",
+  "path": "C:\\Users\\einfa\\Downloads\\UniOS-0.1.22-complete-update.zip",
+  "sha256": "85ac3988fd106d091bd88308b94ff1d551d52befae4ab56fcbcf8a7aa1b337fe",
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.22",
+  "matches_verified_complete_package": true,
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "downloaded_from_github": true,
+  "bytes": 712185802
+}

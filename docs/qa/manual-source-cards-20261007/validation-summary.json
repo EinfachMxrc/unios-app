@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "package": "Durable manual PDF source cards",
+    "baseCommit": "19c4232",
+    "syntheticFixturesOnly": true,
+    "privateDataUsed": false,
+    "liveMigrationPerformed": false,
+    "pushedOrDeployed": false,
+    "buildIndexSha256": "dc897040c163a2ba2bf54e69a5c83f2718f1e57ca05852cd35549f5057a21fcd"
+  },
+  "tests": {
+    "python": {
+      "passed": 956,
+      "skipped": 12,
+      "durationSeconds": 915.06,
+      "selection": "Git-listed test_*.py files plus the five new manual-card/source test files",
+      "temporaryRoot": ".test-mf3"
+    },
+    "frontend": {
+      "passed": 607,
+      "files": 65,
+      "durationSeconds": 7.24
+    },
+    "browserFull": {
+      "startTime": "2026-10-07T01:38:47.676Z",
+      "duration": 487843.24299999996,
+      "expected": 303,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "browserFinalPhotoCapture": {
+      "startTime": "2026-10-07T01:55:19.796Z",
+      "duration": 19550.904000000002,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "staticChecks": {
+    "ruff": "passed",
+    "mypy": "passed: 561 source files",
+    "typecheck": "passed",
+    "eslintFull": "passed",
+    "finalScreenshotHarnessEslint": "passed",
+    "i18n": "passed: 61 namespaces",
+    "openapi": "passed",
+    "generatedApiTypes": "passed",
+    "auditScriptNodeSyntax": "passed",
+    "spdx": "passed: 1499 first-party text files"
+  },
+  "accessibility": {
+    "reportFile": "lighthouse-accessibility-summary.json",
+    "states": 12,
+    "minimumScore": 100,
+    "numericAuditFailuresIncludingUnweighted": 0,
+    "runtimeErrors": 0,
+    "warnings": 0,
+    "method": "Lighthouse snapshots of actual open dialog, answered native session and own-card manager; light/dark, 1440/390 px"
+  },
+  "build": {
+    "passed": true,
+    "newDependencies": 0,
+    "gzipBytes": {
+      "index": 143734,
+      "MaterialPage": 205159,
+      "NotesPage": 280479,
+      "pdfWorker": 376093,
+      "editorApi": 698349,
+      "tsMode": 305088,
+      "tsWorker": 1491546,
+      "editorWorker": 92838
+    },
+    "pwaPrecache": {
+      "manifestEntries": 239,
+      "uniqueFiles": 236,
+      "rawBytes": 16497514,
+      "rawBudgetBytes": 18874368,
+      "gzipBytes": 4443807,
+      "gzipBudgetBytes": 5242880
+    }
+  },
+  "screenshots": {
+    "method": "Enabled primary action, two animation frames, wait for finite running animations to end, visibility immediately before and after capture; actual Radix lifecycle preserved",
+    "inspectedBy": "Primary agent, all twelve original images",
+    "files": [
+      {
+        "file": "cards-dark-1440.png",
+        "sha256": "70d0eb013c55536c40d41f4dd0de7dfc7b6af4c61ef677a5d5e7e671ca66d153",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-dark-390.png",
+        "sha256": "fef0d822a4c4a0368019614e3825c765b057922a7cf473227840f72bc5dbdcac",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-light-1440.png",
+        "sha256": "53ea974659112b25c37ea9a9df681611956f9952231f8b63c6410144a7659581",
+        "visuallyInspected": true
+      },
+      {
+        "file": "cards-light-390.png",
+        "sha256": "1bc70bafb1ade61415cc95d6a7169ad0f392c0bfba987b3734cd31e139ea2bff",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-dark-1440.png",
+        "sha256": "00a10f3be253afdc8ccc849434e08e3aa7952664a5d1bbd84ab46a49998d60f2",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-dark-390.png",
+        "sha256": "c7de7a52189f99a98a498acec499c0884a578a33c1f2e8645b388bae4a033ffc",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-light-1440.png",
+        "sha256": "24a5832c4dedfac4acd3708a01528f524f3d4b5865b6965fc44563359a5b6513",
+        "visuallyInspected": true
+      },
+      {
+        "file": "dialog-light-390.png",
+        "sha256": "d99d11df14867935c0a3062a4404941dc9b0ac9412b1483dd85453d585ff793d",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-dark-1440.png",
+        "sha256": "df68dec7be2dfbb75850290ac85d33570dcb4a64a97c73d6af4bec3be3550ac1",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-dark-390.png",
+        "sha256": "946a757db5cd0f97f2c89c4a8248725358a463e219a85b9375d2ddebb5f20190",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-light-1440.png",
+        "sha256": "6959c0095867c2c73b72ae67caa4347c01b5de40233f73237e7996f4b56dc7e7",
+        "visuallyInspected": true
+      },
+      {
+        "file": "session-light-390.png",
+        "sha256": "4c493f1880d0421ec809b9c25c38d8eb2aaca9ffef82a0e77b754bbdbcd19e75",
+        "visuallyInspected": true
+      }
+    ]
+  },
+  "limitations": [
+    "Docker smoke unavailable: local dockerDesktopLinuxEngine named pipe unreachable.",
+    "Physical MacBook gestures, native WebView/installer and live external Anki desktop networking still require device acceptance.",
+    "No measured learning-time or learning-performance improvement claimed.",
+    "Concurrent windows do not yet preserve conflicting local draft copies.",
+    "SQL study-progress mapping after native note-ID changes and mirror repair on native receipt replay remain the next scoped corrections.",
+    "A checked snapshot by Marc is required before migration of real data."
+  ]
+}

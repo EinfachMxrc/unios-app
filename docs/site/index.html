@@ -1,0 +1,224 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="UniOS bündelt Moodle-Unterlagen, Termine, PDF-Notizen und Karteikarten in einer lokalen Studienoberfläche."
+    />
+    <title>UniOS – dein Studium im Blick</title>
+    <link rel="icon" type="image/svg+xml" href="assets/brand-v2/favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt springen</a>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="UniOS Startseite"
+        ><span class="brand-mark">✦</span> UniOS</a
+      >
+      <nav aria-label="Hauptnavigation">
+        <a href="#ueberblick">Überblick</a>
+        <a href="#lernen">Lernen</a>
+        <a href="#einrichten">Einrichten</a>
+        <a href="docs.html">Dokumentation</a>
+        <a href="developers.html">Entwickler</a>
+      </nav>
+      <a class="text-link" href="https://github.com/EinfachMxrc/unios-app"
+        >Zum Repository <span aria-hidden="true">↗</span></a
+      >
+    </header>
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <span class="eyebrow">Dein lokaler Studienplatz</span>
+          <h1>Weniger suchen.<br /><em>Mehr verstehen.</em></h1>
+          <p>
+            Moodle-Unterlagen, Aufgaben, Termine, eigene Fragen und Karteikarten
+            an einem ruhigen Ort. Auf dem eigenen Gerät, mit Kontrolle über
+            deine Daten.
+          </p>
+          <div class="hero-actions">
+            <a
+              class="button"
+              href="demo.html"
+              >Demo ausprobieren <span aria-hidden="true">→</span></a
+            >
+            <a class="quiet-link" href="download.html"
+              >UniOS herunterladen <span aria-hidden="true">↓</span></a
+            >
+          </div>
+          <p class="fine-print">
+            Desktop und mobile Browser als PWA · neutrales Startprofil, Coburg
+            als Referenz
+          </p>
+        </div>
+        <div
+          class="devices"
+          aria-label="Schematische Vorschau von Desktop- und Mobilansicht mit Beispieldaten"
+        >
+          <div class="glow"></div>
+          <div class="laptop">
+            <div class="laptop-screen">
+              <div class="app-rail">
+                <div class="rail-logo">✦</div>
+                <span class="rail-on">Heute</span><span>Kurse</span
+                ><span>Termine</span><span>Lernen</span><span>Mehr</span>
+              </div>
+              <div class="app-main">
+                <div class="app-top">
+                  <strong>Heute</strong><span>⌕ &nbsp; Suche</span>
+                </div>
+                <div class="app-greeting">
+                  <small>DEIN STUDIENTAG</small>
+                  <h2>Alles Wichtige im Blick.</h2>
+                  <p>Neue Unterlagen und nächste Schritte auf einer Seite.</p>
+                </div>
+                <div class="app-grid">
+                  <div class="app-panel">
+                    <small>NEU IN DEINEN KURSEN</small>
+                    <div class="file-row">
+                      <i>PDF</i
+                      ><span
+                        >Vorlesung 04<br /><small>Programmieren</small></span
+                      >
+                    </div>
+                    <div class="file-row">
+                      <i>DOC</i
+                      ><span
+                        >Übungsblatt 02<br /><small>Mathematik</small></span
+                      >
+                    </div>
+                  </div>
+                  <div class="app-panel">
+                    <small>ALS NÄCHSTES</small>
+                    <div class="date-row">
+                      <b>28</b
+                      ><span
+                        >Aufgabe abgeben<br /><small>in 3 Tagen</small></span
+                      >
+                    </div>
+                    <div class="date-row">
+                      <b>03</b
+                      ><span>Lernblock<br /><small>Analysis</small></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="laptop-base"></div>
+          </div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-content">
+              <strong>✦ UniOS</strong><small>HEUTE</small>
+              <h2>Gut vorbereitet.</h2>
+              <div class="phone-card">
+                <b>Neue Unterlagen</b><span>Vorlesung 04 · PDF</span>
+              </div>
+              <div class="phone-card">
+                <b>Nächste Frist</b><span>Aufgabe · in 3 Tagen</span>
+              </div>
+              <div class="phone-card mint">
+                <b>Karten lernen</b><span>Heute wiederholen →</span>
+              </div>
+            </div>
+          </div>
+          <span class="sample-note"
+            >Schematische Darstellung · Beispieldaten</span
+          >
+        </div>
+      </section>
+
+      <section class="section" id="ueberblick">
+        <div class="section-intro">
+          <span class="eyebrow">Organisation</span>
+          <h2>Dein Material bleibt zusammen.</h2>
+          <p>
+            Die App erkennt Änderungen, bewahrt frühere Dateiversionen und
+            findet Text auch auf der richtigen PDF-Seite.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <span class="feature-icon blue">▤</span>
+            <h3>Unterlagen</h3>
+            <p>
+              Moodle-Dateien nach Kurs und Abschnitt, mit eigener Suche und
+              Offline-Lesecache.
+            </p>
+          </article>
+          <article>
+            <span class="feature-icon violet">◷</span>
+            <h3>Termine</h3>
+            <p>
+              Aufgaben und Fristen in einer Ansicht, auf Wunsch auch als
+              iCal-Feed.
+            </p>
+          </article>
+          <article>
+            <span class="feature-icon coral">✎</span>
+            <h3>Fragen im PDF</h3>
+            <p>
+              Markiere eine Stelle und halte die Frage direkt beim Dokument
+              fest.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section study" id="lernen">
+        <div>
+          <span class="eyebrow">Lernen</span>
+          <h2>Aus Material wird Fortschritt.</h2>
+          <p>
+            Eigene Fragen, freigegebene Kartenvorschläge und Übungen treffen
+            sich im Lernbereich. Der integrierte Modus nutzt die Anki-Engine und
+            kann Bewertungen offline vormerken.
+          </p>
+          <a
+            class="quiet-link"
+            href="https://github.com/EinfachMxrc/unios-app/blob/main/docs/PROGRESS.md"
+            >Aktuellen Entwicklungsstand lesen →</a
+          >
+        </div>
+        <div class="study-card">
+          <span class="study-badge">KARTE DES TAGES</span>
+          <h3>Was bleibt nach der Vorlesung hängen?</h3>
+          <div class="study-answer">Eine Frage. Eine Antwort. Dein Tempo.</div>
+          <div class="study-buttons">
+            <span>Nochmal</span><span>Schwer</span><span>Gut</span
+            ><span>Einfach</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section setup" id="einrichten">
+        <span class="eyebrow">Einrichten</span>
+        <h2>Auf deinem Gerät starten.</h2>
+        <p>
+          Der Installationshelfer richtet die lokale App und ihren
+          Hintergrunddienst ein. Der erste Browserstart führt durch Hochschule,
+          Moodle und Hinweise.
+        </p>
+        <a
+          class="button"
+          href="user/installation.html"
+          >Schnellstart öffnen <span aria-hidden="true">→</span></a
+        >
+        <p class="fine-print">
+          PRIMUSS und mycampus werden erst nach geprüfter Coburger
+          Seitenzuordnung automatisch ausgelesen. Hochschul-Login und MFA
+          erfolgen auf den offiziellen Seiten.
+        </p>
+      </section>
+    </main>
+    <footer>
+      <span>© UniOS · AGPL-3.0-or-later</span>
+      <a href="docs.html">Dokumentation</a>
+      <a href="developers.html">Entwickler</a>
+      <a href="https://github.com/EinfachMxrc/unios-app">Quellcode und Lizenz ↗</a>
+    </footer>
+  </body>
+</html>

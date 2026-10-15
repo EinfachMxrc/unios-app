@@ -1,0 +1,42 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.scroll-tabs-wrap {
+  position: relative;
+  min-width: 0;
+  margin-bottom: 20px;
+}
+.scroll-tabs-wrap .scroll-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  gap: 20px;
+  margin: 0;
+  padding-right: 30px;
+}
+.scroll-tabs-wrap .scroll-tabs > a {
+  flex: none;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.scroll-tabs-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 1px;
+  width: 30px;
+  display: grid;
+  place-items: center;
+  color: var(--app-text);
+  background: var(--app-bg);
+  border-radius: 5px;
+}
+.scroll-tabs-arrow.left {
+  left: 0;
+  box-shadow: 8px 0 8px var(--app-bg);
+}
+.scroll-tabs-arrow.right {
+  right: 0;
+  box-shadow: -8px 0 8px var(--app-bg);
+}

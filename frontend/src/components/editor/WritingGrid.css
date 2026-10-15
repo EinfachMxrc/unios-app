@@ -1,0 +1,86 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.writing-grid-block {
+  min-width: 0;
+  max-width: 100%;
+}
+.writing-grid-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.writing-grid-scroll:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.writing-grid {
+  width: max-content;
+  border: 1px solid var(--app-border);
+  margin-block: 12px;
+}
+.writing-grid-row {
+  display: grid;
+}
+.writing-grid-cell {
+  position: relative;
+  height: 56px;
+  min-width: 0;
+  border-right: 1px solid var(--app-border);
+  border-bottom: 1px solid var(--app-border);
+}
+.writing-grid-row:last-child .writing-grid-cell {
+  border-bottom: 0;
+}
+.writing-grid-cell:last-child {
+  border-right: 0;
+}
+.writing-grid-cell > input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 16px;
+  opacity: 0;
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+.writing-grid-cell > input:focus {
+  opacity: 1;
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.writing-grid-preview {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 100%;
+  padding: 10px 12px;
+  white-space: pre;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+.writing-grid-cell > input:focus + .writing-grid-preview {
+  visibility: hidden;
+}
+.writing-grid-hint {
+  font-size: 0.82rem;
+  margin-block: 8px;
+}
+.study-writing-source {
+  tab-size: 4;
+  font-family: 'Fira Code', monospace;
+}
+
+.writing-grid-preview:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}

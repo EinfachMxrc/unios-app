@@ -1,0 +1,46 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UniOS · Codebereinigung</title>
+<style>
+  :root { color-scheme: light dark; font: 16px/1.6 system-ui,sans-serif; background: light-dark(#fafafa,#17191c); color: light-dark(#20252b,#edf0f4); }
+  body { max-width: 850px; margin: 0 auto; padding: 44px 24px; }
+  h1 { font-size: clamp(1.7rem,5vw,2.6rem); letter-spacing: -.04em; line-height: 1.15; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; }
+  .muted { color: light-dark(#53616d,#b4bfca); }
+  .stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+  .stats span { padding: 12px 18px; background: light-dark(#edf1f5,#252a30); border-radius: 10px; }
+  .stats strong { display: block; font-size: 1.7rem; }
+  details { border-bottom: 1px solid light-dark(#dce1e6,#363c45); padding: 14px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  summary small { display: inline-block; margin-left: 12px; font-size: .75rem; color: light-dark(#41566d,#a9c8e7); font-weight: 500; }
+  code { font-size: .85em; overflow-wrap: anywhere; }
+  details p { margin-bottom: 0; }
+  a { color: light-dark(#245f96,#a9c8e7); }
+  footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid light-dark(#dce1e6,#363c45); font-size: .85rem; }
+</style>
+<main>
+  <p class="muted">UniOS · Quellcodeprüfung · 3. Oktober 2026</p>
+  <h1>Weniger Altlasten.<br>Nachvollziehbare Entscheidungen.</h1>
+  <p>Ungenutzte Bausteine entfernt und vermeintlich verwaiste Einstiegspunkte bis zu ihren tatsächlichen Verbrauchern verfolgt.</p>
+  <div class="stats"><span><strong>5</strong>ungenutzte Dateien entfernt</span><span><strong>7</strong>tote Typ-Aliasse entfernt</span><span><strong>1</strong>ungenutztes JS-Paket entfernt</span></div>
+  <h2>Entfernt und vereinfacht</h2>
+  <details open><summary>UI-Gerüst <small>Entfernt</small></summary><p><code>select.tsx</code>, <code>separator.tsx</code> und <code>tabs.tsx</code> hatten keine Verbraucher. Die tatsächlich genutzten Formulare und Tabs bleiben erhalten.</p></details>
+  <details><summary>Shadcn-Generatorreste <small>Entfernt</small></summary><p>Nach Entfernung des Generatorpakets waren <code>components.json</code> und der ungenutzte <code>lib/utils.ts</code>-Reexport überflüssig. Herkunft und MIT-Hinweise der aktiven Komponenten bleiben dokumentiert.</p></details>
+  <details><summary>Typen und Editorbenennung <small>Vereinfacht</small></summary><p>Sieben ungenutzte Typ-Aliasse entfernt. Die Notizseite verwendet den neuen Editor direkt als <code>NoteStudio</code>. Der tatsächlich genutzte Markdown-Quelleditor bleibt Teil des Studios.</p></details>
+  <details><summary>Updater-Abhängigkeiten <small>JS-Paket entfernt</small></summary><p><code>@tauri-apps/plugin-updater</code> hatte keine JavaScript-Imports. Updates laufen über die Rust-Brücke. Die bereits verwendete <code>@tauri-apps/api</code> ist jetzt direkt mit der bestehenden Version deklariert; keine vorhandene Paketversion wurde aktualisiert.</p></details>
+  <h2>Aktive Architektur</h2>
+  <details><summary>Campus, Lernen und Wissensspeicher <small>Aktiv</small></summary><p>Die Backend-Domänen sind über HTTP, Hintergrundaufträge, CLI oder Agent Gateway eingebunden. Aus der Prüfung ergab sich kein weiterer eindeutig entfernbarer Bereich.</p></details>
+  <details><summary>Desktop-Begleitdienst und Worker <small>Aktiv</small></summary><p><code>app/client/api.py</code> wird vom nativen Begleitdienst gestartet. WASM- und Containerworker werden über separate Prozesse bzw. dokumentierte Plugin-Einstiege verwendet; eine reine Importsuche würde sie falsch einordnen.</p></details>
+  <details><summary>Remote-MCP und OAuth <small>Aktiv</small></summary><p>Der Remote-Prozess ist im Server-Compose-Overlay eingetragen. Seine Autorisierung und Werkzeuge werden weiterhin für Work benötigt.</p></details>
+  <details><summary>Lokaler Betrieb und VPS <small>Aktiv · Kompatibilität</small></summary><p>Der lokale Betrieb wird weiterhin unterstützt. Im Servermodus sind Hostwechsel gesperrt; Snapshots und Schreibschutz bleiben nötig. Diese Teile zu entfernen wäre eine Produktänderung.</p></details>
+  <details><summary>Moodle-Rückruf <small>Aktiv · Quellbetrieb</small></summary><p>Der Protokollhelfer ist noch über den lokalen Installationsweg registrierbar. Native Clients verwenden ihren eigenen Deep-Link-Ablauf.</p></details>
+  <details><summary>Migrationen, Prüfwerkzeuge und Bibliotheken <small>Aktiv</small></summary><p>Migrationen werden für neue und ältere Installationen benötigt. Die zwei TypeScript-Pakete bedienen unterschiedliche Werkzeuge. Die eingebundenen GLib-Quellen enthalten den Linux-Sicherheitsbackport.</p></details>
+  <h2>Prüfung und Grenzen</h2>
+  <p class="muted">Importgraph für 379 Frontend-Dateien vor der Bereinigung; Strukturprüfung für 552 Python-Dateien. Dynamische Übersetzungen, getrennte Prozesse und konfigurierte Einstiegspunkte wurden berücksichtigt. Kein vollständiger Beweis über jede Zeile oder jeden historischen Vertrag.</p>
+  <p>Alle 395 Frontend-Tests, Typecheck, Lint, Build und Lockdatei-Prüfung bestanden. Details und abschließende Browserprüfung im Fortschrittsbericht.</p>
+  <footer><a href="CODE_CLEANUP.md">Vollständige Nachweise</a> · <a href="PROGRESS.md">Prüfergebnisse</a> · Änderungen sind in Git versioniert.</footer>
+</main>
+</html>

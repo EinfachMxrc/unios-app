@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "sourceCommit": "3157ee2",
+    "buildIndexSha256": "78a40737752632c0e7b79ba9bf45b702b529266c471eb393fbea4435f0eddc4d",
+    "syntheticFixturesOnly": true,
+    "goalRemainsActive": true
+  },
+  "python": { "passed": 891, "skipped": 12, "failed": 0, "durationSeconds": 813.91 },
+  "vitest": { "passed": 534, "files": 54, "failed": 0 },
+  "playwright": {
+    "passed": 293, "skipped": 0, "failed": 0, "flaky": 0,
+    "durationSeconds": 468.469244,
+    "freshFakeServers": true,
+    "fullSuite": true
+  },
+  "staticChecks": {
+    "ruff": "passed",
+    "mypy": { "result": "passed", "sourceFiles": 544, "testSourcesListedThroughGit": true },
+    "typescript": "passed",
+    "eslint": "passed",
+    "i18n": "passed",
+    "openapiSchema": "current",
+    "generatedApiTypes": "current",
+    "productionBuild": "passed"
+  },
+  "bundle": {
+    "allIndividualGzipBudgets": "passed",
+    "precacheUniqueAssets": 236,
+    "precacheRawBytes": 16459728,
+    "precacheGzipBytes": 4432817,
+    "rawBudgetBytes": 18874368,
+    "gzipBudgetBytes": 5242880
+  },
+  "accessibility": {
+    "report": "lighthouse-accessibility-summary.json",
+    "homeScore": 100,
+    "readerScore": 100,
+    "belowFullScoreAuditsIncludingUnweighted": 0,
+    "runtimeErrors": 0
+  },
+  "limits": [
+    "Alte unzugängliche Testordner verursachten Aufzählungswarnungen; sie wurden nicht verändert.",
+    "Keine physische MacBook-Trackpad-, native WebView- oder Installer-Abnahme.",
+    "Docker-Smoke mangels erreichbarer lokaler Engine nicht ausgeführt.",
+    "Synthetische Browserfälle beweisen weder reale Lernqualität noch FPS oder gesparte Lernzeit.",
+    "Quellen-Notizneuanlage garantiert nach vollständigem Reload oder verlorenem ACK noch keine Backend-Idempotenz.",
+    "Gezielte Decksessions, dauerhafte eigene Quellkarten, Konzeptcanvas und mathematisches Notizrendering bleiben offene Folgepakete."
+  ]
+}

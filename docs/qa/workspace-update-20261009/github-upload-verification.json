@@ -1,0 +1,108 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.22",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "release_id": 407928994,
+  "release_status": "draft",
+  "url": "https://github.com/EinfachMxrc/unios-app/releases/tag/untagged-63b634236d732e15d9dd",
+  "assets_verified": 16,
+  "all_server_digests_match": true,
+  "assets": [
+    {
+      "name": "deployment-runbook.md",
+      "bytes": 11412,
+      "sha256": "632870139282b273d3ae98928d23a9198d9237ceab74d1adce382e3250503a2a",
+      "github_digest_matches": true
+    },
+    {
+      "name": "lighthouse-summary.json",
+      "bytes": 3858,
+      "sha256": "9b82c35b23423c9d6203b155a42c268d313bb5f5a865d88da167c71566453b97",
+      "github_digest_matches": true
+    },
+    {
+      "name": "quality-summary.json",
+      "bytes": 1833,
+      "sha256": "5da931173af57098e1aa5536bd5d284a6da53548addf0e850f23c014b034d74a",
+      "github_digest_matches": true
+    },
+    {
+      "name": "release-receipt.json",
+      "bytes": 10577,
+      "sha256": "3b8b313043d5ab8860ded9c41c21a147e9d1c00c4b69a711ff26412564bbe233",
+      "github_digest_matches": true
+    },
+    {
+      "name": "server-source-integrity.json",
+      "bytes": 346,
+      "sha256": "34c7536206576f56b6957a4cff0f351637d76848e3ce2d66a33435ac5c39ea5b",
+      "github_digest_matches": true
+    },
+    {
+      "name": "server-verification.json",
+      "bytes": 512,
+      "sha256": "a87af8600d754180ac920fadba76c08eb0f389198dbb621cb5f57e2ef14df8f8",
+      "github_digest_matches": true
+    },
+    {
+      "name": "SHA256SUMS-components.txt",
+      "bytes": 1225,
+      "sha256": "410897a647494bc3e728eb76a10a102ef71f994f39d98be3b40b41de6945a113",
+      "github_digest_matches": true
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 1325,
+      "sha256": "2daffb8d490d8449a1bae4ca40b6a1923e5602c25e1dc7e0f6edb4c78883f90c",
+      "github_digest_matches": true
+    },
+    {
+      "name": "source-and-bundle-verification.json",
+      "bytes": 3952,
+      "sha256": "e584b73f7078cb75ec27db254529ff4d66ab042a480d60de0343aa5f66908433",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS-0.1.22-complete-update.zip",
+      "bytes": 712185802,
+      "sha256": "85ac3988fd106d091bd88308b94ff1d551d52befae4ab56fcbcf8a7aa1b337fe",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS-0.1.22-RELEASE-INFO.txt",
+      "bytes": 2128,
+      "sha256": "37c656b37e5f595cf282e5544fa4eec1e240a44fe7a76818b37c103af36e11d0",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS-0.1.22-server-source.tar.gz",
+      "bytes": 1972967,
+      "sha256": "2ef16ae9d66641b2b3fd22f5161bd3e3946b7b5f074a283613d89ac1104fd0d3",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS-0.1.22-source.zip",
+      "bytes": 35098434,
+      "sha256": "508801a872365777e0b633b0df6bed32415b903eff1e17906184f3f73ef179b1",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS_0.1.22_x64-setup.exe",
+      "bytes": 304102874,
+      "sha256": "72fc39eebd2cecefae2396de815039c7ea52a7e3bb2dfe82918c7c228dc805a4",
+      "github_digest_matches": true
+    },
+    {
+      "name": "UniOS_0.1.22_x64_en-US.msi",
+      "bytes": 370995234,
+      "sha256": "953fb16bb64067098f22d5484eaba5c59f3d319a09f17313f92d60d10a8a9a70",
+      "github_digest_matches": true
+    },
+    {
+      "name": "windows-install-verification.json",
+      "bytes": 414,
+      "sha256": "3856e45343133249427bbed9dec497388ee484422877c6dcb68f4503783c2fd1",
+      "github_digest_matches": true
+    }
+  ]
+}

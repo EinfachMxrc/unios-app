@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-portal-links"
+description = "Enables the portal_links command without any pre-configured scope."
+commands.allow = ["portal_links"]
+
+[[permission]]
+identifier = "deny-portal-links"
+description = "Denies the portal_links command without any pre-configured scope."
+commands.deny = ["portal_links"]

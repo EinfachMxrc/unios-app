@@ -1,0 +1,15 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.skip-link { position: fixed; top: .5rem; left: .5rem; z-index: 1000; padding: .75rem 1rem; background: var(--background); color: var(--foreground); border: 2px solid currentColor; transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+.skip-link:not(:focus) { clip-path: inset(50%); width: 1px; height: 1px; padding: 0; overflow: hidden; white-space: nowrap; }
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible { outline: 3px solid var(--app-accent, #22768a); outline-offset: 3px; }
+/* The palette field fills its whole row; the row shows focus with an accent underline instead of a box around the text. */
+.command-input:focus-visible, .command-item:focus-visible { outline: none; }
+.command-search:has(.command-input:focus-visible) { box-shadow: inset 0 -2px 0 var(--app-accent); }
+html[data-high-contrast="true"] { --app-muted: #303030; --muted-foreground: #303030; --app-line: #555; --app-accent: #00566b; }
+html.dark[data-high-contrast="true"] { --app-muted: #e0e0e0; --muted-foreground: #e0e0e0; --app-line: #b0b0b0; --app-accent: #b3ebff; }
+html[data-high-contrast="true"] :where(input, select, textarea, button) { border-color: currentColor; }
+html[data-reduce-motion="true"] *, html[data-reduce-motion="true"] *::before, html[data-reduce-motion="true"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+@media (forced-colors: active) { :focus-visible { outline: 3px solid Highlight; } progress { forced-color-adjust: auto; } }
+@media (max-width: 800px) { .page-actions { flex-wrap: wrap; } .page-actions label { max-width: 100%; } }

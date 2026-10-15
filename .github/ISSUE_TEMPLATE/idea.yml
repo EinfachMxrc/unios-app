@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Idee vorschlagen
+description: Ein Wunsch für einen Studienablauf oder eine Funktion.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem im Studienalltag möchtest du lösen?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Wie stellst du dir die Lösung vor?

@@ -1,0 +1,65 @@
+{
+  "_spdx": "AGPL-3.0-or-later",
+  "schema": 1,
+  "fixture_only": true,
+  "hardware": {
+    "os": "Windows",
+    "os_version": "11",
+    "python": "3.13.5",
+    "cpu": "AMD64 Family 26 Model 68 Stepping 0, AuthenticAMD",
+    "logical_cpus": 16
+  },
+  "fixture": {
+    "pdf_files": 56,
+    "large_pdf_pages": 500,
+    "total_pdf_pages": 775,
+    "original_bytes": 438438
+  },
+  "timing_seconds": {
+    "import": 48.49166569998488,
+    "large_pdf_background_index": 1.3941512000164948,
+    "corpus": 46.64095760000055,
+    "snapshot": 0.15312709999852814,
+    "restore_stage": 0.04392549998010509
+  },
+  "retrieval": {
+    "cases": 15,
+    "recall_at_5": 1.0,
+    "recall_at_20": 1.0,
+    "mrr": 1.0,
+    "forbidden_sources": 0,
+    "stale_versions": 0,
+    "misses": [],
+    "latency_ms_median": 2.2555000032298267,
+    "latency_ms_p95": 2.806999982567504,
+    "payload_bytes_median": 2674,
+    "token_measurement": "not_model_specific; canonical UTF-8 bytes",
+    "tool_calls": 30,
+    "warm_latency_ms_median": 0.8262000046670437,
+    "warm_latency_ms_p95": 1.574199995957315
+  },
+  "corpus": {
+    "pending": 0,
+    "failed": 0,
+    "documents": 57,
+    "chunks": 776,
+    "sequence": 57
+  },
+  "snapshot_checked": true,
+  "restore": {
+    "integrity": "ok",
+    "versions": 56,
+    "chunks": 776
+  },
+  "bounded_course_list": {
+    "returned": 50,
+    "total": 56
+  },
+  "fetch_budget_bytes": 1069,
+  "limits": [
+    "No real accounts, network downloads, private settings or personal data.",
+    "Generated text-layer PDFs; OCR is not measured in this run.",
+    "Natural phrasing over synthetic content; expected-source metrics are not a human quality verdict.",
+    "Restore verifies staging/integrity/counts, not a native application recovery on a fresh device."
+  ]
+}

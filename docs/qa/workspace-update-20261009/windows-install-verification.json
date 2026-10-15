@@ -1,0 +1,15 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.22",
+  "program_files_matching": 2891,
+  "ui_files_matching": 290,
+  "backend_executable_matching": true,
+  "client_health": {
+    "status": "ok",
+    "mode": "client"
+  },
+  "pairing_preserved": true,
+  "server_connection": "https://unios.example.org/unios",
+  "remote_host_mode": "host",
+  "remote_topology": "server"
+}

@@ -1,0 +1,12 @@
+{
+  "_spdx": "AGPL-3.0-or-later",
+  "name": "Mein Studienraum",
+  "colors": {
+    "light": {"background": "#fbfaf8", "surface": "#ffffff", "text": "#252525", "muted": "#706f6b", "border": "#e8e6e1", "accent": "#2b5870", "sidebar": "#f5f4f1"},
+    "dark": {"background": "#1b1b1a", "surface": "#222221", "text": "#eae9e6", "muted": "#aca9a3", "border": "#393936", "accent": "#a4c6d6", "sidebar": "#222220"}
+  },
+  "typography": {"ui": "Geist Variable", "documentTitle": "Geist Variable", "basePx": 16},
+  "spacingPx": [4, 8, 12, 16, 24, 32],
+  "radiusPx": {"control": 8, "card": 9},
+  "breakpointsPx": {"sidebarHidden": 900, "compact": 650}
+}

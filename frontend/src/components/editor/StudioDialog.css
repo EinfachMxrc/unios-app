@@ -1,0 +1,9 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* Editor tools opened from the PDF drawer sit above that drawer's overlay. */
+.command-overlay.studio-floating-overlay {
+  z-index: 120;
+}
+.command-dialog.studio-floating-dialog {
+  z-index: 121;
+}

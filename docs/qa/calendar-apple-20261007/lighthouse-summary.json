@@ -1,0 +1,117 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "method": "Lighthouse snapshots of built calendar views and event dialogs",
+  "measuredAt": "2026-10-07T21:32:57.582Z",
+  "buildIndexSha256": "9fcf903d02f59ab51138e9b84ff479120eb210fc8193b9c0f36f7db0c0ed874c",
+  "reports": [
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    }
+  ]
+}

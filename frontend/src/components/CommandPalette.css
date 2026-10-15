@@ -1,0 +1,223 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@layer theme, base, components, utilities, workspace, interactions, accessibility;
+@layer workspace {
+
+/*
+ * A Spotlight-style overlay: it opens high on the screen so results grow
+ * downwards, is roomier than the dense work surfaces, and keeps everything
+ * reachable by keyboard. One accent colour marks the focused row and the
+ * matched characters; everything else is neutral.
+ */
+.command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgb(0 0 0 / .32);
+  backdrop-filter: blur(3px);
+  animation: command-fade var(--ui-enter-duration) var(--ui-enter-ease);
+}
+.command-dialog {
+  position: fixed;
+  z-index: 91;
+  top: 12vh;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 18vh);
+  transform: translateX(-50%);
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  background: var(--ui-overlay);
+  color: var(--app-text);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 24px 64px rgb(0 0 0 / .22);
+  animation: command-enter var(--ui-enter-duration) var(--ui-enter-ease);
+}
+@keyframes command-fade { from { opacity: 0; } }
+@keyframes command-enter { from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(.98); } }
+
+.command-search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  padding-inline: 20px 14px;
+  border-bottom: 1px solid var(--app-border);
+  color: var(--app-muted);
+}
+.command-input {
+  flex: 1;
+  min-width: 0;
+  height: 60px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--app-text);
+  font: inherit;
+  font-size: 1.08rem;
+}
+.command-input::placeholder { color: var(--app-muted); opacity: .75; }
+.command-close,
+.command-dialog kbd {
+  display: inline-grid;
+  min-width: 1.45rem;
+  height: 1.35rem;
+  place-items: center;
+  padding-inline: 5px;
+  border: 1px solid var(--app-border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--app-surface-alt);
+  color: var(--app-muted);
+  font: 600 .7rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.command-close { cursor: pointer; transition: color var(--ui-color-duration) var(--ui-color-ease), border-color var(--ui-color-duration) var(--ui-color-ease); }
+.command-close:hover { color: var(--app-text); border-color: color-mix(in srgb, var(--app-text) 30%, var(--app-border)); }
+
+.command-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: 8px;
+  padding: 6px 8px 8px;
+}
+.command-section-label {
+  margin: 10px 10px 4px;
+  color: var(--app-muted);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.command-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 10px 6px; }
+.command-filters > button {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--app-muted);
+  font: inherit;
+  font-size: .75rem;
+  cursor: pointer;
+  transition: background-color var(--ui-color-duration) var(--ui-color-ease), color var(--ui-color-duration) var(--ui-color-ease), border-color var(--ui-color-duration) var(--ui-color-ease);
+}
+.command-filters > button:hover { color: var(--app-text); border-color: color-mix(in srgb, var(--app-text) 25%, var(--app-border)); }
+.command-filters > button[aria-pressed='true'] { border-color: transparent; background: var(--app-blue-soft); color: var(--app-text); font-weight: 600; }
+.command-filters .native-select { height: 26px; max-width: 170px; margin-left: auto; border-radius: 999px; font-size: .75rem; }
+.command-recent-heading { display: flex; align-items: center; justify-content: space-between; padding-right: 6px; }
+.command-recent-heading .command-section-label { margin-bottom: 4px; }
+.command-clear {
+  border: 0;
+  background: none;
+  color: var(--app-muted);
+  font-size: .72rem;
+  cursor: pointer;
+}
+.command-clear:hover { color: var(--app-text); text-decoration: underline; }
+
+.command-item {
+  display: flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  gap: 11px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--ui-radius-item);
+  background: transparent;
+  color: var(--app-text);
+  font: inherit;
+  font-size: .88rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ui-color-duration) var(--ui-color-ease);
+}
+.command-item > svg { flex: none; color: var(--app-muted); }
+.command-item:hover { background: var(--accent); }
+.command-item:focus-visible {
+  outline: none;
+  background: var(--app-blue-soft);
+  box-shadow: inset 2px 0 0 var(--app-accent);
+}
+.command-item:focus-visible > svg { color: var(--app-accent); }
+.command-item:disabled { cursor: default; opacity: .5; background: transparent; }
+.command-label { display: grid; flex: 1; min-width: 0; }
+.command-label,
+.command-hit strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.command-hit { align-items: flex-start; }
+.command-hit > svg { margin-top: 2px; }
+.command-hit strong { font-weight: 600; }
+.command-hit small { overflow: hidden; color: var(--app-muted); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+.command-mark {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--app-accent) 18%, transparent);
+  color: inherit;
+}
+.command-enter { margin-left: auto; flex: none; }
+.command-empty { padding: 18px 10px; color: var(--app-muted); font-size: .85rem; text-align: center; }
+
+.command-panel {
+  flex: none;
+  max-height: 40vh;
+  overflow: auto;
+  padding: 10px 18px 14px;
+  border-top: 1px solid var(--app-border);
+}
+.command-capture {
+  flex: none;
+  padding: 2px 16px 12px;
+  border-top: 1px solid var(--app-border);
+}
+.command-capture .command-section-label { margin-inline: 2px; }
+.command-capture .jot-capture { gap: 8px; }
+.command-capture .jot-capture-fields { gap: 8px; }
+.command-capture .jot-capture-fields .native-select { width: 120px; height: 38px; }
+.command-capture .jot-textarea { min-height: 38px; height: 38px; padding: 8px 11px; resize: none; }
+.command-capture .jot-capture-actions:not(:has(> span)) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.command-capture .jot-capture:has(.jot-textarea:not(:placeholder-shown)) .jot-capture-actions { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+
+.command-footer {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--app-border);
+  background: var(--app-surface-alt);
+  color: var(--app-muted);
+  font-size: .74rem;
+}
+.command-footer > span { display: inline-flex; align-items: center; gap: 5px; }
+.command-footer-status { min-width: 0; color: var(--app-text); }
+.command-shortcuts { margin-left: auto; }
+.command-shortcuts > summary { cursor: pointer; list-style: none; }
+.command-shortcuts > summary::-webkit-details-marker { display: none; }
+.command-shortcuts > summary:hover { color: var(--app-text); }
+.command-shortcuts[open] > p {
+  position: absolute;
+  right: 12px;
+  bottom: calc(100% + 6px);
+  width: min(26rem, calc(100% - 24px));
+  padding: 10px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-panel);
+  background: var(--ui-overlay);
+  box-shadow: var(--ui-overlay-shadow);
+  color: var(--app-text);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .command-dialog { top: 8px; width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
+  .command-input { height: 54px; }
+  .command-footer > span:not(.command-footer-status) { display: none; }
+  .command-capture .jot-capture-fields { flex-direction: row; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .command-overlay, .command-dialog { animation: none; }
+}
+}

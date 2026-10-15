@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "verified_at_utc": "2026-10-09T13:12:19.632594+00:00",
+  "source_commit": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "scope": "Immutable source ZIP and existing tested PWA directory only; no rebuild, staging or product edits.",
+  "source_zip": {
+    "path": "dist/releases/v0.1.22/UniOS-0.1.22-source.zip",
+    "bytes": 35098434,
+    "sha256": "508801a872365777e0b633b0df6bed32415b903eff1e17906184f3f73ef179b1",
+    "zip_entries": 2472,
+    "canonical_files": 2275,
+    "canonical_git_blobs_all_match": true,
+    "exact_git_archive_bytes_all_match": true,
+    "declared_crlf_export_paths": [
+      "deploy/windows/register-task.ps1",
+      "deploy/windows/start-uni-os.ps1",
+      "scripts/install-windows.ps1",
+      "scripts/smoke_service_windows.ps1",
+      "scripts/windows_env_acl.ps1"
+    ],
+    "exact_committed_path_set": true,
+    "zip_commit_comment_matches": true,
+    "forbidden_private_or_generated_paths": [],
+    "mode_oid_path_manifest_sha256": "b878e6b891ef9ee1394518a9a0c440535db5d2bd4007e4050d94b2e74b71e4eb"
+  },
+  "pwa_bundle": {
+    "path": ".tmp/workspace-022-pwa",
+    "file_count": 294,
+    "file_manifest_sha256": "c2e23d1082706139ae7f4411e1735257e5912e343319f14a0cdca984c1ab01d0",
+    "index_sha256": "50ee826a8eb5e2bb98d2401cec3b83d66090570f0a5e2e601bc1d05de270c606",
+    "service_worker_sha256": "97c66e3887223a62037424a6781b1ad5017de390f6e8af3818e777364ce2e8b8",
+    "budget_script_source_sha256": "6dc3ac4090dede40cfd847c3ac7f97e16df2f27a600fb3c59af159c4016b2c4f",
+    "adaptation": "Only the two dist URLs point to the existing immutable PWA build.",
+    "component_budgets": [
+      {
+        "artifact": "index",
+        "gzip_bytes": 200987,
+        "budget_bytes": 225280
+      },
+      {
+        "artifact": "MaterialPage",
+        "gzip_bytes": 208402,
+        "budget_bytes": 256000
+      },
+      {
+        "artifact": "NotesPage",
+        "gzip_bytes": 3086,
+        "budget_bytes": 327680
+      },
+      {
+        "artifact": "pdf.worker.min",
+        "gzip_bytes": 376093,
+        "budget_bytes": 460800
+      },
+      {
+        "artifact": "editor.api",
+        "gzip_bytes": 698349,
+        "budget_bytes": 819200
+      },
+      {
+        "artifact": "tsMode",
+        "gzip_bytes": 305088,
+        "budget_bytes": 368640
+      },
+      {
+        "artifact": "ts.worker",
+        "gzip_bytes": 1491546,
+        "budget_bytes": 1740800
+      },
+      {
+        "artifact": "editor.worker",
+        "gzip_bytes": 92838,
+        "budget_bytes": 112640
+      }
+    ],
+    "precache": {
+      "unique_files": 287,
+      "raw_bytes": 18060939,
+      "raw_budget_bytes": 18874368,
+      "gzip_bytes": 5076349,
+      "gzip_budget_bytes": 5242880,
+      "all_workers_and_fonts_present": true
+    },
+    "exit_code": 0,
+    "passed": true
+  },
+  "staged_guard_synthetic_cases": {
+    "anki_collection": {
+      "paths": [
+        "tests/synthetic/collection.anki2"
+      ],
+      "exit_code": 1,
+      "passed": true
+    },
+    "private_test_directory": {
+      "paths": [
+        "tests/private/synthetic.txt"
+      ],
+      "exit_code": 1,
+      "passed": true
+    },
+    "shared_test_directory": {
+      "paths": [
+        "tests/shared/synthetic.txt"
+      ],
+      "exit_code": 1,
+      "passed": true
+    },
+    "log_test_directory": {
+      "paths": [
+        "tests/logs/synthetic.txt"
+      ],
+      "exit_code": 1,
+      "passed": true
+    },
+    "private_data": {
+      "paths": [
+        "data/synthetic.txt"
+      ],
+      "exit_code": 1,
+      "passed": true
+    },
+    "safe_source_and_env_example": {
+      "paths": [
+        "tests/test_anki_study_undo.py",
+        "frontend/src/studyQueue.ts",
+        ".env.example"
+      ],
+      "exit_code": 0,
+      "passed": true
+    }
+  },
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later"
+}

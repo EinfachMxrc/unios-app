@@ -1,0 +1,15 @@
+{
+  "mode": "client",
+  "runs": [
+    {
+      "seconds": 0.7504,
+      "client_seconds": 0.4334
+    },
+    {
+      "seconds": 0.6417,
+      "client_seconds": 0.4249
+    }
+  ],
+  "median_seconds": 0.6961,
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later"
+}

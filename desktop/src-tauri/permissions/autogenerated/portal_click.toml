@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-portal-click"
+description = "Enables the portal_click command without any pre-configured scope."
+commands.allow = ["portal_click"]
+
+[[permission]]
+identifier = "deny-portal-click"
+description = "Denies the portal_click command without any pre-configured scope."
+commands.deny = ["portal_click"]

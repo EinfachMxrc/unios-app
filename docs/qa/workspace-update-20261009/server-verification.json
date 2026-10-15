@@ -1,0 +1,14 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.22",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "image": "unios-server:0.1.22-workspace-6f3f39ae3b5e",
+  "image_id": "sha256:0cd1c8d2355aab2ce3eed5db731d06a4dc2af71295942b682ababdc1314f22f9",
+  "healthy": true,
+  "mounts_preserved": true,
+  "topology_preserved": true,
+  "unchanged_schema_head": "ff98c7da0320",
+  "https_health": 200,
+  "unauthenticated_api": 401,
+  "activated_at": "2026-10-09T13:19:33Z"
+}

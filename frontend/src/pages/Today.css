@@ -1,0 +1,204 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/* Explicit section rhythm survives the workspace's shared margin reset. */
+.today-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+/* The greeting names the day; the focus card says what to do now and starts it.
+   These are the only rules for the intro; the shared layout keeps none. */
+.today-intro {
+  margin: 0;
+}
+.today-intro > p {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+}
+.today-intro h2 {
+  max-width: 900px;
+  margin: 4px 0 18px;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 640;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+.today-intro h2 span {
+  color: var(--app-muted);
+  font-weight: 420;
+}
+.today-focus {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px 32px;
+  padding: 20px 22px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay);
+  background: var(--app-surface);
+  box-shadow: var(--ui-panel-shadow);
+}
+.today-focus-main {
+  min-width: 0;
+}
+.today-learning-cue {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+.today-learning-cue > span {
+  color: var(--app-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+}
+.today-learning-cue strong {
+  color: var(--app-text);
+  font-size: 1.08rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.today-learning-cue .today-learning-context {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.today-learning-cue small {
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.today-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.today-summary a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 11px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-surface-alt);
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  transition:
+    border-color var(--ui-color-duration) var(--ui-color-ease),
+    color var(--ui-color-duration) var(--ui-color-ease);
+}
+.today-summary a:hover {
+  border-color: color-mix(in srgb, var(--app-accent) 45%, var(--app-border));
+  color: var(--app-text);
+  text-decoration: none;
+}
+.today-summary strong {
+  color: var(--app-text);
+  font-variant-numeric: tabular-nums;
+}
+.today-summary a[data-emoji]::before {
+  content: attr(data-emoji);
+  content: attr(data-emoji) / '';
+  margin-right: 1px;
+}
+.today-focus-actions {
+  display: grid;
+  justify-items: stretch;
+  gap: 4px;
+  min-width: 200px;
+}
+.today-focus-actions > * {
+  justify-content: flex-start;
+}
+.today-focus-actions .today-primary-action {
+  justify-content: space-between;
+  white-space: normal;
+  height: auto;
+  min-height: 2.25rem;
+  text-align: left;
+}
+.today-primary-action svg {
+  flex-shrink: 0;
+}
+.today-study-day {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+}
+@media (max-width: 700px) {
+  .today-focus {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 16px;
+  }
+  .today-focus-actions {
+    grid-column: 1 / -1;
+  }
+  .today-mascot .mascot {
+    width: 48px;
+    height: 48px;
+  }
+  .today-focus-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+  }
+  .today-intro h2 span {
+    display: block;
+  }
+}
+.today-content > .timetable-panel {
+  margin: 0;
+}
+.today-content > .moodle-refresh {
+  margin: 0;
+}
+.today-content .moodle-refresh {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.today-content .moodle-refresh > p {
+  margin: 0;
+  font-size: 0.8rem;
+}
+.today-content .today-section-heading {
+  padding-bottom: 0.85rem;
+}
+.today-content .today-empty {
+  padding-top: 1rem;
+  line-height: 1.6;
+}
+@media (max-width: 520px) {
+  .today-content {
+    gap: 1.5rem;
+  }
+}
+
+/* The greeting is the visible heading; the topbar already names the page.
+   The h1 stays in the outline for screen readers. */
+.today-shell .page-heading {
+  margin: 0;
+}
+.today-shell .page-heading h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .today-content {
+    gap: 24px;
+  }
+  .today-workspace {
+    gap: 24px;
+  }
+}

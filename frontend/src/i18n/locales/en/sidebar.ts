@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+export default {
+  title: 'Customize sidebar',
+  description: 'Drag areas into place or use the arrows. Hiding a shortcut keeps all its content.',
+  close: 'Close',
+  drag: 'Move {{name}}',
+  moveGroup: 'Section for {{name}}',
+  up: 'Move {{name}} up',
+  down: 'Move {{name}} down',
+  remove: 'Hide {{name}}',
+  emptyGroup: 'Drag an area here or add one below.',
+  addTitle: 'Add more areas',
+  search: 'Find an area …',
+  addTo: 'Add to',
+  add: 'Add {{name}}',
+  noResults: 'No more matching areas.',
+  disabledHint: 'Missing an area? Enable disabled features in Settings.',
+  showCourses: 'Show course shortcuts',
+  saved: 'Saved on this device.',
+  changed: '{{name}}: change saved.',
+  saveFailed: 'Unable to save. Your previous selection is preserved.',
+  reset: 'Restore defaults',
+  resetDone: 'Defaults restored.',
+  deviceOnly: 'Changes are saved immediately on this device.',
+  done: 'Done',
+}

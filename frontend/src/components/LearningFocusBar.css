@@ -1,0 +1,5 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.learning-focus-bar { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin-bottom:20px;
+  padding-bottom:14px; border-bottom:1px solid var(--app-border); }
+.learning-focus-bar a { display:inline-flex; align-items:center; gap:7px; min-height:36px; }
+.learning-focus-bar span, .learning-focus-bar p { color:var(--app-muted); overflow-wrap:anywhere; margin:0; }

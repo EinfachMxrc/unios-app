@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+export default {
+  title: 'Seitenleiste anpassen',
+  description: 'Ziehe Bereiche an ihren Platz oder nutze die Pfeile. Ausblenden entfernt nur die Verknüpfung, keine Inhalte.',
+  close: 'Schließen',
+  drag: '{{name}} verschieben',
+  moveGroup: 'Bereich für {{name}}',
+  up: '{{name}} nach oben',
+  down: '{{name}} nach unten',
+  remove: '{{name}} ausblenden',
+  emptyGroup: 'Ziehe einen Bereich hierher oder füge unten einen hinzu.',
+  addTitle: 'Weitere Bereiche hinzufügen',
+  search: 'Bereich suchen …',
+  addTo: 'Hinzufügen zu',
+  add: '{{name}} hinzufügen',
+  noResults: 'Keine weiteren passenden Bereiche.',
+  disabledHint: 'Fehlt ein Bereich? Deaktivierte Funktionen kannst du in den Einstellungen einschalten.',
+  showCourses: 'Kursverknüpfungen anzeigen',
+  saved: 'Auf diesem Gerät gespeichert.',
+  changed: '{{name}}: Änderung gespeichert.',
+  saveFailed: 'Speichern nicht möglich. Deine bisherige Auswahl bleibt erhalten.',
+  reset: 'Standard wiederherstellen',
+  resetDone: 'Standard wiederhergestellt.',
+  deviceOnly: 'Änderungen werden sofort auf diesem Gerät gespeichert.',
+  done: 'Fertig',
+}

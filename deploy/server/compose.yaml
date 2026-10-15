@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: unios
+services:
+  api:
+    build:
+      context: ${UNIOS_SOURCE_ROOT:-../..}
+      dockerfile: deploy/server/Dockerfile
+    image: unios-server:0.1.27
+    container_name: unios-server
+    extra_hosts:
+      - 'judge0:host-gateway'
+    user: '10001:10001'
+    ports:
+      - '127.0.0.1:8008:8000'
+    env_file: ${UNIOS_STATE_ROOT:-.}/server.env
+    environment:
+      UNIOS_HOME: /var/lib/unios
+      UNIOS_SERVER_KEY: /run/secrets/unios.key
+      SERVER_MODE: 'true'
+      AUTOMATIC_TAKEOVER_ENABLED: 'false'
+      API_AUTH_REQUIRED: 'true'
+      SERVE_REACT: 'true'
+      DEVICE_NAME: UniOS Server
+      REACT_DIST_DIR: /app/frontend/dist
+      VOICE_MODEL_DIR: /var/lib/unios/models/whisper-base
+      HF_HOME: /var/lib/unios/models/cache
+      XDG_CACHE_HOME: /var/lib/unios/cache
+    volumes:
+      - ${UNIOS_STATE_ROOT:-.}/state:/var/lib/unios
+      - ${UNIOS_STATE_ROOT:-.}/secrets/unios.key:/run/secrets/unios.key:ro
+    restart: unless-stopped
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    healthcheck:
+      test: ['CMD', '/app/.venv/bin/python', '-c', "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    logging:
+      driver: json-file
+      options: {max-size: 5m, max-file: '2'}

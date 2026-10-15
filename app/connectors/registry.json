@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {"slug": "generic", "name": "Eigene Hochschule", "status": "reference", "connectors": ["example_university"]},
+    {"slug": "hs-coburg", "name": "Hochschule Coburg", "status": "reference", "connectors": ["moodle", "primuss", "mycampus"]}
+  ],
+  "connectors": [
+    {
+      "id": "example_university",
+      "package": "unios-connector-example",
+      "package_version": "0.1.0",
+      "api_version": 1,
+      "capabilities": ["courses.read", "materials.read", "assignments.read", "calendar.read"],
+      "domains": ["example.invalid"],
+      "secrets": [],
+      "review_status": "verified",
+      "runtime": "trusted_python"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/brand/v2/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/svg+xml" href="/brand/v2/favicon.svg" sizes="any" />
+    <link rel="apple-touch-icon" href="/brand/v2/apple-touch-180.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b111c" />
+    <!--
+      Static and, like the PWA manifest, can't follow the in-app language
+      switch — English reads naturally to the widest audience here; "UniOS"
+      is the neutral brand name in both languages. The rest of the UI is
+      fully translated at runtime via i18next (see src/i18n/).
+    -->
+    <meta name="description" content="Private study space for courses, materials and deadlines" />
+    <title>UniOS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

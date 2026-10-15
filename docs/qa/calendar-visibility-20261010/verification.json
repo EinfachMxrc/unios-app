@@ -1,0 +1,89 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "date": "2026-10-10",
+  "synthetic_data_only": true,
+  "private_profile_accessed": false,
+  "installed": false,
+  "server_deployed": false,
+  "frontend_unit_tests_passed": 30,
+  "browser_tests_passed": 26,
+  "browser_duration_seconds": 31.6,
+  "typecheck_passed": true,
+  "eslint_passed": true,
+  "i18n_check_passed": true,
+  "production_build_passed": true,
+  "sources": {
+    "frontend/src/components/TimetableCalendar.tsx": "17ad23911597176b095cf541d58542cf3a4ed78d69dc69750951e2f3cfac0465",
+    "frontend/src/components/Calendar.css": "ea6b843a403f9fbadd86bb4258ca5eba670bc9a88880da6210ee6315ff5572db",
+    "frontend/src/hooks/useCalendarGesture.ts": "256e3fc08f7a0be5e5fdb7e85027267c24b657e429d6dc7426763e3a52f7328f",
+    "frontend/src/lib/calendarLayout.ts": "f1ed3191d09f7a110195fc4ed826eb7048cf79d544ba3b3bcbff0431a2c16d14",
+    "frontend/src/lib/calendarPreferences.ts": "fe56a3026ff46e3015582fb9c9b5a54d41ef49382de03e71f069ac01cab24ce4",
+    "frontend/e2e/calendar-visibility.spec.ts": "ee7c4e0911df6ebf285ea06b6ac09de4eaa36b4b712c6476edff431a2e90f089"
+  },
+  "reviewed_screenshots": {
+    "calendar-fit-dark-1300-820-1791626079598.png": {
+      "sha256": "0658526a3f9c781043fd685b8a1ef6655626c0020f28d3e4abca5849d9959a30",
+      "bytes": 120820
+    },
+    "calendar-fit-light-1300-820-1791626079681.png": {
+      "sha256": "e2d3dc96baac96f8f3b9d2cdc6a8dc81f81ab3f053fea2bfc7c87e07b4da217e",
+      "bytes": 119457
+    },
+    "calendar-fit-dark-1280-720-1791626081395.png": {
+      "sha256": "d48677dbbeb857eb742a034bd027d42a3456ec77b3956c2a09c2124abcb62cb2",
+      "bytes": 121398
+    },
+    "calendar-fit-light-1280-720-1791626081472.png": {
+      "sha256": "6cde0b182b3102379af7283e616600c9d0d30f72fe8be4b85d37dbd4c7411bc8",
+      "bytes": 119661
+    },
+    "calendar-large-dark-1300-820-1791626080404.png": {
+      "sha256": "24a339faea252171cb84826eb42d625c469ed9a914fdabcce2c99c3b38b5c075",
+      "bytes": 58551
+    },
+    "calendar-large-light-1300-820-1791626080455.png": {
+      "sha256": "3a45089f951210d20e5ef4841fc3b2010bac91dafffe7d488f71cdc1fb24586e",
+      "bytes": 58102
+    },
+    "calendar-large-dark-1280-720-1791626082173.png": {
+      "sha256": "e30c19390806b60a7dff796621bffe78c6be1bbab8cfecf9e5698ecbf55c50cd",
+      "bytes": 56739
+    },
+    "calendar-large-light-1280-720-1791626082223.png": {
+      "sha256": "537963683b45a626a3d87fa2bf06174ee21fbb9722bbbe645147d78796279b5a",
+      "bytes": 56039
+    },
+    "calendar-fit-150-dark-1300-820-1791626084448.png": {
+      "sha256": "72f7e1f8b2fc23b087fd592af66f5b55f643b967594ebe4979817f79284902e9",
+      "bytes": 170970
+    },
+    "calendar-fit-150-light-1300-820-1791626084710.png": {
+      "sha256": "9354eaaec878c8c2269ec92050fc0e3697150e50f6bd5b4fc594285e4216b809",
+      "bytes": 184479
+    },
+    "calendar-large-150-dark-1300-820-1791626084988.png": {
+      "sha256": "d50d19ff17aa601ceec324a7977a776b2ef9b382d9b643a10f2ca1c415386774",
+      "bytes": 79113
+    },
+    "calendar-large-150-light-1300-820-1791626085100.png": {
+      "sha256": "91241b67178ec42a4b7861f5cc3846a872ffe4de3c2fb11e06366bda3a373000",
+      "bytes": 77689
+    },
+    "calendar-agenda-dark-390-1791626083731.png": {
+      "sha256": "d3811b70c1722120cc4b2c770a714b685b7945e72e1d77cd1e235bb19bced7c2",
+      "bytes": 72613
+    },
+    "calendar-agenda-light-390-1791626083786.png": {
+      "sha256": "b4e2b9be828c600d01d1b8510b220988a1c369c48a1416e7dcb9e1c7c2a4afe2",
+      "bytes": 70983
+    },
+    "calendar-agenda-150-dark-390-1791626085363.png": {
+      "sha256": "005cbb0f51034d4f48387c67b7e93822d40604d8805eb2b55747faab19fafdb1",
+      "bytes": 113907
+    },
+    "calendar-agenda-150-light-390-1791626085492.png": {
+      "sha256": "1156ef584331b5910f3a0cd9fec0bc54ad7bdfad8d51460f3107e301bcabdbec",
+      "bytes": 113001
+    }
+  }
+}

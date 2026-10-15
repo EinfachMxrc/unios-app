@@ -1,0 +1,84 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Hochschule Coburg
+room_booking_provider: coburg-myapps  # URL und Ablauf durch Nutzerbilder vom 03.10.2026 belegt
+connectors:
+  moodle:
+    config:
+      base_url: https://moodle.hs-coburg.de
+  primuss:
+    config:
+      base_url: https://www3.primuss.de/
+  mycampus:
+    config:
+      base_url: https://mycampus.hs-coburg.de
+moodle_url: https://moodle.hs-coburg.de
+primuss:
+  base_url: https://www3.primuss.de/
+  login_start_url: https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhco  # öffentliche PRIMUSS-Anmeldeseite der Hochschule Coburg
+  institution_code: null  # TODO: Coburger Hochschulkürzel von Marc prüfen
+  selector_alias_map: null  # TODO: Alias-ID eines lokal anonymisierten Beispiels
+  selectors:
+    exams: null  # TODO: anonymisiertes HTML von Marc prüfen
+    exam_key_attr: null  # TODO: stabilen Prüfungs-Schlüssel anhand eines Beispiels prüfen
+    grades: null  # TODO: anonymisiertes HTML von Marc prüfen
+    grade_key_attr: null  # TODO: stabilen Modul-Schlüssel anhand eines Beispiels prüfen
+    grade_title: null  # TODO: anonymisiertes HTML von Marc prüfen
+    grade_ects: null  # TODO: anonymisiertes HTML von Marc prüfen
+    grade_value: null  # TODO: anonymisiertes HTML von Marc prüfen
+    grade_status: null  # TODO: anonymisiertes HTML von Marc prüfen
+    grade_status_passed: null  # TODO: exakten Portaltext selbst prüfen
+    grade_status_failed: null  # TODO: exakten Portaltext selbst prüfen
+    grade_status_open: null  # TODO: exakten Portaltext selbst prüfen
+    grade_attempt: null  # TODO: anonymisiertes HTML von Marc prüfen
+    enrollment_link: null  # TODO: anonymisiertes HTML von Marc prüfen
+    enrollment: null  # TODO: Rückmeldezeilen anhand eines Beispiels prüfen
+    enrollment_key_attr: null  # TODO: stabilen Semester-Schlüssel prüfen
+    enrollment_title: null  # TODO: anonymisiertes HTML von Marc prüfen
+    enrollment_status: null  # TODO: anonymisiertes HTML von Marc prüfen
+    enrollment_deadline: null  # TODO: Datum mit Zeitzone prüfen
+    enrollment_complete_text: null  # TODO: exakten Portaltext selbst prüfen
+    enrollment_open_text: null  # TODO: exakten Portaltext selbst prüfen
+    registration: null  # TODO: anonymisiertes HTML von Marc prüfen
+mycampus:
+  base_url: https://mycampus.hs-coburg.de
+  auth_cookie_hosts:
+    - sso.hs-coburg.de  # Hochschul-SSO für die Wiederverwendung des eigenen Logins
+  institution_code: null  # TODO: falls benötigt, von Marc prüfen
+  selector_alias_map: null  # TODO: Alias-ID eines lokal anonymisierten Beispiels
+  selectors:
+    timetable_link: null  # TODO: anonymisierte Startseite prüfen
+    timetable: null  # TODO: anonymisiertes HTML von Marc prüfen
+    timetable_key_attr: null  # TODO: stabilen Termin-Schlüssel prüfen
+    timetable_title: null  # TODO: anonymisiertes HTML von Marc prüfen
+    timetable_start: null  # TODO: Zeitwert mit Zeitzone prüfen
+    timetable_end: null  # TODO: Zeitwert mit Zeitzone prüfen
+    events_link: null  # TODO: anonymisierte Startseite prüfen
+    events: null  # TODO: anonymisiertes HTML von Marc prüfen
+    events_key_attr: null  # TODO: stabilen Termin-Schlüssel prüfen
+    events_title: null  # TODO: anonymisiertes HTML von Marc prüfen
+    events_start: null  # TODO: Zeitwert mit Zeitzone prüfen
+    events_end: null  # TODO: Zeitwert mit Zeitzone prüfen
+    news_link: null  # TODO: anonymisierte Startseite prüfen
+    news: null  # TODO: anonymisiertes HTML von Marc prüfen
+    news_key_attr: null  # TODO: stabilen News-Schlüssel prüfen
+    news_title: null  # TODO: anonymisiertes HTML von Marc prüfen
+    news_published: null  # TODO: Zeitwert mit Zeitzone prüfen
+mail:
+  web_url: https://outlook.office.com/
+  protocol: null  # TODO: Outlook-Webzugang bestätigt; lesende API/IMAP-Freigabe prüfen
+  host: null  # TODO: keinen IMAP-Server ohne Hochschulangabe annehmen
+  port: null  # TODO: erst nach bestätigter Zugriffsmethode setzen
+  sender_rules: []  # TODO: vertrauenswürdige Absender und Domains mit Marc prüfen
+public_deadline_urls:
+  - https://www.hs-coburg.de/semesterzeiten/  # offizielle Semesterzeiten; persönliche Frist in PRIMUSS prüfen
+grading:
+  scale: null  # TODO: Prüfungsordnung prüfen
+  weighting: null  # TODO: Prüfungsordnung prüfen
+
+canteens:
+  - slug: hauptmensa-coburg
+    name: Mensa Campus Friedrich Streib
+    provider: swo
+  - slug: campus-design-coburg
+    name: Mensa Campus Design
+    provider: swo

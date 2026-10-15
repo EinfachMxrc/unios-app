@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-open-room-booking"
+description = "Enables the open_room_booking command without any pre-configured scope."
+commands.allow = ["open_room_booking"]
+
+[[permission]]
+identifier = "deny-open-room-booking"
+description = "Denies the open_room_booking command without any pre-configured scope."
+commands.deny = ["open_room_booking"]

@@ -1,0 +1,1194 @@
+{
+  "metadata": {
+    "SPDX-License-Identifier": "AGPL-3.0-or-later",
+    "date": "2026-10-07",
+    "generatedAtUtc": "2026-10-07T04:30:27.769638+00:00",
+    "syntheticFixturesOnly": true,
+    "buildIndexSha256": "5a5e62e97f5640d11d2b04e86ae91089b3f990d6a4bc717b325e3636d30505a4",
+    "goalStatus": "active",
+    "legacyReviewRecoveryCommit": "b8a118f"
+  },
+  "python": {
+    "passed": 1015,
+    "skipped": 12,
+    "failed": 0,
+    "errors": 0,
+    "durationSeconds": 1000.678,
+    "realRootTestFiles": 172,
+    "eachFileCollectedOnce": true,
+    "uniqueTestCases": 1027,
+    "noRecursiveTemporaryTestDirectories": true,
+    "basetemp": "C:/tmp/unios-focus-9464c5ed",
+    "report": "focus-python-final.xml",
+    "reportSha256": "63a25a974322f8e770c520ec8a623382eb18915479986bf90ec91ae9758deb33",
+    "testFiles": [
+      "tests/test_addons.py",
+      "tests/test_agent_corpus.py",
+      "tests/test_agent_scale.py",
+      "tests/test_ai_adapter.py",
+      "tests/test_ai_adapter_propose.py",
+      "tests/test_ai_anthropic_adapter.py",
+      "tests/test_ai_budget_reservations.py",
+      "tests/test_ai_costs.py",
+      "tests/test_ai_exercises.py",
+      "tests/test_ai_explanations.py",
+      "tests/test_ai_outbox.py",
+      "tests/test_ai_package.py",
+      "tests/test_anki_manual_agent.py",
+      "tests/test_anki_manual_cards.py",
+      "tests/test_anki_manual_cards_migration.py",
+      "tests/test_anki_manual_transfer.py",
+      "tests/test_anki_queue.py",
+      "tests/test_anki_review_bridge.py",
+      "tests/test_anki_review_bridge_migration.py",
+      "tests/test_anki_study.py",
+      "tests/test_anki_study_scope.py",
+      "tests/test_anki_study_sources.py",
+      "tests/test_assessment_engine.py",
+      "tests/test_assignment_context.py",
+      "tests/test_atomic_files.py",
+      "tests/test_background_jobs.py",
+      "tests/test_backup.py",
+      "tests/test_campus_api.py",
+      "tests/test_campus_documents.py",
+      "tests/test_campus_extract.py",
+      "tests/test_campus_import.py",
+      "tests/test_capabilities.py",
+      "tests/test_catalog_pages.py",
+      "tests/test_cli_api_client.py",
+      "tests/test_cli_commands.py",
+      "tests/test_cli_entities.py",
+      "tests/test_cli_new_commands.py",
+      "tests/test_coding_tutor.py",
+      "tests/test_collections.py",
+      "tests/test_config_storage.py",
+      "tests/test_connector_container.py",
+      "tests/test_connector_init.py",
+      "tests/test_connector_plugin_example.py",
+      "tests/test_connector_plugins.py",
+      "tests/test_corpus_cache.py",
+      "tests/test_corpus_incremental.py",
+      "tests/test_corpus_query_aliases.py",
+      "tests/test_course_workspace.py",
+      "tests/test_deadline_proposals.py",
+      "tests/test_demo.py",
+      "tests/test_desktop_package.py",
+      "tests/test_desktop_release.py",
+      "tests/test_doctor.py",
+      "tests/test_drop.py",
+      "tests/test_entity_actions.py",
+      "tests/test_entity_activity.py",
+      "tests/test_entity_schema.py",
+      "tests/test_export.py",
+      "tests/test_extraction_search_calendar.py",
+      "tests/test_feedback_diagnostics.py",
+      "tests/test_file_dedup.py",
+      "tests/test_file_sidecar_long_paths.py",
+      "tests/test_file_store_paths.py",
+      "tests/test_grades.py",
+      "tests/test_group_filter.py",
+      "tests/test_host_conflicts.py",
+      "tests/test_host_handoff.py",
+      "tests/test_host_lease.py",
+      "tests/test_host_processes.py",
+      "tests/test_host_recovery.py",
+      "tests/test_host_release.py",
+      "tests/test_host_security.py",
+      "tests/test_host_snapshots.py",
+      "tests/test_host_standby.py",
+      "tests/test_import_isolation.py",
+      "tests/test_inbox.py",
+      "tests/test_institution_profile.py",
+      "tests/test_intake.py",
+      "tests/test_jots.py",
+      "tests/test_learning_focus.py",
+      "tests/test_learning_merge.py",
+      "tests/test_learning_progress.py",
+      "tests/test_links.py",
+      "tests/test_local_undo.py",
+      "tests/test_log_redaction.py",
+      "tests/test_macos_signing.py",
+      "tests/test_macos_signing_commands.py",
+      "tests/test_mail_candidates.py",
+      "tests/test_mail_forwarding.py",
+      "tests/test_material.py",
+      "tests/test_mcp_connection.py",
+      "tests/test_mcp_local.py",
+      "tests/test_mcp_remote.py",
+      "tests/test_mensa.py",
+      "tests/test_metadata.py",
+      "tests/test_moodle_enrolment.py",
+      "tests/test_moodle_login_state.py",
+      "tests/test_moodle_sync.py",
+      "tests/test_mycampus.py",
+      "tests/test_note_blocks.py",
+      "tests/test_note_link_targets.py",
+      "tests/test_note_media.py",
+      "tests/test_note_peek.py",
+      "tests/test_note_references.py",
+      "tests/test_notes.py",
+      "tests/test_notification_center.py",
+      "tests/test_notifications.py",
+      "tests/test_ocr.py",
+      "tests/test_openapi_export_isolation.py",
+      "tests/test_parser_process_tree.py",
+      "tests/test_personal_sources.py",
+      "tests/test_portal_access.py",
+      "tests/test_portal_browser_discovery.py",
+      "tests/test_portal_discovery.py",
+      "tests/test_portal_proof.py",
+      "tests/test_portal_sample.py",
+      "tests/test_practice_scope.py",
+      "tests/test_primuss_enrollment.py",
+      "tests/test_primuss_grades.py",
+      "tests/test_primuss_import.py",
+      "tests/test_primuss_preview.py",
+      "tests/test_product_regressions.py",
+      "tests/test_product_views.py",
+      "tests/test_project_mirror.py",
+      "tests/test_projects.py",
+      "tests/test_public_periods.py",
+      "tests/test_publish_history.py",
+      "tests/test_rebuild_index.py",
+      "tests/test_recovery_drill.py",
+      "tests/test_recovery_review.py",
+      "tests/test_release_channels.py",
+      "tests/test_release_health.py",
+      "tests/test_release_lab.py",
+      "tests/test_release_quality_gate.py",
+      "tests/test_release_recovery.py",
+      "tests/test_rooms.py",
+      "tests/test_rules.py",
+      "tests/test_runtime_settings.py",
+      "tests/test_scheduler_catchup.py",
+      "tests/test_secret_store.py",
+      "tests/test_security_and_files.py",
+      "tests/test_server_client.py",
+      "tests/test_server_migration.py",
+      "tests/test_server_package.py",
+      "tests/test_service_standby_processes.py",
+      "tests/test_session_auth.py",
+      "tests/test_session_devices_api.py",
+      "tests/test_setup.py",
+      "tests/test_setup_portals.py",
+      "tests/test_smart_capture.py",
+      "tests/test_stale_sync.py",
+      "tests/test_structured_search.py",
+      "tests/test_study_analytics.py",
+      "tests/test_study_blocks.py",
+      "tests/test_study_cycles.py",
+      "tests/test_study_journal.py",
+      "tests/test_study_modules.py",
+      "tests/test_study_search_migration.py",
+      "tests/test_submission_flow.py",
+      "tests/test_submissions.py",
+      "tests/test_sync_concurrency.py",
+      "tests/test_sync_resilience.py",
+      "tests/test_sync_status.py",
+      "tests/test_syncthing.py",
+      "tests/test_task_peek.py",
+      "tests/test_test_bootstrap_isolation.py",
+      "tests/test_text_pdf.py",
+      "tests/test_timetable_selection.py",
+      "tests/test_voice.py",
+      "tests/test_wasm_addons.py",
+      "tests/test_weekly_digest.py",
+      "tests/test_write_gate.py"
+    ]
+  },
+  "checks": {
+    "ruff": {
+      "status": "passed",
+      "localLog": "focus-ruff-final.log",
+      "logSha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+      "pythonFiles": 682
+    },
+    "mypy": {
+      "status": "passed",
+      "localLog": "focus-mypy-final.log",
+      "logSha256": "bf26dba4a732b261adb97c9b822e6bb231eda7f6f667b428c93908ec3418de55",
+      "sourceFiles": 564
+    },
+    "lint": {
+      "status": "passed",
+      "localLog": "focus-lint-final.log",
+      "logSha256": "98cdc628d09a5242698fda93e945f0e0efa0645207f11c522f5bffab308bd486"
+    },
+    "build": {
+      "status": "passed",
+      "localLog": "focus-build-final.log",
+      "logSha256": "17fa86816e94be351774acfadb325ef0f6eedd2644b0d69cb24821065afe158d",
+      "includesTypeScriptCheck": true
+    },
+    "i18n": {
+      "status": "passed",
+      "localLog": "focus-i18n-final.log",
+      "logSha256": "9b87d9f0d53bd765441667fe13545120f58e8f750ec2ffa198dcf93e73e13836",
+      "namespaces": 61
+    },
+    "openapi": {
+      "status": "passed",
+      "localLog": "focus-openapi-final.log",
+      "logSha256": "b874f20c8c6dd20bb30489ac1140af71827937d7ef3adba42cf576fca593ee3b"
+    },
+    "api": {
+      "status": "passed",
+      "localLog": "focus-api-final.log",
+      "logSha256": "6c870f56a770f49ab2ee1cd9d222815933a97d73f91bc3f915985daf3d4c3938"
+    },
+    "spdx": {
+      "status": "passed",
+      "localLog": "focus-spdx-final.log",
+      "logSha256": "861585eab6c4b15411d26130fcd5d5443f96866f8ea09c91c36a17f0ebc98634",
+      "ownTextFiles": 1541
+    },
+    "bundle": {
+      "status": "passed",
+      "localLog": "focus-bundle-final.log",
+      "logSha256": "36f2fd653e7d0478fafd0cf6cd6868d841c2cf652633585b5e6f3a8eaf2e4e15",
+      "precacheUniqueFiles": 239,
+      "rawBytes": 16546709,
+      "rawBudgetBytes": 18874368,
+      "gzipBytes": 4459438,
+      "gzipBudgetBytes": 5242880
+    },
+    "vitest": {
+      "status": "passed",
+      "localLog": "focus-vitest-final.log",
+      "logSha256": "48524f45b2231d8870455b629821eb140ed919512f273f42e9ac4815fbca15cb",
+      "passed": 672,
+      "files": 75,
+      "durationSeconds": 10.68
+    }
+  },
+  "browser": {
+    "status": "passed in four sequential fresh-browser shards",
+    "sameFrozenProductBuild": true,
+    "assertionsOrTimeoutsRelaxed": false,
+    "addedRetries": 0,
+    "shards": [
+      {
+        "report": "focus-e2e-shard-1-final-report.json",
+        "reportSha256": "f9c5362899abe5da82f5ce5accf62951eb4f712b3f74f7eee4f7d65a5f16d953",
+        "stats": {
+          "startTime": "2026-10-07T04:15:19.350Z",
+          "duration": 136820.34,
+          "expected": 80,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 80,
+        "ordinal": 1
+      },
+      {
+        "report": "focus-e2e-shard-2-final-report.json",
+        "reportSha256": "8ea2c501d0b0d40340c3ab527db839e96e076efe123ed8e4e3bdbeac41eaf23a",
+        "stats": {
+          "startTime": "2026-10-07T04:17:37.298Z",
+          "duration": 167919.56699999998,
+          "expected": 82,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 82,
+        "ordinal": 2
+      },
+      {
+        "report": "focus-e2e-shard-3-final-report.json",
+        "reportSha256": "cb2426ed54e0d8284a450c23762cf617d8bcb5f47fb40782a1d803c26b105e88",
+        "stats": {
+          "startTime": "2026-10-07T04:27:00.960Z",
+          "duration": 174572.97499999998,
+          "expected": 85,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 85,
+        "ordinal": 3
+      },
+      {
+        "report": "focus-e2e-shard-4-final-report.json",
+        "reportSha256": "f4d43e9c24cd6c7236c239127d8a406490ed5c605c68a06503807b8f99d6f6fa",
+        "stats": {
+          "startTime": "2026-10-07T04:23:27.527Z",
+          "duration": 174861.90899999999,
+          "expected": 72,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 72,
+        "ordinal": 4
+      }
+    ],
+    "totals": {
+      "expected": 319,
+      "unexpected": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "durationMs": 654174.791
+    },
+    "coverage": {
+      "referenceReport": "focus-e2e-final-monolithic-diagnostic-report.json",
+      "referenceReportSha256": "36a6618ff390893967c68d74c3d0c21186a30f1e16a65cbf5f453fd72b27c200",
+      "referenceTests": 319,
+      "uniqueExecutedTests": 319,
+      "missing": [],
+      "duplicates": [],
+      "testKeys": [
+        "000e5be67f10979f25e2-6c7ad9e92d766351b0af:",
+        "000e5be67f10979f25e2-7a114b0737f1bb050af3:",
+        "000e5be67f10979f25e2-cf14a83c05cb0082b300:",
+        "0070b5be474e04470bc2-3b17320644e5bb67723d:",
+        "0070b5be474e04470bc2-6e37a97765ac535cf262:",
+        "009fab6d0a73fcbdb470-2db3f93bcddbb7dfaba8:",
+        "009fab6d0a73fcbdb470-895e7e2f90b80c6e7003:",
+        "009fab6d0a73fcbdb470-9b1bf1fa4754e585a3e4:",
+        "009fab6d0a73fcbdb470-9d461b52a8fb5b6ac750:",
+        "009fab6d0a73fcbdb470-a5b4a989a77283c967bc:",
+        "009fab6d0a73fcbdb470-cb011708b230515918ec:",
+        "009fab6d0a73fcbdb470-fe17a3610beaa68de68c:",
+        "009fab6d0a73fcbdb470-ffb778b9e50a8f447a44:",
+        "01f512424d35f19bba88-67e4da4f931903cffd08:",
+        "020452a6d365b7ed2c80-0b2f70efb8507d6fec8b:",
+        "0297911adf33c14ee78f-26e5dde2528ba6702687:",
+        "0297911adf33c14ee78f-572a9b8da317b9fcd076:",
+        "0297911adf33c14ee78f-690b63f00391ecd03ad1:",
+        "04e58cc9b66b8a8d2180-12b01ce959230eae72e0:",
+        "04e58cc9b66b8a8d2180-92f8c6be0e5767397521:",
+        "04e58cc9b66b8a8d2180-f3967e7b48d8ececaa78:",
+        "0549c65d315e06777d95-49039ca96a1309e57040:",
+        "0549c65d315e06777d95-88fe6a8552d8a7258719:",
+        "070273dca980bfb90218-1178293d6a017b3ce2a1:",
+        "0824228f2632e2785d09-6306de648ce620aa7edd:",
+        "0c65b581dc7ba3995236-4583a1aa1254e4f78daa:",
+        "0dd24f2bfb768b0b45bf-dfa51d700490dfc05cb3:",
+        "102df3e96be101966b3a-b504095e8fbd8b07043c:",
+        "110a0074e2e166d4bd53-c247dcad726c9f9540ee:",
+        "14f204daa5d20337b6b6-0fce0fac131ebb3ffa26:",
+        "14f204daa5d20337b6b6-285cbfbc6982818b6172:",
+        "14f204daa5d20337b6b6-3a827e1bf96d67e96061:",
+        "14f204daa5d20337b6b6-620ce3dda49ea34e036d:",
+        "14f204daa5d20337b6b6-6f4b51060f57314fda46:",
+        "14f204daa5d20337b6b6-76588d13ff0640281ce5:",
+        "14f204daa5d20337b6b6-7aafa8135586cde234e9:",
+        "14f204daa5d20337b6b6-a011db67fa0953ac6bbb:",
+        "14f204daa5d20337b6b6-b9847d7199cf0b1f37ff:",
+        "1d45542597cd1233e92d-df49afe18d2521baf223:",
+        "2b2103c9d398d55eecff-051f170c67b071d6e879:",
+        "2b2103c9d398d55eecff-da49bae700e9637d19d8:",
+        "30bf0965a0eb07fc9173-1b8548759892bb633be6:",
+        "30bf0965a0eb07fc9173-6398caa5b4ccc7b8b265:",
+        "30bf0965a0eb07fc9173-e332fbd22224ed43dd0c:",
+        "31cc5d9d0019f87a58b8-8fa2edf4cec61c588678:",
+        "31cc5d9d0019f87a58b8-a87f7156d55a4c028ef0:",
+        "31cc5d9d0019f87a58b8-dd1791388505b7fb3050:",
+        "32fc0124e5e76f1f81cb-cb082ebbb36cc172bc82:",
+        "32fc0124e5e76f1f81cb-f86b1b328a08f1e149f7:",
+        "33302fc55a23d8da191b-6e861b054241c80114b2:",
+        "33302fc55a23d8da191b-9b61d559fba6fa1748cd:",
+        "346979dca1b13a1a8474-701c9407a8e46c678acc:",
+        "346979dca1b13a1a8474-840689a1b014a16a1f6c:",
+        "346979dca1b13a1a8474-9815f57df54e6528222a:",
+        "346979dca1b13a1a8474-aa8c7f9ef2056bda9bfa:",
+        "36de1cbf98d9149e3d28-335078eaa352af227188:",
+        "36de1cbf98d9149e3d28-a07f8e89a09aafd6d4b6:",
+        "36de1cbf98d9149e3d28-d078fa88abd0e2b9dbdd:",
+        "3a2958b1096c5d9a8472-3ebb72901a3c25d84e74:",
+        "3a2958b1096c5d9a8472-bf3953c78d78675dba6a:",
+        "3a2958b1096c5d9a8472-e22592d5083958cc69e1:",
+        "3caf56098807a54ee733-3da4ef0b9108ebfa8181:",
+        "3caf56098807a54ee733-6236cfd831a680e6faee:",
+        "3caf56098807a54ee733-e9f470ba673d4eac44fe:",
+        "43bf4c3c442cec208f7b-2d3a910750c5b117219f:",
+        "43bf4c3c442cec208f7b-5ec1f389cf83575848fa:",
+        "43bf4c3c442cec208f7b-8a79dac544c6b199758f:",
+        "43bf4c3c442cec208f7b-a79d624a73f8feeddb43:",
+        "43bf4c3c442cec208f7b-dd91848dee8e5e95ec97:",
+        "4551c48630873bb3856a-41482e0845261b34d10c:",
+        "45628fd565d82f67197e-320ea0cc0ae89be342d8:",
+        "45628fd565d82f67197e-55729b57bbac4d7af271:",
+        "45628fd565d82f67197e-d7dc5c6bbf0a239f586d:",
+        "484e6cbb83c9c429bc58-1ab1872887fae403927f:",
+        "484e6cbb83c9c429bc58-3f8dd11789cc8f705841:",
+        "484e6cbb83c9c429bc58-85ea4504b18db3d1279b:",
+        "4af1cca458e4e1e90acf-f3f93085712ada34bb8f:",
+        "4f8e77fcf9b309101475-421f95913e02100576b3:",
+        "4f8e77fcf9b309101475-9f584c739743004ba45e:",
+        "54874f56f298ec652aea-7c6c677e749a3470ece9:",
+        "55dd31b28b3eb887cf3d-9b2859ceb14c86b24b7b:",
+        "55dd31b28b3eb887cf3d-b4fa061e5dea71f1ee6d:",
+        "5775cc3be32cd34d2ee9-c847652cc92d80721af9:",
+        "5947b461d8505a22fe31-c04b69bea9524b763c28:",
+        "5a12e5670ec36a99e53f-53918711dca88c9c7b24:",
+        "5ae978a11f74ebecc077-c198071242967ef85105:",
+        "5b28e75bccd065ab0dd6-61068a3841f31152d32f:",
+        "5b28e75bccd065ab0dd6-bed04c0e2aa3945da403:",
+        "5b28e75bccd065ab0dd6-fe32d9f2e9cdf6334bdd:",
+        "5bed70da753ca74b3c45-5542a0967a35ef97568a:",
+        "5bed70da753ca74b3c45-672454c3393b46a71974:",
+        "5bed70da753ca74b3c45-6ea7142754a8c8526dd4:",
+        "5c2700b067c58bd2c248-a1738661ef15f384ef33:",
+        "5ec10339be8effb868ac-26b831f87fbd9f714278:",
+        "61414449abbc39c77d60-04228e86beb135c02053:",
+        "634c82c6846b68aa8d60-9ad96780ed3d0604938d:",
+        "64ea9e12d2280cea1fa1-af115b1bd3857f3896b5:",
+        "68d80edc3a33c05d10f3-258fc30497cb3233db34:",
+        "68d80edc3a33c05d10f3-394014f9b5924bd022e7:",
+        "6bcb5a9b4e27408c434c-ba9aff5560529af3a237:",
+        "6db23797397410fa2eb0-35a2ef0bb12f83053ea3:",
+        "6db23797397410fa2eb0-66dd6dfcafb13a7687a5:",
+        "6db23797397410fa2eb0-e57148c3960adf8ae229:",
+        "6db30388cbf2576b43b1-45cf7ed68bb2e8f08c8a:",
+        "77f352631f55b0da1f77-01fdbb63156783ffc42c:",
+        "77f352631f55b0da1f77-5b1680cf1cfa492e92bc:",
+        "77f352631f55b0da1f77-5e8a01d50ac42ac479cb:",
+        "77f352631f55b0da1f77-be353e74147d7b5d721f:",
+        "7be0190b6c7fb572cece-0ea0acba936e397a8b2b:",
+        "7be0190b6c7fb572cece-2b817c0ddd79262cfd52:",
+        "7be0190b6c7fb572cece-627cdfa9134ffbb69796:",
+        "7be0190b6c7fb572cece-83b59215eca112fdf1f6:",
+        "7be0190b6c7fb572cece-86b26cf502d2ad963e8d:",
+        "7be0190b6c7fb572cece-8c20bf44de3e28b84f00:",
+        "7be0190b6c7fb572cece-9390741926512548cee8:",
+        "7be0190b6c7fb572cece-f0fa19894a307b144d1b:",
+        "7c4607d55cc3bd30cfb0-06d855af078fd74939aa:",
+        "7c4607d55cc3bd30cfb0-1bf25bcd6359cbafa2f8:",
+        "7c4607d55cc3bd30cfb0-22f4f13fbfb6056a4963:",
+        "7c4607d55cc3bd30cfb0-cb8d67b5475c12bdfff2:",
+        "7c4607d55cc3bd30cfb0-ce9db59e44878cbc32f5:",
+        "7c4607d55cc3bd30cfb0-deafed56401aa58da6cb:",
+        "7c4607d55cc3bd30cfb0-fc9953bc16f7a5b9ec4e:",
+        "824e8387918e7d0d2860-5f99ea91eb7fea211ffd:",
+        "824e8387918e7d0d2860-89f97b4bd18e5d0df69f:",
+        "824e8387918e7d0d2860-f76b7d46b8308273b3b8:",
+        "824e8387918e7d0d2860-ffd20f887fbc3d8a16a7:",
+        "82b52f1f8377aa1b2a5d-f70e8d58a12c2dde9680:",
+        "843dbd5c749186b380e0-ec5c3acb5ac7ff160a2e:",
+        "92f0f857cdd5618dd5d5-550d040e6c65382da87f:",
+        "94cbdbf10225758c05a6-7cddbb9be089aefde0d7:",
+        "94cbdbf10225758c05a6-bbca2efd04a014f90b53:",
+        "9876e394d259de1d2ba5-0f1c9c288a6ff41f79a9:",
+        "9876e394d259de1d2ba5-1d9b4581879ff56f52f2:",
+        "9876e394d259de1d2ba5-420ebd0475e709d5e8a0:",
+        "9876e394d259de1d2ba5-76a52008bf906ba400b5:",
+        "9876e394d259de1d2ba5-dd9c906d2496a36f88a2:",
+        "9ac91c6ddef81ae1436f-05af9eaac0f30470aede:",
+        "9ac91c6ddef81ae1436f-53009ac7271712ddb527:",
+        "9ac91c6ddef81ae1436f-8955f4d83706c306cb3d:",
+        "9ac91c6ddef81ae1436f-a64de542566b7c2b9ac1:",
+        "9ac91c6ddef81ae1436f-cdc500a5d58ddf8482e8:",
+        "9b740e4a81119f504361-bd3f168a7209df8e173a:",
+        "9ce38d991cc10981a7b6-5ed27e1de6f61a460134:",
+        "9ce38d991cc10981a7b6-7f70d4c63f95f2e34606:",
+        "9ce38d991cc10981a7b6-96b446c62d6cb02988fd:",
+        "a088064de9fe351eef5f-46efbe3afa5e806a4eb9:",
+        "a088064de9fe351eef5f-4d43417befc4487e0f73:",
+        "a506e264ee2acbdd6d87-0ab161666a8dd40558f8:",
+        "a765af7502480a02a291-6b903fefcbf422342666:",
+        "ae8d14a669c58c51f0f8-2cb2c33e19e60b3639f4:",
+        "ae8d14a669c58c51f0f8-313e60625077f72cd90f:",
+        "ae8d14a669c58c51f0f8-56743fa96e23e7548d3f:",
+        "ae8d14a669c58c51f0f8-7c6b18d322d04da6b1cf:",
+        "ae8d14a669c58c51f0f8-8bccdb2f9abd4aa6abde:",
+        "ae8d14a669c58c51f0f8-8d0a58af03bf07be6827:",
+        "ae8d14a669c58c51f0f8-a9a486ee393f4bda8131:",
+        "ae8d14a669c58c51f0f8-cdd1ed48bc4685383e64:",
+        "ae8d14a669c58c51f0f8-e836d81831e70a748e45:",
+        "ae8d14a669c58c51f0f8-f4e82077201e6ce73234:",
+        "af8e6671bf8726c1ca84-cd8a1d952afc03606dcb:",
+        "b020c8a9d6217bdd3146-eae3142184ee67c46963:",
+        "b15d6361b2fc38288977-14bc7c65679303ff5dc2:",
+        "b30bd866defb4d47d7e8-3854c76333002ffec83e:",
+        "b79295ee8c6c8702a61b-172dfe4d7f66ad880cdb:",
+        "b79295ee8c6c8702a61b-49f55cea1ce43c5d060d:",
+        "b79295ee8c6c8702a61b-4d343bd617621cacc218:",
+        "b79295ee8c6c8702a61b-d5ccdcdf340720802642:",
+        "b79295ee8c6c8702a61b-dbfeb4a16120b35bff5b:",
+        "b9aaf1c82218f1aa861e-1785e86994eae503769a:",
+        "bbf9cb664a60b726d5c1-c3af42a3fe00516141ad:",
+        "c0011e267bb7a139fed4-e8656c5b4c57ee8b1adb:",
+        "c00e51afc00195d2f148-b65b9a116df00c73cb96:",
+        "c123b8156c6e9b71f05d-1c75191160b056f43fd6:",
+        "c123b8156c6e9b71f05d-2fc4f7d9fedfdf8ff868:",
+        "c123b8156c6e9b71f05d-62e92d3ac1a8b46c51ed:",
+        "c123b8156c6e9b71f05d-90239a1bdbccc72bf250:",
+        "c123b8156c6e9b71f05d-b35bddb922a22eb1fad8:",
+        "c123b8156c6e9b71f05d-c33bf4050693e22722f6:",
+        "c123b8156c6e9b71f05d-d29a42389ba74bfbe907:",
+        "c20227a4ef112d4ed94f-acdd764b20af74c3a8b1:",
+        "c331d53f43701d168858-02af919a6b2fb5b9e24e:",
+        "c331d53f43701d168858-0b1d17f698ab4c39f451:",
+        "c331d53f43701d168858-15a267c99ee54c1b1bcc:",
+        "c331d53f43701d168858-1cfecc408a2f7c0da320:",
+        "c331d53f43701d168858-3dd4fb4105f4ec6a218f:",
+        "c331d53f43701d168858-4134e1e22d221416f330:",
+        "c331d53f43701d168858-6457698c748f489dbeeb:",
+        "c331d53f43701d168858-6585f146d351b507ebea:",
+        "c331d53f43701d168858-703ffa5572b24f37cbf3:",
+        "c331d53f43701d168858-77c8c3edadcd5d7098b6:",
+        "c331d53f43701d168858-98f17d380dd2e584a951:",
+        "c331d53f43701d168858-9b7c729c956a10fb7e52:",
+        "c331d53f43701d168858-a4dc6ef674759828cc94:",
+        "c331d53f43701d168858-afce96cf21bc5160072b:",
+        "c331d53f43701d168858-b0b0110038477f1446bf:",
+        "c331d53f43701d168858-ba05c0a323e8d46209ed:",
+        "c331d53f43701d168858-e2dadf7bf1a132b32768:",
+        "c331d53f43701d168858-e4c2ac4c47b7a5088d3a:",
+        "c331d53f43701d168858-e95970bdd2a9b387fa05:",
+        "c331d53f43701d168858-eae9a9512ffed59f80af:",
+        "c331d53f43701d168858-ebdf3e2f67a4238b9a27:",
+        "c331d53f43701d168858-ec018a9ad538779ae33e:",
+        "c331d53f43701d168858-ed8095e3feb109b0ea6a:",
+        "c331d53f43701d168858-f30ccf7c1dde23e6f1c7:",
+        "c331d53f43701d168858-f91a49b0ebcaa60c0dbb:",
+        "c331d53f43701d168858-f94f2785f2aee1038747:",
+        "c331d53f43701d168858-fd6ee1003d9f9c49a753:",
+        "c60be36dadaf24e75fb7-0d1df7ceae0b6c42a33b:",
+        "c60be36dadaf24e75fb7-276812b8cfe0850a0894:",
+        "c60be36dadaf24e75fb7-61499b57846b66d1a33d:",
+        "c60be36dadaf24e75fb7-a92916ee8e4e3bc8183d:",
+        "c60be36dadaf24e75fb7-cc07699c461dbce5c391:",
+        "c60be36dadaf24e75fb7-dc22d064608139ed742a:",
+        "c60be36dadaf24e75fb7-e589b4a538d3679c82ba:",
+        "c72442b0faa532e13366-041e6d8da35086102f4e:",
+        "c72442b0faa532e13366-2077d8949aac3c6ae8a8:",
+        "c72442b0faa532e13366-3bd827576c5654a7b2fc:",
+        "c72442b0faa532e13366-3f3b4c6bee6d4d8765e0:",
+        "c72442b0faa532e13366-4a3f896e63a2f82a1241:",
+        "c72442b0faa532e13366-5d87c31118aabc09582a:",
+        "c72442b0faa532e13366-6926c63fb9bda56fb3c8:",
+        "c72442b0faa532e13366-a7327a6d328027215458:",
+        "c72442b0faa532e13366-ae12fb7973a36cd8a19c:",
+        "c72442b0faa532e13366-d5aa967a781149eb7973:",
+        "c72442b0faa532e13366-dceb23f9a68bc3fc24c2:",
+        "c8c134ea3c25b90e6a31-0d5d18ea5a7179bc9b98:",
+        "c8c134ea3c25b90e6a31-1639d371c283e08afc9b:",
+        "c8c134ea3c25b90e6a31-1b8da88f16b54c5521db:",
+        "c8c134ea3c25b90e6a31-2bdd6e98386c2965692e:",
+        "c8c134ea3c25b90e6a31-2f0bd4a23cf656a97312:",
+        "c8c134ea3c25b90e6a31-412d0754356b15dd7dc3:",
+        "c8c134ea3c25b90e6a31-613a540186821720eee6:",
+        "c8c134ea3c25b90e6a31-678ca02b565f536940bf:",
+        "c8c134ea3c25b90e6a31-6a78bbbadbbdc89013e6:",
+        "c8c134ea3c25b90e6a31-743873a19d8be5dc8880:",
+        "c8c134ea3c25b90e6a31-7b6f652561bebd2f1d31:",
+        "c8c134ea3c25b90e6a31-8044a2f40995531e3f7f:",
+        "c8c134ea3c25b90e6a31-880c0af646d54b60e572:",
+        "c8c134ea3c25b90e6a31-c1038b02656dc62a40a0:",
+        "c8c134ea3c25b90e6a31-c2ae3bc67cbbc4a7612a:",
+        "c8c134ea3c25b90e6a31-c32c1c801737011a340a:",
+        "c8c134ea3c25b90e6a31-c9efb52c73fab1beb201:",
+        "c8c134ea3c25b90e6a31-cf6d2f8257bae121086d:",
+        "c8c134ea3c25b90e6a31-da4454bf2ed520f154ac:",
+        "c8c134ea3c25b90e6a31-ebd3057d3240b5df03d9:",
+        "c9086cbe786fc8171a5a-5df9ba492bd8522b48b1:",
+        "c9086cbe786fc8171a5a-b7ac20b2645eb652c258:",
+        "c9086cbe786fc8171a5a-d85e1658898bf294b4fb:",
+        "cca0b3e1305f7160eea0-10ffa4053c5391f17c43:",
+        "cca0b3e1305f7160eea0-266d1afc2034535dbd0a:",
+        "cca0b3e1305f7160eea0-4ff70d935379d54d2ca1:",
+        "cca0b3e1305f7160eea0-5ebe544b66116e575d2f:",
+        "cca0b3e1305f7160eea0-8f8834b3d1995753ddf2:",
+        "cca0b3e1305f7160eea0-9b6c25cb22f61ad0b43c:",
+        "cca0b3e1305f7160eea0-a4390f96cfcd21821866:",
+        "cca0b3e1305f7160eea0-e30dc63d26ea2936b9c3:",
+        "cca0b3e1305f7160eea0-f4615c3ee0eaef6291aa:",
+        "d0211ee6f8b93cb5cb5e-0b6d3550617070aa00c5:",
+        "d2a24f3341738d6e64f5-e62c1737be0cbba05fff:",
+        "d2ccd86514e24f617e5d-0094f7a3e2fd4f2e799a:",
+        "d2ccd86514e24f617e5d-1a61fe60e74ccc745eaf:",
+        "d2ccd86514e24f617e5d-2caf51314fca3e23cb2e:",
+        "d2ccd86514e24f617e5d-2d52dde30a8b41bc7ca8:",
+        "d2ccd86514e24f617e5d-2feb5efb71999d2cad85:",
+        "d2ccd86514e24f617e5d-319dedb10d0606dbc566:",
+        "d2ccd86514e24f617e5d-4d5c20575f9f687d0003:",
+        "d2ccd86514e24f617e5d-6a00e6bc81d0e76e1a25:",
+        "d2ccd86514e24f617e5d-7c9e913600b07c45627d:",
+        "d2ccd86514e24f617e5d-8ddac3738382ca25786a:",
+        "d2ccd86514e24f617e5d-aac45155d1a0b6f7b8e2:",
+        "d2ccd86514e24f617e5d-aefa729891c627615df4:",
+        "d2ccd86514e24f617e5d-b1edb7917a2714857ac4:",
+        "d2ccd86514e24f617e5d-bc8753f5b3b18cbb7daf:",
+        "d2ccd86514e24f617e5d-ce6678a146749645d158:",
+        "d2ccd86514e24f617e5d-e8cc0e7d90123d2ec53a:",
+        "d2ccd86514e24f617e5d-eda1ee83098649370c75:",
+        "d2ccd86514e24f617e5d-ff5cb4b04e5691c0fa8d:",
+        "d71a275cac9b0d048b05-66d8eadd18dd43e1e55f:",
+        "d777fe3f86808c655290-0c08474a553a03cfbf36:",
+        "d777fe3f86808c655290-0e5f39f8b2798e95d01f:",
+        "d777fe3f86808c655290-3e66e3e1137aad948528:",
+        "d777fe3f86808c655290-7fa081f9c4d5f85034e1:",
+        "d777fe3f86808c655290-9904b9c969757f1b6f6a:",
+        "d877ffdf71ec720167ae-f21700c8defc23a1eb27:",
+        "d9d85f1d19af2218e6c3-28298dc5d8571c25dba5:",
+        "dc7db17c4de492138789-828892ff826dd8cf3e8e:",
+        "dcf8e77c1f1fa101240d-7ab437f680c341b8e309:",
+        "dd72ac353defe749a41b-129eeb3027ab865e9fce:",
+        "dd72ac353defe749a41b-51236b64880db3f4536c:",
+        "df91ee86e1ff622b97f6-2fff00232e45a7f000c0:",
+        "df91ee86e1ff622b97f6-95df3fc2c1c27d0ede8b:",
+        "e04175962f03bc96bd02-0ea1497725bab87d0fc3:",
+        "e04175962f03bc96bd02-81d7fba04de04dba637c:",
+        "e04175962f03bc96bd02-ece7dbc9a34cd69185b8:",
+        "e04175962f03bc96bd02-f6050d2c4dfa04876f98:",
+        "e3eadcf534b44fb21003-2443854c7283fb15ecc8:",
+        "e7acdedec9c4a90a8554-33e36be34711a865e76c:",
+        "e7acdedec9c4a90a8554-45d11ccaf98045e312f7:",
+        "e7acdedec9c4a90a8554-cc0c88566569d5ce82b5:",
+        "e7acdedec9c4a90a8554-dcdc23ceda0cc5da3f0e:",
+        "e7acdedec9c4a90a8554-ed0d4b0b21b43ace918a:",
+        "eccc8495635fa8823817-fcc163ec1382a8041772:",
+        "ed69554c53210704c98c-09a30b95cee77c424582:",
+        "ee2b1c3bcc28b4a8fb52-41ca0128633c1bd91b4d:",
+        "ee2b1c3bcc28b4a8fb52-a145539f4e090c36c95c:",
+        "ee2b1c3bcc28b4a8fb52-ba1180642404c78abf85:",
+        "ee2b1c3bcc28b4a8fb52-c322b4893b75707a5ff4:",
+        "f3915877ea59572347a0-ebeeeaf3cf9018c7aeb4:",
+        "f3986e67d50a5ed8c69e-566a46bef00c580ac675:",
+        "f4c16ad2df3b1859900b-9cc4dde6e92b3ad8ddf1:",
+        "f74a21c23a24b631bec8-9f28eb6189070632d9dd:",
+        "f74a21c23a24b631bec8-f2cafe309b77c0441291:",
+        "fe6a188396d4676eb86f-d81104ab2271eb039424:",
+        "fede5766f5093e60967e-44b82305348b557085aa:",
+        "fede5766f5093e60967e-8fa76170b313db9dbce9:",
+        "fede5766f5093e60967e-cc9bcc8c970ec45402cf:",
+        "fede5766f5093e60967e-f65d61ad5d4faa8b29d1:",
+        "feea900073953e2642ee-8ccb8dd53b61e3d4cd94:"
+      ]
+    },
+    "focused": {
+      "report": "focus-e2e-focused-final-report.json",
+      "reportSha256": "8d5aa9ad8b587f0dd9e54a9addad561f074e22dc65936131f67c00b3a860a389",
+      "stats": {
+        "startTime": "2026-10-07T03:50:20.028Z",
+        "duration": 28516.938,
+        "expected": 15,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "globalErrors": [],
+      "retries": [
+        0
+      ],
+      "collectedTests": 15
+    },
+    "monolithicDiagnostics": [
+      {
+        "report": "focus-e2e-pre-layout-diagnostic-report.json",
+        "reportSha256": "9af02550e53c4b615cf0cae052a52748e037e2cd189ca3c40b1a37c35d2075fb",
+        "stats": {
+          "startTime": "2026-10-07T03:39:58.802Z",
+          "duration": 548133.863,
+          "expected": 317,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 318,
+        "failures": [
+          {
+            "testKey": "c60be36dadaf24e75fb7-a92916ee8e4e3bc8183d:",
+            "file": "rooms.spec.ts",
+            "title": "checks rooms automatically for an exact slot and distinguishes unknown replies and booking restrictions",
+            "messages": [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Verfügbarkeit prüfen', exact: true })\nExpected: disabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Verfügbarkeit prüfen', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Verfügbarkeit prüfen', exact: true })\u001b[22m\n\n\n  144 |   })\n  145 |   await page.goto('/rooms')\n> 146 |   await expect(page.getByRole('button', { name: 'Verfügbarkeit prüfen', exact: true })).toBeDisabled()\n      |                                                                                         ^\n  147 |   await page.getByRole('button', { name: 'Hochschulfenster öffnen' }).click()\n  148 |   await page.getByRole('button', { name: 'Alle Räume prüfen', exact: true }).click()\n  149 |   await expect(page.getByRole('status').filter({ hasText: '2 von 2 Räumen geprüft' })).toBeVisible()\n    at C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\frontend\\e2e\\rooms.spec.ts:146:89"
+            ],
+            "browserErrors": [
+              {
+                "url": "http://127.0.0.1:4173/rooms",
+                "browserErrors": [
+                  "GET http://127.0.0.1:4173/assets/releaseOnboarding-BQKEOe3C.js net::ERR_NO_BUFFER_SPACE",
+                  "Console: Failed to load resource: net::ERR_NO_BUFFER_SPACE"
+                ]
+              }
+            ]
+          }
+        ],
+        "build": "earlier pre-layout diagnostic build"
+      },
+      {
+        "report": "focus-e2e-final-monolithic-diagnostic-report.json",
+        "reportSha256": "36a6618ff390893967c68d74c3d0c21186a30f1e16a65cbf5f453fd72b27c200",
+        "stats": {
+          "startTime": "2026-10-07T04:00:59.163Z",
+          "duration": 562584.806,
+          "expected": 318,
+          "skipped": 0,
+          "unexpected": 1,
+          "flaky": 0
+        },
+        "globalErrors": [],
+        "retries": [
+          0
+        ],
+        "collectedTests": 319,
+        "failures": [
+          {
+            "testKey": "b79295ee8c6c8702a61b-172dfe4d7f66ad880cdb:",
+            "file": "connection-refresh.spec.ts",
+            "title": "Today refreshes Moodle without leaving and offers sign-in on failure",
+            "messages": [
+              "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+              "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Moodle aktualisieren', exact: true })\u001b[22m\n\n\n  111 |   })\n  112 |   await page.goto('/')\n> 113 |   await page.getByRole('button', { name: 'Moodle aktualisieren', exact: true }).click()\n      |                                                                                 ^\n  114 |   await expect(page.getByText('Deine Daten sind wieder aktuell.')).toBeVisible()\n  115 |   await expect(page).toHaveURL(/\\/$/)\n  116 |   await page.getByRole('button', { name: 'Moodle aktualisieren', exact: true }).click()\n    at C:\\Users\\einfa\\OneDrive\\Dokumente\\ChatGPT\\marc os\\marc-uni-os-main\\frontend\\e2e\\connection-refresh.spec.ts:113:81"
+            ],
+            "browserErrors": [
+              {
+                "url": "http://127.0.0.1:4173/",
+                "browserErrors": [
+                  "GET http://127.0.0.1:4173/assets/common-CIMG-SPH.js net::ERR_NO_BUFFER_SPACE",
+                  "Console: Failed to load resource: net::ERR_NO_BUFFER_SPACE"
+                ]
+              }
+            ]
+          }
+        ],
+        "build": "5a5e62e97f5640d11d2b04e86ae91089b3f990d6a4bc717b325e3636d30505a4"
+      }
+    ],
+    "testSelectorDiagnostic": {
+      "report": "focus-e2e-shard-3-selector-diagnostic-report.json",
+      "reportSha256": "fc958f765af59323accf5c46c880c32f42ca81008a9bc7906237f32ab3f11af9",
+      "stats": {
+        "startTime": "2026-10-07T04:20:26.331Z",
+        "duration": 180098.211,
+        "expected": 84,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "globalErrors": [],
+      "retries": [
+        0
+      ],
+      "collectedTests": 85,
+      "cause": "The unscoped .content h1 locator matched both the Shell page title and the intentional Markdown document H1.",
+      "correction": "Scope the unchanged visible-heading assertion to .content > .page-heading > h1; no first(), extra retry or timeout increase.",
+      "finalAcceptance": "Shard 3 was rerun in full with the same product build."
+    },
+    "diagnosticInterpretation": "Initial JavaScript asset requests failed with ERR_NO_BUFFER_SPACE; the exact OS/network cause is unproven. Fresh sequential browser processes passed all collected test identities; no claim of a green monolithic run.",
+    "observedStartup": {
+      "modulePreloadLinks": 66,
+      "eagerGermanNamespaces": 61,
+      "peakPendingPageRequestsAcrossVisualStates": 70,
+      "doesNotProveSocketCount": true,
+      "workboxPrecacheInstallIsSequential": true
+    },
+    "systemNetworkSettingsChanged": false
+  },
+  "visual": {
+    "report": "docs/qa/focus-workspace-20261007/lighthouse-accessibility-summary.json",
+    "reportSha256": "216a3f53735a27560ebd094178f4c168d6d87ce9fd005d1c6c62bbcfa55f6cdd",
+    "states": 16,
+    "minimumAccessibility": 100,
+    "numericAuditsChecked": 354,
+    "failedAuditsIncludingUnweighted": 0,
+    "unexplainedRequestFailures": 0,
+    "rawExpectedCancellationsRetained": 13,
+    "proofRules": {
+      "exact shell read was explicitly signal-aborted; newer same-URL GET completed": 1,
+      "decoded 120-page PDF at requested page; native fetch stream completed or explicitly cancelled": 4,
+      "first-open mutation actually acknowledged by native app fetch with HTTP 204": 4,
+      "exact scoped predecessor cancelled by fetchFreshStudyDue; newer GET completed before capture": 4
+    },
+    "warnings": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "httpErrors": 0,
+    "teardownRequestFailures": 0,
+    "screenshots": [
+      {
+        "path": "docs/qa/focus-workspace-20261007/source-light-1440.png",
+        "sha256": "2a76f0c97dbdfcde4acce6f5663fa00b3adbaca2b491886d427d447dba0b9b59",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/source-light-390.png",
+        "sha256": "08eeadb22f61428305fdc8b0967c131329b0224be1f11443c3291bf3d80a2137",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/source-dark-1440.png",
+        "sha256": "0cc88f7a9124ad8db5dc6557f12034e6fcfe3b2f445c9ac592df5fad4a2118e0",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/source-dark-390.png",
+        "sha256": "2072f653e98e9a4957668a02577abc2598dfa0bb6e3ee7a57a043cb5f6858c2d",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/practice-light-1440.png",
+        "sha256": "a20840cc811c19e86dfbe2dbd496fed4cdf1483efb098f3153376cec88031068",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/practice-light-390.png",
+        "sha256": "fba79963fed8b8c458615cb6763bb86c9496a4227de8b59066b71336601bff3f",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/practice-dark-1440.png",
+        "sha256": "462b71eca79ceb4d2bc2ea8fd5b0d0a62f35372fc71be14e3a1e5f57fe9ae409",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/practice-dark-390.png",
+        "sha256": "e8c1e1cfd4d5a5511379128d1744bea892dbb1b3dba8a938ce222de229c5faa7",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/cards-light-1440.png",
+        "sha256": "d4168c7ee1db719f3f5b9cfc6984ecd7bd60c558158bb8963c0b240b9a93341d",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/cards-light-390.png",
+        "sha256": "bfe9e63008adadccd80c1edd56f625fbd5f46150a61bca87ef0cb8d7663a7fbf",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/cards-dark-1440.png",
+        "sha256": "deb57b5b361ad46276e3e20a11885d3ec5a72f4a9d71d82e54cb456de46a18fb",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/cards-dark-390.png",
+        "sha256": "04a7206c9f9b776d6edbf951f6c7e3e212904034674a49d42dd20b01e283fc0b",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/session-light-1440.png",
+        "sha256": "ec8c920fe75a8769bff820070df6b6f9fbc07c8f7f62f077b05edb6653989cfc",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/session-light-390.png",
+        "sha256": "56de93a5b5512f546baac336a42c6f09f9f99a0c550873bab9aa1c6a9ae5ebd3",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/session-dark-1440.png",
+        "sha256": "de05aa380b38fa729edc4f80cb6db8d7242402beab67646fdb5d809af4050057",
+        "width": 1440,
+        "height": 900,
+        "originalPersonallyInspected": true
+      },
+      {
+        "path": "docs/qa/focus-workspace-20261007/session-dark-390.png",
+        "sha256": "92ababc0a2d9b7f741c6a41de6225ff252dc791044310a9d6fc32990aebf75e0",
+        "width": 390,
+        "height": 844,
+        "originalPersonallyInspected": true
+      }
+    ]
+  },
+  "historicalQa": {
+    "baselineImages": 204,
+    "restoredAfterBrowserRuns": 19,
+    "allOriginalHashesPreserved": true
+  },
+  "frozenChangedProductFiles": [
+    {
+      "path": "app/anki/collection.py",
+      "sha256": "69ee62f0cbbd519bf00b487854970599fbab69894f86c6b0c38be6f26d21b0cd"
+    },
+    {
+      "path": "app/cycles/service.py",
+      "sha256": "d0b26f3534fb63e5e56e53e1c6b07c16b10665afaf7eacc9bd0dc54412d45a0f"
+    },
+    {
+      "path": "app/learning/api.py",
+      "sha256": "74efd27586f6c0fc21276d220b3b9b1f71ee0d562f3baf41553727e0dada78a9"
+    },
+    {
+      "path": "app/learning/focus_api.py",
+      "sha256": "e541c156fe89ac6d40a3e4453e3743905ab08825b916ef75225161de8dce6947"
+    },
+    {
+      "path": "app/learning/focus_repository.py",
+      "sha256": "dd30cc5e27a57b8b1a675287c1500251abe5022f6fa28b837f4890049a384e73"
+    },
+    {
+      "path": "app/learning/focus_schema.py",
+      "sha256": "2202507ac422c8040d2ebbd1f2c37ad16a18d2134332ec1505c30ea72bf92034"
+    },
+    {
+      "path": "app/learning/focus_service.py",
+      "sha256": "ce9b94dc7e970640d7b3d24f73709df1271e802247257c578f334515dafe8d0b"
+    },
+    {
+      "path": "app/learning/practice.py",
+      "sha256": "675192a659b54a380abb4fbb751fd00cfd1b04b7c179c8f5e9631636b547fd74"
+    },
+    {
+      "path": "app/learning/practice_repository.py",
+      "sha256": "04f9c833a75c57ba343beb1e62cc4d3640e6304e4c635a259b153aebf04e800e"
+    },
+    {
+      "path": "app/learning/practice_schema.py",
+      "sha256": "f98186c168af91cbcbc3b92f92cf86e79389132ac7a46cad7e2cab84b19cbcda"
+    },
+    {
+      "path": "app/learning/practice_service.py",
+      "sha256": "486505bfe8ee76d2d0aeadfaa75afdc9b2b7a456f7b340c327fa941ed173ec9b"
+    },
+    {
+      "path": "app/main.py",
+      "sha256": "cd46ec0d70173929069825a3056f29662ed8ed54e73c4489e752b354b500fdd7"
+    },
+    {
+      "path": "frontend/e2e/focus-workspace.spec.ts",
+      "sha256": "9773854e82554c9d20624737743fd5219487b5502c6461ad2be5ee357db631ab"
+    },
+    {
+      "path": "frontend/e2e/quality-gallery.spec.ts",
+      "sha256": "ada69ac7faab475c99afe794c20935754254aeeb7f9f5518625f8dfd085082ac"
+    },
+    {
+      "path": "frontend/e2e/server-client.spec.ts",
+      "sha256": "c8833b1b8434602e4c646db9dbf5d562df03e63aba5b95005c4bfdee30425038"
+    },
+    {
+      "path": "frontend/openapi.json",
+      "sha256": "eef159376793730cc6f82d0013a9377b3399fc8069e5a9295ffe65d67ffcf2f7"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "a440f83c02ca4358ba2ec372a56dca3a526dec332bd48338d442d6718e744947"
+    },
+    {
+      "path": "frontend/src/components/FocusTimerPanel.test.tsx",
+      "sha256": "056300b70228d9a3b9616cbde0ae64a57362e71343830c82d5689edacae645e9"
+    },
+    {
+      "path": "frontend/src/components/FocusTimerPanel.tsx",
+      "sha256": "a9f0c5b683a1f08d811de35ec60e790a328f02fd2c4092f9a63d5eb4cc03619d"
+    },
+    {
+      "path": "frontend/src/components/LearningFocusBar.css",
+      "sha256": "d117f8e663dde026764ff68329c007f8e03dbc6587273562e9cc652abd57fa09"
+    },
+    {
+      "path": "frontend/src/components/LearningFocusBar.tsx",
+      "sha256": "bbb1c0bb7a161f97ab0b6257ef56922ec05a2e8b8b30d25d1728ec05e492d8b3"
+    },
+    {
+      "path": "frontend/src/components/PracticePanel.css",
+      "sha256": "ce26028a6545865898ac3c0fd44ee6a7357b086968efaeaed8b5b563e5d57f6b"
+    },
+    {
+      "path": "frontend/src/components/PracticePanel.test.tsx",
+      "sha256": "cf9e8a1b0ca9acdd658858678781a6378a01dacc2bcd38daa9151c3f19576ac2"
+    },
+    {
+      "path": "frontend/src/components/PracticePanel.tsx",
+      "sha256": "d0cedd9caba73cd007c7c0cba9cb4d4273c354f76898fe91da53fdc41d06a2ef"
+    },
+    {
+      "path": "frontend/src/components/RecoveryModeGate.tsx",
+      "sha256": "9bfeb6d698417725c64a0b62532a87a62153f02eaa71f95931d5b448ce2461a2"
+    },
+    {
+      "path": "frontend/src/components/ServerConnection.mode.test.tsx",
+      "sha256": "31ff9022e6705807f497ad7dd31a6d106d61ed5223a312d9214cf24b4c7fcabf"
+    },
+    {
+      "path": "frontend/src/components/ServerConnection.tsx",
+      "sha256": "fafd4c8186a5227d7d3a9240eb88a0a796c7712ac46d62ff5646c1ed5ac8d687"
+    },
+    {
+      "path": "frontend/src/components/Shell.tsx",
+      "sha256": "733c487776f01f472763ebd5f46a17473341f0ba17928c3f57dfeba8620b4ced"
+    },
+    {
+      "path": "frontend/src/components/StudyBlocksPanel.tsx",
+      "sha256": "0feab0e31f4fab1875fbbf1c58ec059bdd3947b3140cc529e84c72074701fb19"
+    },
+    {
+      "path": "frontend/src/components/StudyCyclesPanel.tsx",
+      "sha256": "0a87c6e67284b6ccc2973cfd23f0eac9946b653cb482685f21e185a67b5e2c7e"
+    },
+    {
+      "path": "frontend/src/components/StudyPlanningFocus.test.tsx",
+      "sha256": "3e0f2d186e38bfd162caa715d08517c4986ae22176f4eb1afb0eba4773196194"
+    },
+    {
+      "path": "frontend/src/components/WorkspaceNavigation.test.tsx",
+      "sha256": "f7e86e0d59d9f096250726e6c469e4791a274e2b81246d11d5dffebf5fea3669"
+    },
+    {
+      "path": "frontend/src/components/WorkspaceNavigation.tsx",
+      "sha256": "e85cdfd4763673b14e54a161c4595acd5ed2b3ac4825e1bd6bbb26c27fb8babe"
+    },
+    {
+      "path": "frontend/src/components/sidebarCatalog.ts",
+      "sha256": "60be36fd55b41600076898b95ce293bed73d98de18bf45e7d18838a95a6cfa67"
+    },
+    {
+      "path": "frontend/src/generated/api.d.ts",
+      "sha256": "1152a34212025788794f48ee45355eb30205f534cca900925ea9ff7676ca596a"
+    },
+    {
+      "path": "frontend/src/i18n/locales/de/learning.ts",
+      "sha256": "34fe472e413793bb987c600dec788decdb224d528d872659f4c0268a3d08718f"
+    },
+    {
+      "path": "frontend/src/i18n/locales/en/learning.ts",
+      "sha256": "4d83cebaa1359a44a67482c45f4bdaec00316185c646939f5bd2446eecdb7243"
+    },
+    {
+      "path": "frontend/src/lib/focusTimerState.ts",
+      "sha256": "fafa44f57535440f0a164b35e8628ca3d8fcc4655c914f7c17b0331706977c23"
+    },
+    {
+      "path": "frontend/src/lib/learningFocus.test.ts",
+      "sha256": "449560a96a33dbd7f77c428d75abeb157447b825e0e667150b504953cf7eab98"
+    },
+    {
+      "path": "frontend/src/lib/learningFocus.ts",
+      "sha256": "3365ed77e557637806ef4a58faff62bc5e2b441cb79130f9ed3065e53ac4aec6"
+    },
+    {
+      "path": "frontend/src/lib/runtimeAccess.ts",
+      "sha256": "7683bd555bbe1ffc189027f5ecdcd7d9f21dba931350c344985b18865f441b2c"
+    },
+    {
+      "path": "frontend/src/offlineCache.test.ts",
+      "sha256": "0d7b95a6898bdaf8ffb2accb5c3562e2d973aab06c8d7223d6d91188327c9eea"
+    },
+    {
+      "path": "frontend/src/offlineCache.ts",
+      "sha256": "83fc191a60ac1648806d268bc8816d8b76aa44a52af3979da2dfaf0b83a9317e"
+    },
+    {
+      "path": "frontend/src/pages/FocusWorkspacePage.css",
+      "sha256": "11749c0ecb58cfae5f22fe1ca66f3cf3810ce92de08aabb9e99ec2ce99fa4ef4"
+    },
+    {
+      "path": "frontend/src/pages/FocusWorkspacePage.test.tsx",
+      "sha256": "1ddb631c36d513e7e78b29b930b05ea16b2d7fbd791a885bd8fe8a3bd8ffab27"
+    },
+    {
+      "path": "frontend/src/pages/FocusWorkspacePage.tsx",
+      "sha256": "7401bc9f5f2cd6bf2ed33d38bad0c8d685f2f6adb8657a15d47a8efa38194445"
+    },
+    {
+      "path": "frontend/src/pages/LearningPage.tsx",
+      "sha256": "95a9b0c10050cc204170b773b612312203833d7b0c016a53c79b846304f6088b"
+    },
+    {
+      "path": "frontend/src/pages/MaterialPage.modal.test.tsx",
+      "sha256": "374272aa3999649cd02107431dbb7913975adbf4d615f80177b2b5c70767668b"
+    },
+    {
+      "path": "frontend/src/pages/MaterialPage.position.test.tsx",
+      "sha256": "115671aa61b834df44d095be1640dd2040af17fd30cd3de1635d8968a52e2cb7"
+    },
+    {
+      "path": "frontend/src/pages/MaterialPage.tsx",
+      "sha256": "8680668364e0a44afeb5963960c394da9407366a9a514971250ec7ef44de1032"
+    },
+    {
+      "path": "frontend/src/pages/StudyPage.test.tsx",
+      "sha256": "568133e66094a3f18fd66cd9fe9b75c8e67be8dfb81efcc86857188b10f9022e"
+    },
+    {
+      "path": "frontend/src/pages/StudyPage.tsx",
+      "sha256": "fa153dcba8d301bf68a32c3f42e88ba0a9b91f0c9f88d581f5bcb99dc3d7350a"
+    },
+    {
+      "path": "frontend/src/pages/StudySessionPage.test.tsx",
+      "sha256": "b54c62c611fda7bf4547d28dc021e8b412b6e9f8c6a705b6801aa687788a39e3"
+    },
+    {
+      "path": "frontend/src/pages/StudySessionPage.tsx",
+      "sha256": "1441b56e62fd1d727b66524616d31229a5d1a37d9f8ebfe8514783b6ccbef99c"
+    },
+    {
+      "path": "frontend/src/pages/material/ReaderStudyTools.tsx",
+      "sha256": "01d616dde628c7d2b5fd77143958dfc8ca1305c2a5e54f531d238406c14cb847"
+    },
+    {
+      "path": "scripts/audit_focus_workspace.mjs",
+      "sha256": "a422fac390a8db09f872b4b09b2bb92aebdf2797eef55a2c1af206273addefd4"
+    },
+    {
+      "path": "tests/fake_servers/phase1_app.py",
+      "sha256": "ff9c6295efb7ed1526dc0177f6b7f237ec4a85a01014aa9d062d5de2cd4b8e0d"
+    },
+    {
+      "path": "tests/test_learning_focus.py",
+      "sha256": "8a2f6a9dd953955251fcb432f45a979c1a5f007de24720433b0283df93ebb13d"
+    },
+    {
+      "path": "tests/test_practice_scope.py",
+      "sha256": "cca754495aaaac2c0506787ef6c52b3b7ae10a3df9bc810761dd735e9df2e8f7"
+    }
+  ],
+  "limitations": [
+    "Physical MacBook/Safari/native WebView gestures not accepted on hardware.",
+    "Signed installers and live external Anki Desktop integration unverified.",
+    "Docker engine unavailable; no Docker smoke test claimed.",
+    "Course materials/notes/exercises are not fully topic tagged.",
+    "Native course-related decks may include unrelated cards/subdecks; UI labels the wider scope.",
+    "Existing saved synthesis notes currently open in a separate mode; shared split editor is follow-up work.",
+    "Link candidates cap at 24 and reverse references cap at 50 without pagination; still follow-up work.",
+    "The two monolithic browser runs each failed on an initial asset with ERR_NO_BUFFER_SPACE; exact cause unproven."
+  ],
+  "privateDataMigration": false,
+  "pushed": false,
+  "deployed": false
+}

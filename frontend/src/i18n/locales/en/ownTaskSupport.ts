@@ -1,0 +1,22 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+export default {
+  title: 'Your work status',
+  open: 'Open',
+  working: 'In progress',
+  done: 'Done',
+  saving: 'Saving …',
+  saved: 'Work status saved',
+  undone: 'Change undone',
+  undo: 'Undo',
+  undoExpired: 'This item has been edited again. Undo is no longer available for this step.',
+  loading: 'Loading work status …',
+  retry: 'Reload',
+  deadlineSaved: 'Date confirmed',
+  invalidTime: 'Please choose a valid time. This time does not exist during the daylight saving transition.',
+  todoSaved: '“{{title}}” is {{state}}',
+  todoSaving: 'Saving “{{title}}” …',
+  todoUndone: 'To-do change undone',
+  propertiesChanged: 'The properties have changed meanwhile. Your draft is retained here.',
+  discardDraftReload: 'Discard draft and reload',
+  loadPropertiesFirst: 'Please load the properties first.',
+}

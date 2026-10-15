@@ -1,0 +1,95 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.21",
+  "source_revision": "900395f354844e51a0afd86be2b5ad523891c497",
+  "release_status": "draft",
+  "windows_install": {
+    "installed_at": "2026-10-08T09:54:17.5902968Z",
+    "exit_code": 0,
+    "app_version": "0.1.21",
+    "installer_sha256": "d65308d4ebd5183dcaa3bc57326b8dc86db37375b9b282776bbf4989012efaab"
+  },
+  "windows_verification": {
+    "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+    "program_files_matching": 2878,
+    "ui_files_matching": 277,
+    "backend_executable_matching": true,
+    "client_health": {
+      "status": "ok",
+      "mode": "client"
+    },
+    "pairing_preserved": true,
+    "server_connection": "https://unios.example.org/unios",
+    "remote_host_mode": "host",
+    "remote_topology": "server"
+  },
+  "server": {
+    "image": "unios-server:0.1.21-alpha3-final",
+    "image_id": "sha256:d9c78615bac7360f05266f20067a94d12dfea1e0e9f0d29e54b86aee974b06fe",
+    "healthy": true,
+    "unchanged_schema_head": "ff98c7da0320",
+    "backend_code_identical_to_previous": true,
+    "mounts_preserved": true,
+    "https_health": 200,
+    "unauthenticated_api": 401
+  },
+  "checks": {
+    "vitest": 712,
+    "packaging_tests": 15,
+    "browser_main_passed": 349,
+    "production_pwa_rerun_passed": 1,
+    "pwa_files_identical": 281,
+    "browser_main_diagnostic": "production fixture read desktop dist during parallel build",
+    "offline_formula_entry": "passed",
+    "typecheck_lint_openapi": "passed",
+    "installed_startup": {
+      "mode": "client",
+      "runs": [
+        {
+          "seconds": 0.6901,
+          "client_seconds": 0.4329
+        },
+        {
+          "seconds": 0.6787,
+          "client_seconds": 0.4327
+        }
+      ],
+      "median_seconds": 0.6844
+    }
+  },
+  "github_quality": {
+    "initial_run": 37693137614,
+    "initial_backend_platform_docker_glib": "passed",
+    "corrected_run": 37757305844,
+    "status": "blocked_before_jobs",
+    "reason": "GitHub account payment failure or spending limit",
+    "complete_exact_revision_matrix": false
+  },
+  "macos_dmg": "not_built",
+  "artifacts": {
+    "UniOS_0.1.21_x64-setup.exe": {
+      "sha256": "d65308d4ebd5183dcaa3bc57326b8dc86db37375b9b282776bbf4989012efaab",
+      "bytes": 304043382
+    },
+    "UniOS_0.1.21_x64_en-US.msi": {
+      "sha256": "2d976673a05bbed9db714f634f18990ed4e7cb6608017b07a4bd9d93e2b69c7c",
+      "bytes": 370919553
+    },
+    "UniOS-0.1.21-server-source.tar.gz": {
+      "sha256": "168861a06e98b6148210087f4ae33dfa351b4eb0fa35d36bc0c8794536806b69",
+      "bytes": 1859270
+    },
+    "UniOS-0.1.21-source.zip": {
+      "sha256": "4b3a184a9f0dd8115e2b64f28a920ea81c7af9dbea8253842a82e768bcca17d0",
+      "bytes": 33482658
+    },
+    "UniOS-0.1.21-RELEASE-INFO.txt": {
+      "sha256": "d23a152e754dc21805eef5f9b24217daa5a873825ba9ac533e67a909ad2785c0",
+      "bytes": 2647
+    },
+    "windows-install-verification.json": {
+      "sha256": "c6c75b8486c361049e154bf37f72d76af9e51a58daf8e971313e152878da5ed1",
+      "bytes": 390
+    }
+  }
+}

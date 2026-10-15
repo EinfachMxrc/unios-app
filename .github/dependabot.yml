@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version: 2
+updates:
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # Compiler 7 is updated separately as typescript-native. ESLint/OpenAPI
+      # still consume the compatible TypeScript 5 API.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # CI/builds run Node 22; use its latest type definitions.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # vite-plugin-pwa 1.3 accepts generator ^1.0.0 only.
+      - dependency-name: "@vite-pwa/assets-generator"
+        update-types: ["version-update:semver-major"]

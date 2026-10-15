@@ -1,0 +1,113 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "6f3f39ae3b5e0f966fd8dac9733efd218e175947",
+  "verified_at_utc": "2026-10-09T13:19:05.4683470Z",
+  "minimum_accessibility_score": 97,
+  "failed_measurements": 0,
+  "measurements": 12,
+  "lighthouse_version": "13.5.0",
+  "measurement_mode": "Snapshots of fully rendered Source/Today/calendar with actual synthetic API and PDF canvas",
+  "summary_path": "lighthouse/summary.json",
+  "immutable_bundle": ".tmp/workspace-022-pwa",
+  "index_sha256": "50ee826a8eb5e2bb98d2401cec3b83d66090570f0a5e2e601bc1d05de270c606",
+  "bundle_index_unchanged": true,
+  "synthetic_only": true,
+  "browser_errors": [],
+  "blocked_external_requests": [],
+  "details": [
+    {
+      "id": "source-light-1440",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/source-light-1440.json",
+      "screenshot": "lighthouse/source-light-1440.png",
+      "failed_audits": []
+    },
+    {
+      "id": "today-light-1440",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/today-light-1440.json",
+      "screenshot": "lighthouse/today-light-1440.png",
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-light-1440",
+      "accessibility_score": 97,
+      "receipt": "lighthouse/calendar-light-1440.json",
+      "screenshot": "lighthouse/calendar-light-1440.png",
+      "failed_audits": [
+        "label-content-name-mismatch",
+        "target-size"
+      ]
+    },
+    {
+      "id": "source-light-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/source-light-390.json",
+      "screenshot": "lighthouse/source-light-390.png",
+      "failed_audits": []
+    },
+    {
+      "id": "today-light-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/today-light-390.json",
+      "screenshot": "lighthouse/today-light-390.png",
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-light-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/calendar-light-390.json",
+      "screenshot": "lighthouse/calendar-light-390.png",
+      "failed_audits": []
+    },
+    {
+      "id": "source-dark-1440",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/source-dark-1440.json",
+      "screenshot": "lighthouse/source-dark-1440.png",
+      "failed_audits": []
+    },
+    {
+      "id": "today-dark-1440",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/today-dark-1440.json",
+      "screenshot": "lighthouse/today-dark-1440.png",
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-dark-1440",
+      "accessibility_score": 97,
+      "receipt": "lighthouse/calendar-dark-1440.json",
+      "screenshot": "lighthouse/calendar-dark-1440.png",
+      "failed_audits": [
+        "label-content-name-mismatch",
+        "target-size"
+      ]
+    },
+    {
+      "id": "source-dark-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/source-dark-390.json",
+      "screenshot": "lighthouse/source-dark-390.png",
+      "failed_audits": []
+    },
+    {
+      "id": "today-dark-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/today-dark-390.json",
+      "screenshot": "lighthouse/today-dark-390.png",
+      "failed_audits": []
+    },
+    {
+      "id": "calendar-dark-390",
+      "accessibility_score": 100,
+      "receipt": "lighthouse/calendar-dark-390.json",
+      "screenshot": "lighthouse/calendar-dark-390.png",
+      "failed_audits": []
+    }
+  ],
+  "limits": [
+    "No claim about production network performance, real Safari/MacBook trackpad behavior, software keyboards or handwriting-equivalent speed.",
+    "Calendar desktop score 97 reports small target areas and label/name mismatch; every measured view exceeds the 90 accessibility threshold."
+  ]
+}

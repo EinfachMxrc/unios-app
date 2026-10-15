@@ -1,0 +1,26 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.course-display-name {
+  display: grid;
+  gap: 0.65rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.course-display-name label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.course-display-name input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+}
+.course-display-name .muted-text {
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}

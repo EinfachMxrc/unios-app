@@ -1,0 +1,11 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.runtime-settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; margin-top: 18px; }
+.runtime-settings-grid label { display: grid; gap: 6px; font-size: .82rem; font-weight: 650; }
+.runtime-settings-grid input:not([type='checkbox']), .runtime-settings-grid select {
+  width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--app-border); border-radius: 8px;
+  background: var(--app-surface); color: var(--app-text);
+}
+.runtime-settings-grid .runtime-settings-check { display: flex; align-items: center; gap: 9px; }
+.runtime-settings-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+@media (max-width: 620px) { .runtime-settings-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+export default {
+  insufficientData: 'Zu wenig Daten',
+  pageTitle: 'Lernanalyse',
+  introKicker: 'Dein Lernverlauf',
+  introTitle: 'Was ist angekommen, was hast du bearbeitet?',
+  introText: 'Nur erfasste Arbeit und gespeicherte Ergebnisse. Fehlende Messwerte bleiben offen.',
+  areaLabel: 'Bereich',
+  allCoursesOption: 'Alle Kurse',
+  newPdfsTitle: 'Neue PDFs · 7 Tage',
+  openedInReaderLabel: 'Davon im Reader geöffnet:',
+  notesCreatedTitle: 'Notizen angelegt · 7 Tage',
+  openQuestionsLabel: 'Offene PDF-Fragen:',
+  studyWorkTitle: 'Lernarbeit · 7 Tage',
+  workSummary: '{{reviews}} Kartenreviews · {{attempts}} Übungsversuche',
+  learningStatusTitle: 'Lernstand',
+  measuredScoreLabel: 'Lernstand gemessener Themen',
+  topicsWithMeasurementLabel: 'Themen mit Messwert',
+  gapsOrUnmeasuredLabel: 'Mit Lücken oder ohne Messwert',
+  ankiRetentionLabel: 'Kartenbehaltensrate · 14 Tage',
+  deltaPointsLabel: '{{sign}}{{delta}} Punkte zur Vorperiode',
+  exerciseAccuracyLabel: 'Übungs-Trefferquote · 14 Tage',
+  learningStatusNote:
+    'Der Lernstand mittelt nur Themen mit genügend Bewertungen oder Versuchen. Die Abdeckung steht daneben; ungeprüfte Themen werden nicht geschätzt.',
+  nextUpTitle: 'Als Nächstes',
+  deadlines14Label: 'Fristen · 14 Tage',
+  exams30Label: 'Prüfungen · 30 Tage',
+  viewCyclesLink: 'Lernzyklen und Themen ansehen →',
+  activityTitle: 'Lernaktivität · 14 Tage',
+  chartAria: 'Kartenreviews und Übungsversuche der letzten 14 Tage',
+  dayTooltip: '{{day}}: {{reviews}} Kartenreviews, {{attempts}} Übungsversuche',
+  reviewsLegend: 'Kartenreviews',
+  exercisesLegend: 'Übungen',
+  noActivityText: 'In den letzten 14 Tagen wurden noch keine Kartenreviews oder Übungsversuche erfasst.',
+  openedNote:
+    '„Geöffnet“ wird seit dieser Version beim erfolgreichen Laden eines PDFs erfasst; frühere Lesevorgänge sind unbekannt. Lernzeit wird derzeit nicht gemessen.',
+} as const

@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.confirm-dialog { display: grid; gap: 12px; width: min(440px, calc(100vw - 32px)); padding: 22px; }
+.confirm-dialog > h2 { font-size: 1.05rem; font-weight: 650; padding-right: 28px; }
+.confirm-dialog > p { color: var(--app-muted); font-size: .9rem; line-height: 1.55; }
+.confirm-dialog .studio-dialog-close { position: absolute; top: 14px; right: 14px; display: inline-grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; background: none; color: var(--app-muted); cursor: pointer; }
+.confirm-dialog .studio-dialog-close:hover { background: var(--app-surface-alt); color: var(--app-text); }
+.confirm-dialog-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 4px; }

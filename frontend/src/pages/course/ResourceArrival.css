@@ -1,0 +1,25 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/* An activity deep link points out the row without isolating it. */
+.resource-row.anchor-target.is-target {
+  animation: resource-arrival 800ms ease-in-out 3;
+  background: transparent;
+  box-shadow: none;
+}
+@keyframes resource-arrival {
+  0%,
+  100% {
+    background: transparent;
+    box-shadow: inset 3px 0 transparent;
+  }
+  45% {
+    background: var(--app-blue-soft);
+    box-shadow: inset 3px 0 var(--app-blue);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resource-row.anchor-target.is-target {
+    animation: none;
+    background: var(--app-blue-soft);
+    box-shadow: inset 3px 0 var(--app-blue);
+  }
+}

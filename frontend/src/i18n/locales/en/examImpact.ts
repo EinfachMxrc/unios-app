@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+export default {
+  changed: 'Exam date changed', oldDate: 'Previously: {{date}}', newDate: 'Now: {{date}}',
+  unknownDate: 'No confirmed date yet', inspect: 'Check study plan', title: 'Replan study work',
+  intro: 'Compare the dates. Your accepted study plan changes only after you confirm.',
+  phases: 'Study phases', blocks: 'Study blocks', before: 'Current', after: 'Proposed',
+  block: '{{topic}} · {{minutes}} minutes', phaseDates: '{{start}} to {{end}}',
+  history: '{{count}} already started or completed blocks and completed phases are preserved.',
+  noHistory: 'The duration, content and source of your study blocks are preserved.',
+  keepOfficial: 'The official exam date stays unchanged. Other accepted study blocks and calendar appointments are taken into account.',
+  unavailable: 'No safe time window', confirm: 'Apply these dates', cancel: 'Cancel', refresh: 'Refresh preview',
+  applying: 'Updating study plan …', applied: 'Your study plan was updated.',
+  reason_undated: 'Without a confirmed exam date your current study plan is preserved.',
+  reason_exam_past: 'The exam date is in the past. No new appointments will be created.',
+  reason_unchanged: 'Your study plan already matches the current exam date.',
+  reason_history_only: 'This phase is part of your history. Work already started or completed stays in place.',
+  reason_phase_elapsed: 'At least one accepted phase has no future window before the new exam. The plan will not be partially changed.',
+  reason_no_slot: 'At least one study block has no free slot before the exam. Your entire current plan is preserved.',
+  readOnly: 'Your main device must be available and ready to apply the changes.',
+}
