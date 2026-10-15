@@ -4,6 +4,8 @@
 
 ## 0.1.28 – KI-Schlüssel, Backup mit Anki, Navigation, Kursnamen und Kalender (15.10.2026)
 
+- Problem- und Ideenberichte öffnen das passende vorausgefüllte Formular im öffentlichen Repository; der Paket-Workflow kann einen Release-Entwurf mit signiertem Update-Feed vorbereiten.
+
 - KI-Adapter: Anthropic-API-Schlüssel auf der KI-Seite einfügen, dann das Modell aus der Liste des Anbieters wählen (das neueste ist vorgewählt). Keine Modell-IDs mehr in Code oder Konfiguration; der Schlüssel liegt im Schlüsselbund und wird nie angezeigt. Das feste Ausweichmodell ist entfernt, das Monatsbudget reserviert nur noch einen Versuch.
 - Behoben: Abgelehnte KI-Anfragen (falscher Schlüssel, Rate-Limit, andere 4xx) sperrten dauerhaft Monatsbudget.
 - Behoben: Das eingebaute Backup enthielt die integrierte Anki-Sammlung (Karten, Lernstände, Medien) nicht; Sicherung und Wiederherstellung umfassen sie jetzt.

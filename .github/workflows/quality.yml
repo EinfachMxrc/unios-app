@@ -64,7 +64,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
       - run: uv run --no-sync ruff check .
       - run: uv run --no-sync mypy app tests
-      - run: uv run --no-sync pytest -q --durations=25
+      - run: uv run --no-sync pytest -q -x --durations=25
         if: matrix.os != 'ubuntu-latest' || github.event_name != 'workflow_dispatch'
       - run: uv run --no-sync pytest --cov=app --cov-branch -q
         if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch'

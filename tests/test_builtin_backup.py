@@ -4,6 +4,7 @@
 
 import json
 import sqlite3
+from contextlib import closing
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -138,12 +139,13 @@ def test_the_builtin_anki_collection_is_backed_up_and_restored(settings, factory
     anki = settings.local_dir / "anki"
     (anki / "collection.media").mkdir(parents=True)
     (anki / "collection.media" / "bild.png").write_bytes(b"png")
-    with sqlite3.connect(anki / "collection.anki2") as collection:
+    # A real restore runs before Anki opens; transaction contexts alone keep Windows handles open.
+    with closing(sqlite3.connect(anki / "collection.anki2")) as collection, collection:
         collection.execute("CREATE TABLE notes (flds TEXT)")
         collection.execute("INSERT INTO notes VALUES ('Karte vor dem Backup')")
     configure(settings, tmp_path)
     name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
-    with sqlite3.connect(anki / "collection.anki2") as collection:
+    with closing(sqlite3.connect(anki / "collection.anki2")) as collection, collection:
         collection.execute("UPDATE notes SET flds = 'Später geändert'")
 
     restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
@@ -151,8 +153,8 @@ def test_the_builtin_anki_collection_is_backed_up_and_restored(settings, factory
     result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
 
     assert result is not None and result["status"] == "success"
-    with sqlite3.connect(anki / "collection.anki2") as collection:
+    with closing(sqlite3.connect(anki / "collection.anki2")) as collection:
         assert collection.execute("SELECT flds FROM notes").fetchone() == ("Karte vor dem Backup",)
     assert (anki / "collection.media" / "bild.png").read_bytes() == b"png"
-    with sqlite3.connect(settings.local_dir / result["previous"] / "anki" / "collection.anki2") as previous:
+    with closing(sqlite3.connect(settings.local_dir / result["previous"] / "anki" / "collection.anki2")) as previous:
         assert previous.execute("SELECT flds FROM notes").fetchone() == ("Später geändert",)

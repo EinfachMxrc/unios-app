@@ -16,7 +16,7 @@ Courses, PDFs, notes, assignments and flashcards in one app, local or on your ow
 
 *Real UI with invented demo data only, [provenance](readme/current/SCREENSHOTS.md). The UI pictured is German.*
 
-> **Alpha.** UniOS is a single-user system under construction. Packages are not publicly trust-signed yet, automatic updates are off, and university connections are verified only as far as [Compatibility](COMPATIBILITY.md) and [Release readiness](RELEASE_READINESS.md) state.
+> **Alpha.** UniOS is a single-user system under construction. Packages are not publicly trust-signed yet. Available packages and update options are listed in the [release notes](https://github.com/EinfachMxrc/unios-app/releases/latest); university connections are verified only as far as [Compatibility](COMPATIBILITY.md) and [Release readiness](RELEASE_READINESS.md) state.
 
 ## What is inside
 

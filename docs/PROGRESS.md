@@ -1,5 +1,37 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Fester öffentlicher Release-Kandidat nach PR #22
+
+Der parallele Merge von PR #22 hat den manuellen Freigabelauf auf `main`
+automatisch abgebrochen. Linux (1.360 Tests, zwölf Skips, 84,53 % Coverage),
+macOS (1.362 Tests, zehn Skips), Docker und GLib bestanden. Der Windowslauf
+meldete einen echten Testaufbaufehler: Die neue Anki-Backup-Prüfung hielt ihre
+SQLite-Verbindung nach dem Transaktionskontext offen. Die Fixture schließt
+ihre Verbindungen jetzt ausdrücklich vor der Wiederherstellung, wie beim
+echten App-Start. Produkt-Backup und Sperrprüfungen werden nicht abgeschwächt.
+Fehlschläge im normalen Backendlauf brechen nun sofort ab; ein grüner Lauf
+prüft weiterhin den vollständigen Bestand. Der vorzeitig beendete Browserlauf
+ist kein bestandener Gesamtlauf.
+
+PR #22 mit Feedback-Formularen und optionalem signiertem Release-Entwurf ist
+im neuen Kandidaten enthalten. Die volle Matrix und anschließend die Pakete
+werden auf einem festen Release-Zweig ausgeführt, damit weitere Main-Merges
+diesen Stand nicht wieder abbrechen. Lighthouse am gemeinsamen vorherigen
+Frontend: Accessibility 100, Legacy-PWA 100, keine Laufzeitfehler.
+
+Kandidat lokal: neun Backup-/Stagingtests, zwei Feedback-Unit-Tests und acht
+passende Navigations-/Feedback-Browserfälle bestanden; Ruff, mypy, Typecheck,
+Lint und Build grün. Der Windows-Nachweis erfolgt erneut auf dem echten
+CI-Windows, die lokale Korrektur wird nicht als bestandene Plattformabnahme gezählt.
+
+## 15.10.2026 – Öffentliche Download-Verweise
+
+Die statische Downloadseite verweist jetzt auf den jeweils aktuellen öffentlichen
+Release statt auf die alte private Alpha 0.1.19. Sie bietet keinen ungeprüften
+macOS-Download an und verweist für den lokalen Bau auf die Bauanleitung.
+README-Links auf `releases/latest` waren bereits korrekt. Diese reine Dokumentations-
+Nachlieferung verändert den geprüften Installer-Quellstand nicht.
+
 ## 15.10.2026 – KI-SDK im öffentlichen Desktop-Paket
 
 Nach Zusammenführung aller 17 Dependency-PRs und PR #19 ist ein Paketierungs-
