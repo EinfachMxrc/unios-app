@@ -34,7 +34,14 @@ export function citationsByPage(citations: MaterialCitation[] | undefined) {
   return pages
 }
 
-export function ReaderCitations({ material, citations, error, retry, onPage, onOpenBeside }: {
+export function ReaderCitations({
+  material,
+  citations,
+  error,
+  retry,
+  onPage,
+  onOpenBeside,
+}: {
   material: Material
   citations: MaterialCitation[] | undefined
   error: string | null
@@ -44,31 +51,55 @@ export function ReaderCitations({ material, citations, error, retry, onPage, onO
 }) {
   const { t } = useT('material')
   const items = useMemo(() => citations ?? [], [citations])
-  return <Panel title={t('citationsTitle')}>
-    {error && !citations ? <Failure message={t('citationsFailed')} retry={retry} /> : items.length === 0
-      ? <p className="muted-text">{t('citationsEmpty')}</p>
-      : <ul className="reader-citations">
-        {items.map(item => {
-          const sameCourse = item.course_name === material.course_name
-          return <li key={item.note_id}>
-            <div className="reader-citation-head">
-              <Quote size={14} aria-hidden="true" />
-              <strong>{item.title}</strong>
-              {!sameCourse && <span className="muted-text">{item.course_name}</span>}
-              {!item.current_version && <span className="reader-citation-version">{t('citationsOlderVersion')}</span>}
-            </div>
-            {item.current_version && <div className="reader-citation-pages">
-              {item.pages.map(page => <button type="button" key={page} onClick={() => onPage(page)}
-                aria-label={t('citationsPageAria', { page })}>{t('citationsPage', { page })}</button>)}
-            </div>}
-            <div className="reader-citation-actions">
-              {sameCourse && <Button variant="ghost" size="sm" onClick={() => onOpenBeside(item.note_id)}>
-                <PanelRight size={14} aria-hidden="true" /> {t('citationsOpenBeside')}
-              </Button>}
-              <Link className="subtle-link" to={`/notes?id=${encodeURIComponent(item.note_id)}`}>{t('citationsOpenNote')}</Link>
-            </div>
-          </li>
-        })}
-      </ul>}
-  </Panel>
+  return (
+    <Panel title={t('citationsTitle')}>
+      {error && !citations ? (
+        <Failure message={t('citationsFailed')} retry={retry} />
+      ) : items.length === 0 ? (
+        <p className="muted-text">{t('citationsEmpty')}</p>
+      ) : (
+        <ul className="reader-citations">
+          {items.map((item) => {
+            const sameCourse = item.course_name === material.course_name
+            return (
+              <li key={item.note_id}>
+                <div className="reader-citation-head">
+                  <Quote size={14} aria-hidden="true" />
+                  <strong>{item.title}</strong>
+                  {!sameCourse && <span className="muted-text">{item.course_name}</span>}
+                  {!item.current_version && (
+                    <span className="reader-citation-version">{t('citationsOlderVersion')}</span>
+                  )}
+                </div>
+                {item.current_version && (
+                  <div className="reader-citation-pages">
+                    {item.pages.map((page) => (
+                      <button
+                        type="button"
+                        key={page}
+                        onClick={() => onPage(page)}
+                        aria-label={t('citationsPageAria', { page })}
+                      >
+                        {t('citationsPage', { page })}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="reader-citation-actions">
+                  {sameCourse && (
+                    <Button variant="ghost" size="sm" onClick={() => onOpenBeside(item.note_id)}>
+                      <PanelRight size={14} aria-hidden="true" /> {t('citationsOpenBeside')}
+                    </Button>
+                  )}
+                  <Link className="subtle-link" to={`/notes?id=${encodeURIComponent(item.note_id)}`}>
+                    {t('citationsOpenNote')}
+                  </Link>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </Panel>
+  )
 }

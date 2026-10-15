@@ -23,6 +23,7 @@ export default {
   zoomIn: 'Größere Stundenhöhe',
   zoomReset: 'Stundenhöhe zurücksetzen',
   weekendSelected: 'Der gewählte Tag liegt am Wochenende.',
-  durationHint: 'Dauer über die Ränder oder im Formular ändern. Alt + Pfeil verschiebt um 15 Minuten; Umschalt + Alt + Pfeil ändert das Ende.',
+  durationHint:
+    'Dauer über die Ränder oder im Formular ändern. Alt + Pfeil verschiebt um 15 Minuten; Umschalt + Alt + Pfeil ändert das Ende.',
   retryConflictHint: 'Der Termin wurde inzwischen geändert. Öffne ihn erneut, bevor du weiterbearbeitest.',
 }

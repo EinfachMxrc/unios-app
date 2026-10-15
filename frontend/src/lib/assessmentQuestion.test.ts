@@ -59,7 +59,7 @@ describe('assessment question content', () => {
     "char token='unfinished; Welchen Wert hat token?",
     'int x=1; /* unfinished comment. What is x?',
     'int x=1; int y=',
-  ])('keeps ambiguous or incomplete Java verbatim: %s', source => {
+  ])('keeps ambiguous or incomplete Java verbatim: %s', (source) => {
     expect(questionBlocks(source)).toEqual([{ kind: 'text', text: source }])
   })
 
@@ -71,7 +71,7 @@ describe('assessment question content', () => {
     'int x=1; This prose has no unambiguous instruction boundary.',
     'Nutze `int x=1;` in deinem Beispiel.',
     '<script>alert("example")</script>',
-  ])('keeps ordinary prose passive: %s', source => {
+  ])('keeps ordinary prose passive: %s', (source) => {
     expect(questionBlocks(source)).toEqual([{ kind: 'text', text: source }])
   })
 
@@ -96,9 +96,7 @@ describe('assessment question content', () => {
     expect(questionBlocks('````java\nint x=1;\n```\n~~~\n````')).toEqual([
       { kind: 'code', language: 'java', text: 'int x=1;\n```\n~~~' },
     ])
-    expect(questionBlocks('~~~\nplain code\n~~~~')).toEqual([
-      { kind: 'code', language: undefined, text: 'plain code' },
-    ])
+    expect(questionBlocks('~~~\nplain code\n~~~~')).toEqual([{ kind: 'code', language: undefined, text: 'plain code' }])
   })
 
   it.each([
@@ -107,7 +105,7 @@ describe('assessment question content', () => {
     '    ```java\n    int x=1;\n    ```',
     '$$\nx^2 + 1',
     'Die Kosten sind $$ pro Woche.',
-  ])('keeps unclosed or non-block delimiters as prose: %s', source => {
+  ])('keeps unclosed or non-block delimiters as prose: %s', (source) => {
     expect(questionBlocks(source)).toEqual([{ kind: 'text', text: source }])
   })
 
@@ -137,7 +135,14 @@ describe('assessment question content', () => {
 describe('passive task structure', () => {
   it('preserves pipes inside formulas, inline code and escaped cells', () => {
     expect(questionBlocks('| Ausdruck | Bedeutung |\n| --- | --- |\n| `$a|b$` | $|x|$ |\n| a\\|b | oder |')).toEqual([
-      { kind: 'table', header: ['Ausdruck', 'Bedeutung'], rows: [['`$a|b$`', '$|x|$'], ['a\\|b', 'oder']] },
+      {
+        kind: 'table',
+        header: ['Ausdruck', 'Bedeutung'],
+        rows: [
+          ['`$a|b$`', '$|x|$'],
+          ['a\\|b', 'oder'],
+        ],
+      },
     ])
   })
   it('does not renumber discontinuous instruction numbers', () => {
@@ -194,7 +199,7 @@ describe('Java display formatting', () => {
     'double x=1.5; boolean ok=x>=0 && x!=2; x/=2;',
     'int[][] matrix={{1,2},{3,4}}; matrix[0][1]++;',
     'String name="a + b"; int x=1; x = x + +x;',
-  ])('only changes whitespace in balanced snippets: %s', source => {
+  ])('only changes whitespace in balanced snippets: %s', (source) => {
     const formatted = formatJavaSnippet(source)
     expect(formatted.replace(/\s/g, '')).toBe(source.replace(/\s/g, ''))
   })
@@ -208,7 +213,7 @@ describe('Java display formatting', () => {
     'String text="unfinished;',
     "char value='unfinished;",
     'int x=1; /* unfinished',
-  ])('does not rewrite comments, existing line layout or malformed snippets: %s', source => {
+  ])('does not rewrite comments, existing line layout or malformed snippets: %s', (source) => {
     expect(formatJavaSnippet(source)).toBe(source)
   })
 })

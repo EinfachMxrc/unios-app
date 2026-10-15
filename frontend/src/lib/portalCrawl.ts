@@ -5,7 +5,14 @@
 // rule for the browser (see desktop/src-tauri/src/portal_crawl.rs); the rules here decide what
 // is worth opening and what is never opened.
 
-export type PortalLink = { index: number; text: string; href: string; visible: boolean; role?: string; messageRow?: boolean }
+export type PortalLink = {
+  index: number
+  text: string
+  href: string
+  visible: boolean
+  role?: string
+  messageRow?: boolean
+}
 export type PortalStatus = { url: string; ready: string; textLength: number; hasPassword: boolean }
 
 export interface CrawlBridge {

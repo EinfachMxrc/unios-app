@@ -42,8 +42,16 @@ export function InboxPage() {
   const captureGeneration = useRef(0)
   const operationPending = useRef(false)
   const mounted = useRef(true)
-  useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
-  function editCapture(update: () => void) { captureGeneration.current += 1; update() }
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+  function editCapture(update: () => void) {
+    captureGeneration.current += 1
+    update()
+  }
   async function capture(event: FormEvent) {
     event.preventDefault()
     if (operationPending.current || !canWrite) return
@@ -146,10 +154,22 @@ export function InboxPage() {
                 <div className="inbox-section-head">
                   <span className="muted-text">{t('saveWebOrTextLabel')}</span>
                   <div className="inbox-mode">
-                    <button type="button" className={mode === 'web' ? 'active' : ''} onClick={() => { if (mode !== 'web') editCapture(() => setMode('web')) }}>
+                    <button
+                      type="button"
+                      className={mode === 'web' ? 'active' : ''}
+                      onClick={() => {
+                        if (mode !== 'web') editCapture(() => setMode('web'))
+                      }}
+                    >
                       {t('modeWebsite')}
                     </button>
-                    <button type="button" className={mode === 'text' ? 'active' : ''} onClick={() => { if (mode !== 'text') editCapture(() => setMode('text')) }}>
+                    <button
+                      type="button"
+                      className={mode === 'text' ? 'active' : ''}
+                      onClick={() => {
+                        if (mode !== 'text') editCapture(() => setMode('text'))
+                      }}
+                    >
                       {t('modeText')}
                     </button>
                     <Link to="/voice">

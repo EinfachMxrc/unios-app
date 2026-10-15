@@ -35,15 +35,26 @@ export function NoteMarkdownDocument({ body }: { body: string; notes: Notes }) {
     }
   }, [body, editor])
   return (
-    <div className="rendered-note" onClick={event => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey
-        || !(event.target instanceof Element)) return
-      const link = event.target.closest('a[href]')
-      const href = internalNoteHref(link?.getAttribute('href') ?? null)
-      if (!href || link?.hasAttribute('download')) return
-      event.preventDefault()
-      navigate(href)
-    }}>
+    <div
+      className="rendered-note"
+      onClick={(event) => {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.altKey ||
+          event.shiftKey ||
+          !(event.target instanceof Element)
+        )
+          return
+        const link = event.target.closest('a[href]')
+        const href = internalNoteHref(link?.getAttribute('href') ?? null)
+        if (!href || link?.hasAttribute('download')) return
+        event.preventDefault()
+        navigate(href)
+      }}
+    >
       <NoteLinkTargetsContext.Provider value={targets}>
         <EditorContent editor={editor?.isDestroyed ? null : editor} />
       </NoteLinkTargetsContext.Provider>

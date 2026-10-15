@@ -7,12 +7,13 @@ from app.ai.access import course_access
 from app.ai.context_repository import mail_rows, timetable_rows
 
 
-def timetable_context(session, start, end) -> list[dict]:
+def timetable_context(session, start, end, settings=None) -> list[dict]:
+    """``settings`` lets slots the student hid from the timetable stay hidden from the assistant too."""
     permitted = course_access(session)
     return [{"id": item.id, "title": item.title, "course_id": item.course_id,
              "starts_at": item.starts_at.replace(tzinfo=UTC).isoformat(),
              "ends_at": item.ends_at.replace(tzinfo=UTC).isoformat() if item.ends_at else None}
-            for item in timetable_rows(session, start, end)
+            for item in timetable_rows(session, start, end, settings)
             if permitted(item.course_id)]
 
 

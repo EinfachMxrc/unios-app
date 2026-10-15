@@ -19,7 +19,9 @@ vi.mock('idb-keyval', () => ({
     memory.set(key, copy(value))
   }),
   update: vi.fn((key: string, updater: (value: unknown) => unknown) => {
-    const next = databaseWrites.then(() => { memory.set(key, copy(updater(copy(memory.get(key))))) })
+    const next = databaseWrites.then(() => {
+      memory.set(key, copy(updater(copy(memory.get(key)))))
+    })
     databaseWrites = next.catch(() => undefined)
     return next
   }),
@@ -73,7 +75,7 @@ describe('studyQueue (offline review queue)', () => {
     expect(await first.pendingReviewCount()).toBe(2)
     expect(new Set(await second.pendingReviewCardIds())).toEqual(new Set([11, 22]))
     const durable = memory.get('pending-v1') as Array<{ review_id: string }>
-    expect(new Set(durable.map(entry => entry.review_id)).size).toBe(2)
+    expect(new Set(durable.map((entry) => entry.review_id)).size).toBe(2)
   })
 
   it('preserves another window append while acknowledging only the old review UUID', async () => {
@@ -81,12 +83,21 @@ describe('studyQueue (offline review queue)', () => {
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     await first.queueReview(11, 2, undefined, 42)
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     let release!: (value: unknown) => void
-    const held = new Promise(resolve => { release = resolve })
-    const fetcher = vi.fn().mockReturnValueOnce(held).mockResolvedValue({
-      ok: false, status: 503, json: async () => ({ detail: 'Synthetisch später fortsetzen' }),
+    const held = new Promise((resolve) => {
+      release = resolve
     })
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(held)
+      .mockResolvedValue({
+        ok: false,
+        status: 503,
+        json: async () => ({ detail: 'Synthetisch später fortsetzen' }),
+      })
     vi.stubGlobal('fetch', fetcher)
     const flushing = first.flushReviews()
     await vi.waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1))
@@ -106,15 +117,18 @@ describe('studyQueue (offline review queue)', () => {
     const durable = copy(memory.get('pending-v1'))
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     const fetcher = vi.fn().mockResolvedValue({ ok: true })
     vi.stubGlobal('fetch', fetcher)
     const { update } = await import('idb-keyval')
     const originalUpdate = vi.mocked(update).getMockImplementation()!
-    vi.mocked(update).mockImplementationOnce(originalUpdate)
+    vi.mocked(update)
+      .mockImplementationOnce(originalUpdate)
       .mockRejectedValueOnce(new Error('Synthetisch abgebrochene IDB-Transaktion'))
     await expect(flushReviews()).rejects.toThrow('Synthetisch abgebrochene IDB-Transaktion')
-    expect(memory.get('pending-v1')).toEqual((durable as object[]).map(entry => ({ ...entry, upload_started: true })))
+    expect(memory.get('pending-v1')).toEqual((durable as object[]).map((entry) => ({ ...entry, upload_started: true })))
     expect(await pendingReviewCount()).toBe(1)
     expect(await flushReviews()).toBe(0)
     expect(JSON.parse(fetcher.mock.calls[1][1].body)).toEqual(JSON.parse(fetcher.mock.calls[0][1].body))
@@ -149,19 +163,35 @@ describe('studyQueue (offline review queue)', () => {
   })
 
   it('replays legacy entries unchanged and invalidates all deck reads once after a batch', async () => {
-    const legacy = { card_id: 1, rating: 3, review_id: crypto.randomUUID(), offline: true,
-      reviewed_at: '2026-10-07T12:00:00Z' }
+    const legacy = {
+      card_id: 1,
+      rating: 3,
+      review_id: crypto.randomUUID(),
+      offline: true,
+      reviewed_at: '2026-10-07T12:00:00Z',
+    }
     memory.set('pending-v1', [legacy])
     const { queueReview, flushReviews } = await import('./studyQueue')
     await queueReview(2, 4, undefined, 42)
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const { queryClient } = await import('./offlineCache')
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
-    const paths = ['/api/anki/study/due', '/api/anki/study/due?deck=Uni%3A%3AA',
-      '/api/anki/study/due?deck=Uni%3A%3AB', '/api/anki/study/stats', '/api/anki/study/status',
-      '/api/learning/topics', '/api/learning/weekly', '/api/learning/cycles', '/api/overview', '/api/courses']
-    paths.forEach(path => queryClient.setQueryData(['api', path], { synthetic: true }))
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
+    const paths = [
+      '/api/anki/study/due',
+      '/api/anki/study/due?deck=Uni%3A%3AA',
+      '/api/anki/study/due?deck=Uni%3A%3AB',
+      '/api/anki/study/stats',
+      '/api/anki/study/status',
+      '/api/learning/topics',
+      '/api/learning/weekly',
+      '/api/learning/cycles',
+      '/api/overview',
+      '/api/courses',
+    ]
+    paths.forEach((path) => queryClient.setQueryData(['api', path], { synthetic: true }))
     const invalidate = vi.spyOn(queryClient, 'invalidateQueries')
     const fetcher = vi.fn().mockResolvedValue({ ok: true })
     vi.stubGlobal('fetch', fetcher)
@@ -169,7 +199,9 @@ describe('studyQueue (offline review queue)', () => {
     expect(JSON.parse(fetcher.mock.calls[0][1].body)).toEqual(legacy)
     expect(JSON.parse(fetcher.mock.calls[1][1].body)).toMatchObject({ card_id: 2, study_deck_id: 42 })
     expect(invalidate).toHaveBeenCalledTimes(1)
-    paths.forEach(path => expect(queryClient.getQueryState(['api', path])?.isInvalidated).toBe(path !== '/api/courses'))
+    paths.forEach((path) =>
+      expect(queryClient.getQueryState(['api', path])?.isInvalidated).toBe(path !== '/api/courses'),
+    )
     queryClient.clear()
   })
 
@@ -180,11 +212,18 @@ describe('studyQueue (offline review queue)', () => {
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const { queryClient } = await import('./offlineCache')
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     const path = '/api/anki/study/due?deck=Uni%3A%3AB'
     queryClient.setQueryData(['api', path], { synthetic: true })
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({ ok: true })
-      .mockResolvedValue({ ok: false, status: 409, json: async () => ({ detail: 'Synthetic order conflict' }) }))
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce({ ok: true })
+        .mockResolvedValue({ ok: false, status: 409, json: async () => ({ detail: 'Synthetic order conflict' }) }),
+    )
     await expect(flushReviews()).rejects.toThrow('Synthetic order conflict')
     expect(await pendingReviewCardIds()).toEqual([2])
     expect(queryClient.getQueryState(['api', path])?.isInvalidated).toBe(true)
@@ -230,7 +269,8 @@ describe('studyQueue (offline review queue)', () => {
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     markHostReachable(false)
     await queueReview(1, 2)
-    markHostReachable(true); markHostVerified(1)
+    markHostReachable(true)
+    markHostVerified(1)
     const fetcher = vi.fn()
     vi.stubGlobal('fetch', fetcher)
     expect(await flushReviews()).toBe(1)
@@ -243,9 +283,13 @@ describe('studyQueue (offline review queue)', () => {
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     markHostReachable(false)
     await queueReview(1, 2)
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     let release!: (value: unknown) => void
-    const held = new Promise(resolve => { release = resolve })
+    const held = new Promise((resolve) => {
+      release = resolve
+    })
     const fetcher = vi.fn().mockReturnValueOnce(held).mockResolvedValue({ ok: true })
     vi.stubGlobal('fetch', fetcher)
     const flushing = flushReviews()
@@ -256,9 +300,9 @@ describe('studyQueue (offline review queue)', () => {
     release({ ok: true })
     expect(await flushing).toBe(0)
     expect(fetcher).toHaveBeenCalledTimes(2)
-    const bodies = fetcher.mock.calls.map(call => JSON.parse(call[1].body))
-    expect(bodies.map(body => body.card_id)).toEqual([1, 2])
-    expect(new Set(bodies.map(body => body.review_id)).size).toBe(2)
+    const bodies = fetcher.mock.calls.map((call) => JSON.parse(call[1].body))
+    expect(bodies.map((body) => body.card_id)).toEqual([1, 2])
+    expect(new Set(bodies.map((body) => body.review_id)).size).toBe(2)
   })
 
   it('undoes a never-uploaded last UUID offline and rejects an older UUID without deleting it', async () => {
@@ -278,11 +322,21 @@ describe('studyQueue (offline review queue)', () => {
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const queued = await queueReview(1, 3)
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     let release!: (value: unknown) => void
-    const held = new Promise(resolve => { release = resolve })
-    const fetcher = vi.fn().mockReturnValueOnce(held).mockResolvedValueOnce({ ok: true, status: 200,
-      json: async () => ({ review_id: queued.review.review_id, card: null }) })
+    const held = new Promise((resolve) => {
+      release = resolve
+    })
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(held)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ review_id: queued.review.review_id, card: null }),
+      })
     vi.stubGlobal('fetch', fetcher)
     const uploading = flushReviews()
     await vi.waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1))
@@ -300,9 +354,14 @@ describe('studyQueue (offline review queue)', () => {
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const queued = await queueReview(1, 3)
     memory.set('pending-v1', [{ ...queued.review, upload_started: true }])
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
-    const fetcher = vi.fn().mockResolvedValue({ ok: false, status: 503,
-      json: async () => ({ detail: 'Synthetic undo acknowledgement interruption' }) })
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
+    const fetcher = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 503,
+      json: async () => ({ detail: 'Synthetic undo acknowledgement interruption' }),
+    })
     vi.stubGlobal('fetch', fetcher)
     await expect(undoReview(queued.review)).rejects.toThrow('Synthetic undo acknowledgement interruption')
     expect(await pendingReviewCount()).toBe(1)
@@ -318,9 +377,17 @@ describe('studyQueue (offline review queue)', () => {
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const queued = await queueReview(1, 3)
     memory.set('pending-v1', [{ ...queued.review, upload_started: true }])
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, status: 200,
-      json: async () => ({ review_id: 'different-synthetic-uuid', card: null }) }))
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ review_id: 'different-synthetic-uuid', card: null }),
+      }),
+    )
     await expect(undoReview(queued.review)).rejects.toThrow()
     expect(await pendingReviewCount()).toBe(1)
   })
@@ -330,11 +397,19 @@ describe('studyQueue (offline review queue)', () => {
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
     const queued = await queueReview(1, 3)
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     let release!: (value: unknown) => void
-    const held = new Promise(resolve => { release = resolve })
+    const held = new Promise((resolve) => {
+      release = resolve
+    })
     const interrupted = { ok: false, status: 503, json: async () => ({ detail: 'Synthetic undo interruption' }) }
-    const fetcher = vi.fn().mockReturnValueOnce(held).mockResolvedValueOnce(interrupted).mockResolvedValueOnce(interrupted)
+    const fetcher = vi
+      .fn()
+      .mockReturnValueOnce(held)
+      .mockResolvedValueOnce(interrupted)
+      .mockResolvedValueOnce(interrupted)
     vi.stubGlobal('fetch', fetcher)
     const uploading = flushReviews()
     await vi.waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1))
@@ -343,11 +418,16 @@ describe('studyQueue (offline review queue)', () => {
     await expect(uploading).rejects.toThrow('Synthetic undo interruption')
     expect(await pendingReviewCount()).toBe(1)
     expect((memory.get('pending-v1') as Array<{ undo_requested: boolean }>)[0].undo_requested).toBe(true)
-    expect(fetcher.mock.calls.map(call => call[0])).toEqual([
-      '/api/anki/study/reviews', '/api/anki/study/reviews/undo', '/api/anki/study/reviews/undo',
+    expect(fetcher.mock.calls.map((call) => call[0])).toEqual([
+      '/api/anki/study/reviews',
+      '/api/anki/study/reviews/undo',
+      '/api/anki/study/reviews/undo',
     ])
-    fetcher.mockResolvedValueOnce({ ok: true, status: 200,
-      json: async () => ({ review_id: queued.review.review_id, card: null }) })
+    fetcher.mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({ review_id: queued.review.review_id, card: null }),
+    })
     expect(await flushReviews()).toBe(0)
   })
 
@@ -355,18 +435,28 @@ describe('studyQueue (offline review queue)', () => {
     const { queueReview, undoReview, flushReviews, pendingReviewCount } = await import('./studyQueue')
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     const queued = await queueReview(1, 3)
-    const rejected = { ok: false, status: 409, json: async () => ({ code: 'UNDO_UNAVAILABLE',
-      detail: `UNDO_UNAVAILABLE:${queued.review.review_id}: Synthetic unchanged applied answer` }) }
+    const rejected = {
+      ok: false,
+      status: 409,
+      json: async () => ({
+        code: 'UNDO_UNAVAILABLE',
+        detail: `UNDO_UNAVAILABLE:${queued.review.review_id}: Synthetic unchanged applied answer`,
+      }),
+    }
     const fetcher = vi.fn().mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce(rejected)
     vi.stubGlobal('fetch', fetcher)
     expect(await flushReviews()).toBe(0)
     await expect(undoReview(queued.review)).rejects.toThrow('Bewertung bleibt gespeichert')
     expect(await pendingReviewCount()).toBe(0)
     await queueReview(2, 4)
-    memory.set('pending-v1', [{ ...queued.review, upload_started: true, undo_requested: true },
-      ...(memory.get('pending-v1') as unknown[])])
+    memory.set('pending-v1', [
+      { ...queued.review, upload_started: true, undo_requested: true },
+      ...(memory.get('pending-v1') as unknown[]),
+    ])
     fetcher.mockResolvedValueOnce(rejected).mockResolvedValueOnce({ ok: true })
     await expect(flushReviews()).rejects.toThrow('Bewertung bleibt gespeichert')
     expect(await pendingReviewCount()).toBe(1)
@@ -378,13 +468,23 @@ describe('studyQueue (offline review queue)', () => {
     const { queueReview, undoReview, flushReviews, pendingReviewCount } = await import('./studyQueue')
     const { markHostReachable, markHostVerified } = await import('./hostAvailability')
     const { setRuntimeVerified } = await import('./lib/runtimeAccess')
-    markHostReachable(true); markHostVerified(1); setRuntimeVerified(true)
+    markHostReachable(true)
+    markHostVerified(1)
+    setRuntimeVerified(true)
     const queued = await queueReview(1, 3)
     memory.set('pending-v1', [{ ...queued.review, upload_started: true }])
-    const fetcher = vi.fn().mockResolvedValueOnce({ ok: false, status: 409,
-      json: async () => ({ code: 'UNDO_UNAVAILABLE', detail: 'UNDO_UNAVAILABLE:foreign-uuid: Unknown outcome' }) })
-      .mockResolvedValueOnce({ ok: false, status: 409,
-        json: async () => ({ detail: `UNDO_UNAVAILABLE:${queued.review.review_id}: Missing typed proof` }) })
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 409,
+        json: async () => ({ code: 'UNDO_UNAVAILABLE', detail: 'UNDO_UNAVAILABLE:foreign-uuid: Unknown outcome' }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 409,
+        json: async () => ({ detail: `UNDO_UNAVAILABLE:${queued.review.review_id}: Missing typed proof` }),
+      })
     vi.stubGlobal('fetch', fetcher)
     await expect(undoReview(queued.review)).rejects.toThrow('foreign-uuid')
     expect(await pendingReviewCount()).toBe(1)
@@ -396,11 +496,23 @@ describe('studyQueue (offline review queue)', () => {
     const first = await import('./studyQueue')
     const availability = await import('./hostAvailability')
     const runtime = await import('./lib/runtimeAccess')
-    availability.markHostReachable(true); availability.markHostVerified(1); runtime.setRuntimeVerified(true)
+    availability.markHostReachable(true)
+    availability.markHostVerified(1)
+    runtime.setRuntimeVerified(true)
     const queued = await first.queueReview(1, 3)
-    const fetcher = vi.fn().mockResolvedValueOnce({ ok: true })
-      .mockResolvedValueOnce({ ok: false, status: 503, json: async () => ({ detail: 'Synthetic lost undo acknowledgement' }) })
-      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ review_id: queued.review.review_id, card: null }) })
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 503,
+        json: async () => ({ detail: 'Synthetic lost undo acknowledgement' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ review_id: queued.review.review_id, card: null }),
+      })
     vi.stubGlobal('fetch', fetcher)
     expect(await first.flushReviews()).toBe(0)
     await expect(first.undoReview(queued.review)).rejects.toThrow('Synthetic lost undo acknowledgement')
@@ -410,11 +522,14 @@ describe('studyQueue (offline review queue)', () => {
     const resumed = await import('./studyQueue')
     const freshAvailability = await import('./hostAvailability')
     const freshRuntime = await import('./lib/runtimeAccess')
-    freshAvailability.markHostReachable(true); freshAvailability.markHostVerified(1); freshRuntime.setRuntimeVerified(true)
+    freshAvailability.markHostReachable(true)
+    freshAvailability.markHostVerified(1)
+    freshRuntime.setRuntimeVerified(true)
     expect(await resumed.flushReviews()).toBe(0)
-    expect(fetcher.mock.calls.map(call => call[0])).toEqual([
-      '/api/anki/study/reviews', '/api/anki/study/reviews/undo', '/api/anki/study/reviews/undo',
+    expect(fetcher.mock.calls.map((call) => call[0])).toEqual([
+      '/api/anki/study/reviews',
+      '/api/anki/study/reviews/undo',
+      '/api/anki/study/reviews/undo',
     ])
   })
-
 })

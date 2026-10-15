@@ -36,11 +36,7 @@ import { fallbackLngMap, localeCodes } from './localeMeta'
  * that module in components instead of `useTranslation` directly.
  */
 void i18n
-  .use(
-    resourcesToBackend(
-      (language: string, namespace: string) => import(`./locales/${language}/${namespace}.ts`),
-    ),
-  )
+  .use(resourcesToBackend((language: string, namespace: string) => import(`./locales/${language}/${namespace}.ts`)))
   .use(initReactI18next)
 
 export const i18nReady = i18n.init({

@@ -3,7 +3,9 @@
 import { expect, test } from './fixtures'
 
 test('the cost calculator shows a local estimate and reacts to locked material', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })))
+  await page.addInitScript(() =>
+    localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })),
+  )
   await page.goto('/more')
   await page.locator('.more-tools > summary').click()
   await page.getByRole('link', { name: 'KI-Paket' }).click()

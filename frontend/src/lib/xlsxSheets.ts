@@ -25,13 +25,19 @@ function columnIndex(reference: string): number {
 function dateStyles(stylesXml: string | null): Set<number> {
   if (!stylesXml) return new Set()
   const styles = parse(stylesXml)
-  const custom = new Map(children(styles.documentElement, 'numFmt')
-    .map(format => [Number(format.getAttribute('numFmtId')), format.getAttribute('formatCode') ?? ''] as const))
-  const isDate = (id: number) => DATE_FORMATS.has(id) ||
-    /[dmy]/i.test((custom.get(id) ?? '').replace(/\[[^\]]*\]|"[^"]*"/g, ''))
+  const custom = new Map(
+    children(styles.documentElement, 'numFmt').map(
+      (format) => [Number(format.getAttribute('numFmtId')), format.getAttribute('formatCode') ?? ''] as const,
+    ),
+  )
+  const isDate = (id: number) =>
+    DATE_FORMATS.has(id) || /[dmy]/i.test((custom.get(id) ?? '').replace(/\[[^\]]*\]|"[^"]*"/g, ''))
   const cellXfs = styles.getElementsByTagName('cellXfs')[0]
   const result = new Set<number>()
-  if (cellXfs) children(cellXfs, 'xf').forEach((xf, index) => { if (isDate(Number(xf.getAttribute('numFmtId')))) result.add(index) })
+  if (cellXfs)
+    children(cellXfs, 'xf').forEach((xf, index) => {
+      if (isDate(Number(xf.getAttribute('numFmtId')))) result.add(index)
+    })
   return result
 }
 
@@ -43,13 +49,17 @@ function excelDate(serial: number): string {
 
 function cellText(cell: Element, shared: string[], dates: Set<number>): string {
   const type = cell.getAttribute('t')
-  if (type === 'inlineStr') return children(cell, 't').map(node => node.textContent ?? '').join('')
+  if (type === 'inlineStr')
+    return children(cell, 't')
+      .map((node) => node.textContent ?? '')
+      .join('')
   const value = cell.getElementsByTagName('v')[0]?.textContent ?? ''
   if (type === 's') return shared[Number(value)] ?? ''
   if (type === 'b') return value === '1' ? 'WAHR' : 'FALSCH'
   if (!type || type === 'n') {
     const number = Number(value)
-    if (value !== '' && dates.has(Number(cell.getAttribute('s') ?? -1)) && Number.isFinite(number)) return excelDate(number)
+    if (value !== '' && dates.has(Number(cell.getAttribute('s') ?? -1)) && Number.isFinite(number))
+      return excelDate(number)
   }
   return value
 }
@@ -63,16 +73,31 @@ export async function readWorkbook(data: ArrayBuffer): Promise<Sheet[]> {
   const zip = await JSZip.loadAsync(data)
   const text = (path: string) => zip.file(path)?.async('string') ?? Promise.resolve(null)
   const [workbookXml, relsXml, sharedXml, stylesXml] = await Promise.all([
-    text('xl/workbook.xml'), text('xl/_rels/workbook.xml.rels'), text('xl/sharedStrings.xml'), text('xl/styles.xml')])
+    text('xl/workbook.xml'),
+    text('xl/_rels/workbook.xml.rels'),
+    text('xl/sharedStrings.xml'),
+    text('xl/styles.xml'),
+  ])
   if (!workbookXml || !relsXml) throw new Error('workbook')
-  const shared = sharedXml ? children(parse(sharedXml).documentElement, 'si')
-    .map(item => children(item, 't').map(node => node.textContent ?? '').join('')) : []
+  const shared = sharedXml
+    ? children(parse(sharedXml).documentElement, 'si').map((item) =>
+        children(item, 't')
+          .map((node) => node.textContent ?? '')
+          .join(''),
+      )
+    : []
   const dates = dateStyles(stylesXml)
-  const targets = new Map(children(parse(relsXml).documentElement, 'Relationship')
-    .map(rel => [rel.getAttribute('Id'), rel.getAttribute('Target') ?? ''] as const))
+  const targets = new Map(
+    children(parse(relsXml).documentElement, 'Relationship').map(
+      (rel) => [rel.getAttribute('Id'), rel.getAttribute('Target') ?? ''] as const,
+    ),
+  )
   const sheets: Sheet[] = []
   for (const sheet of children(parse(workbookXml).documentElement, 'sheet')) {
-    const target = targets.get(sheet.getAttribute('r:id') ?? sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id'))
+    const target = targets.get(
+      sheet.getAttribute('r:id') ??
+        sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id'),
+    )
     if (!target) continue
     const path = target.startsWith('/') ? target.slice(1) : `xl/${target.replace(/^\.\//, '')}`
     const xml = await text(path)
@@ -91,8 +116,11 @@ export async function readWorkbook(data: ArrayBuffer): Promise<Sheet[]> {
       }
       rows.push(row)
     }
-    sheets.push({ name: sheet.getAttribute('name') ?? `Tabelle ${sheets.length + 1}`, rows: rows.slice(0, MAX_ROWS),
-      truncated: rowNodes.length > MAX_ROWS })
+    sheets.push({
+      name: sheet.getAttribute('name') ?? `Tabelle ${sheets.length + 1}`,
+      rows: rows.slice(0, MAX_ROWS),
+      truncated: rowNodes.length > MAX_ROWS,
+    })
   }
   return sheets
 }

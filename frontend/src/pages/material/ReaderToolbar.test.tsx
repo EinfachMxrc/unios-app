@@ -10,12 +10,35 @@ vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string) => key }) }))
 
 afterEach(cleanup)
 
-const search = { input: '', setInput: vi.fn(), search: vi.fn(), clear: vi.fn(), searchedTerm: '' } as unknown as ReturnType<typeof useReaderSearch>
+const search = {
+  input: '',
+  setInput: vi.fn(),
+  search: vi.fn(),
+  clear: vi.fn(),
+  searchedTerm: '',
+} as unknown as ReturnType<typeof useReaderSearch>
 
 function renderToolbar(onZoomTo = vi.fn()) {
-  render(<ReaderToolbar page={1} pages={4} ready goToPage={vi.fn()} pageOverview={false} onToggleOverview={vi.fn()}
-    notesExpanded={false} onOpenNotes={vi.fn()} search={search} pageWidth={760} fitWidth={false}
-    onZoom={vi.fn()} onZoomTo={onZoomTo} onFitWidth={vi.fn()} originalColors={false} onToggleColors={vi.fn()} />)
+  render(
+    <ReaderToolbar
+      page={1}
+      pages={4}
+      ready
+      goToPage={vi.fn()}
+      pageOverview={false}
+      onToggleOverview={vi.fn()}
+      notesExpanded={false}
+      onOpenNotes={vi.fn()}
+      search={search}
+      pageWidth={760}
+      fitWidth={false}
+      onZoom={vi.fn()}
+      onZoomTo={onZoomTo}
+      onFitWidth={vi.fn()}
+      originalColors={false}
+      onToggleColors={vi.fn()}
+    />,
+  )
   return { onZoomTo, field: screen.getByRole('textbox', { name: 'zoomLevelAria' }) as HTMLInputElement }
 }
 

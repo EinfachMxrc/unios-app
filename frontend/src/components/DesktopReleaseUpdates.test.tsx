@@ -16,11 +16,23 @@ i18n.addResourceBundle('de', 'releaseUpdates', releaseUpdates)
 
 beforeEach(() => {
   vi.stubEnv('VITE_UNIOS_UPDATES_ENABLED', 'true')
-  bridge.invoke.mockReset(); bridge.snapshot.mockReset(); bridge.relaunch.mockReset()
-  bridge.invoke.mockResolvedValue({ available: true, version: '0.1.19', channel: 'stable', notes: '', schema_change: false })
+  bridge.invoke.mockReset()
+  bridge.snapshot.mockReset()
+  bridge.relaunch.mockReset()
+  bridge.invoke.mockResolvedValue({
+    available: true,
+    version: '0.1.19',
+    channel: 'stable',
+    notes: '',
+    schema_change: false,
+  })
   bridge.snapshot.mockResolvedValue({ status: 'ok', created_at: new Date().toISOString() })
 })
-afterEach(() => { cleanup(); localStorage.clear(); vi.unstubAllEnvs() })
+afterEach(() => {
+  cleanup()
+  localStorage.clear()
+  vi.unstubAllEnvs()
+})
 
 it('does not expose updates in unsigned builds', () => {
   vi.stubEnv('VITE_UNIOS_UPDATES_ENABLED', 'false')
@@ -39,9 +51,15 @@ it('fails closed before native install when snapshot fails', async () => {
 })
 it('clears checked version on channel change and installs only after snapshot', async () => {
   const steps: string[] = []
-  bridge.snapshot.mockImplementation(async () => { steps.push('snapshot'); return { status: 'ok' } })
+  bridge.snapshot.mockImplementation(async () => {
+    steps.push('snapshot')
+    return { status: 'ok' }
+  })
   bridge.invoke.mockImplementation(async (command: string) => {
-    if (command === 'install_release_update') { steps.push('install'); return }
+    if (command === 'install_release_update') {
+      steps.push('install')
+      return
+    }
     return { available: true, version: '0.1.19', channel: 'beta', notes: '', schema_change: false }
   })
   render(<DesktopReleaseUpdates />)

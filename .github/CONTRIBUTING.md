@@ -9,7 +9,7 @@ größere neue Funktionen zuerst als Vorschlag beschreiben.
 
 ## Lokal entwickeln
 
-Python 3.12+ über uv sowie Node.js 22+ verwenden. Im Repository:
+Python 3.13+ über uv sowie Node.js 22+ verwenden. Im Repository:
 
 ```sh
 uv sync --locked --group dev

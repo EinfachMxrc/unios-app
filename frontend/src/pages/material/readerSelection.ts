@@ -19,7 +19,12 @@ export type ReaderSelectionResult =
  */
 export function readReaderSelection(selected: globalThis.Selection | null): ReaderSelectionResult {
   const quote = selected?.toString().replace(/\s+/g, ' ').trim() ?? ''
-  if (quote.length < MIN_QUOTE_LENGTH || quote.length > MAX_QUOTE_LENGTH || !selected?.anchorNode || !selected.focusNode)
+  if (
+    quote.length < MIN_QUOTE_LENGTH ||
+    quote.length > MAX_QUOTE_LENGTH ||
+    !selected?.anchorNode ||
+    !selected.focusNode
+  )
     return quote ? { kind: 'constraint' } : { kind: 'empty' }
   const anchorPage = selected.anchorNode.parentElement?.closest('[data-material-page]')
   const focusPage = selected.focusNode.parentElement?.closest('[data-material-page]')

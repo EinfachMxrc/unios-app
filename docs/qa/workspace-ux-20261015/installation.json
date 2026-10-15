@@ -1,0 +1,42 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "source_revision": "4f6251a8e61775ede8828e6a5809736904be9136",
+  "server": {
+    "image": "unios-server:0.1.27-workspace-4f6251a8e617",
+    "image_id": "sha256:1507f95ec43480298ea2302931258032cf1929275125014980a8149c13a230eb",
+    "activated_at": "2026-10-15T10:49:36.324830Z",
+    "schema": "ff9bf5d3c943",
+    "snapshot_created_at": "2026-10-15T10:48:37.558056Z",
+    "snapshot_verified_at": "2026-10-15T10:48:41.618679+00:00",
+    "isolated_fake_smoke": true,
+    "healthy": true,
+    "https_health": true,
+    "unauthenticated_api_status": 401,
+    "topology_preserved": true
+  },
+  "mac": {
+    "installed_at": "2026-10-15T10:57:44.424387+00:00",
+    "signature_verified": true,
+    "files_match_staged": true,
+    "file_count": 7,
+    "binary_sha256": "34d7413d7781d3ee5b81cba4ff6d3a372f26b5872c8cb93e810a5fac32e6f87b",
+    "startup_verified": true,
+    "health": {
+      "status": "ok",
+      "mode": "client"
+    },
+    "gui_observation": "unavailable: native pipe startup failed"
+  },
+  "requested_calendar_correction": {
+    "applied": true,
+    "scope": "weekly_series",
+    "weekday": "Tuesday",
+    "start": "14:00",
+    "end": "15:30",
+    "known_series_events": 13,
+    "other_events_unchanged": true,
+    "after_dst_verified": true,
+    "undo_available": true,
+    "verified_at": "2026-10-15T10:51:56.530311+00:00"
+  }
+}

@@ -1,26 +1,111 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.deadline-next { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; margin-bottom: 16px; border: 1px solid var(--app-border); border-radius: var(--ui-radius-item); background: var(--app-surface); }
-.deadline-next > div { min-width: 0; flex: 1; }
-.deadline-next > div > span { display: block; margin-bottom: 5px; font-size: .75rem; color: var(--app-muted); }
-.deadline-next > div > button { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; text-align: left; border-radius: var(--ui-radius-control); font-size: .85rem; }
-.deadline-next strong { font-weight: 600; overflow-wrap: anywhere; }
-.deadline-next time { font-variant-numeric: tabular-nums; }
-.deadline-next small, .deadline-next p { color: var(--app-muted); font-size: .8rem; }
-.deadline-page-switch { display: flex; width: fit-content; max-width: 100%; gap: 3px; margin-bottom: 18px; padding: 3px; border: 1px solid var(--app-border); border-radius: var(--ui-radius-control); background: var(--app-surface-alt); }
-.deadline-page-switch button { min-height: 32px; padding: 4px 14px; border-radius: 5px; color: var(--app-muted); font-size: .85rem; transition: color var(--ui-color-duration) var(--ui-color-ease), background-color var(--ui-color-duration) var(--ui-color-ease); }
-.deadline-page-switch button[aria-pressed='true'] { color: var(--app-text); background: var(--app-surface); font-weight: 600; }
-.deadline-pane[hidden] { display: none; }
-.deadline-pane { margin-bottom: 24px; }
+.deadline-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+  background: var(--app-surface);
+}
+.deadline-next > div {
+  min-width: 0;
+  flex: 1;
+}
+.deadline-next > div > span {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.75rem;
+  color: var(--app-muted);
+}
+.deadline-next > div > button {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  text-align: left;
+  border-radius: var(--ui-radius-control);
+  font-size: 0.85rem;
+}
+.deadline-next strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.deadline-next time {
+  font-variant-numeric: tabular-nums;
+}
+.deadline-next small,
+.deadline-next p {
+  color: var(--app-muted);
+  font-size: 0.8rem;
+}
+.deadline-page-switch {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 3px;
+  margin-bottom: 18px;
+  padding: 3px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-control);
+  background: var(--app-surface-alt);
+}
+.deadline-page-switch button {
+  min-height: 32px;
+  padding: 4px 14px;
+  border-radius: 5px;
+  color: var(--app-muted);
+  font-size: 0.85rem;
+  transition:
+    color var(--ui-color-duration) var(--ui-color-ease),
+    background-color var(--ui-color-duration) var(--ui-color-ease);
+}
+.deadline-page-switch button[aria-pressed='true'] {
+  color: var(--app-text);
+  background: var(--app-surface);
+  font-weight: 600;
+}
+.deadline-pane[hidden] {
+  display: none;
+}
+.deadline-pane {
+  margin-bottom: 24px;
+}
 @media (max-width: 520px) {
-  .deadline-next { flex-wrap: wrap; padding: 12px 14px; }
-  .deadline-next > div { flex-basis: 100%; }
-  .deadline-next > [data-slot='button'] { margin-inline-start: auto; }
+  .deadline-next {
+    flex-wrap: wrap;
+    padding: 12px 14px;
+  }
+  .deadline-next > div {
+    flex-basis: 100%;
+  }
+  .deadline-next > [data-slot='button'] {
+    margin-inline-start: auto;
+  }
 }
 @media (pointer: coarse) {
-  .deadline-page-switch button, .deadline-next > div > button { min-height: 44px; min-width: 44px; }
+  .deadline-page-switch button,
+  .deadline-next > div > button {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 /* Past events stay reachable but quiet: one muted line until opened. */
-.past-events { margin-top: 12px; border-top: 1px solid var(--app-border); padding-top: 10px; }
-.past-events > summary { color: var(--app-muted); font-size: .8rem; cursor: pointer; }
-.past-events > summary:hover { color: var(--app-text); }
-.past-events[open] .data-row { opacity: .7; }
+.past-events {
+  margin-top: 12px;
+  border-top: 1px solid var(--app-border);
+  padding-top: 10px;
+}
+.past-events > summary {
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.past-events > summary:hover {
+  color: var(--app-text);
+}
+.past-events[open] .data-row {
+  opacity: 0.7;
+}

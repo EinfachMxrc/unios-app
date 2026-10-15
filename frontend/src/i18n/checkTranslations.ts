@@ -72,7 +72,11 @@ export function checkNamespace(params: CheckNamespaceParams): NamespaceCheckRepo
 
   const missing = deKeys.filter((key) => !(key in tgt) && !tgtBaseKeys.has(baseKey(key)))
   for (const key of missing) {
-    const issue: NamespaceCheckIssue = { namespace, key, message: `"${locale}" is missing key "${key}" (present in German)` }
+    const issue: NamespaceCheckIssue = {
+      namespace,
+      key,
+      message: `"${locale}" is missing key "${key}" (present in German)`,
+    }
     ;(isStrict ? errors : warnings).push(issue)
   }
 
@@ -84,7 +88,11 @@ export function checkNamespace(params: CheckNamespaceParams): NamespaceCheckRepo
   for (const key of deKeys) {
     if (!(key in tgt) || !(key in baseline)) continue
     if (baseline[key] === tgt[key] && !isTranslationInsensitive(tgt[key])) {
-      warnings.push({ namespace, key, message: `"${locale}"'s "${key}" is identical to its source copy (possibly untranslated)` })
+      warnings.push({
+        namespace,
+        key,
+        message: `"${locale}"'s "${key}" is identical to its source copy (possibly untranslated)`,
+      })
     }
   }
 

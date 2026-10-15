@@ -13,7 +13,14 @@ const OPENED_MESSAGE_HTML = `<html><body>
   </div>
 </body></html>`
 
-const row = (text: string, index = 0, visible = true): PortalLink => ({ index, text, href: '', visible, role: 'option', messageRow: true })
+const row = (text: string, index = 0, visible = true): PortalLink => ({
+  index,
+  text,
+  href: '',
+  visible,
+  role: 'option',
+  messageRow: true,
+})
 
 describe('mailRowCandidate', () => {
   it('accepts a visible, reasonably long row label', () => {
@@ -44,15 +51,14 @@ describe('extractMessage', () => {
   it('returns null for a page with no main region or an unparsable sender', () => {
     expect(extractMessage('<html><body><p>Posteingang wird geladen…</p></body></html>', 'row-1')).toBeNull()
     expect(
-      extractMessage(
-        '<html><body><div role="main"><div role="heading">Betreff</div></div></body></html>',
-        'row-2',
-      ),
+      extractMessage('<html><body><div role="main"><div role="heading">Betreff</div></div></body></html>', 'row-2'),
     ).toBeNull()
   })
   it('keeps an unknown display date unknown instead of sending an invalid datetime', () => {
-    const html = OPENED_MESSAGE_HTML.replace('<time datetime="2026-10-12T09:30:00Z">12.10.2026 09:30</time>',
-      '<span title="Heute, 09:30">Heute</span>')
+    const html = OPENED_MESSAGE_HTML.replace(
+      '<time datetime="2026-10-12T09:30:00Z">12.10.2026 09:30</time>',
+      '<span title="Heute, 09:30">Heute</span>',
+    )
     expect(extractMessage(html, 'row-1')?.receivedAt).toBeNull()
   })
 })
@@ -62,13 +68,25 @@ function fakeMailWindow(rows: string[], htmlFor: (text: string) => string) {
   let scrollsLeft = 0
   const bridge: CrawlBridge = {
     capabilities: async () => ({ traversal: true }),
-    status: async () => ({ url: 'https://outlook.office.com/mail/', ready: 'complete', textLength: 500, hasPassword: false }),
-    links: async () => ({ url: 'https://outlook.office.com/mail/', links: rows.map((text, index) => row(text, index)) }),
+    status: async () => ({
+      url: 'https://outlook.office.com/mail/',
+      ready: 'complete',
+      textLength: 500,
+      hasPassword: false,
+    }),
+    links: async () => ({
+      url: 'https://outlook.office.com/mail/',
+      links: rows.map((text, index) => row(text, index)),
+    }),
     click: async (_index, text) => {
       clicked.push(text)
       return rows.includes(text)
     },
-    snapshot: async () => ({ url: 'https://outlook.office.com/mail/', title: '', html: htmlFor(clicked[clicked.length - 1]) }),
+    snapshot: async () => ({
+      url: 'https://outlook.office.com/mail/',
+      title: '',
+      html: htmlFor(clicked[clicked.length - 1]),
+    }),
     navigate: async () => undefined,
     scroll: async () => {
       if (scrollsLeft > 0) {
@@ -86,7 +104,12 @@ function fakeMailWindow(rows: string[], htmlFor: (text: string) => string) {
 describe('readMailWindow', () => {
   it('does not crawl an MFA or sign-in page without a password input', async () => {
     const { bridge, clicked } = fakeMailWindow([], () => '')
-    bridge.status = async () => ({ url: 'https://login.microsoftonline.com/challenge', ready: 'complete', textLength: 500, hasPassword: false })
+    bridge.status = async () => ({
+      url: 'https://login.microsoftonline.com/challenge',
+      ready: 'complete',
+      textLength: 500,
+      hasPassword: false,
+    })
     await expect(readMailWindow(bridge, new Set())).rejects.toThrow('login-required')
     expect(clicked).toEqual([])
   })

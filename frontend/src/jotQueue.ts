@@ -57,7 +57,11 @@ async function doFlush(): Promise<void> {
   const items = await pendingJots()
   if (!items.length || !navigator.onLine) return
   let generation: number
-  try { generation = await verifiedMutationGeneration() } catch { return }
+  try {
+    generation = await verifiedMutationGeneration()
+  } catch {
+    return
+  }
   try {
     markHostReachable(true)
     await queryClient.invalidateQueries({ queryKey: ['api', '/api/host'] })

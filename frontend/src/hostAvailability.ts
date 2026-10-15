@@ -12,7 +12,10 @@ function notify() {
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('offline', () => { markHostUnverified(); notify() })
+  window.addEventListener('offline', () => {
+    markHostUnverified()
+    notify()
+  })
   window.addEventListener('online', () => {
     reachable = true
     markHostUnverified()

@@ -2,14 +2,25 @@
 
 # Änderungen
 
-## Unveröffentlicht – Papierkorb, Dateien in der App, eingebautes Backup (13.10.2026)
+## 0.1.28 – KI-Schlüssel statt Modell-IDs, Backup mit Anki, Korrekturen (15.10.2026)
+
+- KI-Adapter: Anthropic-API-Schlüssel auf der KI-Seite einfügen, dann das Modell aus der Liste des Anbieters wählen (das neueste ist vorgewählt). Keine Modell-IDs mehr in Code oder Konfiguration; der Schlüssel liegt im Schlüsselbund und wird nie angezeigt. Das feste Ausweichmodell ist entfernt, das Monatsbudget reserviert nur noch einen Versuch.
+- Behoben: Abgelehnte KI-Anfragen (falscher Schlüssel, Rate-Limit, andere 4xx) sperrten dauerhaft Monatsbudget.
+- Behoben: Das eingebaute Backup enthielt die integrierte Anki-Sammlung (Karten, Lernstände, Medien) nicht; Sicherung und Wiederherstellung umfassen sie jetzt.
+- Behoben: Ausgeblendete Stundenplan-Slots erschienen weiter im KI-Kontext; eigene Notizkarten fehlten im MCP-Anki-Status; die Verlaufsliste eines Kurses konnte echte Einträge verdrängen.
+- Behoben: Nullstellen-Aufgaben mit irrationalen Lösungen wurden angenommen, obwohl sie nicht lösbar sind; abgelaufene Prüfungen sperrten ihre Aufgaben weiter.
+- Behoben: Die Desktop-App durfte Links nicht im Browser öffnen (fehlende Berechtigung); ein Moodle-Download mit Weiterleitung ohne Ziel brach mit einem unklaren Fehler ab.
+- Server: Alle Deploy-Dateien nutzen denselben Image-Tag (`UNIOS_VERSION`), ein Test prüft ihn gegen die Programmversion.
+- Entwicklung: Python 3.13 überall (CI, Typprüfung, Mindestversion); das gesamte Frontend ist mit Prettier formatiert, sodass der Commit-Hook greift.
+
+## 0.1.24–0.1.27 – Papierkorb, Dateien in der App, eingebautes Backup (13.10.2026)
 
 - Papierkorb: Notizen und Schnellnotizen lassen sich löschen. Direkt danach bietet UniOS „Rückgängig“ an; unter „Mehr → Papierkorb“ liegt alles Gelöschte, bis man es wiederherstellt oder nach einer Rückfrage endgültig löscht (auch alles auf einmal). Gelöschtes verschwindet aus Listen, Suche, Zitaten und Wiki-Links und kommt beim Wiederherstellen unverändert zurück; eine gelöschte Vorlesungsnotiz legt der nächste Moodle-Abgleich nicht neu an.
 - Dateien in der App ansehen: Code-Dateien aus den Kursen (Python, Java, C …) öffnen mit Zeilennummern, Hervorhebung, Umbruch und Kopierknopf; CSV als Tabelle (auch mit Semikolon aus deutschem Excel); Bilder mit Originalgröße auf Knopfdruck; Videos und Audio mit Player; Word-Dateien seitenweise und Excel-Tabellen mit Blättern, ohne Office oder LibreOffice. Herunterladen bleibt unter „Mehr“.
 - Datensicherung eingebaut (Einstellungen → Daten): einmal einen Ordner wählen (Vorschläge für OneDrive und Dokumente), dann sichert UniOS täglich Datenbank, Notizen, Markierungen, Unterlagen und die nötigen Einstellungen, ohne Restic. Sicherungen holen verpasste Tage nach, alte werden nach deiner Wahl gelöscht. Wiederherstellen nach Eintippen von „WIEDERHERSTELLEN“ beim nächsten Start; der vorherige Stand wird beiseitegelegt. Anmeldedaten und Sitzungen landen nie in der Sicherung.
 - Behoben: Ein offenes „Mehr“-Menü in der Unterlagenliste blieb offen und verdeckte die nächste Zeile; es schließt jetzt beim Öffnen eines anderen und beim Klick daneben.
 
-## Unveröffentlicht – Uli zum Anfassen und Zitate an der genauen Stelle (12.10.2026)
+## 0.1.24–0.1.27 – Uli zum Anfassen und Zitate an der genauen Stelle (12.10.2026)
 
 - Uli reagiert: Beim Darüberfahren (oder mit der Tastatur) öffnet Uli die Augen, auch nachts; die Pupillen folgen dem Mauszeiger. Ein Klick lässt Uli winken und etwas Passendes sagen, danach Tipps. Wer schnell viermal klickt, macht Uli schwindelig. Bei reduzierter Bewegung bleiben die Sprüche, die Animationen entfallen.
 - Zitate aus der Mitschrift öffnen das PDF an der genauen Stelle: Der Leser scrollt zum zitierten Satz und hebt ihn hervor. Neue Zitate merken sich die Position; bei älteren sucht UniOS den Satz auf der Seite. Das klappt auch direkt aus der Mitschrift neben dem PDF, während man schreibt, und ein zweiter Klick auf dieselbe Quelle springt erneut hin.
@@ -19,7 +30,7 @@
 - Behoben: Auf schmalen Handys (320 px) ließen sich „Erweiterungen“ und „myCampus“ seitlich verschieben; Dateifeld und Reiter passen jetzt in die Breite.
 - Verbindungskatalog: Rechte stehen lesbar da („Kurse lesen“ statt nur `courses.read`), in klaren Gruppen; leere Gruppen zeigen „Keine“.
 
-## Unveröffentlicht – Leser und ruhigeres Erscheinungsbild (11.10.2026)
+## 0.1.24–0.1.27 – Leser und ruhigeres Erscheinungsbild (11.10.2026)
 
 - Neue Befehlspalette im Spotlight-Stil: große Suchzeile, Treffer mit Typsymbol und markiertem Suchbegriff, sichtbare Enter-Aktion, Tastenzeile; Schnellerfassung bleibt im selben Fenster.
 - PDF-Leiste neu gruppiert: Seiten, Zoom mit Prozentanzeige und Mitschrift links, kompakte Suche rechts.

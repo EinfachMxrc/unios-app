@@ -58,7 +58,10 @@ for (const theme of ['light', 'dark'])
       await expect(document.locator('.studio-callout svg')).toHaveCount(6)
       await expect(document.locator('.katex').first()).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-      await page.screenshot({ path: screenshotPath(`../docs/qa/study-note-boxes-20261014/${theme}-${width}.png`), fullPage: true })
+      await page.screenshot({
+        path: screenshotPath(`../docs/qa/study-note-boxes-20261014/${theme}-${width}.png`),
+        fullPage: true,
+      })
       await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
       await page.getByRole('textbox', { name: 'Notizinhalt' }).press('ControlOrMeta+End')
       await page.getByRole('button', { name: 'Bausteine', exact: true }).click()

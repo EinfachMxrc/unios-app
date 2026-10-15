@@ -8,8 +8,11 @@ test('500-page PDF keeps canvases bounded when jumping to its final page', async
   const pdf = await fixture.body()
   await page.route('**/files/*/inline', (route) => route.fulfill({ contentType: 'application/pdf', body: pdf }))
   await page.goto('/courses/1')
-  await page.locator('.resource-row').filter({ hasText: '04_Schleifen.pdf' })
-    .getByRole('link', { name: 'PDF öffnen' }).click()
+  await page
+    .locator('.resource-row')
+    .filter({ hasText: '04_Schleifen.pdf' })
+    .getByRole('link', { name: 'PDF öffnen' })
+    .click()
   await expect(page.locator('[data-material-page="1"] canvas')).toBeVisible()
   expect(await page.locator('.material-pages canvas').count()).toBeLessThan(13)
   await page.locator('[data-reader-page="500"]').scrollIntoViewIfNeeded()

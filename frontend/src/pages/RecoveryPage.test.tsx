@@ -4,7 +4,10 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import '@/i18n'
 import RecoveryPage from './RecoveryPage'
-afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+})
 it('allows a checked recovery copy without calling the normal writer API', async () => {
   const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ id: 'invented', verified: true }) })
   vi.stubGlobal('fetch', fetcher)

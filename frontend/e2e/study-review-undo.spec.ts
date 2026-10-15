@@ -17,15 +17,21 @@ test('undo restores a confirmed rating after ordinary study reads and prevents i
   await expect(page.getByRole('button', { name: /Antwort zeigen/ })).toBeVisible()
   const question = await page.locator('.study-session-card-content').innerText()
   await page.keyboard.press('Space')
-  const answering = page.waitForResponse(response => response.url().endsWith('/api/anki/study/reviews') && response.request().method() === 'POST')
+  const answering = page.waitForResponse(
+    (response) => response.url().endsWith('/api/anki/study/reviews') && response.request().method() === 'POST',
+  )
   await page.keyboard.press('3')
   const answer = await answering
   expect(answer.ok()).toBeTruthy()
   const sent = answer.request().postDataJSON()
-  for (const route of ['/api/anki/study/status', '/api/anki/study/stats', `/api/anki/study/due?deck=${encodeURIComponent(scenario.deck_a.name)}`]) {
+  for (const route of [
+    '/api/anki/study/status',
+    '/api/anki/study/stats',
+    `/api/anki/study/due?deck=${encodeURIComponent(scenario.deck_a.name)}`,
+  ]) {
     expect((await page.request.get(route)).ok()).toBeTruthy()
   }
-  const undoing = page.waitForResponse(response => response.url().endsWith('/api/anki/study/reviews/undo'))
+  const undoing = page.waitForResponse((response) => response.url().endsWith('/api/anki/study/reviews/undo'))
   await page.keyboard.press('z')
   expect((await undoing).ok()).toBeTruthy()
   await expect(page.locator('.study-session-note[role="status"]')).toContainText('Bewertung zurückgenommen')

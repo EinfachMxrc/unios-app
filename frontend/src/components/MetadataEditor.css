@@ -1,14 +1,68 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.metadata-editor { margin: 18px 0; padding: 11px 13px; border: 1px solid var(--app-border); border-radius: 7px; background: var(--app-surface); }
-.metadata-editor summary { cursor: pointer; color: var(--app-muted); font-size: .75rem; font-weight: 600; }
-.metadata-editor-body { display: grid; gap: 12px; padding-top: 15px; }
-.metadata-editor label { display: grid; gap: 5px; color: var(--app-muted); font-size: .7rem; font-weight: 600; }
-.metadata-editor input { width: 100%; padding: 7px 9px; border: 1px solid var(--app-border); border-radius: 5px; background: var(--app-bg); color: var(--app-text); font-size: .78rem; }
-.metadata-editor-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
-.metadata-editor-fields .native-select { width: 100%; min-width: 0; }
-.metadata-editor-body > button { justify-self: start; }
-.metadata-editor-body p { margin: 0; font-size: .74rem; }
-.metadata-draft-conflict { display: grid; gap: 8px; padding: 10px; border-left: 2px solid var(--app-accent); border-radius: 4px; background: var(--app-blue-soft); }
-.metadata-draft-conflict > button { justify-self: start; }
-@media (max-width: 720px) { .metadata-editor-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.metadata-editor {
+  margin: 18px 0;
+  padding: 11px 13px;
+  border: 1px solid var(--app-border);
+  border-radius: 7px;
+  background: var(--app-surface);
+}
+.metadata-editor summary {
+  cursor: pointer;
+  color: var(--app-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.metadata-editor-body {
+  display: grid;
+  gap: 12px;
+  padding-top: 15px;
+}
+.metadata-editor label {
+  display: grid;
+  gap: 5px;
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.metadata-editor input {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--app-border);
+  border-radius: 5px;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-size: 0.78rem;
+}
+.metadata-editor-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+.metadata-editor-fields .native-select {
+  width: 100%;
+  min-width: 0;
+}
+.metadata-editor-body > button {
+  justify-self: start;
+}
+.metadata-editor-body p {
+  margin: 0;
+  font-size: 0.74rem;
+}
+.metadata-draft-conflict {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-left: 2px solid var(--app-accent);
+  border-radius: 4px;
+  background: var(--app-blue-soft);
+}
+.metadata-draft-conflict > button {
+  justify-self: start;
+}
+@media (max-width: 720px) {
+  .metadata-editor-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

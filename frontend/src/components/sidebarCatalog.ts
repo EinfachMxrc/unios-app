@@ -131,7 +131,10 @@ export const areaDefinitions: AreaDefinition[] = [
     label: ({ more }) => more('flashcards'),
     module: 'courses',
     parent: 'learning',
-    routes: [{ path: '/study/session/:deck', page: 'studySession' }, { path: '/study/cards', page: 'studyCards' }],
+    routes: [
+      { path: '/study/session/:deck', page: 'studySession' },
+      { path: '/study/cards', page: 'studyCards' },
+    ],
   },
   {
     id: 'assessment',

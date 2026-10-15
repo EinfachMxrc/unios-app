@@ -13,7 +13,12 @@ const emptyResults: PdfSearchResult[] = []
  * Full-text search inside the open PDF. Input, term and hits survive a trip away
  * from the reader; a newer search or leaving the page cancels a running one.
  */
-export function useReaderSearch({ versionId, pdfDocument, page, goToPage }: {
+export function useReaderSearch({
+  versionId,
+  pdfDocument,
+  page,
+  goToPage,
+}: {
   versionId: number
   pdfDocument: PDFDocumentProxy | null
   page: number
@@ -26,8 +31,15 @@ export function useReaderSearch({ versionId, pdfDocument, page, goToPage }: {
   const [progress, setProgress] = useState(0)
   const sequence = useRef(0)
   const jump = useRef(goToPage)
-  useLayoutEffect(() => { jump.current = goToPage })
-  useEffect(() => () => { sequence.current += 1 }, [])
+  useLayoutEffect(() => {
+    jump.current = goToPage
+  })
+  useEffect(
+    () => () => {
+      sequence.current += 1
+    },
+    [],
+  )
 
   function clear() {
     sequence.current += 1

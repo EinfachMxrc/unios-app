@@ -13,17 +13,28 @@ vi.mock('@/api', () => api)
 function deferred() {
   let resolve!: (response: SearchResponse) => void
   let reject!: (cause: Error) => void
-  const promise = new Promise<SearchResponse>((accept, fail) => { resolve = accept; reject = fail })
+  const promise = new Promise<SearchResponse>((accept, fail) => {
+    resolve = accept
+    reject = fail
+  })
   return { promise, resolve, reject }
 }
 
 describe('command palette query ownership', () => {
-  beforeEach(() => { vi.useFakeTimers(); api.request.mockReset() })
-  afterEach(() => { cleanup(); vi.useRealTimers() })
+  beforeEach(() => {
+    vi.useFakeTimers()
+    api.request.mockReset()
+  })
+  afterEach(() => {
+    cleanup()
+    vi.useRealTimers()
+  })
 
   it('waits exactly 250 ms and debounces rapid changes into one trimmed, encoded request', async () => {
     api.request.mockResolvedValue(paletteSearchFixture())
-    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), { initialProps: { query: 'a' } })
+    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), {
+      initialProps: { query: 'a' },
+    })
     await act(async () => vi.advanceTimersByTime(500))
     expect(api.request).not.toHaveBeenCalled()
     rerender({ query: 'al' })
@@ -42,7 +53,9 @@ describe('command palette query ownership', () => {
   it('hides loading and ignores an old response when input is shortened below two characters', async () => {
     const old = deferred()
     api.request.mockReturnValue(old.promise)
-    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), { initialProps: { query: 'old' } })
+    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), {
+      initialProps: { query: 'old' },
+    })
     await act(async () => vi.advanceTimersByTime(250))
     expect(result.current?.searching).toBe(true)
     const signal = api.request.mock.calls[0][1].signal as AbortSignal
@@ -58,7 +71,9 @@ describe('command palette query ownership', () => {
     const old = deferred()
     const latest = deferred()
     api.request.mockReturnValueOnce(old.promise).mockReturnValueOnce(latest.promise)
-    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), { initialProps: { query: 'old' } })
+    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), {
+      initialProps: { query: 'old' },
+    })
     await act(async () => vi.advanceTimersByTime(250))
     rerender({ query: 'latest' })
     expect(result.current).toBeNull()
@@ -73,7 +88,9 @@ describe('command palette query ownership', () => {
     const first = deferred()
     const current = deferred()
     api.request.mockReturnValueOnce(first.promise).mockReturnValueOnce(current.promise)
-    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), { initialProps: { query: 'alpha' } })
+    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), {
+      initialProps: { query: 'alpha' },
+    })
     await act(async () => vi.advanceTimersByTime(250))
     rerender({ query: 'beta' })
     rerender({ query: 'alpha' })
@@ -88,8 +105,13 @@ describe('command palette query ownership', () => {
   it('hides old errors immediately and prevents cancelled errors from replacing the current query', async () => {
     const latest = deferred()
     const old = deferred()
-    api.request.mockRejectedValueOnce(new Error('first failed')).mockReturnValueOnce(old.promise).mockReturnValueOnce(latest.promise)
-    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), { initialProps: { query: 'first' } })
+    api.request
+      .mockRejectedValueOnce(new Error('first failed'))
+      .mockReturnValueOnce(old.promise)
+      .mockReturnValueOnce(latest.promise)
+    const { result, rerender } = renderHook(({ query }) => useCommandPaletteSearch(query, true), {
+      initialProps: { query: 'first' },
+    })
     await act(async () => vi.advanceTimersByTime(250))
     expect(result.current?.error).toContain('first failed')
     rerender({ query: 'old' })
@@ -107,7 +129,9 @@ describe('command palette query ownership', () => {
   it('cancels both timers and requests when disabled or unmounted', async () => {
     const old = deferred()
     api.request.mockReturnValue(old.promise)
-    const { result, rerender, unmount } = renderHook(({ enabled }) => useCommandPaletteSearch('synthetic', enabled), { initialProps: { enabled: true } })
+    const { result, rerender, unmount } = renderHook(({ enabled }) => useCommandPaletteSearch('synthetic', enabled), {
+      initialProps: { enabled: true },
+    })
     rerender({ enabled: false })
     await act(async () => vi.advanceTimersByTime(250))
     expect(api.request).not.toHaveBeenCalled()

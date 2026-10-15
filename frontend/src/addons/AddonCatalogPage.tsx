@@ -37,7 +37,9 @@ export function AddonCatalogPage() {
   async function change(addon: AddonCatalogItem, action: string) {
     if (
       ['revoke', 'uninstall'].includes(action) &&
-      !window.confirm(action === 'revoke' ? t('confirmRevoke', { name: addon.name }) : t('confirmUninstall', { name: addon.name }))
+      !window.confirm(
+        action === 'revoke' ? t('confirmRevoke', { name: addon.name }) : t('confirmUninstall', { name: addon.name }),
+      )
     )
       return
     setBusy(addon.id)
@@ -70,7 +72,10 @@ export function AddonCatalogPage() {
     setMessage('')
     try {
       const value = JSON.parse(await file.text()) as Record<string, unknown>
-      await request(value.module_base64 ? '/api/addons/import-package' : '/api/addons/import', { method: 'POST', body: JSON.stringify(value) })
+      await request(value.module_base64 ? '/api/addons/import-package' : '/api/addons/import', {
+        method: 'POST',
+        body: JSON.stringify(value),
+      })
       setMessage(t('manifestImported'))
       refresh()
     } catch (cause) {
@@ -83,9 +88,7 @@ export function AddonCatalogPage() {
   return (
     <Shell title={t('catalogTitle')}>
       <div className="addon-intro">
-        <p>
-          {t('catalogIntro')}
-        </p>
+        <p>{t('catalogIntro')}</p>
         <label className="addon-import">
           {t('importManifestLabel')}
           <input
@@ -95,9 +98,7 @@ export function AddonCatalogPage() {
             disabled={!canWrite || Boolean(busy)}
           />
         </label>
-        <p className="muted-text">
-          {t('stepsHint')}
-        </p>
+        <p className="muted-text">{t('stepsHint')}</p>
       </div>
       {actionError && (
         <p role="alert" className="addon-error">

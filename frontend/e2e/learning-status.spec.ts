@@ -7,11 +7,20 @@ test('a practiced exercise appears as a topic in the learning status panel', asy
   const resource = detail.resources.find((item: { name: string }) => item.name === '04_Schleifen.pdf')
   const version = detail.versions[resource.id][0].version
   const payload = {
-    schema_version: 1, generated_by: 'browser-test', generated_at: new Date().toISOString(),
+    schema_version: 1,
+    generated_by: 'browser-test',
+    generated_at: new Date().toISOString(),
     source: { resource_id: resource.id, version },
-    exercises: [{ question: 'Wie oft läuft die Schleife?', topic: 'Lernstand-Test-Thema', difficulty: 'easy',
-      sample_solution: 'Bis die Bedingung falsch wird.',
-      solution_steps: 'Bedingung prüfen.', source_page: 1 }],
+    exercises: [
+      {
+        question: 'Wie oft läuft die Schleife?',
+        topic: 'Lernstand-Test-Thema',
+        difficulty: 'easy',
+        sample_solution: 'Bis die Bedingung falsch wird.',
+        solution_steps: 'Bedingung prüfen.',
+        source_page: 1,
+      },
+    ],
   }
   const created = await page.request.post('/api/ai/exercises/import', { data: payload })
   const item = (await created.json())[0]
@@ -26,8 +35,10 @@ test('a practiced exercise appears as a topic in the learning status panel', asy
   await expect(page.getByText('Versuch gespeichert.')).toBeVisible()
 
   await page.reload()
-  const topicRow = page.locator('.data-row')
-    .filter({ hasText: 'Kartenbehaltensrate' }).filter({ hasText: 'Lernstand-Test-Thema' })
+  const topicRow = page
+    .locator('.data-row')
+    .filter({ hasText: 'Kartenbehaltensrate' })
+    .filter({ hasText: 'Lernstand-Test-Thema' })
   await expect(topicRow).toBeVisible()
   await expect(topicRow).toContainText('Übungs-Trefferquote: Zu wenig Daten (1 Versuche)')
   await page.getByLabel('Kurs für Lernmodul').selectOption('1')

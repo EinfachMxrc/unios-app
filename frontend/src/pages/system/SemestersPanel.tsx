@@ -13,7 +13,13 @@ import { useWritableHost } from '@/hooks/host'
 import type { SystemResponse } from '@/types'
 
 /** The known semesters and a form to add one; days count from local midnight. */
-export function SemestersPanel({ semesters, onCreated }: { semesters: SystemResponse['semesters']; onCreated: () => void }) {
+export function SemestersPanel({
+  semesters,
+  onCreated,
+}: {
+  semesters: SystemResponse['semesters']
+  onCreated: () => void
+}) {
   const canWrite = useWritableHost()
   const { t } = useT('system')
   const [name, setName] = useState('')

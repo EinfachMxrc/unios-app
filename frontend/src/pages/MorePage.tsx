@@ -32,9 +32,11 @@ export function MorePage() {
     { id: 'settings', title: t('groupSettings') },
   ].map((group) => ({
     ...group,
-    items: catalog.filter((area) =>
-      ((area.group === group.id && !area.parent) || (group.id === 'quick' && area.group === 'primary' && !pinned.has(area.id)))
-      && area.id !== 'more',
+    items: catalog.filter(
+      (area) =>
+        ((area.group === group.id && !area.parent) ||
+          (group.id === 'quick' && area.group === 'primary' && !pinned.has(area.id))) &&
+        area.id !== 'more',
     ),
   }))
   const renderGroups = (sections: typeof groups) => (

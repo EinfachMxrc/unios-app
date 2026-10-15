@@ -12,18 +12,27 @@ export function ResourceHistory({ resourceId, latestId }: { resourceId: number; 
   const [open, setOpen] = useState(false)
   const [offset, setOffset] = useState(0)
   const { data, loading, error } = useApi<components['schemas']['ResourceVersionsView']>(
-    `/api/resources/${resourceId}/versions?offset=${offset}&limit=20`, { enabled: open },
+    `/api/resources/${resourceId}/versions?offset=${offset}&limit=20`,
+    { enabled: open },
   )
-  return <details onToggle={event => setOpen(event.currentTarget.open)}>
-    <summary>{quality('versionHistory')}</summary>
-    {open && <div>
-      {loading && <Loading variant="rows" />}
-      {error && <Failure message={error} />}
-      {data?.versions.filter(item => item.id !== latestId).map(item => <a key={item.id} href={`/files/${item.id}`}>
-        {t('downloadVersion', { version: item.version })}
-      </a>)}
-      {data?.page.total === 1 && <span>{quality('noPreviousVersions')}</span>}
-      <ListPagination page={data?.page} onPage={setOffset} />
-    </div>}
-  </details>
+  return (
+    <details onToggle={(event) => setOpen(event.currentTarget.open)}>
+      <summary>{quality('versionHistory')}</summary>
+      {open && (
+        <div>
+          {loading && <Loading variant="rows" />}
+          {error && <Failure message={error} />}
+          {data?.versions
+            .filter((item) => item.id !== latestId)
+            .map((item) => (
+              <a key={item.id} href={`/files/${item.id}`}>
+                {t('downloadVersion', { version: item.version })}
+              </a>
+            ))}
+          {data?.page.total === 1 && <span>{quality('noPreviousVersions')}</span>}
+          <ListPagination page={data?.page} onPage={setOffset} />
+        </div>
+      )}
+    </details>
+  )
 }

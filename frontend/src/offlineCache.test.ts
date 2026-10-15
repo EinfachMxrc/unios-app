@@ -7,11 +7,18 @@ it('caches only bounded accepted-focus metadata paths', () => {
   for (const path of ['/api/learning/focus/block/3', '/api/learning/focus/cycle/42']) {
     expect(mayCache(path)).toBe(true)
   }
-  for (const path of ['/api/learning/focus/block/0', '/api/learning/focus/block/-1',
-    '/api/learning/focus/block/01', '/api/learning/focus/cycle/1.5',
-    '/api/learning/focus/block/9007199254740992', '/api/learning/focus/block/3/private',
-    '/api/learning/focus/cycle/3?private=true', '/api/learning/focus/course/3',
-    '/api/learning/practice', '/api/learning/focus']) {
+  for (const path of [
+    '/api/learning/focus/block/0',
+    '/api/learning/focus/block/-1',
+    '/api/learning/focus/block/01',
+    '/api/learning/focus/cycle/1.5',
+    '/api/learning/focus/block/9007199254740992',
+    '/api/learning/focus/block/3/private',
+    '/api/learning/focus/cycle/3?private=true',
+    '/api/learning/focus/course/3',
+    '/api/learning/practice',
+    '/api/learning/focus',
+  ]) {
     expect(mayCache(path)).toBe(false)
   }
 })

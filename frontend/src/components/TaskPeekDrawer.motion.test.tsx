@@ -13,29 +13,52 @@ vi.mock('@/components/State', () => ({ Loading: () => null, Failure: () => null 
 beforeEach(() => {
   vi.useFakeTimers()
   vi.stubGlobal('matchMedia', () => ({ matches: false }))
-  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, value: function (this: HTMLDialogElement) { this.open = true } })
-  Object.defineProperty(HTMLDialogElement.prototype, 'close', { configurable: true, value: function (this: HTMLDialogElement) { this.open = false; this.dispatchEvent(new Event('close')) } })
+  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
+    configurable: true,
+    value: function (this: HTMLDialogElement) {
+      this.open = true
+    },
+  })
+  Object.defineProperty(HTMLDialogElement.prototype, 'close', {
+    configurable: true,
+    value: function (this: HTMLDialogElement) {
+      this.open = false
+      this.dispatchEvent(new Event('close'))
+    },
+  })
 })
 afterEach(() => {
-  cleanup(); delete document.documentElement.dataset.reduceMotion
-  Reflect.deleteProperty(HTMLDialogElement.prototype, 'showModal'); Reflect.deleteProperty(HTMLDialogElement.prototype, 'close')
-  vi.unstubAllGlobals(); vi.useRealTimers()
+  cleanup()
+  delete document.documentElement.dataset.reduceMotion
+  Reflect.deleteProperty(HTMLDialogElement.prototype, 'showModal')
+  Reflect.deleteProperty(HTMLDialogElement.prototype, 'close')
+  vi.unstubAllGlobals()
+  vi.useRealTimers()
 })
 
 describe('task sheet close timing', () => {
   it('closes immediately for the app preference without an invisible animation wait', () => {
     document.documentElement.dataset.reduceMotion = 'true'
     const closed = vi.fn()
-    render(<MemoryRouter><TaskPeekDrawer target={{ kind: 'deadline', id: 5 }} detail={<p>Fixture detail</p>} onClose={closed} /></MemoryRouter>)
+    render(
+      <MemoryRouter>
+        <TaskPeekDrawer target={{ kind: 'deadline', id: 5 }} detail={<p>Fixture detail</p>} onClose={closed} />
+      </MemoryRouter>,
+    )
     fireEvent.click(screen.getByRole('button', { name: 'closeAria' }))
     expect(closed).toHaveBeenCalledOnce()
     expect(vi.getTimerCount()).toBe(0)
   })
   it('allows one close transition, ignores repeat clicks and resolves at 160ms', async () => {
     const closed = vi.fn()
-    render(<MemoryRouter><TaskPeekDrawer target={{ kind: 'deadline', id: 5 }} detail={<p>Fixture detail</p>} onClose={closed} /></MemoryRouter>)
+    render(
+      <MemoryRouter>
+        <TaskPeekDrawer target={{ kind: 'deadline', id: 5 }} detail={<p>Fixture detail</p>} onClose={closed} />
+      </MemoryRouter>,
+    )
     const button = screen.getByRole('button', { name: 'closeAria' })
-    fireEvent.click(button); fireEvent.click(button)
+    fireEvent.click(button)
+    fireEvent.click(button)
     expect(closed).not.toHaveBeenCalled()
     await vi.advanceTimersByTimeAsync(159)
     expect(closed).not.toHaveBeenCalled()

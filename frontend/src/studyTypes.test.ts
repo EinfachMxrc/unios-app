@@ -11,16 +11,19 @@ describe('study deck snapshots', () => {
   })
 
   it('retains scheduler order, child decks and immutable parent metadata', () => {
-    const due = syntheticStudyDue('Uni::Parent', [syntheticStudyCard(7, 'Uni::Parent::B'), syntheticStudyCard(3, 'Uni::Parent::A')],
-      { counts: { new: 102, learning: 8, review: 9 }, has_more: true })
+    const due = syntheticStudyDue(
+      'Uni::Parent',
+      [syntheticStudyCard(7, 'Uni::Parent::B'), syntheticStudyCard(3, 'Uni::Parent::A')],
+      { counts: { new: 102, learning: 8, review: 9 }, has_more: true },
+    )
     const snapshot = freezeStudySession('Uni::Parent', due)!
-    expect(snapshot.cards.map(card => card.id)).toEqual([7, 3])
+    expect(snapshot.cards.map((card) => card.id)).toEqual([7, 3])
     expect(snapshot.scope?.deck_id).toBe(42)
     due.cards.reverse()
     due.counts.new = 0
     due.scope!.deck_id = 99
     due.cards[0].front_html = '<p>Changed later</p>'
-    expect(snapshot.cards.map(card => card.id)).toEqual([7, 3])
+    expect(snapshot.cards.map((card) => card.id)).toEqual([7, 3])
     expect(snapshot.cards[1].front_html).toContain('Question 3')
     expect(snapshot.counts.new).toBe(102)
     expect(snapshot.scope?.deck_id).toBe(42)
@@ -47,8 +50,9 @@ describe('study deck snapshots', () => {
     const card = syntheticStudyCard(1)
     for (const state of [0, 1, 2, 3])
       expect(studyCardInput({ ...card.fsrs, state })).toMatchObject({ state, last_review: null })
-    expect(studyCardInput({ ...card.fsrs, last_review: '2026-10-06T12:00:00Z' }).last_review)
-      .toBe('2026-10-06T12:00:00Z')
+    expect(studyCardInput({ ...card.fsrs, last_review: '2026-10-06T12:00:00Z' }).last_review).toBe(
+      '2026-10-06T12:00:00Z',
+    )
     expect(() => studyCardInput({ ...card.fsrs, state: 4 })).toThrow(RangeError)
   })
 })

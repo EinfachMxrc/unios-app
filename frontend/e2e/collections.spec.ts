@@ -52,14 +52,21 @@ test('sichtbare Spalten und Reihenfolge bleiben nach Neustart erhalten', async (
   await page.getByRole('button', { name: 'Neue Sammlung' }).click()
   await page.getByLabel('Inhalte').selectOption('materials')
   await page.getByRole('button', { name: 'Tabelle', exact: true }).click()
-  await page.getByRole('group', { name: 'Sichtbare Felder' }).getByRole('checkbox', { name: 'Kurs', exact: true }).uncheck()
+  await page
+    .getByRole('group', { name: 'Sichtbare Felder' })
+    .getByRole('checkbox', { name: 'Kurs', exact: true })
+    .uncheck()
   await page.getByLabel('Reihenfolge', { exact: true }).selectOption('desc')
   await page.getByRole('textbox', { name: 'Name der Ansicht' }).fill('Meine Spalten')
   await page.getByRole('button', { name: 'Ansicht speichern' }).click()
   await expect(page.locator('.collections-message')).toContainText('Ansicht gespeichert')
-  await expect(page.locator('.collection-table').getByRole('columnheader', { name: 'Kurs', exact: true })).toHaveCount(0)
+  await expect(page.locator('.collection-table').getByRole('columnheader', { name: 'Kurs', exact: true })).toHaveCount(
+    0,
+  )
   await page.reload()
   await page.getByText('Filter und Ansicht anpassen').click()
   await expect(page.getByLabel('Reihenfolge', { exact: true })).toHaveValue('desc')
-  await expect(page.getByRole('group', { name: 'Sichtbare Felder' }).getByRole('checkbox', { name: 'Kurs', exact: true })).not.toBeChecked()
+  await expect(
+    page.getByRole('group', { name: 'Sichtbare Felder' }).getByRole('checkbox', { name: 'Kurs', exact: true }),
+  ).not.toBeChecked()
 })

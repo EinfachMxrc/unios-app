@@ -37,11 +37,12 @@ test('real deck list and scoped B session remain readable on desktop and mobile 
   await page.keyboard.press('Tab')
   await expect(transfer).toBeFocused()
   await expect(page.getByRole('group', { name: 'Bewertungen der letzten sieben Tage', exact: true })).toBeVisible()
-  expect(await page.locator('.study-footer-link').evaluate(link => getComputedStyle(link).textDecorationLine))
-    .toContain('underline')
+  expect(
+    await page.locator('.study-footer-link').evaluate((link) => getComputedStyle(link).textDecorationLine),
+  ).toContain('underline')
 
   for (const theme of ['dark', 'light']) {
-    await page.evaluate(value => {
+    await page.evaluate((value) => {
       localStorage.setItem('unios-theme', value)
       document.documentElement.classList.toggle('dark', value === 'dark')
     }, theme)
@@ -50,11 +51,18 @@ test('real deck list and scoped B session remain readable on desktop and mobile 
       await page.goto('/study')
       const bLink = page.locator(`.study-deck-link[href="${bPath}"]`)
       await expect(bLink).toContainText('1 heute geplant · 1 Karte mit Unterstapeln')
-      await expect(page.locator(`.study-deck-link[href="/study/session/${encodeURIComponent(scenario.deck_a.name)}"]`))
-        .toContainText('101 heute geplant · 101 Karten mit Unterstapeln')
-      await page.evaluate(async () => { await document.fonts.ready })
+      await expect(
+        page.locator(`.study-deck-link[href="/study/session/${encodeURIComponent(scenario.deck_a.name)}"]`),
+      ).toContainText('101 heute geplant · 101 Karten mit Unterstapeln')
+      await page.evaluate(async () => {
+        await document.fonts.ready
+      })
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-      await page.screenshot({ path: screenshotPath(path.join(screenshots, `decks-${theme}-${width}.png`)), fullPage: true, animations: 'disabled' })
+      await page.screenshot({
+        path: screenshotPath(path.join(screenshots, `decks-${theme}-${width}.png`)),
+        fullPage: true,
+        animations: 'disabled',
+      })
 
       await bLink.click()
       await expect(page.getByRole('heading', { name: 'B', exact: true })).toBeVisible()
@@ -64,9 +72,15 @@ test('real deck list and scoped B session remain readable on desktop and mobile 
       await expect(reveal).toBeInViewport()
       await expect(page.locator('.study-session-answer')).toHaveCount(0)
       await expect(page.getByText('0 von 1 Karte bearbeitet', { exact: true })).toBeVisible()
-      await page.evaluate(async () => { await document.fonts.ready })
+      await page.evaluate(async () => {
+        await document.fonts.ready
+      })
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-      await page.screenshot({ path: screenshotPath(path.join(screenshots, `session-${theme}-${width}.png`)), fullPage: true, animations: 'disabled' })
+      await page.screenshot({
+        path: screenshotPath(path.join(screenshots, `session-${theme}-${width}.png`)),
+        fullPage: true,
+        animations: 'disabled',
+      })
     }
   }
 
@@ -77,7 +91,12 @@ test('real deck list and scoped B session remain readable on desktop and mobile 
   await expect(summary).toBeFocused()
   await page.keyboard.press('Enter')
   await expect(details).toHaveAttribute('open', '')
-  await expect(details.getByText('Dieser Stapel umfasst seine Unterstapel. Jede Sitzung enthält höchstens 100 Karten in Ankis Reihenfolge.', { exact: true })).toBeVisible()
+  await expect(
+    details.getByText(
+      'Dieser Stapel umfasst seine Unterstapel. Jede Sitzung enthält höchstens 100 Karten in Ankis Reihenfolge.',
+      { exact: true },
+    ),
+  ).toBeVisible()
   await expect(page.locator('.study-session-answer')).toHaveCount(0)
   await page.keyboard.press('Space')
   await expect(details).not.toHaveAttribute('open')

@@ -36,14 +36,20 @@ test('Syncthing folder status is visible and blocks an incomplete folder', async
     await expect(page.getByText('Syncthing-Konfliktdatei gefunden; Datenstand manuell prüfen')).toBeVisible()
     const screenshots = path.resolve(import.meta.dirname, '../test-results/screenshots/phase2')
     await mkdir(screenshots, { recursive: true })
-    await page.screenshot({ path: screenshotPath(path.join(screenshots, 'syncthing-conflict-light-1280.png')), fullPage: true })
+    await page.screenshot({
+      path: screenshotPath(path.join(screenshots, 'syncthing-conflict-light-1280.png')),
+      fullPage: true,
+    })
     await page.setViewportSize({ width: 390, height: 850 })
     await page.evaluate(() => localStorage.setItem('unios-theme', 'dark'))
     await page.reload()
     await page.getByRole('button', { name: 'Gerät prüfen' }).click()
     await expect(page.getByText('Syncthing-Konfliktdatei gefunden; Datenstand manuell prüfen')).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
-    await page.screenshot({ path: screenshotPath(path.join(screenshots, 'syncthing-conflict-dark-390.png')), fullPage: true })
+    await page.screenshot({
+      path: screenshotPath(path.join(screenshots, 'syncthing-conflict-dark-390.png')),
+      fullPage: true,
+    })
   } finally {
     await page.request.post('http://127.0.0.1:8177/__test__/folder-state', {
       data: { need_files: 0 },

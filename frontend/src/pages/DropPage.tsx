@@ -124,7 +124,10 @@ function Assignment({ files, reload }: { files: DropFile[]; reload: () => void }
               <Button
                 variant="outline"
                 disabled={!canWrite || !selectedCourse || !detail || busy !== null}
-                onClick={() => { importFile.reset(); importFile.mutate(file.name) }}
+                onClick={() => {
+                  importFile.reset()
+                  importFile.mutate(file.name)
+                }}
               >
                 {file.imported ? t('recheckButton') : t('assignButton')}
               </Button>
@@ -150,9 +153,7 @@ export function DropPage() {
   return (
     <Shell title={t('pageTitle')} eyebrow={t('pageEyebrow')} cachedAt={updatedAt}>
       <Panel title={t('folderFilesPanelTitle')}>
-        <p className="muted-text mb-3">
-          {t('folderFilesIntro')}
-        </p>
+        <p className="muted-text mb-3">{t('folderFilesIntro')}</p>
         {data && <code className="drop-folder">{data.folder}</code>}
       </Panel>
       <Panel title={t('assignFilesPanelTitle')}>

@@ -13,9 +13,32 @@ import DOMPurify from 'dompurify'
  * layers agree on what is safe.
  */
 const ALLOWED_TAGS = [
-  'b', 'strong', 'i', 'em', 'u', 's', 'p', 'div', 'span', 'br', 'hr',
-  'ul', 'ol', 'li', 'code', 'pre', 'sub', 'sup', 'blockquote', 'table',
-  'thead', 'tbody', 'tr', 'th', 'td', 'img',
+  'b',
+  'strong',
+  'i',
+  'em',
+  'u',
+  's',
+  'p',
+  'div',
+  'span',
+  'br',
+  'hr',
+  'ul',
+  'ol',
+  'li',
+  'code',
+  'pre',
+  'sub',
+  'sup',
+  'blockquote',
+  'table',
+  'thead',
+  'tbody',
+  'tr',
+  'th',
+  'td',
+  'img',
 ]
 const ALLOWED_ATTR = ['src', 'alt', 'loading']
 

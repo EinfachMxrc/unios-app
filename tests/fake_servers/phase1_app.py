@@ -39,6 +39,8 @@ _live_db_path = _data_dir / "private" / "test.sqlite3"
 
 from app import security as security_module
 from app.ai import proposals_service as ai_api_module
+from app.ai import provider_repository as ai_provider_repository
+from app.ai import provider_service as ai_provider_service
 from app.ai.adapter import AdapterResult
 from app.config import Settings
 from app.connectors.base import ConnectorAuth
@@ -111,6 +113,7 @@ settings = Settings(
     github_token="",
     ai_adapter_enabled=False,
     ai_adapter_api_key="",
+    ai_adapter_model="",
     ai_adapter_monthly_budget_tokens=None,
     ai_adapter_effort=None,
     connector_plugins="",
@@ -1232,11 +1235,34 @@ class _StubAiAdapter:
         return AdapterResult(model="stub-model", tokens_used=42, payload=json.dumps(body, ensure_ascii=False))
 
 
+class _FakeModelList:
+    @staticmethod
+    def list(**_kwargs):
+        return SimpleNamespace(data=[SimpleNamespace(id="fixture-model-new", display_name="Fixture Modell Neu"),
+                                     SimpleNamespace(id="fixture-model-old", display_name="Fixture Modell Alt")])
+
+
+# The provider flow never reaches the network or the developer's keychain from the browser suite.
+_fixture_vault: dict[tuple[str, str], str] = {}
+
+
+def _fixture_save(connector: str, alias: str, value: str) -> bool:
+    _fixture_vault[(connector, alias)] = value
+    return True
+
+
+ai_provider_service._client = lambda _key: SimpleNamespace(models=_FakeModelList())  # type: ignore[assignment]
+ai_provider_repository.load_connector_secret = lambda connector, alias: _fixture_vault.get((connector, alias), "")  # type: ignore[assignment]
+ai_provider_repository.save_connector_secret = _fixture_save  # type: ignore[assignment]
+ai_provider_repository.delete_connector_secret = lambda connector, alias: _fixture_vault.pop((connector, alias), None)  # type: ignore[assignment]
+
+
 @app.post("/api/__test__/ai-adapter/enable")
 def enable_fake_ai_adapter():
     """Simulate an enabled, configured KI-Adapter with a stub provider (no real network call)."""
     settings.ai_adapter_enabled = True
     settings.ai_adapter_api_key = "fixture-adapter-key"  # pragma: allowlist secret
+    settings.ai_adapter_model = "fixture-model-new"
     ai_api_module.select_adapter = lambda _settings: _StubAiAdapter()
     return {"status": "enabled"}
 
@@ -1245,6 +1271,8 @@ def enable_fake_ai_adapter():
 def disable_fake_ai_adapter():
     settings.ai_adapter_enabled = False
     settings.ai_adapter_api_key = ""
+    settings.ai_adapter_model = ""
+    _fixture_vault.clear()
     ai_api_module.select_adapter = _original_select_adapter
     return {"status": "disabled"}
 
@@ -1316,6 +1344,8 @@ def reset_for_browser_test():
     uploaded_submission_content = None
     settings.ai_adapter_enabled = False
     settings.ai_adapter_api_key = ""
+    settings.ai_adapter_model = ""
+    _fixture_vault.clear()
     ai_api_module.select_adapter = _original_select_adapter
     app.state.corpus_cache.clear()
     doctor_module._credential_file = original_credential_file_check

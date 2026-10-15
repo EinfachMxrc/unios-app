@@ -53,9 +53,14 @@ export function numberMathInput(source: string) {
       }).length
     const dollars = unescaped('$')
     const escapedDollars = before.match(/\\\$/g)?.length ?? 0
-    if (dollars % 2 || escapedDollars % 2 || unescaped('`') % 2 ||
+    if (
+      dollars % 2 ||
+      escapedDollars % 2 ||
+      unescaped('`') % 2 ||
       before.lastIndexOf('\\(') > before.lastIndexOf('\\)') ||
-      before.lastIndexOf('\\[') > before.lastIndexOf('\\]')) continue
+      before.lastIndexOf('\\[') > before.lastIndexOf('\\]')
+    )
+      continue
     if (source[index] !== '(' && (before.match(/\(/g)?.length ?? 0) > (before.match(/\)/g)?.length ?? 0)) continue
     const formula = numberMathSource(source.slice(index, end))
     if (formula && index + formula.raw.length === end)

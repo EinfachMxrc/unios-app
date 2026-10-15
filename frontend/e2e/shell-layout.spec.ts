@@ -19,7 +19,9 @@ test('header controls share one row without overlaps at window and sidebar bound
       await expect(notification).toHaveAttribute('title', '102 ungelesene Benachrichtigungen')
       await expect(header.locator('.topbar-notification-count')).toHaveText('99+')
       await expect(search).toBeVisible()
-      expect(await page.locator('.content').evaluate(el => parseFloat(getComputedStyle(el).paddingLeft))).toBeGreaterThanOrEqual(16)
+      expect(
+        await page.locator('.content').evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft)),
+      ).toBeGreaterThanOrEqual(16)
       const frame = (await header.boundingBox())!
       const controls = await header.locator('a, button').all()
       const boxes = []

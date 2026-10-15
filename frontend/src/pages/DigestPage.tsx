@@ -26,7 +26,9 @@ type Digest = {
 }
 
 function shortDate(day: string) {
-  return new Intl.DateTimeFormat(activeIntlLocale(), { day: '2-digit', month: '2-digit' }).format(new Date(`${day}T12:00:00`))
+  return new Intl.DateTimeFormat(activeIntlLocale(), { day: '2-digit', month: '2-digit' }).format(
+    new Date(`${day}T12:00:00`),
+  )
 }
 
 function previousDate(day: string) {
@@ -49,13 +51,15 @@ export function DigestPage() {
         summary && (
           <>
             <p className="muted-text mb-4">
-              {data.preview
-                ? t('previewText')
-                : t('generatedAtText', { date: localDate(data.generated_at) })}
+              {data.preview ? t('previewText') : t('generatedAtText', { date: localDate(data.generated_at) })}
               {!data.enabled && t('disabledSuffix')}
             </p>
             <div className="two-column">
-              <Panel title={t('newMaterialsPanelTitle', { range: `${shortDate(summary.week_start)}–${previousDate(summary.week_end)}` })}>
+              <Panel
+                title={t('newMaterialsPanelTitle', {
+                  range: `${shortDate(summary.week_start)}–${previousDate(summary.week_end)}`,
+                })}
+              >
                 {summary.materials.length ? (
                   <ListRows>
                     {summary.materials.map((item) => (
@@ -69,11 +73,7 @@ export function DigestPage() {
                     ))}
                   </ListRows>
                 ) : (
-                  <Empty
-                    icon={FileText}
-                    title={t('emptyMaterialsTitle')}
-                    text={t('emptyMaterialsText')}
-                  />
+                  <Empty icon={FileText} title={t('emptyMaterialsTitle')} text={t('emptyMaterialsText')} />
                 )}
               </Panel>
               <Panel title={t('nextDeadlinesPanelTitle', { date: previousDate(summary.next_week_end) })}>
@@ -93,11 +93,7 @@ export function DigestPage() {
                     ))}
                   </ListRows>
                 ) : (
-                  <Empty
-                    icon={CalendarDays}
-                    title={t('emptyDeadlinesTitle')}
-                    text={t('emptyDeadlinesText')}
-                  />
+                  <Empty icon={CalendarDays} title={t('emptyDeadlinesTitle')} text={t('emptyDeadlinesText')} />
                 )}
               </Panel>
             </div>
@@ -105,14 +101,14 @@ export function DigestPage() {
               <Panel title={t('cardStatusPanelTitle')}>
                 {summary.anki.available ? (
                   <p className="muted-text">
-                    {t('cardStatusLine', { cards: summary.anki.card_count, reviews: summary.anki.review_count, proposed: summary.anki.proposed_count })}
+                    {t('cardStatusLine', {
+                      cards: summary.anki.card_count,
+                      reviews: summary.anki.review_count,
+                      proposed: summary.anki.proposed_count,
+                    })}
                   </p>
                 ) : (
-                  <Empty
-                    icon={Layers3}
-                    title={t('emptyCardsTitle')}
-                    text={t('emptyCardsText')}
-                  />
+                  <Empty icon={Layers3} title={t('emptyCardsTitle')} text={t('emptyCardsText')} />
                 )}
               </Panel>
               <Panel title={t('openAssignmentsPanelTitle')}>
@@ -129,11 +125,7 @@ export function DigestPage() {
                     ))}
                   </ListRows>
                 ) : (
-                  <Empty
-                    icon={MessageCircleQuestion}
-                    title={t('allAssignedTitle')}
-                    text={t('allAssignedText')}
-                  />
+                  <Empty icon={MessageCircleQuestion} title={t('allAssignedTitle')} text={t('allAssignedText')} />
                 )}
               </Panel>
             </div>

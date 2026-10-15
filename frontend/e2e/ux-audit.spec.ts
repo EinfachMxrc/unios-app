@@ -79,31 +79,63 @@ test('core surfaces at desktop and phone sizes', async ({ page }, testInfo) => {
   const deckId = 90
   const fsrs = createEmptyCard(new Date('2026-10-02T08:00:00Z'))
   const due: components['schemas']['StudyDueResponse'] = {
-    cards: [{
-      id: 900, note_id: 900, deck: deckName, tags: [], due: 0, queue: 0,
-      front: 'Was wiederholt eine Schleife?', back: 'Eine Folge von Anweisungen.',
-      front_html: 'Was wiederholt eine Schleife?', back_html: 'Eine Folge von Anweisungen.',
-      fsrs: { ...fsrs, due: fsrs.due.toISOString(), last_review: null },
-    }],
-    generated_at: '2026-10-02T08:00:00Z', has_more: false,
+    cards: [
+      {
+        id: 900,
+        note_id: 900,
+        deck: deckName,
+        tags: [],
+        due: 0,
+        queue: 0,
+        front: 'Was wiederholt eine Schleife?',
+        back: 'Eine Folge von Anweisungen.',
+        front_html: 'Was wiederholt eine Schleife?',
+        back_html: 'Eine Folge von Anweisungen.',
+        fsrs: { ...fsrs, due: fsrs.due.toISOString(), last_review: null },
+      },
+    ],
+    generated_at: '2026-10-02T08:00:00Z',
+    has_more: false,
     scope: { deck_id: deckId, deck_name: deckName, includes_subdecks: true },
     counts: { new: 1, learning: 0, review: 0 },
   }
   const stats: components['schemas']['StudyStatsResponse'] = {
-    daily_reviews: ['2026-09-26', '2026-09-27', '2026-09-28', '2026-09-29',
-      '2026-09-30', '2026-10-01', '2026-10-02'].map(day => ({ day, count: 0 })),
+    daily_reviews: [
+      '2026-09-26',
+      '2026-09-27',
+      '2026-09-28',
+      '2026-09-29',
+      '2026-09-30',
+      '2026-10-01',
+      '2026-10-02',
+    ].map((day) => ({ day, count: 0 })),
     retention: null,
     decks: [{ deck_id: deckId, name: deckName, cards: 1, scope_cards: 1, counts: due.counts }],
   }
-  await page.route('**/api/anki/study/status', (route) => route.fulfill({ json: {
-    mode: 'integrated', cards: 1, notes: 1, due: 1, reviews: 0, counts: due.counts,
-  } satisfies components['schemas']['StudyStatusResponse'] }))
-  await page.route('**/api/anki/study/stats', route => route.fulfill({ json: stats }))
-  await page.route(url => url.pathname === '/api/anki/study/due' &&
-    (url.searchParams.get('deck') === null || url.searchParams.get('deck') === deckName), route => {
-    const scoped = new URL(route.request().url()).searchParams.has('deck')
-    return route.fulfill({ json: { ...due, scope: scoped ? due.scope : null } satisfies components['schemas']['StudyDueResponse'] })
-  })
+  await page.route('**/api/anki/study/status', (route) =>
+    route.fulfill({
+      json: {
+        mode: 'integrated',
+        cards: 1,
+        notes: 1,
+        due: 1,
+        reviews: 0,
+        counts: due.counts,
+      } satisfies components['schemas']['StudyStatusResponse'],
+    }),
+  )
+  await page.route('**/api/anki/study/stats', (route) => route.fulfill({ json: stats }))
+  await page.route(
+    (url) =>
+      url.pathname === '/api/anki/study/due' &&
+      (url.searchParams.get('deck') === null || url.searchParams.get('deck') === deckName),
+    (route) => {
+      const scoped = new URL(route.request().url()).searchParams.has('deck')
+      return route.fulfill({
+        json: { ...due, scope: scoped ? due.scope : null } satisfies components['schemas']['StudyDueResponse'],
+      })
+    },
+  )
   await page.route('**/api/mensa/services', (route) =>
     route.fulfill({
       json: {
@@ -252,8 +284,13 @@ test('core surfaces at desktop and phone sizes', async ({ page }, testInfo) => {
         })
       }
       await page.addInitScript(() => {
-        const saved = JSON.parse(localStorage.getItem('unios-ui-preferences-v1') || localStorage.getItem('marc-ui-preferences-v1') || '{}')
-        localStorage.setItem('unios-ui-preferences-v1', JSON.stringify({ ...saved, modules: { ...saved.modules, mail: true } }))
+        const saved = JSON.parse(
+          localStorage.getItem('unios-ui-preferences-v1') || localStorage.getItem('marc-ui-preferences-v1') || '{}',
+        )
+        localStorage.setItem(
+          'unios-ui-preferences-v1',
+          JSON.stringify({ ...saved, modules: { ...saved.modules, mail: true } }),
+        )
       })
       await page.goto('/mail')
       await page.locator('.mail-settings > summary').click()

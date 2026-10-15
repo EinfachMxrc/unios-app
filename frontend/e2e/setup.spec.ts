@@ -274,10 +274,15 @@ test('setup signs in to myCampus and PRIMUSS through the desktop app windows', a
       cookies: [{ name: 'sid', value: 'invented', domain: 'mycampus.example.edu' }],
     },
   ])
-  await expect.poll(() => page.evaluate(
-    () => (window as unknown as { __desktopCalls: Array<[string, unknown]> }).__desktopCalls
-      .some(([command]) => command === 'close_portal_login'),
-  )).toBe(true)
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        (window as unknown as { __desktopCalls: Array<[string, unknown]> }).__desktopCalls.some(
+          ([command]) => command === 'close_portal_login',
+        ),
+      ),
+    )
+    .toBe(true)
   const calls = await page.evaluate(
     () => (window as unknown as { __desktopCalls: Array<[string, unknown]> }).__desktopCalls,
   )
@@ -615,7 +620,7 @@ test('first-run requires a catalogue programme and imports the selected BWL docu
 })
 
 test('disconnected study program setup keeps actions inside phone viewport', async ({ page }, testInfo) => {
-  await page.route('**/api/setup/status', async route => {
+  await page.route('**/api/setup/status', async (route) => {
     const response = await route.fetch()
     const body = await response.json()
     body.study_program = null
@@ -625,7 +630,7 @@ test('disconnected study program setup keeps actions inside phone viewport', asy
   })
   await page.goto('/setup')
   for (const theme of ['light', 'dark'] as const) {
-    await page.evaluate(value => localStorage.setItem('unios-theme', value), theme)
+    await page.evaluate((value) => localStorage.setItem('unios-theme', value), theme)
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 844 })
       await page.goto('/setup')

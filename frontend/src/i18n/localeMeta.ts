@@ -27,10 +27,7 @@ export type { LocaleMeta, TextDirection }
  * per language. Metadata is plain JSON rather than `.ts` on purpose — see
  * `./localeMetaShape.ts`'s header comment for why.
  */
-const metaModules = import.meta.glob('./locales/*/locale.json', { eager: true }) as Record<
-  string,
-  { default: unknown }
->
+const metaModules = import.meta.glob('./locales/*/locale.json', { eager: true }) as Record<string, { default: unknown }>
 
 export const localeRegistry: LocaleRegistry = buildLocaleRegistry(metaModules)
 

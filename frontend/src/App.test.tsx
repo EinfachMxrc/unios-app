@@ -20,29 +20,29 @@ beforeEach(() => {
           path === '/api/recovery/status'
             ? { mode: 'normal' }
             : path === '/api/host/conflicts'
-            ? []
-            : path === '/api/courses'
-              ? { courses: [] }
-              : path === '/api/mensa/services'
-                ? { canteens: [], timezone: 'Europe/Berlin' }
-                : {
-                    date: '2026-09-24',
-                    moodle_configured: true,
-                    new_files: 0,
-                    new_assignments: 0,
-                    changes: [],
-                    deadlines: [],
-                    courses: {},
-                    warnings: [],
-                    latest_sync: null,
-                    sync_continuity: {
-                      state: 'never',
-                      hours_since: null,
-                      recovered_gap_hours: null,
-                      last_usable_at: null,
+              ? []
+              : path === '/api/courses'
+                ? { courses: [] }
+                : path === '/api/mensa/services'
+                  ? { canteens: [], timezone: 'Europe/Berlin' }
+                  : {
+                      date: '2026-09-24',
+                      moodle_configured: true,
+                      new_files: 0,
+                      new_assignments: 0,
+                      changes: [],
+                      deadlines: [],
+                      courses: {},
+                      warnings: [],
+                      latest_sync: null,
+                      sync_continuity: {
+                        state: 'never',
+                        hours_since: null,
+                        recovered_gap_hours: null,
+                        last_usable_at: null,
+                      },
+                      pending_group_courses: [{ id: 7, name: 'Mathe' }],
                     },
-                    pending_group_courses: [{ id: 7, name: 'Mathe' }],
-                  },
       }),
     ),
   )

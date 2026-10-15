@@ -15,7 +15,9 @@ describe('route intent loading', () => {
     expect(preloadRoute('/external')).toBeUndefined()
   })
   it('allows a failed speculative download to retry on the next intent', async () => {
-    const loader = vi.fn().mockRejectedValueOnce(new Error('offline'))
+    const loader = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('offline'))
       .mockResolvedValue({ default: () => null })
     lazyRoute('/retry-route', loader)
     await expect(preloadRoute('/retry-route')).rejects.toThrow('offline')

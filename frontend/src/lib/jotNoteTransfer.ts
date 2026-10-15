@@ -40,17 +40,27 @@ function requireNoLocalDraft(id: string) {
  * Copy is an explicit versioned note edit. Assignment remains a separate
  * metadata action; neither the original jot nor its existing relation changes.
  */
-export async function transferJotToNote(jot: Pick<Jot, 'id' | 'body'>, noteId: string,
-                                      courseId: number, sourceLabel: string, signal?: AbortSignal): Promise<{
-  detail: NoteDetail; alreadyLinked: boolean
+export async function transferJotToNote(
+  jot: Pick<Jot, 'id' | 'body'>,
+  noteId: string,
+  courseId: number,
+  sourceLabel: string,
+  signal?: AbortSignal,
+): Promise<{
+  detail: NoteDetail
+  alreadyLinked: boolean
 }> {
   requireNoLocalDraft(noteId)
   const host = await request<{ mode: string; generation: number | null }>('/api/host', { cache: 'no-store', signal })
   if (host.mode !== 'host' || !Number.isSafeInteger(host.generation) || host.generation === null || host.generation < 1)
     throw new JotTransferBlocked('hostUnavailable')
   const detail = await request<NoteDetail>(`/api/notes/${noteId}`, { cache: 'no-store', signal })
-  if (detail.note.id !== noteId || detail.note.course_id !== courseId ||
-      detail.selected_revision !== detail.note.current_revision) throw new JotTransferBlocked('wrongNote')
+  if (
+    detail.note.id !== noteId ||
+    detail.note.course_id !== courseId ||
+    detail.selected_revision !== detail.note.current_revision
+  )
+    throw new JotTransferBlocked('wrongNote')
   requireNoLocalDraft(noteId)
   if (includesJotSource(detail.body, jot.id)) return { detail, alreadyLinked: true }
   const body = appendJot(detail.body, jot, sourceLabel)
@@ -58,7 +68,8 @@ export async function transferJotToNote(jot: Pick<Jot, 'id' | 'body'>, noteId: s
   // stays untouched; a later draft save still has its own revision fence.
   // Concurrent server edits/host changes fail the existing revision/lease fence.
   const saved = await request<NoteDetail>(`/api/notes/${noteId}`, {
-    method: 'PUT', signal,
+    method: 'PUT',
+    signal,
     headers: { 'X-UniOS-Lease-Generation': String(host.generation) },
     body: JSON.stringify({ title: detail.note.title, body, expected_revision: detail.note.current_revision }),
   })
@@ -66,15 +77,20 @@ export async function transferJotToNote(jot: Pick<Jot, 'id' | 'body'>, noteId: s
 }
 
 /** Prepare the existing create form, keeping any earlier device draft intact. */
-export function prepareJotNoteDraft(jot: Pick<Jot, 'id' | 'body'>, courseId: number,
-                                    suggestedTitle: string, sourceLabel: string): string {
+export function prepareJotNoteDraft(
+  jot: Pick<Jot, 'id' | 'body'>,
+  courseId: number,
+  suggestedTitle: string,
+  sourceLabel: string,
+): string {
   const previous = newNoteDraftFor(courseId, null)
   const working = sourceWorkingDraft(courseId, null)
   const current = working && (!previous || previous.writeId === working.persisted?.writeId) ? working : previous
   const title = current?.title ?? suggestedTitle
   const currentBody = current?.body ?? ''
   const body = includesJotSource(currentBody, jot.id) ? currentBody : appendJot(currentBody, jot, sourceLabel)
-  const prepared = previous?.title === title && previous.body === body ? previous : keepNewNoteDraft(courseId, null, title, body)
+  const prepared =
+    previous?.title === title && previous.body === body ? previous : keepNewNoteDraft(courseId, null, title, body)
   if (working) rememberSourceWorkingDraft(courseId, null, { title, body, persisted: prepared, status: 'local' })
   // Only a clean completed composition may release its former UUID. Pending
   // creates or later RAM text still continue against their concrete receipt.

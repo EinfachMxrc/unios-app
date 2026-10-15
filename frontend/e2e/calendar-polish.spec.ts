@@ -2,7 +2,9 @@
 import { expect, test } from './fixtures'
 import { calendarNow } from './calendar-fixtures'
 
-test('saved schedule section keeps next deadline reachable and the timetable deep link intentional', async ({ page }) => {
+test('saved schedule section keeps next deadline reachable and the timetable deep link intentional', async ({
+  page,
+}) => {
   await page.clock.install({ time: new Date(calendarNow) })
   await page.goto('/deadlines')
   const switcher = page.locator('.deadline-page-switch')
@@ -21,10 +23,14 @@ test('saved schedule section keeps next deadline reachable and the timetable dee
 
 test('secondary source failure is distinct from setup and does not block the main deadline', async ({ page }) => {
   let fail = true
-  await page.route('**/api/primuss/status', route => fail
-    ? route.fulfill({ status: 503, json: { detail: 'Fixture source unavailable' } })
-    : route.fulfill({ json: { enrollment_available: false, session_available: false } }))
-  await page.route('**/api/public-periods', route => route.fulfill({ json: { configured: false, state: 'never', last_success_at: null, periods: [] } }))
+  await page.route('**/api/primuss/status', (route) =>
+    fail
+      ? route.fulfill({ status: 503, json: { detail: 'Fixture source unavailable' } })
+      : route.fulfill({ json: { enrollment_available: false, session_available: false } }),
+  )
+  await page.route('**/api/public-periods', (route) =>
+    route.fulfill({ json: { configured: false, state: 'never', last_success_at: null, periods: [] } }),
+  )
   await page.goto('/deadlines')
   await page.locator('.deadline-sources > summary').click()
   const sources = page.locator('.deadline-sources')
@@ -40,10 +46,19 @@ test('secondary source failure is distinct from setup and does not block the mai
 test.describe('coarse pointer targets', () => {
   test.use({ hasTouch: true, viewport: { width: 1440, height: 1000 } })
   test('sidebar actions and notifications have both 44px axes without hover', async ({ page }) => {
-    await page.addInitScript(() => localStorage.setItem('unios-sidebar-layout-v1', JSON.stringify({
-      version: 1, workspace: ['today', 'courses', 'learning', 'notes', 'deadlines'], library: [],
-      courseOrder: [], hiddenCourses: [], showCourses: true,
-    })))
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        'unios-sidebar-layout-v1',
+        JSON.stringify({
+          version: 1,
+          workspace: ['today', 'courses', 'learning', 'notes', 'deadlines'],
+          library: [],
+          courseOrder: [],
+          hiddenCourses: [],
+          showCourses: true,
+        }),
+      ),
+    )
     await page.goto('/deadlines')
     const action = page.locator('.sidebar-course-toggle').first()
     await expect(action).toBeVisible()

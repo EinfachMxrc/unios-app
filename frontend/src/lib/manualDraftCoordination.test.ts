@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest'
-afterEach(() => { vi.unstubAllGlobals(); vi.resetModules() })
+afterEach(() => {
+  vi.unstubAllGlobals()
+  vi.resetModules()
+})
 it('loads coordination and creates a secure document identity when randomUUID is unavailable', async () => {
   const getRandomValues = crypto.getRandomValues.bind(crypto)
   vi.stubGlobal('crypto', { getRandomValues })

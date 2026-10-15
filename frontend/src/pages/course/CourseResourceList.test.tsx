@@ -16,10 +16,23 @@ afterEach(cleanup)
 type Resource = CourseDetail['resources'][number]
 
 function renderRow(resource: Partial<Resource>, mime: string) {
-  const item = { id: 5, name: 'Tagebuch', kind: 'file', section_id: null, removed_upstream: false, group_category: 'own',
-    filename: 'index.html', url: null, ...resource } as Resource
+  const item = {
+    id: 5,
+    name: 'Tagebuch',
+    kind: 'file',
+    section_id: null,
+    removed_upstream: false,
+    group_category: 'own',
+    filename: 'index.html',
+    url: null,
+    ...resource,
+  } as Resource
   const detail = { sections: [], versions: { 5: [{ id: 41, version: 1, mime_type: mime }] } } as unknown as CourseDetail
-  render(<MemoryRouter><CourseResourceList resources={[item]} detail={detail} hash="" canWrite courseId="1" /></MemoryRouter>)
+  render(
+    <MemoryRouter>
+      <CourseResourceList resources={[item]} detail={detail} hash="" canWrite courseId="1" />
+    </MemoryRouter>,
+  )
 }
 
 it('opens a Moodle page inside the app and keeps its download in "Mehr"', () => {

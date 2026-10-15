@@ -21,7 +21,16 @@ export function parseNumber(source: string, base: number): Rational {
   return { numerator: negative ? -numerator : numerator, denominator: BigInt(base) ** BigInt(fraction.length) }
 }
 export function formatNumber(value: Rational, base: number, places = 24): { text: string; exact: boolean } {
-  if (!Number.isInteger(base) || base < 2 || base > 36 || value.denominator <= 0n || !Number.isInteger(places) || places < 0 || places > 64) throw new NumberSystemError('invalid')
+  if (
+    !Number.isInteger(base) ||
+    base < 2 ||
+    base > 36 ||
+    value.denominator <= 0n ||
+    !Number.isInteger(places) ||
+    places < 0 ||
+    places > 64
+  )
+    throw new NumberSystemError('invalid')
   const magnitude = value.numerator < 0 ? -value.numerator : value.numerator
   let rest = magnitude % value.denominator
   let text = (value.numerator < 0 ? '-' : '') + (magnitude / value.denominator).toString(base).toUpperCase()
@@ -34,8 +43,10 @@ export function formatNumber(value: Rational, base: number, places = 24): { text
   return { text: text + (rest ? '…' : ''), exact: rest === 0n }
 }
 export function binaryWord(value: Rational, width: number): { bits: string; unsigned: string; signed: string } {
-  if (!Number.isInteger(width) || width < 1 || width > 128 || value.numerator % value.denominator) throw new NumberSystemError('width')
-  const n = value.numerator / value.denominator, modulus = 1n << BigInt(width)
+  if (!Number.isInteger(width) || width < 1 || width > 128 || value.numerator % value.denominator)
+    throw new NumberSystemError('width')
+  const n = value.numerator / value.denominator,
+    modulus = 1n << BigInt(width)
   if (n < -(modulus >> 1n) || n >= modulus) throw new NumberSystemError('width')
   const unsigned = n < 0 ? modulus + n : n
   const signed = unsigned >= modulus / 2n ? unsigned - modulus : unsigned
@@ -49,9 +60,12 @@ export function placeValues(source: string, base: number): { digit: string; expo
   if (prefix && normalized.startsWith(prefix)) normalized = normalized.slice(2)
   const [whole, fraction = ''] = normalized.split('.')
   return Array.from(whole + fraction, (digit, i) => {
-    const exponent = whole.length - i - 1, coefficient = BigInt(digits.indexOf(digit))
-    const value = exponent >= 0 ? String(coefficient * BigInt(base) ** BigInt(exponent))
-      : `${coefficient}/${BigInt(base) ** BigInt(-exponent)}`
+    const exponent = whole.length - i - 1,
+      coefficient = BigInt(digits.indexOf(digit))
+    const value =
+      exponent >= 0
+        ? String(coefficient * BigInt(base) ** BigInt(exponent))
+        : `${coefficient}/${BigInt(base) ** BigInt(-exponent)}`
     return { digit, exponent, value }
   })
 }

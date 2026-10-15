@@ -36,7 +36,9 @@ test('Notiz bekommt Tags und erscheint in einer gefilterten Sammlung', async ({ 
   const metadata = await (await page.request.get(`/api/metadata/note/${noteId}`)).json()
   expect(metadata.tags).toContain('prüfung')
   expect(metadata.priority).toBe('high')
-  const filtered = await (await page.request.get('/api/collections/preview?kind=notes&tag=prüfung&priority=high')).json()
+  const filtered = await (
+    await page.request.get('/api/collections/preview?kind=notes&tag=prüfung&priority=high')
+  ).json()
   expect(filtered.total).toBe(1)
   await page.goto('/collections')
   await page.getByText('Filter und Ansicht anpassen', { exact: false }).click()

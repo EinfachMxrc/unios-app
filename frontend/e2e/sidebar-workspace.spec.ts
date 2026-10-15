@@ -27,8 +27,10 @@ test('default sidebar opens an actual course and its notes, with reversible keyb
   await expect(course).toBeVisible()
   await course.click()
   await expect(page.getByRole('heading', { name: 'Programmieren 1', exact: true })).toBeVisible()
-  const children = sidebar.locator('.sidebar-course-group')
-    .filter({ has: page.locator('.sidebar-course[href="/courses/1"]') }).locator('.sidebar-course-children')
+  const children = sidebar
+    .locator('.sidebar-course-group')
+    .filter({ has: page.locator('.sidebar-course[href="/courses/1"]') })
+    .locator('.sidebar-course-children')
   await expect(children.getByRole('link', { name: 'Materialien', exact: true })).toBeVisible()
   await expect(sidebar.locator('.sidebar-recents a[href="/courses/1"]')).toHaveCount(0)
   await sidebar.getByRole('button', { name: 'Unterseiten von Programmieren 1 schließen', exact: true }).click()
@@ -83,7 +85,10 @@ test('an empty course group gives a real next step and remains optional', async 
   const response = await page.request.get('/api/courses')
   const fixture = await response.json()
   fixture.courses = []
-  await page.route(url => url.pathname === '/api/courses', route => route.fulfill({ json: fixture }))
+  await page.route(
+    (url) => url.pathname === '/api/courses',
+    (route) => route.fulfill({ json: fixture }),
+  )
   await page.goto('/courses')
   const sidebar = page.locator('.app-sidebar')
   await expect(sidebar.locator('.sidebar-courses')).toContainText('Deine Kurse erscheinen hier nach dem Import.')
@@ -100,11 +105,14 @@ test('sidebar reopens actual PDF pages and notes in one click and filters disabl
   const fixture = await page.request.get('/api/__test__/long-reader.pdf?pages=3')
   expect(fixture.ok()).toBeTruthy()
   const pdf = await fixture.body()
-  await page.route('**/files/*/inline', route => route.fulfill({ contentType: 'application/pdf', body: pdf }))
+  await page.route('**/files/*/inline', (route) => route.fulfill({ contentType: 'application/pdf', body: pdf }))
   await page.goto('/courses/1')
   const sidebar = page.locator('.app-sidebar')
-  await page.locator('.resource-row').filter({ hasText: '04_Schleifen.pdf' })
-    .getByRole('link', { name: 'PDF öffnen', exact: true }).click()
+  await page
+    .locator('.resource-row')
+    .filter({ hasText: '04_Schleifen.pdf' })
+    .getByRole('link', { name: 'PDF öffnen', exact: true })
+    .click()
   await expect(page.locator('[data-material-page="1"] canvas')).toBeVisible()
   await page.getByRole('button', { name: 'Nächste Seite', exact: true }).click()
   await expect(page.locator('.material-pager')).toContainText('Seite 2 von 3')
@@ -129,29 +137,45 @@ test('sidebar reopens actual PDF pages and notes in one click and filters disabl
   await expect(page.locator('.rendered-note')).toContainText('Der Basisfall beendet den Selbstaufruf.')
   await expect(recent.locator('.sidebar-recent').first()).toHaveAttribute('href', `/notes?id=${noteId}`)
   for (const theme of ['light', 'dark']) {
-    await page.evaluate(value => {
+    await page.evaluate((value) => {
       localStorage.setItem('unios-theme', value)
       dispatchEvent(new StorageEvent('storage', { key: 'unios-theme' }))
     }, theme)
     for (const width of [1440, 1280, 390]) {
       await page.setViewportSize({ width, height: width === 390 ? 844 : width === 1440 ? 1000 : 720 })
-      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth ? [] :
-        [...document.querySelectorAll('body *')].filter(element => {
-          const rect = element.getBoundingClientRect()
-          return rect.width > 0 && rect.right > innerWidth + 1
-        }).slice(0, 15).map(element => ({ tag: element.tagName, className: element.className,
-          width: element.getBoundingClientRect().width, right: element.getBoundingClientRect().right,
-          parentClass: element.parentElement?.className,
-          parentColumns: element.parentElement ? getComputedStyle(element.parentElement).gridTemplateColumns : null }))))
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            document.documentElement.scrollWidth <= innerWidth
+              ? []
+              : [...document.querySelectorAll('body *')]
+                  .filter((element) => {
+                    const rect = element.getBoundingClientRect()
+                    return rect.width > 0 && rect.right > innerWidth + 1
+                  })
+                  .slice(0, 15)
+                  .map((element) => ({
+                    tag: element.tagName,
+                    className: element.className,
+                    width: element.getBoundingClientRect().width,
+                    right: element.getBoundingClientRect().right,
+                    parentClass: element.parentElement?.className,
+                    parentColumns: element.parentElement
+                      ? getComputedStyle(element.parentElement).gridTemplateColumns
+                      : null,
+                  })),
+          ),
+        )
         .toEqual([])
       await page.screenshot({
         path: screenshotPath(path.resolve('..', qaDirectory, `sidebar-${theme}-${width}-${Date.now()}.png`)),
         animations: 'disabled',
       })
-      if (width === 1440) await sidebar.screenshot({
-        path: screenshotPath(path.resolve('..', qaDirectory, `sidebar-detail-${theme}-${Date.now()}.png`)),
-        animations: 'disabled',
-      })
+      if (width === 1440)
+        await sidebar.screenshot({
+          path: screenshotPath(path.resolve('..', qaDirectory, `sidebar-detail-${theme}-${Date.now()}.png`)),
+          animations: 'disabled',
+        })
     }
   }
   await page.setViewportSize({ width: 1440, height: 900 })
@@ -170,14 +194,19 @@ test('sidebar reopens actual PDF pages and notes in one click and filters disabl
 })
 
 test('saved hidden courses remain hidden and can be restored explicitly', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('unios-sidebar-layout-v1', JSON.stringify({
-    version: 1,
-    workspace: ['today', 'courses', 'learning', 'notes', 'deadlines'],
-    library: [],
-    courseOrder: [],
-    hiddenCourses: [1],
-    showCourses: false,
-  })))
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'unios-sidebar-layout-v1',
+      JSON.stringify({
+        version: 1,
+        workspace: ['today', 'courses', 'learning', 'notes', 'deadlines'],
+        library: [],
+        courseOrder: [],
+        hiddenCourses: [1],
+        showCourses: false,
+      }),
+    ),
+  )
   await page.goto('/courses/1')
   const sidebar = page.locator('.app-sidebar')
   await expect(page.getByRole('heading', { name: 'Programmieren 1', exact: true })).toBeVisible()
@@ -212,7 +241,12 @@ test('five recent notes stay ordered and hiding the group survives navigation an
   }
   const sidebar = page.locator('.app-sidebar')
   const recent = sidebar.locator('.sidebar-recents')
-  await expect(recent.locator('.sidebar-recent strong')).toHaveText(notes.slice(1).reverse().map(note => note.title))
+  await expect(recent.locator('.sidebar-recent strong')).toHaveText(
+    notes
+      .slice(1)
+      .reverse()
+      .map((note) => note.title),
+  )
   await sidebar.getByRole('button', { name: 'Seitenleiste anpassen', exact: true }).click()
   const editor = page.getByRole('dialog')
   const showRecent = editor.getByLabel('Zuletzt geöffnete Inhalte anzeigen', { exact: true })
@@ -239,14 +273,17 @@ test('long navigation scrolls at 1280 by 720 with enlarged text while footer sta
     id: 1001 + index,
     name: `Beispielkurs ${index + 1} mit langem Navigationstitel`,
   }))
-  await page.route(url => url.pathname === '/api/courses', route => route.fulfill({ json: fixture }))
+  await page.route(
+    (url) => url.pathname === '/api/courses',
+    (route) => route.fulfill({ json: fixture }),
+  )
   await page.addInitScript(() => localStorage.setItem('unios-accessibility-v1', JSON.stringify({ scale: 150 })))
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto('/notes')
   const sidebar = page.locator('.app-sidebar')
   const navigation = sidebar.getByRole('navigation', { name: 'Hauptnavigation', exact: true })
   await expect(sidebar.locator('.sidebar-course')).toHaveCount(30)
-  expect(await navigation.evaluate(element => element.scrollHeight > element.clientHeight)).toBe(true)
+  await expect.poll(() => navigation.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true)
   const footer = sidebar.locator('.sidebar-bottom')
   await expect(footer.getByRole('button', { name: 'Seitenleiste anpassen', exact: true })).toBeInViewport()
   await expect(footer.getByRole('link', { name: 'Einstellungen', exact: true })).toBeInViewport()
@@ -257,7 +294,7 @@ test('long navigation scrolls at 1280 by 720 with enlarged text while footer sta
   await footer.getByRole('button', { name: 'Seitenleiste anpassen', exact: true }).click()
   const editor = page.getByRole('dialog')
   await expect(editor).toBeVisible()
-  expect(await editor.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true)
+  expect(await editor.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
   await editor.getByRole('button', { name: 'Fertig', exact: true }).click()
   await footer.getByRole('link', { name: 'Einstellungen', exact: true }).click()
   await expect(page).toHaveURL(/\/settings$/)

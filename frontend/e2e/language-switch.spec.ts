@@ -13,10 +13,13 @@ test('switching to English updates shell, Today, and Settings, and persists acro
   await page.addInitScript(() => {
     const storageKey = 'unios-ui-preferences-v1'
     const current = JSON.parse(localStorage.getItem(storageKey) ?? '{}')
-    localStorage.setItem(storageKey, JSON.stringify({
-      ...current,
-      modules: { ...(current.modules ?? {}), projects: true, grades: true, ai: true },
-    }))
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        ...current,
+        modules: { ...(current.modules ?? {}), projects: true, grades: true, ai: true },
+      }),
+    )
   })
 
   await page.goto('/settings')
@@ -42,9 +45,15 @@ test('switching to English updates shell, Today, and Settings, and persists acro
 
   // Shell chrome and navigation (present on every page) switch too.
   await expect(page.getByRole('link', { name: 'More', exact: true })).toBeVisible()
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Today' })).toBeVisible()
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Courses' })).toBeVisible()
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Deadlines' })).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Today' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Courses' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Deadlines' }),
+  ).toBeVisible()
   await expect(page.getByRole('button', { name: 'Open command palette' })).toBeVisible()
 
   // Today page.
@@ -58,7 +67,9 @@ test('switching to English updates shell, Today, and Settings, and persists acro
   // before the app renders — see src/i18n/index.ts / src/preferences.ts).
   await page.reload()
   await expect(page.getByRole('heading', { name: 'Today', exact: true })).toBeVisible()
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Today' })).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Today' }),
+  ).toBeVisible()
 
   // Learning page.
   await page.goto('/learning')

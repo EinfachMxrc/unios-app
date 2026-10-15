@@ -80,22 +80,39 @@ function EventsPanel({ events }: { events: DeadlinesResponse['events'] }) {
   const row = (item: DeadlinesResponse['events'][number]) => (
     <div className="data-row" key={item.id}>
       <span className="row-date">{localDate(item.starts_at, { day: '2-digit', month: 'short' })}</span>
-      <div><p>{item.title}</p><span className="row-subtitle">{localDate(item.starts_at)}</span></div>
+      <div>
+        <p>{item.title}</p>
+        <span className="row-subtitle">{localDate(item.starts_at)}</span>
+      </div>
     </div>
   )
-  return <Panel title={t('eventsTitle')}>
-    {upcoming.length ? <ListRows>{upcoming.slice(0, 8).map(row)}</ListRows>
-      : <Empty icon={CalendarDays} title={t('noUpcomingEventsTitle')} text={t('noEventsText')} />}
-    {past.length > 0 && <details className="past-events">
-      <summary>{t('pastEventsSummary', { count: past.length })}</summary>
-      <ListRows>{past.slice(0, 20).map(row)}</ListRows>
-    </details>}
-  </Panel>
+  return (
+    <Panel title={t('eventsTitle')}>
+      {upcoming.length ? (
+        <ListRows>{upcoming.slice(0, 8).map(row)}</ListRows>
+      ) : (
+        <Empty icon={CalendarDays} title={t('noUpcomingEventsTitle')} text={t('noEventsText')} />
+      )}
+      {past.length > 0 && (
+        <details className="past-events">
+          <summary>{t('pastEventsSummary', { count: past.length })}</summary>
+          <ListRows>{past.slice(0, 20).map(row)}</ListRows>
+        </details>
+      )}
+    </Panel>
+  )
 }
 
 export function DeadlinesPage() {
   const { t } = useT('deadlines')
-  const { data, error: deadlineError, refreshError: deadlineRefreshError, loading, updatedAt, reload: reloadDeadlines } = useApi<DeadlinesResponse>('/api/deadlines')
+  const {
+    data,
+    error: deadlineError,
+    refreshError: deadlineRefreshError,
+    loading,
+    updatedAt,
+    reload: reloadDeadlines,
+  } = useApi<DeadlinesResponse>('/api/deadlines')
   const error = deadlineRefreshError ?? deadlineError
   const { data: unresolved, reload: reloadUnresolved } = useApi<Assignment[]>('/api/assignments/unresolved')
   const portalQuery = useApi<PrimussStatus>('/api/primuss/status')
@@ -121,7 +138,9 @@ export function DeadlinesPage() {
   const [pageView, setPageView] = useWorkspaceState<PageView>('deadlines:page-view', 'calendar', { valid: isPageView })
   const [peek, setPeek] = useState<PeekTarget | null>(null)
   const location = useLocation()
-  useEffect(() => { if (location.hash === '#timetable') setPageView('calendar') }, [location.hash, setPageView])
+  useEffect(() => {
+    if (location.hash === '#timetable') setPageView('calendar')
+  }, [location.hash, setPageView])
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000)
@@ -200,46 +219,71 @@ export function DeadlinesPage() {
       </div>
       {loading && !data && <Loading />}
       {error && <Failure message={error} retry={reloadDeadlines} />}
-      {data && <section className="deadline-next" aria-label={t('nextDeadlineHeading')}>
-        <div><span>{t('nextDeadlineHeading')}</span>
-          {upcoming ? <button type="button" onClick={() => setPeek({
-            kind: upcoming.assignment_id ? 'assignment' : 'deadline', id: upcoming.assignment_id ?? upcoming.id,
-          })}><strong>{upcoming.title}</strong><time dateTime={upcoming.due_at}>{localDate(upcoming.due_at)}</time>
-            <small>{upcoming.course_id ? data.courses[String(upcoming.course_id)] ?? t('generalCourse') : t('generalCourse')}</small></button>
-            : <p>{t('noUpcomingDeadline')}</p>}
-        </div>
-        <Button variant="outline" size="sm" onClick={() => setPageView('assignments')}>{t('allAssignments')}</Button>
-      </section>}
+      {data && (
+        <section className="deadline-next" aria-label={t('nextDeadlineHeading')}>
+          <div>
+            <span>{t('nextDeadlineHeading')}</span>
+            {upcoming ? (
+              <button
+                type="button"
+                onClick={() =>
+                  setPeek({
+                    kind: upcoming.assignment_id ? 'assignment' : 'deadline',
+                    id: upcoming.assignment_id ?? upcoming.id,
+                  })
+                }
+              >
+                <strong>{upcoming.title}</strong>
+                <time dateTime={upcoming.due_at}>{localDate(upcoming.due_at)}</time>
+                <small>
+                  {upcoming.course_id
+                    ? (data.courses[String(upcoming.course_id)] ?? t('generalCourse'))
+                    : t('generalCourse')}
+                </small>
+              </button>
+            ) : (
+              <p>{t('noUpcomingDeadline')}</p>
+            )}
+          </div>
+          <Button variant="outline" size="sm" onClick={() => setPageView('assignments')}>
+            {t('allAssignments')}
+          </Button>
+        </section>
+      )}
       <div className="deadline-page-switch" role="group" aria-label={t('pageViewLabel')}>
-        <button type="button" aria-pressed={pageView === 'calendar'} onClick={() => setPageView('calendar')}>{t('pageCalendar')}</button>
-        <button type="button" aria-pressed={pageView === 'assignments'} onClick={() => setPageView('assignments')}>{t('pageAssignments')}</button>
+        <button type="button" aria-pressed={pageView === 'calendar'} onClick={() => setPageView('calendar')}>
+          {t('pageCalendar')}
+        </button>
+        <button type="button" aria-pressed={pageView === 'assignments'} onClick={() => setPageView('assignments')}>
+          {t('pageAssignments')}
+        </button>
       </div>
       <div className="deadline-pane" hidden={pageView !== 'calendar'}>
         <TimetablePanel />
         {data && <EventsPanel events={data.events} />}
       </div>
       <div className="deadline-pane" hidden={pageView !== 'assignments'}>
-      <DeadlineProposalsPanel onChanged={reloadDeadlines} />
-      {!!unresolved?.length && (
-        <Panel title={t('unresolvedTitle')}>
-          <p className="muted-text">{t('unresolvedHint')}</p>
-          {unresolved.map((item) => (
-            <div className="data-row" key={item.id}>
-              <div>
-                <Link to={`/courses/${item.course_id}#assignment-${item.id}`}>{item.title}</Link>
-                <AssignmentDeadline
-                  item={item}
-                  onSaved={() => {
-                    reloadUnresolved()
-                    reloadDeadlines()
-                  }}
-                />
+        <DeadlineProposalsPanel onChanged={reloadDeadlines} />
+        {!!unresolved?.length && (
+          <Panel title={t('unresolvedTitle')}>
+            <p className="muted-text">{t('unresolvedHint')}</p>
+            {unresolved.map((item) => (
+              <div className="data-row" key={item.id}>
+                <div>
+                  <Link to={`/courses/${item.course_id}#assignment-${item.id}`}>{item.title}</Link>
+                  <AssignmentDeadline
+                    item={item}
+                    onSaved={() => {
+                      reloadUnresolved()
+                      reloadDeadlines()
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </Panel>
-      )}
-      {data && <DeadlineViews data={data} />}
+            ))}
+          </Panel>
+        )}
+        {data && <DeadlineViews data={data} />}
       </div>
       <details className="deadline-sources">
         <summary>{t('sourcesHeading')}</summary>
@@ -247,13 +291,24 @@ export function DeadlinesPage() {
           <p className="muted-text">{t('enrollmentIntro')}</p>
           {portalLoading && <p role="status">{t('sourceLoading')}</p>}
           {portalError && <Failure message={portalError} retry={reloadPortalStatus} />}
-          {!portalLoading && !portalError && portalStatus && !portalStatus.enrollment_available && <p>{t('enrollmentNotSetUp')} <Link to="/setup">{t('setupPrimuss')}</Link></p>}
+          {!portalLoading && !portalError && portalStatus && !portalStatus.enrollment_available && (
+            <p>
+              {t('enrollmentNotSetUp')} <Link to="/setup">{t('setupPrimuss')}</Link>
+            </p>
+          )}
           {!portalLoading && !portalError && portalStatus?.enrollment_available && !portalStatus.session_available && (
             <p>{t('enrollmentLoginRequired')}</p>
           )}
           <Button
             variant="outline"
-            disabled={!canWrite || portalLoading || !!portalError || !portalStatus?.enrollment_available || !portalStatus.session_available || checking}
+            disabled={
+              !canWrite ||
+              portalLoading ||
+              !!portalError ||
+              !portalStatus?.enrollment_available ||
+              !portalStatus.session_available ||
+              checking
+            }
             onClick={() => void recheckEnrollment()}
           >
             {checking ? t('checkingEnrollment') : t('checkEnrollment')}
@@ -289,7 +344,11 @@ export function DeadlinesPage() {
           <p className="muted-text">{t('publicPeriodsIntro')}</p>
           {publicLoading && <p role="status">{t('sourceLoading')}</p>}
           {publicFetchError && <Failure message={publicFetchError} retry={reloadPublicPeriods} />}
-          {!publicLoading && !publicFetchError && publicPeriods && !publicPeriods.configured && <p>{t('publicPeriodsNotSetUp')} <Link to="/setup">{t('setupUniversity')}</Link></p>}
+          {!publicLoading && !publicFetchError && publicPeriods && !publicPeriods.configured && (
+            <p>
+              {t('publicPeriodsNotSetUp')} <Link to="/setup">{t('setupUniversity')}</Link>
+            </p>
+          )}
           {publicPeriods?.state === 'error' && <p>{t('publicPeriodsError')}</p>}
           <Button
             variant="outline"
@@ -335,7 +394,9 @@ export function DeadlinesPage() {
           {!campusLoading && !campusFetchError && campusStatus && !campusAvailable && (
             <p>{campusStatus?.alias_map_available === false ? t('campusAliasMapMissing') : t('campusNotSetUp')}</p>
           )}
-          {!campusLoading && !campusFetchError && campusAvailable && !campusStatus?.session_available && <p>{t('campusLoginRequired')}</p>}
+          {!campusLoading && !campusFetchError && campusAvailable && !campusStatus?.session_available && (
+            <p>{t('campusLoginRequired')}</p>
+          )}
           {campusAvailable && campusStatus?.connection_state === 'login_required' && (
             <p>{t('campusLoginNeededAgain')}</p>
           )}
@@ -344,7 +405,14 @@ export function DeadlinesPage() {
           )}
           <Button
             variant="outline"
-            disabled={!canWrite || campusLoading || !!campusFetchError || !campusAvailable || !campusStatus?.session_available || campusBusy}
+            disabled={
+              !canWrite ||
+              campusLoading ||
+              !!campusFetchError ||
+              !campusAvailable ||
+              !campusStatus?.session_available ||
+              campusBusy
+            }
             onClick={() => void syncCampus()}
           >
             {campusBusy ? t('syncingCampus') : t('syncCampus')}

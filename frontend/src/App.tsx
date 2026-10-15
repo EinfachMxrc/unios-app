@@ -55,9 +55,7 @@ const NotificationsPage = lazyArea('notifications', () =>
 const ActivityPage = lazyArea('activity', () =>
   import('@/pages/ActivityPage').then((module) => ({ default: module.ActivityPage })),
 )
-const TrashPage = lazyArea('trash', () =>
-  import('@/pages/TrashPage').then((module) => ({ default: module.TrashPage })),
-)
+const TrashPage = lazyArea('trash', () => import('@/pages/TrashPage').then((module) => ({ default: module.TrashPage })))
 import { NotFound } from '@/pages/NotFound'
 import { MorePage } from '@/pages/MorePage'
 import { SettingsPage } from '@/pages/SettingsPage'
@@ -72,7 +70,7 @@ const ExercisePage = lazyArea('exercises', () =>
 const AiPage = lazyArea('ai', () => import('@/pages/AiPage').then((module) => ({ default: module.AiPage })))
 import { LearningPage } from '@/pages/LearningPage'
 const FocusWorkspacePage = lazyArea('learningFocus', () =>
-  import('@/pages/FocusWorkspacePage').then(module => ({ default: module.FocusWorkspacePage })),
+  import('@/pages/FocusWorkspacePage').then((module) => ({ default: module.FocusWorkspacePage })),
 )
 const ExplanationPage = lazyArea('explanations', () =>
   import('@/pages/ExplanationPage').then((module) => ({ default: module.ExplanationPage })),

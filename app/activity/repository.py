@@ -168,7 +168,11 @@ class ActivityRepository:
                         and_(LinkEdge.from_type == relation_kind, LinkEdge.from_id == entity_id),
                         and_(LinkEdge.to_type == relation_kind, LinkEdge.to_id == entity_id))).limit(60)):
                     facts.append(Fact(edge.created_at, "relation_created", edge.relation, "Lokale Verknüpfung"))
-            local_query = select(LocalAction).where(LocalAction.course_id == course_id) if kind == "course" else select(LocalAction).where(or_(
+            local_query = select(LocalAction).where(
+                LocalAction.course_id == course_id,
+                # Only actions that produce a fact; others would crowd real entries out of the limit below.
+                or_(LocalAction.kind.in_(["intake", "topic_merge", "relation"]), LocalAction.undone_at.is_not(None)),
+            ) if kind == "course" else select(LocalAction).where(or_(
                 and_(LocalAction.kind.in_([kind, "topic_merge"] if kind == "topic" else [kind]), LocalAction.entity_id == entity_id),
                 and_(LocalAction.kind == "relation", or_(
                     and_(LocalAction.before["from_type"].as_string() == relation_kind, LocalAction.before["from_id"].as_string() == entity_id),

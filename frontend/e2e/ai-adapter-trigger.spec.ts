@@ -3,18 +3,37 @@
 import { expect, test } from './fixtures'
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })))
+  await page.addInitScript(() =>
+    localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })),
+  )
 })
 
 test.afterEach(async ({ page }) => {
   await page.request.post('http://127.0.0.1:8173/api/__test__/ai-adapter/disable')
 })
 
-test('the disabled adapter shows an explanatory text and no trigger controls', async ({ page }) => {
+test('without a key the panel only asks for the API key', async ({ page }) => {
   await page.goto('/ai')
   const panel = page.locator('.glass-card').filter({ has: page.getByRole('heading', { name: 'KI-Adapter' }) })
-  await expect(panel.getByText('Ausgeschaltet.')).toBeVisible()
+  await expect(panel.getByLabel('API-Schlüssel')).toBeVisible()
+  await expect(panel.getByRole('button', { name: 'Verbinden' })).toBeDisabled()
   await expect(panel.getByRole('button', { name: 'Vorschläge erstellen' })).toHaveCount(0)
+})
+
+test('pasting a key offers the provider models with the newest preselected, and the key can be removed', async ({
+  page,
+}) => {
+  await page.goto('/ai')
+  const panel = page.locator('.glass-card').filter({ has: page.getByRole('heading', { name: 'KI-Adapter' }) })
+  await panel.getByLabel('API-Schlüssel').fill('fixture-pasted-key')
+  await panel.getByRole('button', { name: 'Verbinden' }).click()
+  const models = panel.getByLabel('KI-Modell wählen')
+  await expect(models).toHaveValue('fixture-model-new')
+  await models.selectOption('fixture-model-old')
+  await expect(models).toHaveValue('fixture-model-old')
+  await expect(panel.getByText('fixture-pasted-key')).toHaveCount(0)
+  await panel.getByRole('button', { name: 'Schlüssel entfernen' }).click()
+  await expect(panel.getByLabel('API-Schlüssel')).toBeVisible()
 })
 
 test('an enabled adapter with a stub provider queues card proposals for review', async ({ page, request }) => {

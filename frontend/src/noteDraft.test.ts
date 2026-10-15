@@ -5,10 +5,23 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { clearWorkspace } from '@/lib/workspaceState'
 import { clearDraft, draftFor, keepDraft, rememberVolatileNoteDraft, workingNoteDraftFor } from './noteDraft'
 
-const original = { noteId: 'synthetic-note-a', baseRevision: 3, baseTitle: 'Saved title', baseBody: 'Saved baseline',
-  title: 'Own title', body: 'Old local body' }
-beforeEach(() => { clearWorkspace(); localStorage.clear() })
-afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); clearWorkspace() })
+const original = {
+  noteId: 'synthetic-note-a',
+  baseRevision: 3,
+  baseTitle: 'Saved title',
+  baseBody: 'Saved baseline',
+  title: 'Own title',
+  body: 'Old local body',
+}
+beforeEach(() => {
+  clearWorkspace()
+  localStorage.clear()
+})
+afterEach(() => {
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
+  clearWorkspace()
+})
 
 it('retains durable and RAM note recovery without crypto.randomUUID', () => {
   vi.stubGlobal('crypto', { getRandomValues: crypto.getRandomValues.bind(crypto) })
@@ -20,7 +33,9 @@ it('retains durable and RAM note recovery without crypto.randomUUID', () => {
 
 it('restores the latest RAM text over an older durable draft after a failed local write', () => {
   const disk = keepDraft(original)
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Synthetic denied storage') })
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('Synthetic denied storage')
+  })
   const newer = { ...original, body: 'Newest text only in this window' }
   expect(() => keepDraft(newer)).toThrow('Synthetic denied storage')
   const ram = rememberVolatileNoteDraft(newer)

@@ -67,15 +67,15 @@ try {
     page.on('request', request => {
       const url = new URL(request.url())
       const fixture = url.pathname === '/api/timetable/status' ? calendarStatus
-        : url.pathname === '/api/timetable/events' ? calendarEvents.map(event => ({ ...event, revision: 'a'.repeat(64), personal: false, adjusted: false }))
+        : url.pathname === '/api/timetable/events' ? calendarEvents.map(event => ({ ...event, revision: 'a'.repeat(64), personal: false, adjusted: false, series_count: 2, series_revision: 'b'.repeat(64), series_adjusted: false }))
         : url.pathname === '/api/deadlines' ? calendarDeadlines : null
       if (fixture) void request.respond({ status: 200, contentType: 'application/json', body: JSON.stringify(fixture) })
       else void request.continue()
     })
     await page.goto(`${preview}/deadlines`, { waitUntil: 'networkidle0' })
     await page.waitForSelector('[data-testid="timetable-event-9004"]')
-    if (kind === 'month') { await click(page, 'Kalender'); await page.waitForSelector('.deadline-selected-agenda') }
-    if (kind === 'event' || kind === 'editor') { await page.click('[data-testid="timetable-event-9004"] [data-calendar-trigger]'); await page.waitForSelector('.calendar-event-dialog') }
+    if (kind === 'month') { await click(page, 'Abgaben', '.deadline-page-switch'); await click(page, 'Kalender', '.view-switch[aria-label="Fristenansicht"]'); await page.waitForSelector('.deadline-selected-agenda') }
+    if (kind === 'event' || kind === 'editor') { await page.$eval('[data-testid="timetable-event-9004"] [data-calendar-trigger]', button => button.click()); await page.waitForSelector('.calendar-event-dialog') }
     if (kind === 'editor') { await click(page, 'Bearbeiten', '.calendar-event-dialog'); await page.waitForSelector('.calendar-edit-form') }
     await page.evaluate(() => document.fonts.ready)
     const selector = kind === 'month' ? '.deadline-calendar' : kind === 'event' || kind === 'editor' ? '.calendar-event-dialog' : '#timetable'

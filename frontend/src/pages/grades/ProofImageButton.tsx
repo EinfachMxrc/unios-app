@@ -12,16 +12,26 @@ import './ProofImageButton.css'
 export function ProofImageButton({ proofId, label, takenAt }: { proofId: string; label: string; takenAt?: string }) {
   const { t } = useT('grades')
   const [open, setOpen] = useState(false)
-  return <>
-    <button type="button" className="subtle-link proof-image-button" onClick={() => setOpen(true)}>{label}</button>
-    {open && <Dialog open onOpenChange={setOpen}>
-      <DialogContent className="proof-image-dialog">
-        <DialogTitle>{t('proofRowLabel')}</DialogTitle>
-        {takenAt ? <DialogDescription>{takenAt}</DialogDescription> : <DialogDescription className="sr-only">{label}</DialogDescription>}
-        <div className="proof-image-frame">
-          <img src={`/api/primuss/proofs/${encodeURIComponent(proofId)}`} alt={t('proofRowLabel')} />
-        </div>
-      </DialogContent>
-    </Dialog>}
-  </>
+  return (
+    <>
+      <button type="button" className="subtle-link proof-image-button" onClick={() => setOpen(true)}>
+        {label}
+      </button>
+      {open && (
+        <Dialog open onOpenChange={setOpen}>
+          <DialogContent className="proof-image-dialog">
+            <DialogTitle>{t('proofRowLabel')}</DialogTitle>
+            {takenAt ? (
+              <DialogDescription>{takenAt}</DialogDescription>
+            ) : (
+              <DialogDescription className="sr-only">{label}</DialogDescription>
+            )}
+            <div className="proof-image-frame">
+              <img src={`/api/primuss/proofs/${encodeURIComponent(proofId)}`} alt={t('proofRowLabel')} />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
+  )
 }

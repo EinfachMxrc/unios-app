@@ -33,44 +33,71 @@ export function useStudyCollection({ onCardsChanged }: { onCardsChanged: () => v
     return body
   }
 
-  const previewFile = () => file ? track(async () => {
-    setPreview(await request(`${BASE}/preview`, { method: 'POST', body: packageBody() }))
-  }, 'previewFailed') : Promise.resolve(false)
+  const previewFile = () =>
+    file
+      ? track(async () => {
+          setPreview(await request(`${BASE}/preview`, { method: 'POST', body: packageBody() }))
+        }, 'previewFailed')
+      : Promise.resolve(false)
 
-  const activate = () => file && preview ? track(async () => {
-    const result = await request<{ after: StudyStatus }>(`${BASE}/switch/integrated`, { method: 'POST', body: packageBody() })
-    setMessage(t('activateSuccess', { cards: result.after.cards, reviews: result.after.reviews }))
-    setFile(null)
-    void invalidateStudyReads(queryClient)
-  }, 'activateFailed') : Promise.resolve(false)
+  const activate = () =>
+    file && preview
+      ? track(async () => {
+          const result = await request<{ after: StudyStatus }>(`${BASE}/switch/integrated`, {
+            method: 'POST',
+            body: packageBody(),
+          })
+          setMessage(t('activateSuccess', { cards: result.after.cards, reviews: result.after.reviews }))
+          setFile(null)
+          void invalidateStudyReads(queryClient)
+        }, 'activateFailed')
+      : Promise.resolve(false)
 
-  const switchToExternal = () => track(async () => {
-    const result = await request<{ package: string }>(`${BASE}/switch/external`, { method: 'POST' })
-    setLastPackage(result.package)
-    setMessage(t('switchToExternalSuccess'))
-    void invalidateStudyReads(queryClient)
-  }, 'switchToExternalFailed')
+  const switchToExternal = () =>
+    track(async () => {
+      const result = await request<{ package: string }>(`${BASE}/switch/external`, { method: 'POST' })
+      setLastPackage(result.package)
+      setMessage(t('switchToExternalSuccess'))
+      void invalidateStudyReads(queryClient)
+    }, 'switchToExternalFailed')
 
-  const startEmpty = () => track(async () => {
-    await request(`${BASE}/switch/integrated-empty`, { method: 'POST' })
-    setMessage(t('startEmptySuccess'))
-    void invalidateStudyReads(queryClient)
-  }, 'startEmptyFailed')
+  const startEmpty = () =>
+    track(async () => {
+      await request(`${BASE}/switch/integrated-empty`, { method: 'POST' })
+      setMessage(t('startEmptySuccess'))
+      void invalidateStudyReads(queryClient)
+    }, 'startEmptyFailed')
 
-  const exportCards = () => track(async () => {
-    const result = await request<{ package: string }>(`${BASE}/export`, { method: 'POST' })
-    setLastPackage(result.package)
-  }, 'exportFailed')
+  const exportCards = () =>
+    track(async () => {
+      const result = await request<{ package: string }>(`${BASE}/export`, { method: 'POST' })
+      setLastPackage(result.package)
+    }, 'exportFailed')
 
-  const transferApproved = () => track(async () => {
-    const result = await request<{ imported: number }>(`${BASE}/approved`, { method: 'POST' })
-    setMessage(t('transferApprovedSuccess', { count: result.imported }))
-    void invalidateStudyReads(queryClient)
-    onCardsChanged()
-  }, 'transferApprovedFailed')
+  const transferApproved = () =>
+    track(async () => {
+      const result = await request<{ imported: number }>(`${BASE}/approved`, { method: 'POST' })
+      setMessage(t('transferApprovedSuccess', { count: result.imported }))
+      void invalidateStudyReads(queryClient)
+      onCardsChanged()
+    }, 'transferApprovedFailed')
 
   return {
-    busy, message, errorMessage, setErrorMessage, file, setFile, preview, setPreview, lastPackage,
-    track, previewFile, activate, switchToExternal, startEmpty, exportCards, transferApproved,
+    busy,
+    message,
+    errorMessage,
+    setErrorMessage,
+    file,
+    setFile,
+    preview,
+    setPreview,
+    lastPackage,
+    track,
+    previewFile,
+    activate,
+    switchToExternal,
+    startEmpty,
+    exportCards,
+    transferApproved,
   }
 }

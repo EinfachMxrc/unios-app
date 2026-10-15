@@ -1,5 +1,18 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – 0.1.28: KI-Schlüssel, Backup mit Anki, Prüfung der Fremdbefunde, Öffentlichkeit
+
+API-Schlüssel einfügen und Modell aus der Anbieterliste wählen (Schlüsselbund, keine
+Modell-IDs mehr). Zwölf Befunde eines externen Code-Reviews gegen den Code geprüft:
+sieben bestätigt und behoben (Budgetsperre nach abgelehnten Anfragen, Anki fehlt im
+Backup, ausgeblendete Slots im KI-Kontext, unlösbare Nullstellen, Prüfungssperre,
+Desktop-Berechtigung, Deploy-Tags), mehrere widerlegt (Papierkorb wird global
+gefiltert, Hinweisstand 4 ist beabsichtigt, SQLite-Downgrade funktioniert). Python 3.13
+vereinheitlicht, Frontend einmal mit Prettier formatiert. Öffentliches Repository
+`unios-app` mit neuer Historie angelegt. Backend 1359 Tests
+(ein umgebungsbedingter Fehlschlag), Frontend 1427 Tests, Playwright KI-Ablauf grün.
+Keine Windows-/macOS-Pakete gebaut; echter Anthropic-Schlüssel nicht geprüft.
+
 ## 15.10.2026 – Installiertes Paket: Start, Navigation, Mensa und Kalender
 
 Beim Mac-Start einen verwaisten PyInstaller-Arbeiter als belegenden Prozess
@@ -52,7 +65,13 @@ enthalten. Bisherige Links ohne Auswahl exportieren weiter alle Quellen.
 
 Lokale Prüfung: 50 gezielte Backendfälle, vollständiger Frontendlauf mit
 1.427 Fällen, Typecheck, Lint, Ruff, mypy und Build bestanden. Die geänderten
-Browserabläufe bestehen in Teilgruppen; der abschließende Gesamtlauf läuft.
+Browserabläufe sind vollständig in fortgesetzten Teilgruppen geprüft: alle
+526 aktuell gesammelten Fälle erfolgreich zugeordnet. Eine große Ansichten-
+Galerie bestand nach Retry (flaky), ein Formeleditor-Zeitlimit im separaten
+Wiederholungslauf. Die lange Sidebar-Prüfung wartet jetzt auf das Layout.
+Lighthouse: Kalender 96–100 Accessibility; Startseite und Legacy-PWA 100.
+Synthetische Bilder, Abdeckungs- und Installationsnachweise liegen unter
+docs/qa/workspace-ux-20261015/. Kein vollständig grüner Einzellauf.
 Ein älterer Anki-Test brauchte eine deterministische Ersatz-ID bei Erstellung
 innerhalb derselben Millisekunde (separater Test-Commit). Der lokale OS-ACL-
 Signiertest benötigt eine zusätzlich vertraute Wegwerfidentität und kann hier

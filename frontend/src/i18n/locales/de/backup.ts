@@ -2,7 +2,8 @@
 
 export default {
   title: 'Datensicherung',
-  intro: 'UniOS sichert Notizen, Markierungen, Unterlagen und Einstellungen in einen Ordner deiner Wahl, zum Beispiel auf OneDrive oder einem USB-Stick. Anmeldedaten bleiben auf diesem Gerät.',
+  intro:
+    'UniOS sichert Notizen, Markierungen, Unterlagen und Einstellungen in einen Ordner deiner Wahl, zum Beispiel auf OneDrive oder einem USB-Stick. Anmeldedaten bleiben auf diesem Gerät.',
   folderLabel: 'Backup-Ordner',
   folderPlaceholder: 'C:\\Users\\Name\\Documents\\UniOS-Backups',
   suggestions: 'Vorschläge',
@@ -24,7 +25,8 @@ export default {
   restore: 'Wiederherstellen',
   restoreLabel: 'Stand vom {{date}} wiederherstellen',
   restoreTitle: 'Diesen Stand wiederherstellen?',
-  restoreText: 'UniOS spielt den Stand vom {{date}} beim nächsten Start ein. Alles, was du danach geändert hast, ist dann nicht mehr zu sehen. Der jetzige Stand wird vorher beiseitegelegt und lässt sich zurückholen.',
+  restoreText:
+    'UniOS spielt den Stand vom {{date}} beim nächsten Start ein. Alles, was du danach geändert hast, ist dann nicht mehr zu sehen. Der jetzige Stand wird vorher beiseitegelegt und lässt sich zurückholen.',
   restoreTypeLabel: 'Zum Bestätigen „{{phrase}}“ eintippen',
   restoreConfirm: 'Beim nächsten Start einspielen',
   cancel: 'Abbrechen',

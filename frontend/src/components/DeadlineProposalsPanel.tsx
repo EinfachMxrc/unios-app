@@ -8,8 +8,16 @@ import { Failure, Panel } from '@/components/State'
 import { useApiMutation } from '@/hooks/useApiMutation'
 import { useWritableHost } from '@/hooks/host'
 
-type Proposal = { id: number; resource_name: string; course_name: string; version_id: number;
-  page_number: number; quote: string; candidate_date: string; previous_due_at: string | null }
+type Proposal = {
+  id: number
+  resource_name: string
+  course_name: string
+  version_id: number
+  page_number: number
+  quote: string
+  candidate_date: string
+  previous_due_at: string | null
+}
 
 function Review({ item, onDone }: { item: Proposal; onDone: () => void }) {
   const { t } = useT('deadlineProposals')
@@ -30,32 +38,64 @@ function Review({ item, onDone }: { item: Proposal; onDone: () => void }) {
     { onSuccess: onDone },
   )
   const busy = decide.pending
-  return <article className="deadline-proposal">
-    <strong>{item.resource_name}</strong><span className="muted-text">{item.course_name}</span>
-    <p>{item.previous_due_at ? t('previousToProposalLine', { previous: localDate(item.previous_due_at), proposal: item.candidate_date })
-      : t('newProposalLine', { date: item.candidate_date })}</p>
-    <p className="deadline-proposal-quote">{t('quoteOpen')}{item.quote}{t('quoteClose')}</p>
-    <a href={`/material/${item.version_id}?page=${item.page_number}`}>{t('sourceLink', { page: item.page_number })}</a>
-    <div className="deadline-proposal-fields">
-      <label>{t('titleLabel')}<input maxLength={500} value={title} onChange={(event) => setTitle(event.target.value)} /></label>
-      <label>{t('dateTimeLabel')}<input type="datetime-local" value={when}
-        onChange={(event) => setWhen(event.target.value)} /></label>
-    </div>
-    <p className="muted-text">{t('timeHint')}</p>
-    {decide.error && <Failure message={decide.error} />}
-    <div className="note-editor-actions">
-      <Button disabled={!canWrite || busy} onClick={() => decide.mutate('accept')}>{t('updateCalendarButton')}</Button>
-      <Button variant="outline" disabled={!canWrite || busy} onClick={() => decide.mutate('dismiss')}>{t('ignoreButton')}</Button>
-    </div>
-  </article>
+  return (
+    <article className="deadline-proposal">
+      <strong>{item.resource_name}</strong>
+      <span className="muted-text">{item.course_name}</span>
+      <p>
+        {item.previous_due_at
+          ? t('previousToProposalLine', { previous: localDate(item.previous_due_at), proposal: item.candidate_date })
+          : t('newProposalLine', { date: item.candidate_date })}
+      </p>
+      <p className="deadline-proposal-quote">
+        {t('quoteOpen')}
+        {item.quote}
+        {t('quoteClose')}
+      </p>
+      <a href={`/material/${item.version_id}?page=${item.page_number}`}>
+        {t('sourceLink', { page: item.page_number })}
+      </a>
+      <div className="deadline-proposal-fields">
+        <label>
+          {t('titleLabel')}
+          <input maxLength={500} value={title} onChange={(event) => setTitle(event.target.value)} />
+        </label>
+        <label>
+          {t('dateTimeLabel')}
+          <input type="datetime-local" value={when} onChange={(event) => setWhen(event.target.value)} />
+        </label>
+      </div>
+      <p className="muted-text">{t('timeHint')}</p>
+      {decide.error && <Failure message={decide.error} />}
+      <div className="note-editor-actions">
+        <Button disabled={!canWrite || busy} onClick={() => decide.mutate('accept')}>
+          {t('updateCalendarButton')}
+        </Button>
+        <Button variant="outline" disabled={!canWrite || busy} onClick={() => decide.mutate('dismiss')}>
+          {t('ignoreButton')}
+        </Button>
+      </div>
+    </article>
+  )
 }
 
 export function DeadlineProposalsPanel({ onChanged }: { onChanged: () => void }) {
   const { t } = useT('deadlineProposals')
   const { data, reload } = useApi<Proposal[]>('/api/deadline-proposals')
   if (!data?.length) return null
-  return <Panel title={t('panelTitle', { count: data.length })}>
-    <p className="muted-text">{t('intro')}</p>
-    {data.map((item) => <Review key={item.id} item={item} onDone={() => { reload(); onChanged() }} />)}
-  </Panel>
+  return (
+    <Panel title={t('panelTitle', { count: data.length })}>
+      <p className="muted-text">{t('intro')}</p>
+      {data.map((item) => (
+        <Review
+          key={item.id}
+          item={item}
+          onDone={() => {
+            reload()
+            onChanged()
+          }}
+        />
+      ))}
+    </Panel>
+  )
 }

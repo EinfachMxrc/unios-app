@@ -6,22 +6,32 @@ import { studyDuePath, type StudyDueResponse } from '@/studyTypes'
 
 /** URL strings are complete TanStack key elements; a global key is no prefix for scoped URLs. */
 export function isStudyReadKey(key: QueryKey): boolean {
-  return key[0] === 'api' && typeof key[1] === 'string' &&
-    /^\/api\/anki\/study\/(?:status|stats|due)(?:\?|$)/.test(key[1])
+  return (
+    key[0] === 'api' && typeof key[1] === 'string' && /^\/api\/anki\/study\/(?:status|stats|due)(?:\?|$)/.test(key[1])
+  )
 }
 
 export function invalidateStudyReads(client: QueryClient, options: { progress?: boolean } = {}): Promise<void> {
-  return client.invalidateQueries({ predicate: query => {
-    if (isStudyReadKey(query.queryKey)) return true
-    const [domain, path] = query.queryKey
-    return options.progress === true && domain === 'api' && typeof path === 'string' &&
-      /^\/api\/(?:learning\/(?:topics|modules|weekly|cycles|blocks)|analytics\/study|overview)(?:\?|$)/.test(path)
-  } })
+  return client.invalidateQueries({
+    predicate: (query) => {
+      if (isStudyReadKey(query.queryKey)) return true
+      const [domain, path] = query.queryKey
+      return (
+        options.progress === true &&
+        domain === 'api' &&
+        typeof path === 'string' &&
+        /^\/api\/(?:learning\/(?:topics|modules|weekly|cycles|blocks)|analytics\/study|overview)(?:\?|$)/.test(path)
+      )
+    },
+  })
 }
 
 /** A pre-replay pending fetch has no freshness guarantee, even with staleTime: 0. */
-export async function fetchFreshStudyDue(client: QueryClient, deck: string,
-  isCurrent: () => boolean = () => true): Promise<StudyDueResponse | null> {
+export async function fetchFreshStudyDue(
+  client: QueryClient,
+  deck: string,
+  isCurrent: () => boolean = () => true,
+): Promise<StudyDueResponse | null> {
   if (!isCurrent()) return null
   const path = studyDuePath(deck)
   const queryKey = ['api', path]

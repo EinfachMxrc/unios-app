@@ -55,17 +55,28 @@ function replayPayload(action: Action): Record<string, unknown> | null {
       : null
   }
   if (action.method === 'POST' && action.path === '/api/jots') {
-    return typeof body.id === 'string' && /^[0-9a-f-]{36}$/i.test(body.id) && typeof body.body === 'string' &&
-      typeof body.created_at === 'string' && ['thought', 'question', 'todo'].includes(String(body.kind))
+    return typeof body.id === 'string' &&
+      /^[0-9a-f-]{36}$/i.test(body.id) &&
+      typeof body.body === 'string' &&
+      typeof body.created_at === 'string' &&
+      ['thought', 'question', 'todo'].includes(String(body.kind))
       ? { id: body.id, kind: body.kind, body: body.body, created_at: body.created_at }
       : null
   }
   if (action.method === 'POST' && action.path === '/api/links') {
     const kinds = ['course', 'material', 'jot', 'note']
-    return kinds.includes(String(body.from_type)) && kinds.includes(String(body.to_type)) &&
-      Number.isInteger(body.from_id) && Number.isInteger(body.to_id) && body.relation === 'related'
-      ? { from_type: body.from_type, from_id: body.from_id, to_type: body.to_type,
-          to_id: body.to_id, relation: 'related' }
+    return kinds.includes(String(body.from_type)) &&
+      kinds.includes(String(body.to_type)) &&
+      Number.isInteger(body.from_id) &&
+      Number.isInteger(body.to_id) &&
+      body.relation === 'related'
+      ? {
+          from_type: body.from_type,
+          from_id: body.from_id,
+          to_type: body.to_type,
+          to_id: body.to_id,
+          relation: 'related',
+        }
       : null
   }
   return null
@@ -105,9 +116,11 @@ export function ConflictReview() {
     try {
       const page = await request<ActionPage>(`/api/host/conflicts/${packageId}?offset=${offset}&limit=50`)
       setSelected(packageId)
-      setDetail((current) => offset && current?.package_id === packageId
-        ? { ...page, actions: [...current.actions, ...page.actions] }
-        : page)
+      setDetail((current) =>
+        offset && current?.package_id === packageId
+          ? { ...page, actions: [...current.actions, ...page.actions] }
+          : page,
+      )
     } catch {
       setMessage(t('notOpenedError'))
     } finally {
@@ -124,10 +137,13 @@ export function ConflictReview() {
     try {
       await request(action.path, { method: action.method, body: JSON.stringify(payload) })
       await request(`/api/host/conflicts/${selected}/${action.id}/replayed`, { method: 'POST' })
-      setDetail((current) => current && ({
-        ...current,
-        actions: current.actions.map((item) => item.id === action.id ? { ...item, replayed: true } : item),
-      }))
+      setDetail(
+        (current) =>
+          current && {
+            ...current,
+            actions: current.actions.map((item) => (item.id === action.id ? { ...item, replayed: true } : item)),
+          },
+      )
       setMessage(t('replayedMessage'))
     } catch {
       setMessage(t('replayFailedMessage'))
@@ -143,10 +159,13 @@ export function ConflictReview() {
     setMessage('')
     try {
       await request(`/api/host/conflicts/${selected}/${action.id}/checked`, { method: 'POST' })
-      setDetail((current) => current && ({
-        ...current,
-        actions: current.actions.map((item) => item.id === action.id ? { ...item, checked: true } : item),
-      }))
+      setDetail(
+        (current) =>
+          current && {
+            ...current,
+            actions: current.actions.map((item) => (item.id === action.id ? { ...item, checked: true } : item)),
+          },
+      )
       setMessage(t('checkedMessage'))
     } catch {
       setMessage(t('checkFailedMessage'))
@@ -156,8 +175,15 @@ export function ConflictReview() {
   }
 
   async function finishReview() {
-    if (!selected || !detail || detail.package_id !== selected || detail.actions.length !== detail.total ||
-        !detail.actions.every((item) => item.replayed || item.checked) || !canWrite) return
+    if (
+      !selected ||
+      !detail ||
+      detail.package_id !== selected ||
+      detail.actions.length !== detail.total ||
+      !detail.actions.every((item) => item.replayed || item.checked) ||
+      !canWrite
+    )
+      return
     if (!window.confirm(t('confirmFinishText'))) return
     setBusy(true)
     setMessage('')
@@ -183,7 +209,9 @@ export function ConflictReview() {
         <div className="mt-3 grid gap-3">
           {packages.map((item) => (
             <div key={item.package_id}>
-              <strong>{item.losing_device} · {localDate(item.detected_at)}</strong>
+              <strong>
+                {item.losing_device} · {localDate(item.detected_at)}
+              </strong>
               <p>{t('packageSummaryLine', { count: item.action_count, device: item.winning_device })}</p>
               {item.reviewed && <p>{t('reviewCompleteText')}</p>}
               {!item.dashboard_actions_complete && <p>{t('incompleteLogWarning')}</p>}
@@ -194,20 +222,37 @@ export function ConflictReview() {
             </div>
           ))}
         </div>
-        {message && <p className="mt-3" role="status">{message}</p>}
+        {message && (
+          <p className="mt-3" role="status">
+            {message}
+          </p>
+        )}
         {selected && detail?.package_id === selected && (
           <div className="mt-4 grid gap-3">
             {detail.actions.map((action) => (
               <div className="rounded-lg border p-3" key={action.id}>
                 <strong>{actionLabel(action, t)}</strong>
-                <p>{localDate(action.recorded_at)} · {action.outcome === 'unklar' ? t('resultUnclearText') : t('savedThenText')}</p>
+                <p>
+                  {localDate(action.recorded_at)} ·{' '}
+                  {action.outcome === 'unklar' ? t('resultUnclearText') : t('savedThenText')}
+                </p>
                 <details className="mt-2">
                   <summary>{t('inspectDetailsSummary')}</summary>
-                  <pre className="mt-2 overflow-auto whitespace-pre-wrap text-xs">{JSON.stringify({
-                    method: action.method, path: action.path, body: action.body,
-                  }, null, 2)}</pre>
+                  <pre className="mt-2 overflow-auto whitespace-pre-wrap text-xs">
+                    {JSON.stringify(
+                      {
+                        method: action.method,
+                        path: action.path,
+                        body: action.body,
+                      },
+                      null,
+                      2,
+                    )}
+                  </pre>
                 </details>
-                {action.replayed ? <p>{t('appliedOnDeviceText')}</p> : action.checked ? (
+                {action.replayed ? (
+                  <p>{t('appliedOnDeviceText')}</p>
+                ) : action.checked ? (
                   <p>{t('individuallyCheckedText')}</p>
                 ) : (
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -231,12 +276,14 @@ export function ConflictReview() {
                 {t('showMoreButton')}
               </Button>
             )}
-            {detail.actions.length === detail.total && detail.actions.every((item) => item.replayed || item.checked) &&
-              canWrite && !packages.find((item) => item.package_id === selected)?.reviewed && (
-              <Button variant="outline" disabled={busy} onClick={() => void finishReview()}>
-                {t('finishReviewButton')}
-              </Button>
-            )}
+            {detail.actions.length === detail.total &&
+              detail.actions.every((item) => item.replayed || item.checked) &&
+              canWrite &&
+              !packages.find((item) => item.package_id === selected)?.reviewed && (
+                <Button variant="outline" disabled={busy} onClick={() => void finishReview()}>
+                  {t('finishReviewButton')}
+                </Button>
+              )}
           </div>
         )}
       </AlertDescription>

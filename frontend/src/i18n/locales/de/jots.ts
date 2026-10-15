@@ -43,17 +43,22 @@ export default {
   assignmentHint: 'Zuordnen verknüpft Kurs und Notiz. Der Text der Mitschrift bleibt dabei unverändert.',
   transferButton: 'In Mitschrift übernehmen',
   transferPending: 'Übernehme …',
-  transferHint: 'Übernehmen ergänzt den Text der ausgewählten Mitschrift mit einem Link zur ursprünglichen Schnellnotiz. Die Schnellnotiz und ihre Zuordnung bleiben erhalten.',
+  transferHint:
+    'Übernehmen ergänzt den Text der ausgewählten Mitschrift mit einem Link zur ursprünglichen Schnellnotiz. Die Schnellnotiz und ihre Zuordnung bleiben erhalten.',
   transferSucceeded: 'Text in der Mitschrift ergänzt.',
   alreadyLinked: 'Diese Schnellnotiz ist in der Mitschrift bereits als Quelle verknüpft.',
   openTransferredNote: 'Mitschrift öffnen',
   originalJotLabel: 'Ursprüngliche Schnellnotiz',
-  transferLocalDraft: 'Diese Mitschrift hat einen lokalen Entwurf. Öffne und sichere ihn zuerst, damit deine Änderungen erhalten bleiben.',
-  transferHostUnavailable: 'Das Hauptgerät ist nicht zum Schreiben bereit. Versuche es erneut, sobald es erreichbar ist.',
-  transferWrongNote: 'Die Mitschrift passt nicht zum gewählten Kurs oder ist keine aktuelle Version. Wähle das Ziel erneut.',
+  transferLocalDraft:
+    'Diese Mitschrift hat einen lokalen Entwurf. Öffne und sichere ihn zuerst, damit deine Änderungen erhalten bleiben.',
+  transferHostUnavailable:
+    'Das Hauptgerät ist nicht zum Schreiben bereit. Versuche es erneut, sobald es erreichbar ist.',
+  transferWrongNote:
+    'Die Mitschrift passt nicht zum gewählten Kurs oder ist keine aktuelle Version. Wähle das Ziel erneut.',
   transferTooLong: 'Die ergänzte Mitschrift wäre zu lang. Wähle eine andere oder neue Mitschrift.',
   transferFailed: 'Der Text konnte nicht übernommen werden. Die Schnellnotiz bleibt erhalten.',
   newNoteButton: 'Neue Mitschrift mit diesem Eintrag',
   newNoteTitle: 'Mitschrift aus Schnellnotizen',
-  newNoteDraftFailed: 'Der neue Entwurf konnte auf diesem Gerät nicht gesichert werden. Die Schnellnotiz bleibt erhalten.',
+  newNoteDraftFailed:
+    'Der neue Entwurf konnte auf diesem Gerät nicht gesichert werden. Die Schnellnotiz bleibt erhalten.',
 } as const

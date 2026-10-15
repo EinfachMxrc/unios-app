@@ -162,7 +162,8 @@ test('Unterlagen verwenden den Moodle-Titel und behalten Dateiname und PDF-Zugan
     const data = structuredClone(fixture)
     const query = new URL(route.request().url()).searchParams.get('q')?.toLocaleLowerCase() ?? ''
     data.resources = data.resources.filter((item: { name: string; filename?: string }) =>
-      `${item.name} ${item.filename ?? ''}`.toLocaleLowerCase().includes(query))
+      `${item.name} ${item.filename ?? ''}`.toLocaleLowerCase().includes(query),
+    )
     data.page = { offset: 0, limit: 50, total: data.resources.length, has_more: false }
     await route.fulfill({ json: data })
   })

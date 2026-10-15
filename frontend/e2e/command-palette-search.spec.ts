@@ -26,14 +26,22 @@ test('Cmd+K includes every content type and opens an own note through keyboard n
   const noteId = (await created.json()).note.id as string
   const response = paletteSearchFixture(50)
   response.note_results[0].id = noteId
-  await page.route(url => url.pathname === '/api/search', route => route.fulfill({ json: response }))
+  await page.route(
+    (url) => url.pathname === '/api/search',
+    (route) => route.fulfill({ json: response }),
+  )
   const input = await openPalette(page)
   await input.fill('synthetic')
   const hits = page.locator('.command-results .command-hit')
   await expect(hits).toHaveCount(7)
   await expect(hits.locator('strong')).toHaveText([
-    'synthetic-document-0', 'synthetic-annotation-0', 'synthetic-announcement-0',
-    'synthetic-course-note-0', 'synthetic-note-0', 'synthetic-jot-0', 'synthetic-clip-0',
+    'synthetic-document-0',
+    'synthetic-annotation-0',
+    'synthetic-announcement-0',
+    'synthetic-course-note-0',
+    'synthetic-note-0',
+    'synthetic-jot-0',
+    'synthetic-clip-0',
   ])
   for (let index = 0; index < 5; index += 1) await page.keyboard.press('ArrowDown')
   await expect(hits.nth(4)).toBeFocused()
@@ -50,16 +58,22 @@ test('one content type fills seven ranked slots and a forum hit keeps its extern
   })
   await page.addInitScript(() => {
     window.open = (url, target, features) => {
-      const record = (window as unknown as Window & {
-        recordPaletteWindowOpen: (url: string, target: string, features: string) => Promise<void>
-      }).recordPaletteWindowOpen
+      const record = (
+        window as unknown as Window & {
+          recordPaletteWindowOpen: (url: string, target: string, features: string) => Promise<void>
+        }
+      ).recordPaletteWindowOpen
       void record(String(url), target ?? '', features ?? '')
       return null
     }
   })
-  await page.route(url => url.pathname === '/api/search', route => route.fulfill({
-    json: new URL(route.request().url()).searchParams.get('q') === 'notes' ? notes : paletteSearchFixture(50),
-  }))
+  await page.route(
+    (url) => url.pathname === '/api/search',
+    (route) =>
+      route.fulfill({
+        json: new URL(route.request().url()).searchParams.get('q') === 'notes' ? notes : paletteSearchFixture(50),
+      }),
+  )
   const input = await openPalette(page)
   await input.fill('notes')
   const hits = page.locator('.command-results .command-hit')
@@ -67,9 +81,15 @@ test('one content type fills seven ranked slots and a forum hit keeps its extern
   await input.fill('forum')
   await expect(hits).toHaveCount(7)
   await page.getByRole('button', { name: /synthetic-announcement-0/ }).click()
-  await expect.poll(() => opened).toEqual([{
-    url: 'https://example.org/forum/0', target: '_blank', features: 'noopener,noreferrer',
-  }])
+  await expect
+    .poll(() => opened)
+    .toEqual([
+      {
+        url: 'https://example.org/forum/0',
+        target: '_blank',
+        features: 'noopener,noreferrer',
+      },
+    ])
   await expect(page).toHaveURL(/\/courses$/)
 })
 
@@ -78,24 +98,35 @@ test('late old-query responses stay hidden after a change or a shortened input',
   let releaseShortened!: () => void
   let oldHandled!: () => void
   let shortenedHandled!: () => void
-  const oldGate = new Promise<void>(resolve => { releaseOld = resolve })
-  const shortenedGate = new Promise<void>(resolve => { releaseShortened = resolve })
-  const oldDone = new Promise<void>(resolve => { oldHandled = resolve })
-  const shortenedDone = new Promise<void>(resolve => { shortenedHandled = resolve })
-  await page.route(url => url.pathname === '/api/search', async route => {
-    const query = new URL(route.request().url()).searchParams.get('q') ?? ''
-    if (query === 'old') await oldGate
-    if (query === 'shortened') await shortenedGate
-    try {
-      await route.fulfill({ json: paletteSearchFixture(50, query) })
-    } finally {
-      if (query === 'old') oldHandled()
-      if (query === 'shortened') shortenedHandled()
-    }
+  const oldGate = new Promise<void>((resolve) => {
+    releaseOld = resolve
   })
+  const shortenedGate = new Promise<void>((resolve) => {
+    releaseShortened = resolve
+  })
+  const oldDone = new Promise<void>((resolve) => {
+    oldHandled = resolve
+  })
+  const shortenedDone = new Promise<void>((resolve) => {
+    shortenedHandled = resolve
+  })
+  await page.route(
+    (url) => url.pathname === '/api/search',
+    async (route) => {
+      const query = new URL(route.request().url()).searchParams.get('q') ?? ''
+      if (query === 'old') await oldGate
+      if (query === 'shortened') await shortenedGate
+      try {
+        await route.fulfill({ json: paletteSearchFixture(50, query) })
+      } finally {
+        if (query === 'old') oldHandled()
+        if (query === 'shortened') shortenedHandled()
+      }
+    },
+  )
   try {
     const input = await openPalette(page)
-    const oldRequest = page.waitForRequest(request => new URL(request.url()).searchParams.get('q') === 'old')
+    const oldRequest = page.waitForRequest((request) => new URL(request.url()).searchParams.get('q') === 'old')
     await input.fill('old')
     await oldRequest
     await input.fill('latest')
@@ -105,7 +136,7 @@ test('late old-query responses stay hidden after a change or a shortened input',
     await oldDone
     await expect(page.getByText('old-document-0', { exact: true })).toHaveCount(0)
     await expect(hits.locator('strong').nth(4)).toHaveText('latest-note-0')
-    const shortRequest = page.waitForRequest(request => new URL(request.url()).searchParams.get('q') === 'shortened')
+    const shortRequest = page.waitForRequest((request) => new URL(request.url()).searchParams.get('q') === 'shortened')
     await input.fill('shortened')
     await shortRequest
     await input.fill('s')

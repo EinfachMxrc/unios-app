@@ -10,12 +10,31 @@ import { NoteMarkdownEditor } from './NoteMarkdownEditor'
 vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string) => key }) }))
 vi.mock('@/hooks/useNoteLinks', () => ({ useNoteSuggestions: () => ({ data: [] }) }))
 vi.mock('@/components/editor/StudyInsertTools', () => ({ StudyInsertTools: () => null }))
-vi.mock('@/components/NoteMarkdownDocument', () => ({ NoteMarkdownDocument: ({ body }: { body: string }) => <p>{body}</p> }))
+vi.mock('@/components/NoteMarkdownDocument', () => ({
+  NoteMarkdownDocument: ({ body }: { body: string }) => <p>{body}</p>,
+}))
 
-function Harness({ initial = 'Start End', changed = () => undefined }: { initial?: string; changed?: (value: string) => void }) {
+function Harness({
+  initial = 'Start End',
+  changed = () => undefined,
+}: {
+  initial?: string
+  changed?: (value: string) => void
+}) {
   const [value, setValue] = useState(initial)
-  return <MemoryRouter><NoteMarkdownEditor id="synthetic-source" value={value} notes={[]}
-    onChange={next => { changed(next); setValue(next) }} /></MemoryRouter>
+  return (
+    <MemoryRouter>
+      <NoteMarkdownEditor
+        id="synthetic-source"
+        value={value}
+        notes={[]}
+        onChange={(next) => {
+          changed(next)
+          setValue(next)
+        }}
+      />
+    </MemoryRouter>
+  )
 }
 
 function fileWithText(read: () => Promise<string>) {
@@ -25,8 +44,9 @@ function fileWithText(read: () => Promise<string>) {
 }
 
 function drop(file: File) {
-  fireEvent.drop(screen.getByRole('textbox', { name: 'noteContentAria' }).closest('.note-writing-field')!,
-    { dataTransfer: { files: [file], types: ['Files'] } })
+  fireEvent.drop(screen.getByRole('textbox', { name: 'noteContentAria' }).closest('.note-writing-field')!, {
+    dataTransfer: { files: [file], types: ['Files'] },
+  })
 }
 
 afterEach(cleanup)
@@ -35,7 +55,14 @@ it('preserves newer typing while an imported file is still being read', async ()
   let finish!: (text: string) => void
   render(<Harness />)
   const field = screen.getByRole('textbox', { name: 'noteContentAria' }) as HTMLTextAreaElement
-  drop(fileWithText(() => new Promise(resolve => { finish = resolve })))
+  drop(
+    fileWithText(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve
+        }),
+    ),
+  )
   fireEvent.change(field, { target: { value: 'Newer lecture text' } })
   await act(async () => finish('Imported formula $x^2$'))
   expect(field.value).toBe('Newer lecture text')
@@ -47,11 +74,21 @@ it('imports at the captured caret instead of a later selection and resumes there
   render(<Harness />)
   const field = screen.getByRole('textbox', { name: 'noteContentAria' }) as HTMLTextAreaElement
   field.setSelectionRange(6, 6)
-  drop(fileWithText(() => new Promise(resolve => { finish = resolve })))
+  drop(
+    fileWithText(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve
+        }),
+    ),
+  )
   field.setSelectionRange(0, 0)
   await act(async () => finish('Imported'))
   expect(field.value).toBe('Start ImportedEnd')
-  await waitFor(() => { expect(document.activeElement).toBe(field); expect(field.selectionStart).toBe(14) })
+  await waitFor(() => {
+    expect(document.activeElement).toBe(field)
+    expect(field.selectionStart).toBe(14)
+  })
   expect(field.selectionEnd).toBe(14)
 })
 
@@ -70,7 +107,14 @@ it('does not apply a pending import after leaving the editor', async () => {
   let finish!: (text: string) => void
   const changed = vi.fn()
   const view = render(<Harness changed={changed} />)
-  drop(fileWithText(() => new Promise(resolve => { finish = resolve })))
+  drop(
+    fileWithText(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve
+        }),
+    ),
+  )
   view.unmount()
   await act(async () => finish('Late import'))
   expect(changed).not.toHaveBeenCalled()
