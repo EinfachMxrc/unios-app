@@ -21,7 +21,8 @@ und [DESKTOP_PACKAGES](DESKTOP_PACKAGES.md).
 6. **Pakete** bauen: Qualitätsmatrix auf dem Commit laufen lassen, dann den Workflow „Desktop-Pakete“ mit
    `release_draft` starten. Er legt einen Release-Entwurf mit Installern, `SHA256SUMS.txt` und `latest.json`
    (Update-Feed) an. Nur Plattformen auflisten, die wirklich gebaut und geprüft wurden.
-   Das Staging-Skript erwartet das vollständige signierte Vier-Plattform-Set.
+   Das Staging-Skript übernimmt ausschließlich gebaute Plattformen und verlangt
+   für jede übernommene Plattform ein vollständiges signiertes Paket.
    Für die öffentliche manuelle Windows-/Linux-Ausgabe stattdessen die erzeugten
    CI-Pakete gegen `build-verification.json` und `startup-check.json` am selben
    Quellcommit prüfen, Prüfsummen beilegen und keinen unsignierten Updatefeed erzeugen.

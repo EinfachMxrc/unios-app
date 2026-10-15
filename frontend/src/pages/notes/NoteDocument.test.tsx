@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { clearWorkspace } from '@/lib/workspaceState'
@@ -9,7 +9,11 @@ import { draftFor, keepDraft, workingNoteDraftFor } from '@/noteDraft'
 import type { NoteDetail } from '@/types'
 import { NoteDocument } from './NoteDocument'
 
-const mocks = vi.hoisted(() => ({ details: new Map<string, NoteDetail>(), refreshError: null as string | null }))
+const mocks = vi.hoisted(() => ({
+  details: new Map<string, NoteDetail>(),
+  refreshError: null as string | null,
+  editorChange: null as ((body: string) => void) | null,
+}))
 vi.mock('@/api', () => ({
   ApiError: class ApiError extends Error {
     status = 503
@@ -37,9 +41,10 @@ vi.mock('@/components/NoteMarkdownDocument', () => ({
   NoteMarkdownDocument: ({ body }: { body: string }) => <p>{body}</p>,
 }))
 vi.mock('@/components/editor/NoteStudio', () => ({
-  NoteStudio: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
-    <textarea aria-label="noteContentAria" value={value} onChange={(event) => onChange(event.target.value)} />
-  ),
+  NoteStudio: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
+    mocks.editorChange = onChange
+    return <textarea aria-label="noteContentAria" value={value} onChange={(event) => onChange(event.target.value)} />
+  },
 }))
 vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
@@ -94,6 +99,18 @@ afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
   clearWorkspace()
+})
+
+it('retains a renamed title when a delayed editor callback changes the body', () => {
+  open()
+  const delayedChange = mocks.editorChange!
+  fireEvent.change(screen.getByLabelText('noteTitleAria'), { target: { value: 'My renamed lecture' } })
+  act(() => delayedChange('A later section from the editor'))
+  expect(workingNoteDraftFor(detail.note.id)).toMatchObject({
+    title: 'My renamed lecture',
+    body: 'A later section from the editor',
+  })
+  expect((screen.getByLabelText('noteTitleAria') as HTMLInputElement).value).toBe('My renamed lecture')
 })
 
 it('hydrates a clean open editor from a newer refetch and rejects older cache rollback', () => {

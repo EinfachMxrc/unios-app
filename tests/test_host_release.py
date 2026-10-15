@@ -123,22 +123,24 @@ def test_running_release_waits_for_http_writer_then_keeps_service_read_only(sett
     @app.post("/__test__/held-write")
     def held_write():
         entered.set()
-        assert finish.wait(3)
+        assert finish.wait(30)
         return {"ok": True}
 
     with TestClient(app) as client, ThreadPoolExecutor(max_workers=2) as pool:
         first = pool.submit(client.post, "/__test__/held-write")
-        assert entered.wait(1)
-        releasing = pool.submit(release_running_host, coordinator, scheduler, gate)
-        deadline = time.monotonic() + 1
-        while not gate.draining and time.monotonic() < deadline:
-            time.sleep(0.001)
-        assert gate.draining
-        assert releasing.done() is False
-        assert client.post("/api/host/snapshot").status_code == 423
-        finish.set()
-        assert first.result(timeout=2).status_code == 200
-        released = releasing.result(timeout=2)
+        try:
+            assert entered.wait(10)
+            releasing = pool.submit(release_running_host, coordinator, scheduler, gate)
+            deadline = time.monotonic() + 10
+            while not gate.draining and time.monotonic() < deadline:
+                time.sleep(0.001)
+            assert gate.draining
+            assert releasing.done() is False
+            assert client.post("/api/host/snapshot").status_code == 423
+        finally:
+            finish.set()
+        assert first.result(timeout=10).status_code == 200
+        released = releasing.result(timeout=10)
         assert released.generation == 2
         assert released.released_at is not None
         assert client.get("/api/host").json()["mode"] == "released"

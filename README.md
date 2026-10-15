@@ -25,7 +25,7 @@ Kurse, PDFs, Notizen, Aufgaben und Karteikarten in einer App – lokal oder auf 
 
 *Echte Oberfläche mit ausschließlich erfundenen Demo-Daten, [Herkunft der Bilder](docs/readme/current/SCREENSHOTS.md).*
 
-> **Alpha.** UniOS ist ein Einzelnutzer-System im Aufbau. Pakete sind noch nicht öffentlich vertrauenssigniert, automatische Updates sind nicht aktiviert, und Hochschulverbindungen sind nur so weit geprüft, wie die [Kompatibilitätsliste](docs/COMPATIBILITY.md) und der [Prüfstand](docs/RELEASE_READINESS.md) es angeben.
+> **Alpha.** UniOS ist ein Einzelnutzer-System im Aufbau. Pakete sind noch nicht öffentlich vertrauenssigniert. Verfügbare Pakete und Updatewege stehen in den [Release-Hinweisen](https://github.com/EinfachMxrc/unios-app/releases/latest); Hochschulverbindungen sind nur so weit geprüft, wie die [Kompatibilitätsliste](docs/COMPATIBILITY.md) und der [Prüfstand](docs/RELEASE_READINESS.md) es angeben.
 
 ## Was drin ist
 

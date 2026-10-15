@@ -1,5 +1,77 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Kursnamen nach Cache-Hydrierung und PDF-Testvorbedingung
+
+Lauf 38770630888 bestand alle Plattform-/Betriebsjobs: Linux 1.361 Tests mit
+84,53 % Coverage, macOS 1.363 und Windows 1.364 Tests samt Dienststartprüfung.
+Browser 528 von 530 bestanden, einschließlich sämtlicher KI- und Mitschriftfälle.
+Das Kursnamenformular übernahm nach einem frischen Server-Refetch seinen alten
+Vergleichswert aus dem ersten Cache-Render. Unberührte Formulare gleichen jetzt
+Wert und Vergleichswert vor dem Paint ab; eigene Eingaben und deren ursprünglicher
+Vergleichswert bleiben erhalten, sodass echte Fremdänderungen weiterhin kollidieren.
+Zwei gezielte Regressionen prüfen beide Fälle.
+
+Der PDF-Test verließ nach einem Deep-Link die Ansicht, bevor der asynchron
+geöffnete Dialog sichtbar war. Er bestätigt jetzt zunächst den geöffneten Dialog
+und prüft danach unverändert dessen Rückkehr/Persistenz. Keine Produkt-Speicherung,
+Tests oder Coverage-Grenzen werden deaktiviert; noch keine Paketfreigabe.
+Die Kursnamen-Regression schlägt mit dem bisherigen Produktcode fehl und
+besteht mit der Korrektur. Beide Unit-Fälle sowie 16 Browserfälle in zwei
+aufeinanderfolgenden Ausführungen bestehen; Typecheck, Lint und Build sind grün.
+
+## 15.10.2026 – Befunde aus dem festen Kandidaten
+
+Lauf 38756486505 bestand Linux, macOS, Docker und GLib; Browser 526 bestanden /
+vier fehlgeschlagen. Drei KI-Fälle fehlten wegen des im Browser-CI nicht
+installierten optionalen SDKs; das Extra `ai` wird dort jetzt wie im Backend
+installiert. Der vierte Fall verlor einen umbenannten Mitschrifttitel beim
+folgenden Texteingang. Feldänderungen lesen das andere Feld nun aus dem neuesten
+Entwurf beziehungsweise Live-Ref statt aus einem älteren Editor-Rückruf.
+Ein gezielter Regressionstest hält bewusst einen alten Rückruf fest und prüft
+den erhaltenen Titel. Alle neun NoteDocument-Tests bestehen.
+
+Windows bestand die korrigierte Anki-Backup-Prüfung, scheiterte später beim
+Host-Übergabetest am einsekündigen Warten auf den HTTP-Arbeiter. Ereignisgesteuerte
+Wartefristen erlauben nun CI-Anlaufzeit; alle bisherigen Sperr- und Reihenfolge-
+Prüfungen bleiben erhalten, der gehaltene Arbeiter wird auch nach einem
+fehlgeschlagenen Assert freigegeben. 17 Host-/Backupfälle, Ruff und mypy bestehen.
+Der vorherige Kandidat ist weiterhin keine Paketfreigabe.
+Nach Korrektur zusätzlich 23 kombinierte Browserfälle für KI-Verbindung und
+Mitschrift einschließlich Titel-/Inhaltsfortsetzung, Hell/Dunkel und Mobil
+bestanden. Typecheck, Lint und endgültiger Frontend-Build sind grün.
+
+## 15.10.2026 – Fester öffentlicher Release-Kandidat nach PR #22
+
+Der parallele Merge von PR #22 hat den manuellen Freigabelauf auf `main`
+automatisch abgebrochen. Linux (1.360 Tests, zwölf Skips, 84,53 % Coverage),
+macOS (1.362 Tests, zehn Skips), Docker und GLib bestanden. Der Windowslauf
+meldete einen echten Testaufbaufehler: Die neue Anki-Backup-Prüfung hielt ihre
+SQLite-Verbindung nach dem Transaktionskontext offen. Die Fixture schließt
+ihre Verbindungen jetzt ausdrücklich vor der Wiederherstellung, wie beim
+echten App-Start. Produkt-Backup und Sperrprüfungen werden nicht abgeschwächt.
+Fehlschläge im normalen Backendlauf brechen nun sofort ab; ein grüner Lauf
+prüft weiterhin den vollständigen Bestand. Der vorzeitig beendete Browserlauf
+ist kein bestandener Gesamtlauf.
+
+PR #22 mit Feedback-Formularen und optionalem signiertem Release-Entwurf ist
+im neuen Kandidaten enthalten. Die volle Matrix und anschließend die Pakete
+werden auf einem festen Release-Zweig ausgeführt, damit weitere Main-Merges
+diesen Stand nicht wieder abbrechen. Lighthouse am gemeinsamen vorherigen
+Frontend: Accessibility 100, Legacy-PWA 100, keine Laufzeitfehler.
+
+Kandidat lokal: neun Backup-/Stagingtests, zwei Feedback-Unit-Tests und acht
+passende Navigations-/Feedback-Browserfälle bestanden; Ruff, mypy, Typecheck,
+Lint und Build grün. Der Windows-Nachweis erfolgt erneut auf dem echten
+CI-Windows, die lokale Korrektur wird nicht als bestandene Plattformabnahme gezählt.
+
+## 15.10.2026 – Öffentliche Download-Verweise
+
+Die statische Downloadseite verweist jetzt auf den jeweils aktuellen öffentlichen
+Release statt auf die alte private Alpha 0.1.19. Sie bietet keinen ungeprüften
+macOS-Download an und verweist für den lokalen Bau auf die Bauanleitung.
+README-Links auf `releases/latest` waren bereits korrekt. Diese reine Dokumentations-
+Nachlieferung verändert den geprüften Installer-Quellstand nicht.
+
 ## 15.10.2026 – KI-SDK im öffentlichen Desktop-Paket
 
 Nach Zusammenführung aller 17 Dependency-PRs und PR #19 ist ein Paketierungs-

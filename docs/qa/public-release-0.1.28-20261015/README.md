@@ -2,6 +2,26 @@
 
 # Öffentlicher Release 0.1.28 – Prüfnachweise
 
+Letzter vollständiger Kandidatenlauf 38770630888: alle fünf Plattform-/Betriebsjobs
+bestanden, Browser 528/530. Das Kursnamenformular nutzte nach Cache-Hydrierung
+einen veralteten Vergleichswert; unberührte Formulare übernehmen jetzt frische
+Serverwerte, eigene Eingaben behalten ihren ursprünglichen Konfliktvergleich.
+Zwei Regressionen bestehen, die erste schlägt ohne Produktkorrektur fehl.
+Der PDF-Test bestätigt das asynchrone Öffnen, bevor er den geöffneten Zustand
+nach Rückkehr erwartet. Alle 16 betroffenen Browserfälle bestehen in zwei
+aufeinanderfolgenden Läufen. Vollständige Matrix am neuen Commit und Pakete offen.
+
+Vorheriger Kandidatenbefund: Lauf 38756486505 bestand Linux, macOS, Docker
+und GLib, jedoch nur 526 von 530 Browserfällen. Drei KI-Fälle erforderten
+das fehlende SDK im Browser-CI; ein Mitschriftfall fand einen veralteten
+Editor-Rückruf, der den neuen Titel überschreiben konnte. SDK-Extra und
+Feldänderungen mit neuesten Entwurfswerten sind korrigiert; ein gezielter
+Regressionstest hält einen alten Editor-Rückruf fest. Windows kam nach der
+Anki-Fixture-Korrektur bis zum Host-Übergabefall und scheiterte dort an einer
+einsekündigen Testfrist. Die Ereignis-Wartefristen sind angeglichen, alle
+Sperr-/Reihenfolgeprüfungen bleiben erhalten. Erneute vollständige Matrix
+und echte Pakete stehen aus; historische grüne Teilstände unten ersetzen sie nicht.
+
 Ziel: `EinfachMxrc/unios-app`. Die zehn beim Start offenen Dependency-PRs
 #1–#10 sind als echte Merge-Eltern im Release-Zweig enthalten. Private
 Git-Historie wird nicht importiert; die vorhandenen Abschlussnachweise sind
