@@ -103,7 +103,9 @@ class AssessmentRepository:
 
     def locked(self, session, task_id):
         rows = session.scalars(select(AssessmentSession).where(AssessmentSession.state == 'running')).all()
-        return any(task_id in row.task_ids for row in rows)
+        now = datetime.now(UTC)
+        # An exam whose time ran out no longer holds its tasks, even before the student finishes it.
+        return any(task_id in row.task_ids and row.ends_at.replace(tzinfo=UTC) > now for row in rows)
 
     def hint(self, task_id, level, guard):
         with self.factory() as session:

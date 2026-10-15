@@ -61,7 +61,10 @@ describe('i18n key parity between German and English resources', () => {
           if (deValue !== enValue) return false
           return !isTranslationInsensitive(deValue)
         })
-        expect(suspects, `English "${namespace}" has untranslated (copy-pasted) values for: ${suspects.join(', ')}`).toEqual([])
+        expect(
+          suspects,
+          `English "${namespace}" has untranslated (copy-pasted) values for: ${suspects.join(', ')}`,
+        ).toEqual([])
       })
     })
   }

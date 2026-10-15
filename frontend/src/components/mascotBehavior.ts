@@ -3,8 +3,18 @@
 import type { MascotMood } from './Mascot'
 
 export type MascotLine =
-  | 'sleepy1' | 'sleepy2' | 'focus1' | 'focus2' | 'cheer1' | 'cheer2'
-  | 'tip1' | 'tip2' | 'tip3' | 'tip4' | 'tip5' | 'tip6'
+  | 'sleepy1'
+  | 'sleepy2'
+  | 'focus1'
+  | 'focus2'
+  | 'cheer1'
+  | 'cheer2'
+  | 'tip1'
+  | 'tip2'
+  | 'tip3'
+  | 'tip4'
+  | 'tip5'
+  | 'tip6'
 
 const TIPS: MascotLine[] = ['tip1', 'tip2', 'tip3', 'tip4', 'tip5', 'tip6']
 const MOOD_LINES: Record<MascotMood, MascotLine[]> = {

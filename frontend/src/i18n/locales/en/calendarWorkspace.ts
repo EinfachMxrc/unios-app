@@ -23,6 +23,7 @@ export default {
   zoomIn: 'Larger hour height',
   zoomReset: 'Reset hour height',
   weekendSelected: 'The selected day is on the weekend.',
-  durationHint: 'Change duration using the edges or the form. Alt + arrow moves by 15 minutes; Shift + Alt + arrow changes the end.',
+  durationHint:
+    'Change duration using the edges or the form. Alt + arrow moves by 15 minutes; Shift + Alt + arrow changes the end.',
   retryConflictHint: 'The appointment has changed meanwhile. Open it again before continuing to edit.',
 }

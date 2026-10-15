@@ -1,40 +1,241 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.rules-intro { max-width: 690px; margin-bottom: 28px; }
-.rules-intro > span { color: var(--app-muted); font-size: .72rem; font-weight: 650; letter-spacing: .08em; }
-.rules-intro h2 { margin: 8px 0; font-size: clamp(1.35rem, 2.5vw, 1.9rem); letter-spacing: -.035em; }
-.rules-intro p { color: var(--app-muted); font-size: .84rem; }
-.rules-layout { display: grid; grid-template-columns: 215px minmax(0, 1fr); gap: 34px; max-width: 1180px; }
-.rules-list { border-right: 1px solid var(--app-border); padding-right: 14px; }
-.rules-list > div { display: flex; align-items: center; justify-content: space-between; margin: 3px 0 13px; font-size: .8rem; }
-.rules-list > div button { padding: 4px; border-radius: 5px; }
-.rules-list > button { display: grid; width: 100%; gap: 3px; padding: 9px; border-radius: 6px; text-align: left; font-size: .78rem; }
-.rules-list > button.active, .rules-list > button:hover, .rules-list > div button:hover { background: var(--app-surface-alt); }
-.rules-list small, .rules-list p { color: var(--app-muted); font-size: .7rem; }
-.rules-main { min-width: 0; }
-.rules-builder { padding: 20px; border: 1px solid var(--app-border); border-radius: 9px; background: var(--app-surface); }
-.rules-builder-header { display: flex; gap: 12px; align-items: start; padding-bottom: 19px; border-bottom: 1px solid var(--app-border); }
-.rules-builder-header div { display: grid; gap: 4px; font-size: .83rem; }
-.rules-builder-header span { color: var(--app-muted); font-size: .73rem; }
-.rules-builder label { display: grid; gap: 7px; margin-top: 17px; color: var(--app-muted); font-size: .73rem; font-weight: 600; }
-.rules-builder input:not([type="checkbox"]) { width: 100%; padding: 8px 10px; border: 1px solid var(--app-border); border-radius: 6px; background: var(--app-bg); color: var(--app-text); }
-.rules-when, .rules-then { display: grid; grid-template-columns: 55px minmax(0, 1fr); gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--app-border); }
-.rules-when > span, .rules-then > span { padding-top: 24px; color: var(--app-muted); font-size: .7rem; font-weight: 700; letter-spacing: .05em; }
-.rules-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.rules-fields label, .rules-then label { margin: 0; min-width: 0; }
-.rules-fields .native-select, .rules-then .native-select { width: 100%; min-width: 0; }
-.rules-then small { grid-column: 2; color: var(--app-muted); font-size: .69rem; }
-.rules-builder .rules-enabled { display: flex; align-items: center; gap: 8px; margin: 23px 0 0; color: var(--app-text); font-weight: 500; }
-.rules-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 19px; }
-.rules-builder [role="status"], .rules-builder [role="alert"] { margin-top: 14px; font-size: .75rem; }
-.rules-preview, .rules-audit { margin-top: 27px; }
-.rules-preview > div:first-child { display: flex; justify-content: space-between; align-items: baseline; }
-.rules-preview h3, .rules-audit h3 { margin: 0 0 13px; font-size: .88rem; }
-.rules-preview > div:first-child span, .rules-preview > p, .rules-audit > p { color: var(--app-muted); font-size: .74rem; }
-.rules-preview > div:not(:first-child), .rules-audit > div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--app-border); font-size: .78rem; }
-.rules-preview > div a { display: inline-flex; gap: 5px; align-items: center; }
-.rules-preview small, .rules-audit small, .rules-audit span { color: var(--app-muted); font-size: .7rem; }
-.rules-audit > div > div { display: grid; gap: 4px; }
-.rules-audit button { color: var(--app-muted); font-size: .71rem; }
-@media (max-width: 800px) { .rules-layout { grid-template-columns: 1fr; } .rules-list { border-right: 0; border-bottom: 1px solid var(--app-border); padding: 0 0 16px; } .rules-list > button { display: inline-grid; width: auto; margin-right: 6px; } }
-@media (max-width: 570px) { .rules-builder { padding: 15px; } .rules-fields { grid-template-columns: 1fr; } .rules-when, .rules-then { grid-template-columns: 1fr; gap: 10px; } .rules-when > span, .rules-then > span { padding: 0; } .rules-then small { grid-column: 1; } }
+.rules-intro {
+  max-width: 690px;
+  margin-bottom: 28px;
+}
+.rules-intro > span {
+  color: var(--app-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+.rules-intro h2 {
+  margin: 8px 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
+  letter-spacing: -0.035em;
+}
+.rules-intro p {
+  color: var(--app-muted);
+  font-size: 0.84rem;
+}
+.rules-layout {
+  display: grid;
+  grid-template-columns: 215px minmax(0, 1fr);
+  gap: 34px;
+  max-width: 1180px;
+}
+.rules-list {
+  border-right: 1px solid var(--app-border);
+  padding-right: 14px;
+}
+.rules-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 3px 0 13px;
+  font-size: 0.8rem;
+}
+.rules-list > div button {
+  padding: 4px;
+  border-radius: 5px;
+}
+.rules-list > button {
+  display: grid;
+  width: 100%;
+  gap: 3px;
+  padding: 9px;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 0.78rem;
+}
+.rules-list > button.active,
+.rules-list > button:hover,
+.rules-list > div button:hover {
+  background: var(--app-surface-alt);
+}
+.rules-list small,
+.rules-list p {
+  color: var(--app-muted);
+  font-size: 0.7rem;
+}
+.rules-main {
+  min-width: 0;
+}
+.rules-builder {
+  padding: 20px;
+  border: 1px solid var(--app-border);
+  border-radius: 9px;
+  background: var(--app-surface);
+}
+.rules-builder-header {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 19px;
+  border-bottom: 1px solid var(--app-border);
+}
+.rules-builder-header div {
+  display: grid;
+  gap: 4px;
+  font-size: 0.83rem;
+}
+.rules-builder-header span {
+  color: var(--app-muted);
+  font-size: 0.73rem;
+}
+.rules-builder label {
+  display: grid;
+  gap: 7px;
+  margin-top: 17px;
+  color: var(--app-muted);
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+.rules-builder input:not([type='checkbox']) {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+.rules-when,
+.rules-then {
+  display: grid;
+  grid-template-columns: 55px minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--app-border);
+}
+.rules-when > span,
+.rules-then > span {
+  padding-top: 24px;
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.rules-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.rules-fields label,
+.rules-then label {
+  margin: 0;
+  min-width: 0;
+}
+.rules-fields .native-select,
+.rules-then .native-select {
+  width: 100%;
+  min-width: 0;
+}
+.rules-then small {
+  grid-column: 2;
+  color: var(--app-muted);
+  font-size: 0.69rem;
+}
+.rules-builder .rules-enabled {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 23px 0 0;
+  color: var(--app-text);
+  font-weight: 500;
+}
+.rules-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 19px;
+}
+.rules-builder [role='status'],
+.rules-builder [role='alert'] {
+  margin-top: 14px;
+  font-size: 0.75rem;
+}
+.rules-preview,
+.rules-audit {
+  margin-top: 27px;
+}
+.rules-preview > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.rules-preview h3,
+.rules-audit h3 {
+  margin: 0 0 13px;
+  font-size: 0.88rem;
+}
+.rules-preview > div:first-child span,
+.rules-preview > p,
+.rules-audit > p {
+  color: var(--app-muted);
+  font-size: 0.74rem;
+}
+.rules-preview > div:not(:first-child),
+.rules-audit > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--app-border);
+  font-size: 0.78rem;
+}
+.rules-preview > div a {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+.rules-preview small,
+.rules-audit small,
+.rules-audit span {
+  color: var(--app-muted);
+  font-size: 0.7rem;
+}
+.rules-audit > div > div {
+  display: grid;
+  gap: 4px;
+}
+.rules-audit button {
+  color: var(--app-muted);
+  font-size: 0.71rem;
+}
+@media (max-width: 800px) {
+  .rules-layout {
+    grid-template-columns: 1fr;
+  }
+  .rules-list {
+    border-right: 0;
+    border-bottom: 1px solid var(--app-border);
+    padding: 0 0 16px;
+  }
+  .rules-list > button {
+    display: inline-grid;
+    width: auto;
+    margin-right: 6px;
+  }
+}
+@media (max-width: 570px) {
+  .rules-builder {
+    padding: 15px;
+  }
+  .rules-fields {
+    grid-template-columns: 1fr;
+  }
+  .rules-when,
+  .rules-then {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .rules-when > span,
+  .rules-then > span {
+    padding: 0;
+  }
+  .rules-then small {
+    grid-column: 1;
+  }
+}

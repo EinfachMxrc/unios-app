@@ -52,7 +52,11 @@ async function doFlush(): Promise<void> {
   const entries = await pendingAnnotations()
   if (!entries.length || !navigator.onLine) return
   let generation: number
-  try { generation = await verifiedMutationGeneration() } catch { return }
+  try {
+    generation = await verifiedMutationGeneration()
+  } catch {
+    return
+  }
   try {
     markHostReachable(true)
     for (const entry of entries) {

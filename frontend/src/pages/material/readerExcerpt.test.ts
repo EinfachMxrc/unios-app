@@ -3,7 +3,14 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { clearNewNoteDraft, draftFor, keepNewNoteDraft, newNoteDraftFor, rememberVolatileNoteDraft, workingNoteDraftFor } from '@/noteDraft'
+import {
+  clearNewNoteDraft,
+  draftFor,
+  keepNewNoteDraft,
+  newNoteDraftFor,
+  rememberVolatileNoteDraft,
+  workingNoteDraftFor,
+} from '@/noteDraft'
 import type { Material, NoteDetail } from '@/types'
 import { chooseSourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { clearWorkspace } from '@/lib/workspaceState'
@@ -31,13 +38,31 @@ beforeEach(() => {
 describe('source-linked reader excerpts', () => {
   it('appends against the current RAM recovery body rather than an older durable body', () => {
     const id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
-    const detail: NoteDetail = { note: { id, course_id: 2, resource_id: 4, course_name: 'Synthetic course', title: 'Lecture',
-      current_revision: 3, created_at: '2026-10-09T10:00:00Z', updated_at: '2026-10-09T10:00:00Z' },
-      body: 'Saved baseline', selected_revision: 3, versions: [] }
+    const detail: NoteDetail = {
+      note: {
+        id,
+        course_id: 2,
+        resource_id: 4,
+        course_name: 'Synthetic course',
+        title: 'Lecture',
+        current_revision: 3,
+        created_at: '2026-10-09T10:00:00Z',
+        updated_at: '2026-10-09T10:00:00Z',
+      },
+      body: 'Saved baseline',
+      selected_revision: 3,
+      versions: [],
+    }
     queryClient.setQueryData(['api', `/api/notes/${id}`], detail)
     chooseSourceNoteTarget(2, 4, id)
-    const ram = rememberVolatileNoteDraft({ noteId: id, baseRevision: 2, baseTitle: 'Previous title', baseBody: 'Earlier baseline',
-      title: 'Own title only in RAM', body: 'Newest explanation only in RAM' })
+    const ram = rememberVolatileNoteDraft({
+      noteId: id,
+      baseRevision: 2,
+      baseTitle: 'Previous title',
+      baseBody: 'Earlier baseline',
+      title: 'Own title only in RAM',
+      body: 'Newest explanation only in RAM',
+    })
     appendReaderExcerpt({ material, quote: 'Related source', page: 80 })
     const appended = workingNoteDraftFor(id)!
     expect(appended.body).toContain(ram.body)
@@ -50,13 +75,29 @@ describe('source-linked reader excerpts', () => {
 
   it('adds successive PDF pages to the same normal note draft, retaining its original CAS base', () => {
     const id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
-    const detail: NoteDetail = { note: { id, course_id: 2, resource_id: 4, course_name: 'Invented course', title: 'One lecture',
-      current_revision: 3, created_at: '2026-10-09T10:00:00Z', updated_at: '2026-10-09T10:00:00Z' },
-      body: 'Already saved lecture section', selected_revision: 3, versions: [] }
+    const detail: NoteDetail = {
+      note: {
+        id,
+        course_id: 2,
+        resource_id: 4,
+        course_name: 'Invented course',
+        title: 'One lecture',
+        current_revision: 3,
+        created_at: '2026-10-09T10:00:00Z',
+        updated_at: '2026-10-09T10:00:00Z',
+      },
+      body: 'Already saved lecture section',
+      selected_revision: 3,
+      versions: [],
+    }
     queryClient.setQueryData(['api', `/api/notes/${id}`], detail)
     chooseSourceNoteTarget(2, 4, id)
     appendReaderExcerpt({ material, quote: 'First concept', page: 12 })
-    queryClient.setQueryData(['api', `/api/notes/${id}`], { ...detail, note: { ...detail.note, current_revision: 4 }, body: 'Foreign newer text' })
+    queryClient.setQueryData(['api', `/api/notes/${id}`], {
+      ...detail,
+      note: { ...detail.note, current_revision: 4 },
+      body: 'Foreign newer text',
+    })
     appendReaderExcerpt({ material, quote: 'Related concept', page: 13 })
     const draft = draftFor(id)!
     expect(draft.noteId).toBe(id)
@@ -103,7 +144,9 @@ describe('source-linked reader excerpts', () => {
     expect(draft.body).toContain('> \\*\\*fett\\*\\*\n> &lt;script&gt;alert\\(1\\)&lt;/script&gt;')
     expect(draft.body).toContain('> \\[x\\]\\(javascript:alert\\(1\\)\\)')
     expect(draft.body).toContain('> \\# heading\n> \\$math\\$ &amp; \\`code\\`')
-    expect(draft.body).toContain('[\\[x\\]\\(https://fake\\.invalid\\) &lt;b&gt;\\$x\\$\\.pdf · 3](/material/17?page=3)')
+    expect(draft.body).toContain(
+      '[\\[x\\]\\(https://fake\\.invalid\\) &lt;b&gt;\\$x\\$\\.pdf · 3](/material/17?page=3)',
+    )
     expect(draft.body).not.toContain('<script>')
   })
 
@@ -121,8 +164,9 @@ describe('source-linked reader excerpts', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('Quota exceeded', 'QuotaExceededError')
     })
-    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 }))
-      .toThrowError(expect.objectContaining({ code: 'storage' }))
+    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 })).toThrowError(
+      expect.objectContaining({ code: 'storage' }),
+    )
     expect(newNoteDraftFor(2, 4)).toEqual(previous)
   })
 
@@ -130,13 +174,17 @@ describe('source-linked reader excerpts', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new DOMException('Access denied', 'SecurityError')
     })
-    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 }))
-      .toThrowError(expect.objectContaining({ code: 'storage' }))
+    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 })).toThrowError(
+      expect.objectContaining({ code: 'storage' }),
+    )
   })
 
   it('normalises whitespace in a filename so its source label cannot create a Markdown block', () => {
-    const draft = appendReaderExcerpt({ material: { ...material, resource_name: 'Datei\n\n# neuer Block.pdf' },
-      quote: 'Eine Quelle', page: 2 })
+    const draft = appendReaderExcerpt({
+      material: { ...material, resource_name: 'Datei\n\n# neuer Block.pdf' },
+      quote: 'Eine Quelle',
+      page: 2,
+    })
     expect(draft.title).toBe('Datei # neuer Block')
     expect(draft.body).toContain('[Datei \\# neuer Block\\.pdf · 2](/material/17?page=2)')
     expect(draft.body).not.toContain('\n# neuer Block')
@@ -144,14 +192,14 @@ describe('source-linked reader excerpts', () => {
 
   it('rejects an overflowing draft before writing, leaving its content and writeId intact', () => {
     const previous = keepNewNoteDraft(2, 4, 'Lang', 'x'.repeat(READER_NOTE_BODY_LIMIT - 5))
-    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 }))
-      .toThrowError(expect.objectContaining({ code: 'tooLong' }))
+    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page: 1 })).toThrowError(
+      expect.objectContaining({ code: 'tooLong' }),
+    )
     expect(newNoteDraftFor(2, 4)).toEqual(previous)
   })
 
   it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY])('rejects an invalid page %s without writing', (page) => {
-    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page }))
-      .toThrowError(ReaderExcerptError)
+    expect(() => appendReaderExcerpt({ material, quote: 'Weitere Quelle', page })).toThrowError(ReaderExcerptError)
     expect(newNoteDraftFor(2, 4)).toBeNull()
   })
 

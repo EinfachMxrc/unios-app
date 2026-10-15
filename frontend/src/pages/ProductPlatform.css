@@ -164,8 +164,30 @@
   font-size: 0.85rem;
 }
 /* Rights as three labelled groups; the manifest's own name for a right stays small beside the readable one. */
-.market-rights { display: grid; gap: 10px; margin: 10px 0; }
-.market-rights dt { margin-bottom: 2px; color: var(--app-muted); font-size: .7rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
-.market-rights dd { margin: 0; padding-left: 10px; border-left: 2px solid var(--app-border); line-height: 1.7; }
-.market-rights-none { color: var(--app-muted); }
-.market-right-key { margin-left: 6px; color: var(--app-muted); font-size: .75rem; }
+.market-rights {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0;
+}
+.market-rights dt {
+  margin-bottom: 2px;
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.market-rights dd {
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--app-border);
+  line-height: 1.7;
+}
+.market-rights-none {
+  color: var(--app-muted);
+}
+.market-right-key {
+  margin-left: 6px;
+  color: var(--app-muted);
+  font-size: 0.75rem;
+}

@@ -110,19 +110,27 @@ export function MarketplacePage() {
               <details>
                 <summary>{t('marketRights')}</summary>
                 <dl className="market-rights">
-                  {([
-                    ['domains', t('marketDomains'), item.domains],
-                    ['capabilities', t('marketCapabilities'), item.capabilities],
-                    ['secrets', t('marketSecrets'), item.secrets],
-                  ] as const).map(([key, label, values]) => (
+                  {(
+                    [
+                      ['domains', t('marketDomains'), item.domains],
+                      ['capabilities', t('marketCapabilities'), item.capabilities],
+                      ['secrets', t('marketSecrets'), item.secrets],
+                    ] as const
+                  ).map(([key, label, values]) => (
                     <div key={key}>
                       <dt>{label}</dt>
-                      {values.length ? values.map((value) => (
-                        <dd key={value}>
-                          {key === 'capabilities' ? rightNames[value] ?? value : value}
-                          {key === 'capabilities' && rightNames[value] && <code className="market-right-key">{value}</code>}
-                        </dd>
-                      )) : <dd className="market-rights-none">{t('marketNone')}</dd>}
+                      {values.length ? (
+                        values.map((value) => (
+                          <dd key={value}>
+                            {key === 'capabilities' ? (rightNames[value] ?? value) : value}
+                            {key === 'capabilities' && rightNames[value] && (
+                              <code className="market-right-key">{value}</code>
+                            )}
+                          </dd>
+                        ))
+                      ) : (
+                        <dd className="market-rights-none">{t('marketNone')}</dd>
+                      )}
                     </div>
                   ))}
                 </dl>

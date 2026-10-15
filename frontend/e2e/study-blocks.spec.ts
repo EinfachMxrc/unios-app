@@ -2,15 +2,27 @@
 
 import { expect, test } from './fixtures'
 
-test('a weak topic is suggested as a study block before the exam and can be accepted into the calendar', async ({ page }) => {
+test('a weak topic is suggested as a study block before the exam and can be accepted into the calendar', async ({
+  page,
+}) => {
   const detail = await (await page.request.get('/api/courses/1')).json()
   const resource = detail.resources.find((item: { name: string }) => item.name === '04_Schleifen.pdf')
   const version = detail.versions[resource.id][0].version
   const payload = {
-    schema_version: 1, generated_by: 'browser-test', generated_at: new Date().toISOString(),
+    schema_version: 1,
+    generated_by: 'browser-test',
+    generated_at: new Date().toISOString(),
     source: { resource_id: resource.id, version },
-    exercises: [{ question: 'Blockfrage?', topic: 'Block-Test-Thema', difficulty: 'easy',
-      sample_solution: 'Antwort.', solution_steps: 'Schritt.', source_page: 1 }],
+    exercises: [
+      {
+        question: 'Blockfrage?',
+        topic: 'Block-Test-Thema',
+        difficulty: 'easy',
+        sample_solution: 'Antwort.',
+        solution_steps: 'Schritt.',
+        source_page: 1,
+      },
+    ],
   }
   const created = await page.request.post('/api/ai/exercises/import', { data: payload })
   const item = (await created.json())[0]
@@ -25,13 +37,14 @@ test('a weak topic is suggested as a study block before the exam and can be acce
   await page.request.post('/api/__test__/schedule-exam-in-5-days')
 
   await page.goto('/learning')
-  const cycleRow = page.locator('.data-row').filter({ hasText: 'Anwenden und üben' })
+  const cycleRow = page
+    .locator('.data-row')
+    .filter({ hasText: 'Anwenden und üben' })
     .filter({ hasText: 'Block-Test-Thema' })
   await expect(cycleRow).toBeVisible()
   await cycleRow.getByRole('button', { name: 'Annehmen' }).click()
   await expect(cycleRow.getByText('Angenommen', { exact: true })).toBeVisible()
-  const row = page.locator('.study-block-row').filter({ hasText: 'Block-Test-Thema' })
-    .filter({ hasText: 'Minuten' })
+  const row = page.locator('.study-block-row').filter({ hasText: 'Block-Test-Thema' }).filter({ hasText: 'Minuten' })
   await expect(row).toBeVisible()
   await row.getByRole('button', { name: 'Annehmen' }).click()
   await expect(row.getByText('Angenommen · im Kalender')).toBeVisible()
@@ -41,18 +54,29 @@ test('a weak topic is suggested as a study block before the exam and can be acce
 
   await page.setViewportSize({ width: 390, height: 900 })
   for (const theme of ['light', 'dark']) {
-    await page.evaluate(value => localStorage.setItem('unios-theme', value), theme)
+    await page.evaluate((value) => localStorage.setItem('unios-theme', value), theme)
     await page.reload()
     const open = row.getByRole('link', { name: 'Jetzt lernen', exact: true })
     await expect(open).toBeVisible()
-    const bounds = await row.evaluate(element => {
-      const rect = (target: Element) => { const value = target.getBoundingClientRect(); return {
-        left: value.left, right: value.right, top: value.top, bottom: value.bottom,
-      } }
-      return { content: rect(element.closest('[data-slot="card-content"]')!),
-        children: [...element.children].map(rect), actions: rect(element.querySelector('.study-block-actions')!),
-        meta: rect(element.querySelector('.row-subtitle')!), link: rect(element.querySelector('.study-block-actions a')!),
-        rowWidth: element.clientWidth, rowScrollWidth: element.scrollWidth }
+    const bounds = await row.evaluate((element) => {
+      const rect = (target: Element) => {
+        const value = target.getBoundingClientRect()
+        return {
+          left: value.left,
+          right: value.right,
+          top: value.top,
+          bottom: value.bottom,
+        }
+      }
+      return {
+        content: rect(element.closest('[data-slot="card-content"]')!),
+        children: [...element.children].map(rect),
+        actions: rect(element.querySelector('.study-block-actions')!),
+        meta: rect(element.querySelector('.row-subtitle')!),
+        link: rect(element.querySelector('.study-block-actions a')!),
+        rowWidth: element.clientWidth,
+        rowScrollWidth: element.scrollWidth,
+      }
     })
     expect(bounds.rowScrollWidth).toBeLessThanOrEqual(bounds.rowWidth + 1)
     for (const child of [...bounds.children, bounds.link]) {

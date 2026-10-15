@@ -14,16 +14,19 @@ test('personal weekly slots persist and update Today without deleting imported e
   await schedule.getByText('Kalenderverbindung verwalten', { exact: true }).click()
   await schedule.locator('.timetable-selection summary').filter({ hasText: 'English Workshop' }).click()
   const later = schedule.getByRole('checkbox', { name: 'Montag · 11:45', exact: true })
-  const saved = page.waitForResponse(response => response.url().endsWith('/api/timetable/selection') && response.request().method() === 'PUT')
+  const saved = page.waitForResponse(
+    (response) => response.url().endsWith('/api/timetable/selection') && response.request().method() === 'PUT',
+  )
   await later.uncheck()
   expect((await saved).ok()).toBeTruthy()
   await expect(later).not.toBeChecked()
   await expect(schedule.locator('article')).toHaveCount(1)
   await expect(schedule.locator('article')).toContainText('10:00')
-  const screenshots = process.env.UNIOS_QA_DIRECTORY || path.resolve(import.meta.dirname, '../../docs/qa/timetable-selection-20261005')
+  const screenshots =
+    process.env.UNIOS_QA_DIRECTORY || path.resolve(import.meta.dirname, '../../docs/qa/timetable-selection-20261005')
   await mkdir(screenshots, { recursive: true })
   for (const theme of ['light', 'dark']) {
-    await page.evaluate(value => localStorage.setItem('unios-theme', value), theme)
+    await page.evaluate((value) => localStorage.setItem('unios-theme', value), theme)
     await page.reload()
     await schedule.getByText('Kalenderverbindung verwalten', { exact: true }).click()
     await schedule.locator('.timetable-selection summary').filter({ hasText: 'English Workshop' }).click()

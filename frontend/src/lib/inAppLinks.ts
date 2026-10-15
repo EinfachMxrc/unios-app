@@ -11,8 +11,9 @@ const STANDALONE_SCREENS = ['/welcome', '/import', '/setup']
  * responses and other server paths share the origin but are not screens.
  */
 export function isAppScreen(pathname: string): boolean {
-  return [...STANDALONE_SCREENS, ...areaRoutes.map(route => route.path)]
-    .some(path => matchPath({ path, end: true }, pathname))
+  return [...STANDALONE_SCREENS, ...areaRoutes.map((route) => route.path)].some((path) =>
+    matchPath({ path, end: true }, pathname),
+  )
 }
 /** The longest quote a source link carries; enough to find the passage again. */
 export const CITED_QUOTE_LIMIT = 300
@@ -32,7 +33,11 @@ interface ClickInfo {
  * are. In a plain browser, modifier clicks still open a new tab on purpose;
  * the desktop app has no tabs, so there they stay in the app too.
  */
-export function inAppTarget(link: HTMLAnchorElement, click: ClickInfo, { desktop, origin }: { desktop: boolean; origin: string }): string | null {
+export function inAppTarget(
+  link: HTMLAnchorElement,
+  click: ClickInfo,
+  { desktop, origin }: { desktop: boolean; origin: string },
+): string | null {
   if (click.button !== 0 || link.hasAttribute('download')) return null
   // Same-page anchors are not navigation. Links inside the note editor are
   // followed on click too: the browser would not follow them there at all, and
@@ -82,7 +87,8 @@ export function citedQuote(link: HTMLAnchorElement): string | null {
 /** Adds the cited passage to a reader link that does not already point at an exact place. */
 export function withCitedQuote(path: string, link: HTMLAnchorElement): string {
   const url = new URL(path, 'http://app.invalid')
-  if (!/^\/material\/[1-9]\d*$/.test(url.pathname) || url.searchParams.has('mark') || url.searchParams.has('clip')) return path
+  if (!/^\/material\/[1-9]\d*$/.test(url.pathname) || url.searchParams.has('mark') || url.searchParams.has('clip'))
+    return path
   const quote = citedQuote(link)
   if (!quote) return path
   url.searchParams.set('quote', quote)

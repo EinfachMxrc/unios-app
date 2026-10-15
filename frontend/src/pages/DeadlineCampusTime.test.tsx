@@ -13,10 +13,22 @@ import { ProjectPage, ProjectsPage } from './ProjectsPage'
 
 const fixtures = vi.hoisted(() => ({
   project: {
-    id: 24, name: 'Erfundenes Projekt', course_id: 2, course_name: 'Erfundener Kurs',
-    deadline_at: '2026-10-25T01:30:45Z' as string | null, notes: '', members: [], links: [],
-    todos: [], assignment_ids: [], assignments: [], github_repo: null, revision: 1,
-    archived_at: null, created_at: '2026-10-09T10:00:00Z', updated_at: '2026-10-09T10:00:00Z',
+    id: 24,
+    name: 'Erfundenes Projekt',
+    course_id: 2,
+    course_name: 'Erfundener Kurs',
+    deadline_at: '2026-10-25T01:30:45Z' as string | null,
+    notes: '',
+    members: [],
+    links: [],
+    todos: [],
+    assignment_ids: [],
+    assignments: [],
+    github_repo: null,
+    revision: 1,
+    archived_at: null,
+    created_at: '2026-10-09T10:00:00Z',
+    updated_at: '2026-10-09T10:00:00Z',
   },
 }))
 
@@ -25,14 +37,33 @@ vi.mock('@/api', () => ({
   localDate: (value: string) => value,
   request: vi.fn(),
   useApi: (path: string) => ({
-    data: path === '/api/mail' ? [{ id: 3, subject: 'Erfundene Mailfrist', sender: 'test@example.invalid',
-      received_at: null, candidate_date: '2026-10-26', status: 'proposed', deadline_id: null,
-      imported_at: '2026-10-09T10:00:00Z' }]
-      : path === '/api/projects/24' ? fixtures.project
-        : path === '/api/projects' ? []
-          : path === '/api/courses?all_semesters=true' ? { courses: [{ id: 2, name: 'Erfundener Kurs' }] }
-            : path === '/api/courses/2' ? { assignments: [] } : undefined,
-    error: null, loading: false, updatedAt: null, reload: vi.fn(),
+    data:
+      path === '/api/mail'
+        ? [
+            {
+              id: 3,
+              subject: 'Erfundene Mailfrist',
+              sender: 'test@example.invalid',
+              received_at: null,
+              candidate_date: '2026-10-26',
+              status: 'proposed',
+              deadline_id: null,
+              imported_at: '2026-10-09T10:00:00Z',
+            },
+          ]
+        : path === '/api/projects/24'
+          ? fixtures.project
+          : path === '/api/projects'
+            ? []
+            : path === '/api/courses?all_semesters=true'
+              ? { courses: [{ id: 2, name: 'Erfundener Kurs' }] }
+              : path === '/api/courses/2'
+                ? { assignments: [] }
+                : undefined,
+    error: null,
+    loading: false,
+    updatedAt: null,
+    reload: vi.fn(),
   }),
 }))
 vi.mock('@/offlineCache', async () => {
@@ -40,14 +71,22 @@ vi.mock('@/offlineCache', async () => {
   return { queryClient: new QueryClient({ defaultOptions: { mutations: { retry: false } } }) }
 })
 vi.mock('@/i18n', () => ({ default: { t: (key: string) => key } }))
-vi.mock('@/i18n/useT', () => ({ useT: () => ({
-  t: (key: string, values?: { zone?: string }) => values?.zone ? `${key}: ${values.zone}` : key,
-}) }))
+vi.mock('@/i18n/useT', () => ({
+  useT: () => ({
+    t: (key: string, values?: { zone?: string }) => (values?.zone ? `${key}: ${values.zone}` : key),
+  }),
+}))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
 vi.mock('@/components/Shell', () => ({ Shell: ({ children }: { children: ReactNode }) => <main>{children}</main> }))
 vi.mock('@/components/State', () => ({
-  Panel: ({ title, children }: { title: string; children: ReactNode }) => <section><h2>{title}</h2>{children}</section>,
-  Empty: () => null, Loading: () => null,
+  Panel: ({ title, children }: { title: string; children: ReactNode }) => (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  ),
+  Empty: () => null,
+  Loading: () => null,
   Failure: ({ message }: { message: string }) => <p role="alert">{message}</p>,
   ListRows: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }))
@@ -63,14 +102,26 @@ vi.mock('@/components/MailForwardingConnection', () => ({
 
 beforeEach(() => {
   fixtures.project.deadline_at = '2026-10-25T01:30:45Z'
-  vi.mocked(request).mockReset().mockResolvedValue({ ...fixtures.project, revision: 2 })
+  vi.mocked(request)
+    .mockReset()
+    .mockResolvedValue({ ...fixtures.project, revision: 2 })
 })
-afterEach(() => { cleanup(); queryClient.clear() })
+afterEach(() => {
+  cleanup()
+  queryClient.clear()
+})
 
 function openProject(edit = false) {
-  render(<QueryClientProvider client={queryClient}><MemoryRouter initialEntries={[edit ? '/projects/24' : '/projects']}>
-    <Routes><Route path="/projects" element={<ProjectsPage />} /><Route path="/projects/:id" element={<ProjectPage />} /></Routes>
-  </MemoryRouter></QueryClientProvider>)
+  render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[edit ? '/projects/24' : '/projects']}>
+        <Routes>
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:id" element={<ProjectPage />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>,
+  )
   fireEvent.click(screen.getByRole('button', { name: edit ? 'editButton' : 'newProjectButton' }))
   if (!edit) {
     fireEvent.change(screen.getByLabelText('nameLabel'), { target: { value: 'Erfundene Projektfrist' } })
@@ -78,7 +129,11 @@ function openProject(edit = false) {
   }
 }
 function openMail() {
-  render(<MemoryRouter><MailPage /></MemoryRouter>)
+  render(
+    <MemoryRouter>
+      <MailPage />
+    </MemoryRouter>,
+  )
   fireEvent.click(screen.getByRole('button', { name: 'checkDateButton' }))
 }
 async function sentPayload() {
@@ -90,7 +145,6 @@ async function sentPayload() {
 // e2e/deadline-campus-time.spec.ts. Mutating TZ at runtime does not change
 // Windows Node worker-thread Date instances reliably and proves no UI behavior.
 describe('campus deadline input and DST validation', () => {
-
   it('keeps typed project wall time and sends the same Berlin instant', async () => {
     openProject()
     const field = screen.getByLabelText('deadlineLabel') as HTMLInputElement

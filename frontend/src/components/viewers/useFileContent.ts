@@ -9,7 +9,9 @@ export function useFileContent<T extends 'text' | 'arrayBuffer'>(versionId: numb
     queryKey: ['file-view', versionId, as],
     queryFn: async ({ signal }) => {
       const response = await requestResponse(`/files/${versionId}/view`, { signal })
-      return (as === 'text' ? await response.text() : await response.arrayBuffer()) as T extends 'text' ? string : ArrayBuffer
+      return (as === 'text' ? await response.text() : await response.arrayBuffer()) as T extends 'text'
+        ? string
+        : ArrayBuffer
     },
     staleTime: Infinity,
     retry: false,

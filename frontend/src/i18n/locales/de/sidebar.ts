@@ -2,7 +2,8 @@
 
 export default {
   title: 'Seitenleiste anpassen',
-  description: 'Ziehe Bereiche an ihren Platz oder nutze die Pfeile. Ausblenden entfernt nur die Verknüpfung, keine Inhalte.',
+  description:
+    'Ziehe Bereiche an ihren Platz oder nutze die Pfeile. Ausblenden entfernt nur die Verknüpfung, keine Inhalte.',
   close: 'Schließen',
   drag: '{{name}} verschieben',
   moveGroup: 'Bereich für {{name}}',

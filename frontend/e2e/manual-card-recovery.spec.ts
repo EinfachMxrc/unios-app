@@ -8,7 +8,8 @@ type Scenario = { version_id: number; annotation: { id: string }; deck_name: str
 type Sent = components['schemas']['ManualCardInput']
 type ReviewSent = components['schemas']['ReviewInput']
 type NativeSnapshot = {
-  cards: number; reviews: number
+  cards: number
+  reviews: number
   receipts: Array<{ review_id: string; card_id: number; rating: number }>
   revlog: Array<{ id: number; card_id: number; rating: number }>
   sql_reviews: Array<{ id: number; card_id: number; rating: number; review_id: string | null; reviewed_at: string }>
@@ -20,7 +21,7 @@ async function openDraft(page: Page) {
   await page.goto(`/material/${scenario.version_id}?page=12`)
   await expect(page.locator('[data-material-page="12"] canvas')).toBeVisible()
   const annotations = page.getByRole('dialog', { name: 'Markierungen & Fragen', exact: true })
-  if (!await annotations.isVisible()) {
+  if (!(await annotations.isVisible())) {
     await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
   }
   await page.getByRole('button', { name: 'Als Lernkarte', exact: true }).click()
@@ -34,25 +35,35 @@ function front(dialog: Locator) {
 }
 
 async function visibleDraftText(dialog: Locator) {
-  return dialog.evaluate(element => {
+  return dialog.evaluate((element) => {
     const controls = Array.from(element.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input,textarea'))
-      .filter(control => control.getClientRects().length > 0).map(control => control.value)
+      .filter((control) => control.getClientRects().length > 0)
+      .map((control) => control.value)
     return `${(element as HTMLElement).innerText}\n${controls.join('\n')}`
   })
 }
 
 async function pendingNativeReviews(page: Page): Promise<ReviewSent[]> {
-  return page.evaluate(() => new Promise<ReviewSent[]>((resolve, reject) => {
-    const opening = indexedDB.open('marc-uni-os-study')
-    opening.onupgradeneeded = () => opening.transaction?.abort()
-    opening.onerror = () => reject(opening.error)
-    opening.onsuccess = () => {
-      const database = opening.result
-      const reading = database.transaction('review-queue', 'readonly').objectStore('review-queue').get('pending-v1')
-      reading.onerror = () => { database.close(); reject(reading.error) }
-      reading.onsuccess = () => { database.close(); resolve(reading.result ?? []) }
-    }
-  }))
+  return page.evaluate(
+    () =>
+      new Promise<ReviewSent[]>((resolve, reject) => {
+        const opening = indexedDB.open('marc-uni-os-study')
+        opening.onupgradeneeded = () => opening.transaction?.abort()
+        opening.onerror = () => reject(opening.error)
+        opening.onsuccess = () => {
+          const database = opening.result
+          const reading = database.transaction('review-queue', 'readonly').objectStore('review-queue').get('pending-v1')
+          reading.onerror = () => {
+            database.close()
+            reject(reading.error)
+          }
+          reading.onsuccess = () => {
+            database.close()
+            resolve(reading.result ?? [])
+          }
+        }
+      }),
+  )
 }
 
 async function staleBackgroundPage(context: BrowserContext) {
@@ -61,14 +72,16 @@ async function staleBackgroundPage(context: BrowserContext) {
     // Notifications are hints. A background document missing all of them must
     // still compare its old revision with the real shared IDB transaction.
     for (const type of ['storage', 'focus']) {
-      window.addEventListener(type, event => event.stopImmediatePropagation(), true)
+      window.addEventListener(type, (event) => event.stopImmediatePropagation(), true)
     }
     const addListener = BroadcastChannel.prototype.addEventListener
     BroadcastChannel.prototype.addEventListener = function (...args: Parameters<typeof addListener>) {
       if (args[0] !== 'message') addListener.apply(this, args)
     }
     Object.defineProperty(BroadcastChannel.prototype, 'onmessage', {
-      configurable: true, get: () => null, set: () => {},
+      configurable: true,
+      get: () => null,
+      set: () => {},
     })
   })
   return second
@@ -82,7 +95,10 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
 })
 
-test('stale windows preserve both own texts through reload instead of overwriting a draft', async ({ page, context }) => {
+test('stale windows preserve both own texts through reload instead of overwriting a draft', async ({
+  page,
+  context,
+}) => {
   const first = await openDraft(page)
   await expect(front(first)).toBeEnabled()
   const secondPage = await staleBackgroundPage(context)
@@ -100,12 +116,15 @@ test('stale windows preserve both own texts through reload instead of overwritin
     await expect.poll(() => visibleDraftText(dialog)).toContain(textA)
     await expect.poll(() => visibleDraftText(dialog)).toContain(textB)
   }
-  const retained = reopenedFirst.getByRole('region', { name: 'Gesicherte Fassungen', exact: true })
-    .locator('article').filter({ hasText: textB })
+  const retained = reopenedFirst
+    .getByRole('region', { name: 'Gesicherte Fassungen', exact: true })
+    .locator('article')
+    .filter({ hasText: textB })
   await retained.getByRole('button', { name: 'Diese Fassung übernehmen', exact: true }).click()
   await expect(front(reopenedFirst)).toHaveValue(textB)
-  const storing = page.waitForResponse(response => response.url().endsWith('/api/anki/manual-cards') &&
-    response.request().method() === 'POST')
+  const storing = page.waitForResponse(
+    (response) => response.url().endsWith('/api/anki/manual-cards') && response.request().method() === 'POST',
+  )
   await reopenedFirst.getByRole('button', { name: 'Speichern & freigeben', exact: true }).click()
   const saved: components['schemas']['ManualCardResponse'] = await (await storing).json()
   expect(saved.card.front).toBe(textB)
@@ -120,8 +139,10 @@ test('simultaneous save reserves one exact payload across both windows', async (
   await expect(front(second)).toBeEnabled()
   const sent: Sent[] = []
   let release!: () => void
-  const gate = new Promise<void>(resolve => { release = resolve })
-  await context.route('**/api/anki/manual-cards', async route => {
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  await context.route('**/api/anki/manual-cards', async (route) => {
     if (route.request().method() !== 'POST') return route.continue()
     sent.push(route.request().postDataJSON() as Sent)
     const response = await route.fetch()
@@ -131,13 +152,22 @@ test('simultaneous save reserves one exact payload across both windows', async (
   try {
     // Both controls are initially enabled. Native click() respects a button
     // disabled by a reservation that arrives just ahead of the second click.
-    await Promise.all([first, second].map(dialog => dialog.getByRole('button', {
-      name: 'Speichern & freigeben', exact: true,
-    }).evaluate(button => (button as HTMLButtonElement).click())))
+    await Promise.all(
+      [first, second].map((dialog) =>
+        dialog
+          .getByRole('button', {
+            name: 'Speichern & freigeben',
+            exact: true,
+          })
+          .evaluate((button) => (button as HTMLButtonElement).click()),
+      ),
+    )
     await expect.poll(() => sent.length).toBeGreaterThan(0)
     await expect(front(first)).toBeDisabled()
     await expect(front(second)).toBeDisabled()
-  } finally { release() }
+  } finally {
+    release()
+  }
   for (const dialog of [first, second]) {
     await expect(dialog).toContainText('Gespeichert und in Anki übernommen')
   }
@@ -153,14 +183,17 @@ test('another window recovers the exact lost acknowledgement after the sender cl
   await expect(front(first)).toBeEnabled()
   await expect(front(second)).toBeEnabled()
   const sent: Sent[] = []
-  await context.route('**/api/anki/manual-cards', async route => {
+  await context.route('**/api/anki/manual-cards', async (route) => {
     if (route.request().method() !== 'POST') return route.continue()
     sent.push(route.request().postDataJSON() as Sent)
     const response = await route.fetch()
     expect(response.status(), await response.text()).toBe(201)
     if (sent.length === 1) {
-      await route.fulfill({ status: 503, contentType: 'application/json',
-        body: JSON.stringify({ detail: 'Synthetisch verlorene Fenster-Bestätigung' }) })
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ detail: 'Synthetisch verlorene Fenster-Bestätigung' }),
+      })
     } else await route.fulfill({ response })
   })
   await first.getByRole('button', { name: 'Speichern & freigeben', exact: true }).click()
@@ -182,8 +215,10 @@ test('a delayed old acknowledgement cannot overwrite an explicitly started secon
   await openDraft(secondPage)
   const sent: Sent[] = []
   let release!: () => void
-  const gate = new Promise<void>(resolve => { release = resolve })
-  await context.route('**/api/anki/manual-cards', async route => {
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  await context.route('**/api/anki/manual-cards', async (route) => {
     if (route.request().method() !== 'POST') return route.continue()
     sent.push(route.request().postDataJSON() as Sent)
     const requestIndex = sent.length
@@ -201,7 +236,9 @@ test('a delayed old acknowledgement cannot overwrite an explicitly started secon
     await expect(front(recovered)).toBeEnabled()
     await front(recovered).fill('Die zweite bewusste Frage bleibt nach dem verspäteten ACK erhalten')
     await expect(recovered).toContainText('Entwurf auf diesem Gerät gespeichert.')
-  } finally { release() }
+  } finally {
+    release()
+  }
   const current = secondPage.getByRole('dialog', { name: 'Eigene Lernkarte', exact: true })
   await expect(front(current)).toHaveValue('Die zweite bewusste Frage bleibt nach dem verspäteten ACK erhalten')
   await current.getByRole('button', { name: 'Speichern & freigeben', exact: true }).click()
@@ -223,13 +260,15 @@ test('a native review survives SQL failure and repairs the original mirror on br
   expect((await page.request.post('/api/__test__/study-review-fault')).ok()).toBeTruthy()
   const sent: ReviewSent[] = []
   let observed!: (value: NativeSnapshot) => void
-  const failedSnapshot = new Promise<NativeSnapshot>(resolve => { observed = resolve })
-  await page.route('**/api/anki/study/reviews', async route => {
+  const failedSnapshot = new Promise<NativeSnapshot>((resolve) => {
+    observed = resolve
+  })
+  await page.route('**/api/anki/study/reviews', async (route) => {
     sent.push(route.request().postDataJSON() as ReviewSent)
     const response = await route.fetch()
     if (sent.length === 1) {
       expect(response.status(), await response.text()).toBe(503)
-      observed(await (await page.request.get('/api/__test__/study-deck-scenario')).json() as NativeSnapshot)
+      observed((await (await page.request.get('/api/__test__/study-deck-scenario')).json()) as NativeSnapshot)
     }
     await route.fulfill({ response })
   })
@@ -240,10 +279,12 @@ test('a native review survives SQL failure and repairs the original mirror on br
   expect(failed.sql_reviews).toHaveLength(0)
   await page.reload()
   await expect(page.locator('.study-session')).toBeVisible()
-  await expect.poll(async () => {
-    const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
-    return current.sql_reviews.length
-  }).toBe(1)
+  await expect
+    .poll(async () => {
+      const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
+      return current.sql_reviews.length
+    })
+    .toBe(1)
   const repaired: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
   expect(sent).toHaveLength(2)
   expect(sent[1]).toEqual(sent[0])
@@ -257,8 +298,9 @@ test('a native review survives SQL failure and repairs the original mirror on br
 
 test('the source and original SQL progress identity survive a changed native note ID', async ({ page }) => {
   const dialog = await openDraft(page)
-  const storing = page.waitForResponse(response => response.url().endsWith('/api/anki/manual-cards') &&
-    response.request().method() === 'POST')
+  const storing = page.waitForResponse(
+    (response) => response.url().endsWith('/api/anki/manual-cards') && response.request().method() === 'POST',
+  )
   await dialog.getByRole('button', { name: 'Speichern & freigeben', exact: true }).click()
   const saved: components['schemas']['ManualCardResponse'] = await (await storing).json()
   await expect(dialog).toContainText('Gespeichert und in Anki übernommen')
@@ -266,14 +308,18 @@ test('the source and original SQL progress identity survive a changed native not
   expect(moved.ok(), await moved.text()).toBeTruthy()
   const binding: { new_note_id: string; sql_card_id: number } = await moved.json()
   await page.goto(`/study/session/${encodeURIComponent(scenario.deck_name)}`)
-  await expect(page.getByRole('link', { name: /Quelle öffnen/ })).toHaveAttribute('href',
-    `/material/${scenario.version_id}?page=12`)
+  await expect(page.getByRole('link', { name: /Quelle öffnen/ })).toHaveAttribute(
+    'href',
+    `/material/${scenario.version_id}?page=12`,
+  )
   await page.getByRole('button', { name: /Antwort zeigen/ }).click()
   await page.getByRole('button', { name: /Gut/ }).click()
-  await expect.poll(async () => {
-    const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
-    return current.sql_reviews.length
-  }).toBe(1)
+  await expect
+    .poll(async () => {
+      const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
+      return current.sql_reviews.length
+    })
+    .toBe(1)
   const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
   expect(current.reviews).toBe(1)
   expect(current.sql_cards[0].id).toBe(binding.sql_card_id)
@@ -285,7 +331,8 @@ test('the source and original SQL progress identity survive a changed native not
 test('two offline deck windows retain both ratings and replay each UUID once', async ({ page, context }) => {
   const seeded = await page.request.post('/api/__test__/study-deck-scenario')
   expect(seeded.ok(), await seeded.text()).toBeTruthy()
-  const decks: { deck_a: { name: string; card_ids: number[] }; deck_b: { name: string; card_ids: number[] } } = await seeded.json()
+  const decks: { deck_a: { name: string; card_ids: number[] }; deck_b: { name: string; card_ids: number[] } } =
+    await seeded.json()
   const second = await context.newPage()
   await page.goto(`/study/session/${encodeURIComponent(decks.deck_a.name)}`)
   await second.goto(`/study/session/${encodeURIComponent(decks.deck_b.name)}`)
@@ -296,13 +343,17 @@ test('two offline deck windows retain both ratings and replay each UUID once', a
   }
   try {
     await context.setOffline(true)
-    await Promise.all([page, second].map(window => window.getByRole('button', { name: /Antwort zeigen/ }).click()))
-    await Promise.all([page, second].map(window => window.getByRole('button', { name: /Gut/ })
-      .evaluate(button => (button as HTMLButtonElement).click())))
-    await expect.poll(async () => (await pendingNativeReviews(page)).map(review => review.card_id).sort())
+    await Promise.all([page, second].map((window) => window.getByRole('button', { name: /Antwort zeigen/ }).click()))
+    await Promise.all(
+      [page, second].map((window) =>
+        window.getByRole('button', { name: /Gut/ }).evaluate((button) => (button as HTMLButtonElement).click()),
+      ),
+    )
+    await expect
+      .poll(async () => (await pendingNativeReviews(page)).map((review) => review.card_id).sort())
       .toEqual([decks.deck_a.card_ids[0], decks.deck_b.card_ids[0]].sort())
     const beforeReload = await pendingNativeReviews(page)
-    expect(new Set(beforeReload.map(review => review.review_id)).size).toBe(2)
+    expect(new Set(beforeReload.map((review) => review.review_id)).size).toBe(2)
     await Promise.all([page.reload(), second.reload()])
     expect(await pendingNativeReviews(page)).toEqual(beforeReload)
     await context.setOffline(false)
@@ -310,9 +361,12 @@ test('two offline deck windows retain both ratings and replay each UUID once', a
     const current: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()
     expect(current.reviews).toBe(2)
     expect(current.receipts).toHaveLength(2)
-    expect(new Set(current.receipts.map(receipt => receipt.review_id)))
-      .toEqual(new Set(beforeReload.map(review => review.review_id)))
-  } finally { await context.setOffline(false) }
+    expect(new Set(current.receipts.map((receipt) => receipt.review_id))).toEqual(
+      new Set(beforeReload.map((review) => review.review_id)),
+    )
+  } finally {
+    await context.setOffline(false)
+  }
 })
 
 test('returning immediately to the learning overview shows the acknowledged topic progress', async ({ page }) => {
@@ -321,13 +375,16 @@ test('returning immediately to the learning overview shows the acknowledged topi
   await dialog.getByRole('button', { name: 'Speichern & freigeben', exact: true }).click()
   await expect(dialog).toContainText('Gespeichert und in Anki übernommen')
   await page.goto('/learning')
-  const topic = page.locator('.data-row').filter({ has: page.getByText('Synthetisches Fortschrittsthema', { exact: true }) })
+  const topic = page
+    .locator('.data-row')
+    .filter({ has: page.getByText('Synthetisches Fortschrittsthema', { exact: true }) })
   await expect(topic).toContainText('(0 Wiederholungen)')
   await page.locator('.learning-tabs').getByRole('link', { name: 'Karteikarten', exact: true }).click()
   await page.locator(`a[href="/study/session/${encodeURIComponent(scenario.deck_name)}"]`).click()
   await page.getByRole('button', { name: /Antwort zeigen/ }).click()
-  const reviewing = page.waitForResponse(response => response.url().endsWith('/api/anki/study/reviews') &&
-    response.request().method() === 'POST')
+  const reviewing = page.waitForResponse(
+    (response) => response.url().endsWith('/api/anki/study/reviews') && response.request().method() === 'POST',
+  )
   await page.getByRole('button', { name: /Gut/ }).click()
   expect((await reviewing).ok()).toBeTruthy()
   await page.goBack()
@@ -345,13 +402,15 @@ test('a committed receipt repairs progress after the original native card is rem
   expect((await page.request.post('/api/__test__/study-review-fault')).ok()).toBeTruthy()
   const sent: ReviewSent[] = []
   let observed!: (value: NativeSnapshot) => void
-  const failedSnapshot = new Promise<NativeSnapshot>(resolve => { observed = resolve })
-  await page.route('**/api/anki/study/reviews', async route => {
+  const failedSnapshot = new Promise<NativeSnapshot>((resolve) => {
+    observed = resolve
+  })
+  await page.route('**/api/anki/study/reviews', async (route) => {
     sent.push(route.request().postDataJSON() as ReviewSent)
     const response = await route.fetch()
     if (sent.length === 1) {
       expect(response.status(), await response.text()).toBe(503)
-      observed(await (await page.request.get('/api/__test__/study-deck-scenario')).json() as NativeSnapshot)
+      observed((await (await page.request.get('/api/__test__/study-deck-scenario')).json()) as NativeSnapshot)
     } else {
       expect(response.ok(), await response.text()).toBeTruthy()
       expect(await response.json()).toMatchObject({ already_applied: true, card: null })
@@ -362,7 +421,9 @@ test('a committed receipt repairs progress after the original native card is rem
   const failed = await failedSnapshot
   expect(failed.reviews).toBe(1)
   expect(failed.sql_reviews).toHaveLength(0)
-  expect((await page.request.post(`/api/__test__/study-native-card-remove?card_id=${sent[0].card_id}`)).ok()).toBeTruthy()
+  expect(
+    (await page.request.post(`/api/__test__/study-native-card-remove?card_id=${sent[0].card_id}`)).ok(),
+  ).toBeTruthy()
   await page.reload()
   await expect.poll(async () => (await pendingNativeReviews(page)).length).toBe(0)
   const repaired: NativeSnapshot = await (await page.request.get('/api/__test__/study-deck-scenario')).json()

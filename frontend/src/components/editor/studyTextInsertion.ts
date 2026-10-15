@@ -5,8 +5,12 @@ export function studyTextSelection(source: string, from: number, to: number): St
   const start = Math.min(source.length, Math.max(0, from))
   return { source, from: start, to: Math.min(source.length, Math.max(start, to)) }
 }
-export function insertStudyText(current: string, selection: StudyTextSelection, text: string, maxLength: number):
-  { body: string; caret: number } | 'changed' | 'long' {
+export function insertStudyText(
+  current: string,
+  selection: StudyTextSelection,
+  text: string,
+  maxLength: number,
+): { body: string; caret: number } | 'changed' | 'long' {
   if (current !== selection.source) return 'changed'
   const body = current.slice(0, selection.from) + text + current.slice(selection.to)
   return body.length > maxLength ? 'long' : { body, caret: selection.from + text.length }

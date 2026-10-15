@@ -54,7 +54,7 @@ def write_study_mode(settings: Settings, mode: str) -> None:
     path = mode_path(settings)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".tmp")
-    with temporary.open("x", encoding="utf-8") as output:
+    with temporary.open("w", encoding="utf-8") as output:  # overwrite a stale file left by a crash
         json.dump({"mode": mode}, output)
         output.flush()
     temporary.replace(path)

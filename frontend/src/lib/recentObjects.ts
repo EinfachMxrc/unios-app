@@ -26,21 +26,27 @@ export function rememberObject(to: string, title: string) {
   if (url.origin !== 'https://unios.invalid' || !safe || !title.trim()) return
   const item = { to: safe, title: title.trim().slice(0, 200) }
   // One entry per object; revisiting a PDF updates its exact page handle.
-  const identity = (ref: string) => ref.startsWith('/material/') ? ref.split('?')[0] : ref
+  const identity = (ref: string) => (ref.startsWith('/material/') ? ref.split('?')[0] : ref)
   if (objects[0]?.to === item.to && objects[0]?.title === item.title) return
-  objects = [item, ...objects.filter(value => identity(value.to) !== identity(item.to))].slice(0, 12)
-  listeners.forEach(listener => listener())
+  objects = [item, ...objects.filter((value) => identity(value.to) !== identity(item.to))].slice(0, 12)
+  listeners.forEach((listener) => listener())
 }
 
 export function clearRecentObjects() {
   objects = EMPTY
-  listeners.forEach(listener => listener())
+  listeners.forEach((listener) => listener())
 }
 
 function subscribe(listener: () => void) {
   listeners.add(listener)
-  return () => { listeners.delete(listener) }
+  return () => {
+    listeners.delete(listener)
+  }
 }
 export function useRecentObjects() {
-  return useSyncExternalStore(subscribe, () => objects, () => EMPTY)
+  return useSyncExternalStore(
+    subscribe,
+    () => objects,
+    () => EMPTY,
+  )
 }

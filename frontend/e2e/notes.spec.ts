@@ -23,7 +23,9 @@ test('existing notes remain readable and editable', async ({ page }, testInfo) =
   await expect(page.getByRole('status').filter({ hasText: 'Lokal auf diesem Gerät gesichert' })).toBeVisible()
   await page.reload()
   await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await expect(page.getByRole('textbox', { name: 'Notizinhalt' })).toHaveValue('Historischer Markdown-Text mit Ergänzung')
+  await expect(page.getByRole('textbox', { name: 'Notizinhalt' })).toHaveValue(
+    'Historischer Markdown-Text mit Ergänzung',
+  )
   holdSaves = false
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.reload()
@@ -34,7 +36,9 @@ test('existing notes remain readable and editable', async ({ page }, testInfo) =
   await page.getByRole('button', { name: 'Bearbeiten' }).click()
   await page.getByRole('button', { name: 'Schließen' }).click()
   await page.goto(`/courses/${courseId}`)
-  await expect(page.getByRole('navigation', { name: 'Kursansichten' }).getByRole('link', { name: /Notizen/ })).toBeVisible()
+  await expect(
+    page.getByRole('navigation', { name: 'Kursansichten' }).getByRole('link', { name: /Notizen/ }),
+  ).toBeVisible()
   await expect(page.getByRole('link', { name: 'Frühere Frage' })).toBeVisible()
 })
 
@@ -130,7 +134,10 @@ test('Markdown tools, links and preview make a note easy to write', async ({ pag
   await page.getByRole('button', { name: 'Codeblock einfügen' }).click()
   await expect(editor).toHaveValue(/\]\]\n\n\| Thema \| Notiz \|/)
   await expect(editor).toContainText('| Thema | Notiz |')
-  await page.getByRole('toolbar', { name: 'Markdown formatieren' }).getByRole('button', { name: 'Vorschau', exact: true }).click()
+  await page
+    .getByRole('toolbar', { name: 'Markdown formatieren' })
+    .getByRole('button', { name: 'Vorschau', exact: true })
+    .click()
   await expect(page.locator('.note-writing-preview table')).toBeVisible()
   await expect(page.locator('.note-writing-preview pre')).toBeVisible()
   await page.getByRole('button', { name: 'Schreiben' }).click()
@@ -143,7 +150,10 @@ test('Markdown tools, links and preview make a note easy to write', async ({ pag
   await editor.fill(
     '## Schleifen und Rekursion\n\nWie verändert sich die Laufzeit bei verschachtelten Schleifen?\n\n| Konzept | Merksatz |\n| --- | --- |\n| Schleife | Wiederholt einen Block |\n| Rekursion | Ruft sich mit kleinerem Problem auf |\n\n```python\nfor zahl in range(3):\n    print(zahl)\n```\n\nWeiterlesen: [[Verknüpfte Lernquelle]]',
   )
-  await page.getByRole('toolbar', { name: 'Markdown formatieren' }).getByRole('button', { name: 'Vorschau', exact: true }).click()
+  await page
+    .getByRole('toolbar', { name: 'Markdown formatieren' })
+    .getByRole('button', { name: 'Vorschau', exact: true })
+    .click()
   await page.screenshot({ path: screenshotPath('test-results/readme-notes-editor.png') })
   await page.getByRole('button', { name: 'Notiz anlegen' }).click()
   await expect(page.locator('.rendered-note .note-wikilink', { hasText: 'Verknüpfte Lernquelle' })).toBeVisible()

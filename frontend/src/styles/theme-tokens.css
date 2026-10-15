@@ -64,13 +64,13 @@
     --ui-radius-panel: 10px;
     --ui-radius-overlay: 14px;
     --ui-overlay: var(--popover);
-    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / .05), 0 10px 30px rgb(0 0 0 / .10);
-    --ui-panel-shadow: 0 1px 2px rgb(0 0 0 / .04);
+    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 10px 30px rgb(0 0 0 / 0.1);
+    --ui-panel-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
     /* Motion: colour changes are quick and linear-ish; entrances settle softly. */
     --ui-color-duration: 150ms;
-    --ui-color-ease: cubic-bezier(.4, 0, .2, 1);
+    --ui-color-ease: cubic-bezier(0.4, 0, 0.2, 1);
     --ui-enter-duration: 160ms;
-    --ui-enter-ease: cubic-bezier(.22, 1, .36, 1);
+    --ui-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --ui-scrollbar: color-mix(in srgb, var(--app-text) 20%, transparent);
     --ui-scrollbar-hover: color-mix(in srgb, var(--app-text) 38%, transparent);
   }
@@ -122,7 +122,7 @@
     --nav-muted: #a0a0a0;
     --nav-hover: #1f1f1f;
     --nav-active: #262626;
-    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px rgb(0 0 0 / .5);
+    --ui-overlay-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px rgb(0 0 0 / 0.5);
     --ui-panel-shadow: none;
   }
 }

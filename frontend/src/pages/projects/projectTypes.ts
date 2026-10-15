@@ -24,7 +24,10 @@ export type Project = ProjectFields & {
   created_at: string
   updated_at: string
 }
-export type ProjectSummary = Pick<Project, 'id' | 'name' | 'course_id' | 'course_name' | 'deadline_at' | 'archived_at'> & {
+export type ProjectSummary = Pick<
+  Project,
+  'id' | 'name' | 'course_id' | 'course_name' | 'deadline_at' | 'archived_at'
+> & {
   todo_count: number
   open_todo_count: number
 }
@@ -38,6 +41,12 @@ export type GitHubActivity = {
   members: { name: string; github_username: string; commits: number; issues: number; pull_requests: number }[]
   fetched_at: string
 }
-export type MirrorSnapshot = { id: number; repository: string; fetched_at: string; refs_count: number; head: string | null }
+export type MirrorSnapshot = {
+  id: number
+  repository: string
+  fetched_at: string
+  refs_count: number
+  head: string | null
+}
 export type RepoMatch = { path: string; line: number; excerpt: string }
 export type RepoSearch = { snapshot_id: number; head: string; matches: RepoMatch[] }

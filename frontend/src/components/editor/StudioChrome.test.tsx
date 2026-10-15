@@ -8,11 +8,17 @@ import { afterEach, expect, it, vi } from 'vitest'
 import { StudioBlockActions, StudioOutline } from './StudioChrome'
 
 vi.mock('@/i18n/useT', () => ({
-  useT: () => ({ t: (key: string, values?: Record<string, unknown>) => values ? `${key}:${JSON.stringify(values)}` : key }),
+  useT: () => ({
+    t: (key: string, values?: Record<string, unknown>) => (values ? `${key}:${JSON.stringify(values)}` : key),
+  }),
 }))
 
 let editor: Editor | null = null
-afterEach(() => { cleanup(); editor?.destroy(); editor = null })
+afterEach(() => {
+  cleanup()
+  editor?.destroy()
+  editor = null
+})
 
 function make(html: string, cursorInBlock: number) {
   editor = new Editor({ extensions: [StarterKit], content: html })
@@ -21,7 +27,8 @@ function make(html: string, cursorInBlock: number) {
   editor.commands.setTextSelection(pos + 1)
   return editor
 }
-const texts = () => Array.from({ length: editor!.state.doc.childCount }, (_, i) => editor!.state.doc.child(i).textContent)
+const texts = () =>
+  Array.from({ length: editor!.state.doc.childCount }, (_, i) => editor!.state.doc.child(i).textContent)
 
 it('moves the block under the cursor down and up again without losing content', () => {
   const instance = make('<p>Eins</p><p>Zwei</p><p>Drei</p>', 0)

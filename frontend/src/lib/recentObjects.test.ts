@@ -5,7 +5,10 @@ import { cleanup, renderHook, act } from '@testing-library/react'
 import { clearRecentObjects, recentHandle, rememberObject, useRecentObjects } from './recentObjects'
 import { clearWorkspace } from './workspaceState'
 
-afterEach(() => { cleanup(); clearRecentObjects() })
+afterEach(() => {
+  cleanup()
+  clearRecentObjects()
+})
 describe('recent object navigation', () => {
   it('only keeps stable object handles, stripping unrelated query parameters', () => {
     expect(recentHandle('/search', '?q=private')).toBeNull()
@@ -23,8 +26,10 @@ describe('recent object navigation', () => {
       rememberObject('/material/34?page=14', 'A PDF')
       rememberObject('https://outside.invalid/notes?id=abc', 'Foreign')
     })
-    expect(result.current.map(item => item.to)).toEqual(['/material/34?page=14', '/notes?id=abc'])
-    act(() => { for (let index = 1; index <= 20; index++) rememberObject(`/courses/${index}`, `Course ${index}`) })
+    expect(result.current.map((item) => item.to)).toEqual(['/material/34?page=14', '/notes?id=abc'])
+    act(() => {
+      for (let index = 1; index <= 20; index++) rememberObject(`/courses/${index}`, `Course ${index}`)
+    })
     expect(result.current).toHaveLength(12)
     expect(result.current[0].to).toBe('/courses/20')
     act(clearWorkspace)

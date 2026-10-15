@@ -49,13 +49,18 @@ test('a running timer survives a reload', async ({ page, request }) => {
 test('a finished timer shows a calm completion state instead of a negative countdown', async ({ page, request }) => {
   const block = await (await request.post('http://127.0.0.1:8173/api/__test__/accepted-study-block-today')).json()
   const alreadyFinishedState = {
-    blockId: block.id, topic: block.topic, courseName: block.course_name,
-    durationSeconds: 60, startedAt: Date.now() - 120_000, pausedAt: null, accumulatedPauseMs: 0,
+    blockId: block.id,
+    topic: block.topic,
+    courseName: block.course_name,
+    durationSeconds: 60,
+    startedAt: Date.now() - 120_000,
+    pausedAt: null,
+    accumulatedPauseMs: 0,
   }
-  await page.addInitScript(
-    ([key, value]) => window.localStorage.setItem(key, value),
-    [STORAGE_KEY, JSON.stringify(alreadyFinishedState)] as [string, string],
-  )
+  await page.addInitScript(([key, value]) => window.localStorage.setItem(key, value), [
+    STORAGE_KEY,
+    JSON.stringify(alreadyFinishedState),
+  ] as [string, string])
   await page.goto('/learning')
   const panel = page.locator('.glass-card').filter({ has: page.getByRole('heading', { name: 'Lernblöcke heute' }) })
   const row = panel.locator('.data-row').filter({ hasText: block.topic })
@@ -68,11 +73,21 @@ test('a finished timer shows a calm completion state instead of a negative count
 test('today includes UTC blocks across the Berlin midnight with and without an explicit offset', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-04T22:30:00Z'))
   const starts = ['2026-10-04T22:30:00', '2026-10-04T22:30:00Z', '2026-10-05T00:30:00+02:00']
-  await page.route('**/api/learning/blocks', route => route.fulfill({ json: starts.map((starts_at, index) => ({
-    id: 701 + index, exam_id: 1, exam_title: 'Mitternachts-Test', topic_id: 1,
-    topic: `Mitternachtsblock ${index + 1}`, course_name: 'Programmieren 1',
-    duration_minutes: 1, starts_at, status: 'accepted',
-  })) }))
+  await page.route('**/api/learning/blocks', (route) =>
+    route.fulfill({
+      json: starts.map((starts_at, index) => ({
+        id: 701 + index,
+        exam_id: 1,
+        exam_title: 'Mitternachts-Test',
+        topic_id: 1,
+        topic: `Mitternachtsblock ${index + 1}`,
+        course_name: 'Programmieren 1',
+        duration_minutes: 1,
+        starts_at,
+        status: 'accepted',
+      })),
+    }),
+  )
   await page.goto('/learning')
   const panel = page.locator('.glass-card').filter({ has: page.getByRole('heading', { name: 'Lernblöcke heute' }) })
   for (let index = 1; index <= 3; index++)

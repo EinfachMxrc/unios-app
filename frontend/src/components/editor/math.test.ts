@@ -5,8 +5,13 @@ import { renderFormula } from './math'
 
 describe('bounded local formula rendering', () => {
   it('renders fractions, aligned equations, sets and matrices with accessible MathML', () => {
-    for (const latex of ['\\frac{x^2+1}{2}', '\\forall x\\in\\R', '\\sum_{i=1}^{n}i',
-      '\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}', '\\begin{aligned}x&=1\\\\y&=2\\end{aligned}']) {
+    for (const latex of [
+      '\\frac{x^2+1}{2}',
+      '\\forall x\\in\\R',
+      '\\sum_{i=1}^{n}i',
+      '\\begin{pmatrix}1&2\\\\3&4\\end{pmatrix}',
+      '\\begin{aligned}x&=1\\\\y&=2\\end{aligned}',
+    ]) {
       const html = renderFormula(latex, true)
       expect(html).toContain('<math')
       expect(html).toContain('katex')

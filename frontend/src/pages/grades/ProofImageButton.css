@@ -1,10 +1,55 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 /* Looks like the link it replaces; it only opens a viewer instead of the browser. */
-.proof-image-button { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; }
-.proof-image-dialog { display: grid; gap: 10px; width: min(960px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 20px; }
-.proof-image-dialog > h2 { font-size: 1.05rem; font-weight: 650; padding-right: 28px; }
-.proof-image-dialog > p { color: var(--app-muted); font-size: .85rem; }
-.proof-image-dialog .studio-dialog-close { position: absolute; top: 14px; right: 14px; display: inline-grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 8px; background: none; color: var(--app-muted); cursor: pointer; }
-.proof-image-dialog .studio-dialog-close:hover { background: var(--app-surface-alt); color: var(--app-text); }
-.proof-image-frame { overflow: auto; max-height: calc(100dvh - 140px); border: 1px solid var(--app-border); border-radius: 10px; background: var(--app-surface); }
-.proof-image-frame img { display: block; max-width: 100%; height: auto; }
+.proof-image-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+.proof-image-dialog {
+  display: grid;
+  gap: 10px;
+  width: min(960px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 20px;
+}
+.proof-image-dialog > h2 {
+  font-size: 1.05rem;
+  font-weight: 650;
+  padding-right: 28px;
+}
+.proof-image-dialog > p {
+  color: var(--app-muted);
+  font-size: 0.85rem;
+}
+.proof-image-dialog .studio-dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--app-muted);
+  cursor: pointer;
+}
+.proof-image-dialog .studio-dialog-close:hover {
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+}
+.proof-image-frame {
+  overflow: auto;
+  max-height: calc(100dvh - 140px);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-surface);
+}
+.proof-image-frame img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

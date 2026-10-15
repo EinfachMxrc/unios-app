@@ -25,11 +25,10 @@ export function useCommandPaletteSearch(query: string, enabled: boolean): Palett
     const timer = window.setTimeout(() => {
       setState({ query: value, results: null, searching: true, error: '' })
       request<SearchResponse>(`/api/search?q=${encodeURIComponent(value)}`, { signal: controller.signal })
-        .then(results => {
-          if (!controller.signal.aborted)
-            setState({ query: value, results, searching: false, error: '' })
+        .then((results) => {
+          if (!controller.signal.aborted) setState({ query: value, results, searching: false, error: '' })
         })
-        .catch(cause => {
+        .catch((cause) => {
           if (!controller.signal.aborted)
             setState({ query: value, results: null, searching: false, error: extractApiErrorMessage(cause) })
         })

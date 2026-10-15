@@ -12,7 +12,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Header, HTTPException, Query, Request
 from pydantic import BaseModel
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 
 from app.ai.access import allowed, course_access
 from app.ai.context import mail_context, timetable_context
@@ -32,6 +32,7 @@ from app.db.models import (
     Deadline,
     Exam,
     ExamRegistration,
+    LearningTopic,
     Project,
     RepoSnapshot,
     Resource,
@@ -182,7 +183,7 @@ def mcp_router(settings: Settings, factory, coordinator: HostCoordinator, action
             start = datetime.now(settings.timezone).replace(hour=0, minute=0, second=0, microsecond=0)
             end = start + timedelta(days=days)
             result = timetable_context(session, start.astimezone(UTC).replace(tzinfo=None),
-                                       end.astimezone(UTC).replace(tzinfo=None))
+                                       end.astimezone(UTC).replace(tzinfo=None), settings)
             audit(session, "get_timetable", None, True)
             return {"timezone": settings.tz, "days": days, "events": result}
 
@@ -389,16 +390,20 @@ def mcp_router(settings: Settings, factory, coordinator: HostCoordinator, action
     def get_anki_status(x_unios_mcp_token: str = Header(default="")):
         with factory() as session:
             authorize(session, x_unios_mcp_token, "get_anki_status")
-            rows = session.execute(select(AnkiCardQueue, Resource).join(
-                Resource, Resource.id == AnkiCardQueue.resource_id).where(
-                    Resource.group_category != "other_group")).all()
+            # Free note cards have no resource; their course comes from the learning topic.
+            owner_course = func.coalesce(Resource.course_id, LearningTopic.course_id)
+            rows = session.execute(select(AnkiCardQueue, owner_course)
+                .outerjoin(Resource, Resource.id == AnkiCardQueue.resource_id)
+                .outerjoin(LearningTopic, LearningTopic.id == AnkiCardQueue.topic_id)
+                .where(or_(Resource.id.is_(None), Resource.group_category != "other_group"))).all()
             permitted = course_access(session)
-            visible = [item for item, resource in rows if permitted(resource.course_id)]
-            note_rows = session.execute(select(AnkiCard.id, Resource.course_id).join(
-                AnkiCardQueue, AnkiCardQueue.id == AnkiCard.queue_id).join(
-                    Resource, Resource.id == AnkiCardQueue.resource_id).where(
-                        Resource.group_category != "other_group")).all()
-            note_ids = [note_id for note_id, course_id in note_rows if permitted(course_id)]
+            visible = [item for item, course_id in rows if course_id is not None and permitted(course_id)]
+            note_rows = session.execute(select(AnkiCard.id, owner_course)
+                .join(AnkiCardQueue, AnkiCardQueue.id == AnkiCard.queue_id)
+                .outerjoin(Resource, Resource.id == AnkiCardQueue.resource_id)
+                .outerjoin(LearningTopic, LearningTopic.id == AnkiCardQueue.topic_id)
+                .where(or_(Resource.id.is_(None), Resource.group_category != "other_group"))).all()
+            note_ids = [note_id for note_id, course_id in note_rows if course_id is not None and permitted(course_id)]
             review_count = (session.scalar(select(func.count(AnkiReview.id)).where(
                 AnkiReview.card_id.in_(note_ids))) or 0) if note_ids else 0
             audit(session, "get_anki_status", None, True)

@@ -27,7 +27,9 @@ test('a backup folder is chosen once, a backup runs, and a restore can be staged
     await expect(confirm).toBeDisabled()
     await dialog.getByLabel(/WIEDERHERSTELLEN/).fill('WIEDERHERSTELLEN')
     await confirm.click()
-    await expect(panel.getByRole('status').filter({ hasText: 'wird beim nächsten Start von UniOS eingespielt' })).toBeVisible()
+    await expect(
+      panel.getByRole('status').filter({ hasText: 'wird beim nächsten Start von UniOS eingespielt' }),
+    ).toBeVisible()
     await panel.getByRole('button', { name: 'Wiederherstellen abbrechen' }).click()
     await expect(panel.getByText(/wird beim nächsten Start/)).toHaveCount(0)
   } finally {

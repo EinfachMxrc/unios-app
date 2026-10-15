@@ -26,7 +26,7 @@ from app.host.lease import HostCoordinator
 
 # Device-bound or rebuildable: the host lease and its pre-migration copies, caches, older backup copies.
 SKIPPED_TOP_LEVEL = {"host", "derived", "backup-snapshots", "backup-status"}
-# Only what a fresh start needs; sessions, tokens and connection secrets stay on this device.
+# Only what a fresh start needs, plus the Anki collection; sessions, tokens and secrets stay on this device.
 LOCAL_SETTINGS = ("setup.json", "institution-profile.json", "campus.json")
 DAILY = timedelta(hours=24)
 
@@ -55,6 +55,18 @@ def _copy_database(source: Path, target: Path) -> str | None:
         except sqlite3.Error:
             row = None
     return row[0] if row else None
+
+
+def _copy_anki_collection(source: Path, target: Path) -> None:
+    """The built-in Anki collection holds every card and review; it lives beside the database."""
+    collection = source / "collection.anki2"
+    if not collection.is_file():
+        return
+    target.mkdir(parents=True)
+    _copy_database(collection, target / "collection.anki2")
+    media = source / "collection.media"
+    if media.is_dir():
+        shutil.copytree(media, target / "collection.media")
 
 
 def _mirror(data_dir: Path, target: Path) -> tuple[int, int]:
@@ -113,6 +125,7 @@ def run_backup(settings: Settings, coordinator: HostCoordinator, app_version: st
             for setting in LOCAL_SETTINGS:
                 if (settings.local_dir / setting).is_file():
                     shutil.copy2(settings.local_dir / setting, work / "local" / setting)
+            _copy_anki_collection(settings.local_dir / "anki", work / "local" / "anki")
             files, total = _mirror(settings.data_dir, root / "files")
             manifest = {"format": 1, "created_at": started, "app_version": app_version, "schema": schema,
                         "files": files, "bytes": total}

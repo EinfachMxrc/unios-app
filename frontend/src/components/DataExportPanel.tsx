@@ -34,15 +34,9 @@ export function DataExportPanel() {
 
   return (
     <Panel title={t('panelTitle')} action={<Download size={20} />}>
-      <p className="muted-text mb-4">
-        {t('intro')}
-      </p>
+      <p className="muted-text mb-4">{t('intro')}</p>
       <label className="mb-4 flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={includeFiles}
-          onChange={(event) => setIncludeFiles(event.target.checked)}
-        />
+        <input type="checkbox" checked={includeFiles} onChange={(event) => setIncludeFiles(event.target.checked)} />
         {t('includeFilesLabel')}
       </label>
       <Button

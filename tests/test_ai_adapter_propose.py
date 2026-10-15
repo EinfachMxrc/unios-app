@@ -29,7 +29,7 @@ class FakeMessages:
 class FakeClient:
     def __init__(self, response=None, error=None):
         self.messages_stub = FakeMessages(response, error)
-        self.beta = SimpleNamespace(messages=self.messages_stub)
+        self.messages = self.messages_stub
 
 
 def make_response(payload: dict, stop_reason="end_turn"):
@@ -102,7 +102,8 @@ def test_propose_refuses_without_configured_key(settings, factory, coordinator):
 
 def test_propose_refuses_locked_course_and_never_calls_sdk(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, resource_id = _material(factory)
     fake_client = FakeClient(response=make_response(_card_payload(resource_id)))
     patch_client(monkeypatch, fake_client)
@@ -116,7 +117,8 @@ def test_propose_refuses_locked_course_and_never_calls_sdk(monkeypatch, settings
 
 def test_propose_worst_case_budget_gate_refuses_before_calling_sdk(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     settings.ai_adapter_monthly_budget_tokens = 1  # prompt alone already exceeds this
     course_id, resource_id = _material(factory)
     fake_client = FakeClient(response=make_response(_card_payload(resource_id)))
@@ -130,7 +132,8 @@ def test_propose_worst_case_budget_gate_refuses_before_calling_sdk(monkeypatch, 
 
 def test_propose_imports_cards_as_proposed_and_records_usage(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, resource_id = _material(factory)
     fake_client = FakeClient(response=make_response(_card_payload(resource_id)))
     patch_client(monkeypatch, fake_client)
@@ -150,7 +153,8 @@ def test_propose_imports_cards_as_proposed_and_records_usage(monkeypatch, settin
 
 def test_propose_imports_exercises_as_proposed(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, resource_id = _material(factory)
     fake_client = FakeClient(response=make_response(_exercise_payload(resource_id)))
     patch_client(monkeypatch, fake_client)
@@ -166,7 +170,8 @@ def test_propose_imports_exercises_as_proposed(monkeypatch, settings, factory, c
 
 def test_propose_invalid_json_imports_nothing_but_records_usage(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, _resource_id = _material(factory)
     broken_response = SimpleNamespace(
         stop_reason="end_turn", stop_details=None,
@@ -187,7 +192,8 @@ def test_propose_invalid_json_imports_nothing_but_records_usage(monkeypatch, set
 
 def test_propose_schema_violation_imports_nothing(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, resource_id = _material(factory)
     bad_payload = _card_payload(resource_id)
     del bad_payload["cards"][0]["confidence"]  # required field missing
@@ -204,7 +210,8 @@ def test_propose_maps_rate_limit_error_to_service_unavailable(monkeypatch, setti
     import httpx2
 
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, _resource_id = _material(factory)
     request = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
     error = anthropic.RateLimitError("rate limited", response=httpx2.Response(429, request=request), body=None)
@@ -219,7 +226,8 @@ def test_propose_maps_rate_limit_error_to_service_unavailable(monkeypatch, setti
 
 def test_propose_refusal_imports_nothing(monkeypatch, settings, factory, coordinator):
     settings.ai_adapter_enabled = True
-    settings.ai_adapter_api_key = "sk-test"
+    settings.ai_adapter_api_key = "sk-test"  # pragma: allowlist secret
+    settings.ai_adapter_model = "claude-opus-5"
     course_id, _resource_id = _material(factory)
     fake_client = FakeClient(response=make_response({}, stop_reason="refusal"))
     patch_client(monkeypatch, fake_client)

@@ -2,7 +2,8 @@
 
 export default {
   title: 'Backup',
-  intro: 'UniOS backs up notes, highlights, course files and settings to a folder you choose, for example on OneDrive or a USB stick. Sign-in data stays on this device.',
+  intro:
+    'UniOS backs up notes, highlights, course files and settings to a folder you choose, for example on OneDrive or a USB stick. Sign-in data stays on this device.',
   folderLabel: 'Backup folder',
   folderPlaceholder: 'C:\\Users\\Name\\Documents\\UniOS backups',
   suggestions: 'Suggestions',
@@ -24,7 +25,8 @@ export default {
   restore: 'Restore',
   restoreLabel: 'Restore the state of {{date}}',
   restoreTitle: 'Restore this state?',
-  restoreText: 'UniOS brings back the state of {{date}} at its next start. Anything you changed after that will no longer show. The current state is set aside first and can be brought back.',
+  restoreText:
+    'UniOS brings back the state of {{date}} at its next start. Anything you changed after that will no longer show. The current state is set aside first and can be brought back.',
   restoreTypeLabel: 'Type “{{phrase}}” to confirm',
   restoreConfirm: 'Restore at next start',
   cancel: 'Cancel',

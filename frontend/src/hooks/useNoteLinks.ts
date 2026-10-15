@@ -30,7 +30,10 @@ export async function requestNoteLinkBatch(path: string, signal: AbortSignal): P
       activeBatches++
       resolve()
     }
-    if (signal.aborted) { cancel(); return }
+    if (signal.aborted) {
+      cancel()
+      return
+    }
     signal.addEventListener('abort', cancel, { once: true })
     if (activeBatches < 4) start()
     else waitingBatches.push(start)
@@ -46,8 +49,13 @@ export async function requestNoteLinkBatch(path: string, signal: AbortSignal): P
 function cachedNoteLinks(client: QueryClient): Map<string, NoteLinkResolution> {
   const latest = new Map<string, { updated: number; resolution: NoteLinkResolution }>()
   for (const query of client.getQueryCache().getAll()) {
-    if (query.queryKey[0] !== 'api' || typeof query.queryKey[1] !== 'string'
-      || query.queryKey[1].split('?')[0] !== '/api/notes/link-targets' || !Array.isArray(query.state.data)) continue
+    if (
+      query.queryKey[0] !== 'api' ||
+      typeof query.queryKey[1] !== 'string' ||
+      query.queryKey[1].split('?')[0] !== '/api/notes/link-targets' ||
+      !Array.isArray(query.state.data)
+    )
+      continue
     for (const resolution of query.state.data as NoteLinkResolution[]) {
       if (query.state.dataUpdatedAt >= (latest.get(resolution.title)?.updated ?? -1)) {
         latest.set(resolution.title, { updated: query.state.dataUpdatedAt, resolution })
@@ -58,7 +66,7 @@ function cachedNoteLinks(client: QueryClient): Map<string, NoteLinkResolution> {
 }
 
 export function noteTitleHasText(title: string): boolean {
-  return [...title].some(char => {
+  return [...title].some((char) => {
     // Python strip() includes these controls, while JS trim() additionally
     // removes the BOM. Keep the exact backend title rules without casefolding.
     return char === '\uFEFF' || (Boolean(char.trim()) && ![28, 29, 30, 31, 133].includes(char.charCodeAt(0)))
@@ -67,8 +75,9 @@ export function noteTitleHasText(title: string): boolean {
 
 /** Stable read batches: metadata only, bounded count and URL length. */
 export function noteLinkPaths(body: string): string[] {
-  const titles = [...new Set([...body.matchAll(/\[\[([^[\]\r\n]{1,200})\]\]/gu)]
-    .map(match => match[1]).filter(noteTitleHasText))].sort()
+  const titles = [
+    ...new Set([...body.matchAll(/\[\[([^[\]\r\n]{1,200})\]\]/gu)].map((match) => match[1]).filter(noteTitleHasText)),
+  ].sort()
   const paths: string[] = []
   let params = new URLSearchParams()
   for (const title of titles) {
@@ -86,32 +95,35 @@ export function noteLinkPaths(body: string): string[] {
 
 let refreshUsers = 0
 function refreshCatalog() {
-  void queryClient.invalidateQueries({ predicate: query => query.queryKey[0] === 'api'
-    && typeof query.queryKey[1] === 'string'
-    && ['/api/notes/link-targets', '/api/entities/note'].includes(query.queryKey[1].split('?')[0]) })
+  void queryClient.invalidateQueries({
+    predicate: (query) =>
+      query.queryKey[0] === 'api' &&
+      typeof query.queryKey[1] === 'string' &&
+      ['/api/notes/link-targets', '/api/entities/note'].includes(query.queryKey[1].split('?')[0]),
+  })
 }
 
 export function useNoteLinkTargets(body: string) {
   const client = useQueryClient()
   const paths = useMemo(() => noteLinkPaths(body), [body])
   const resolutions = useQueries({
-    queries: paths.map(path => ({
+    queries: paths.map((path) => ({
       queryKey: ['api', path],
       queryFn: ({ signal }: { signal: AbortSignal }) => requestNoteLinkBatch(path, signal),
       staleTime: 30_000,
       networkMode: 'always' as const,
       meta: { offlineCache: true },
     })),
-    combine: queries => {
+    combine: (queries) => {
       // A new title changes a batch key. Preserve prior exact global answers
       // while refreshing or offline instead of losing the other known links.
       const previous = cachedNoteLinks(client)
       return queries.flatMap((query, index) => {
         // Access observer data even when another batch supplies the newer
         // answer: React Query must subscribe this view to successful updates.
-        const current = new Map(query.data?.map(resolution => [resolution.title, resolution]))
+        const current = new Map(query.data?.map((resolution) => [resolution.title, resolution]))
         const failed = query.isError
-        return new URLSearchParams(paths[index].split('?')[1]).getAll('titles').flatMap(title => {
+        return new URLSearchParams(paths[index].split('?')[1]).getAll('titles').flatMap((title) => {
           const resolved = previous.get(title) ?? current.get(title)
           return resolved ? [resolved] : failed ? [{ title, status: 'unavailable' as const, target: null }] : []
         })
@@ -130,7 +142,7 @@ export function useNoteLinkTargets(body: string) {
       }
     }
   }, [])
-  return useMemo(() => new Map(resolutions.map(item => [item.title, item])), [resolutions])
+  return useMemo(() => new Map(resolutions.map((item) => [item.title, item])), [resolutions])
 }
 
 /** Search the global entity catalogue, never the currently filtered note list. */

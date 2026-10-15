@@ -3,13 +3,15 @@
 export default {
   focusStart: 'Jetzt lernen',
   focusNextTask: 'Dein Lernauftrag: {{topic}}',
-  focusAcceptedReason: 'Du hast diesen Lernauftrag angenommen. Quellen, Notizen, Karten und Übungen öffnen sich im Kontext seines Kurses.',
+  focusAcceptedReason:
+    'Du hast diesen Lernauftrag angenommen. Quellen, Notizen, Karten und Übungen öffnen sich im Kontext seines Kurses.',
   focusTimerContextTitle: 'Timer für diesen Lernblock',
   focusTimerContextIntro: 'Starte den Timer für diesen angenommenen Lernblock.',
   focusTimerContextEmptyText: 'Dieser Lernblock ist aktuell nicht verfügbar. Prüfe die Lernübersicht.',
   focusTimerOtherBlock: 'Ein Timer läuft bereits für {{topic}} · {{course}}.',
   focusScopeMismatch: 'Dieser Stapel gehört nicht zum gewählten Lernauftrag.',
-  focusDeckScopeHint: 'Diese Stapel enthalten zugeordnete Kurskarten. Weitere Karten und Unterstapel können enthalten sein.',
+  focusDeckScopeHint:
+    'Diese Stapel enthalten zugeordnete Kurskarten. Weitere Karten und Unterstapel können enthalten sein.',
   focusCardsTitle: 'Karten für diesen Lernauftrag',
   focusCardsEmpty: 'Keine Kartenstapel eindeutig zugeordnet',
   focusBackToWork: 'Zurück zum Lernauftrag',
@@ -27,11 +29,13 @@ export default {
   focusExamChanged: 'Der Prüfungstermin wurde seit der Planung geändert.',
   focusTopicsMissing: 'Ein Teil der ursprünglichen Themen ist nicht mehr zugeordnet.',
   focusTopicsUnknown: 'Themenzuordnung offen',
-  focusCourseScope: 'Quellen, Notizen, Karten und Übungen werden kursbezogen angeboten. Eine genaue Themenzuordnung ist nicht vollständig vorhanden.',
+  focusCourseScope:
+    'Quellen, Notizen, Karten und Übungen werden kursbezogen angeboten. Eine genaue Themenzuordnung ist nicht vollständig vorhanden.',
   focusChooseSource: 'Quelle für diesen Lernauftrag',
   focusChooseNote: 'Notiz dieses Kurses',
   focusNoSources: 'In dieser Auswahl ist keine lesbare Quelle vorhanden',
-  focusNoSourcesText: 'Prüfe weitere Seiten oder öffne den Kurs, um gespeicherte Unterlagen zu prüfen oder hinzuzufügen.',
+  focusNoSourcesText:
+    'Prüfe weitere Seiten oder öffne den Kurs, um gespeicherte Unterlagen zu prüfen oder hinzuzufügen.',
   focusNoNotes: 'Noch keine Notiz in diesem Kurs',
   focusNoNotesText: 'Öffne eine Quelle und schreibe deine erste Mitschrift.',
   focusReadSource: 'Quelle öffnen',

@@ -20,11 +20,16 @@ function documentWith(pages: string[], gate?: Promise<void>) {
 const submit = { preventDefault: () => undefined } as FormEvent<HTMLFormElement>
 
 beforeEach(clearWorkspace)
-afterEach(() => { cleanup(); clearWorkspace() })
+afterEach(() => {
+  cleanup()
+  clearWorkspace()
+})
 
 function setup(pdf: PDFDocumentProxy, page = 1) {
   const goToPage = vi.fn()
-  const hook = renderHook((props) => useReaderSearch(props), { initialProps: { versionId: 7, pdfDocument: pdf, page, goToPage } })
+  const hook = renderHook((props) => useReaderSearch(props), {
+    initialProps: { versionId: 7, pdfDocument: pdf, page, goToPage },
+  })
   return { goToPage, ...hook }
 }
 
@@ -33,9 +38,17 @@ it('finds matching pages, jumps to the first and steps through the hits', async 
   act(() => result.current.setInput('rekursion'))
   await act(() => result.current.search(submit))
   expect(result.current.status).toBe('done')
-  expect(result.current.results).toEqual([{ page: 1, count: 1 }, { page: 3, count: 1 }])
+  expect(result.current.results).toEqual([
+    { page: 1, count: 1 },
+    { page: 3, count: 1 },
+  ])
   expect(goToPage).toHaveBeenLastCalledWith(1)
-  rerender({ versionId: 7, pdfDocument: documentWith(['Rekursion', 'nichts', 'Basisfall der Rekursion']), page: 1, goToPage })
+  rerender({
+    versionId: 7,
+    pdfDocument: documentWith(['Rekursion', 'nichts', 'Basisfall der Rekursion']),
+    page: 1,
+    goToPage,
+  })
   act(() => result.current.move(1))
   expect(goToPage).toHaveBeenLastCalledWith(3)
 })
@@ -51,11 +64,15 @@ it('ignores terms shorter than two characters', async () => {
 
 it('lets a clear win over a search that is still running', async () => {
   let release = () => undefined as void
-  const gate = new Promise<void>((resolve) => { release = resolve })
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
   const { result, goToPage } = setup(documentWith(['Rekursion'], gate))
   act(() => result.current.setInput('rekursion'))
   let running: Promise<void> = Promise.resolve()
-  act(() => { running = result.current.search(submit) })
+  act(() => {
+    running = result.current.search(submit)
+  })
   expect(result.current.status).toBe('searching')
   act(() => result.current.clear())
   release()

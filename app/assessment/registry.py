@@ -4,6 +4,8 @@ import json
 from dataclasses import dataclass
 from fractions import Fraction
 
+import sympy as sp
+
 from app.assessment import math
 
 
@@ -37,6 +39,11 @@ def validate(task):
         polynomial = math.polynomial(task.expression)
         if task.math_operation == 'roots' and not 1 <= polynomial.degree() <= 2:
             raise ValueError('MATH_DEGREE')
+        if task.math_operation == 'roots':
+            # Answers are rational numbers only, so irrational or complex roots could never be entered.
+            roots = sp.solve(polynomial.as_expr(), math.X)
+            if not roots or any(not root.is_rational for root in roots):
+                raise ValueError('MATH_ROOTS')
     if kind == 'multiple_choice' and (len(task.choices) < 2 or task.expected not in task.choices):
         raise ValueError('CHOICE_EXPECTED')
     if kind in {'ordering', 'parsons', 'matching'}:

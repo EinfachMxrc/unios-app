@@ -18,19 +18,16 @@ export function HostHandoff() {
   const dialog = useRef<HTMLDialogElement>(null)
   const [completed, setCompleted] = useState(false)
 
-  const release = useApiMutation(
-    () => request<HostStatus>('/api/host/release', { method: 'POST' }),
-    {
-      onSuccess: async () => {
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['api', '/api/host'] }),
-          queryClient.invalidateQueries({ queryKey: ['api', '/api/system'] }),
-        ])
-        setCompleted(true)
-        dialog.current?.close()
-      },
+  const release = useApiMutation(() => request<HostStatus>('/api/host/release', { method: 'POST' }), {
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['api', '/api/host'] }),
+        queryClient.invalidateQueries({ queryKey: ['api', '/api/system'] }),
+      ])
+      setCompleted(true)
+      dialog.current?.close()
     },
-  )
+  })
   const busy = release.pending
 
   if (host?.topology === 'server') return null
@@ -69,9 +66,7 @@ export function HostHandoff() {
         }}
       >
         <h2 id="handoff-title">{t('dialogTitle')}</h2>
-        <p>
-          {t('dialogIntro')}
-        </p>
+        <p>{t('dialogIntro')}</p>
         <p className="muted-text">
           {t('dialogHintPrefix')}{' '}
           {/* eslint-disable-next-line i18next/no-literal-string -- CLI command name, not natural-language UI text */}

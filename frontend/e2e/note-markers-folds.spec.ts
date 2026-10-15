@@ -61,7 +61,10 @@ for (const theme of ['light', 'dark'])
       await expect(fold.locator('.katex').first()).toBeVisible()
       await expect(fold.locator('.studio-callout')).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-      await page.screenshot({ path: screenshotPath(`../docs/qa/note-markers-folds-20261014/${theme}-${width}.png`), fullPage: true })
+      await page.screenshot({
+        path: screenshotPath(`../docs/qa/note-markers-folds-20261014/${theme}-${width}.png`),
+        fullPage: true,
+      })
       await toggle.click()
       await page.emulateMedia({ media: 'print' })
       await expect(fold.locator('.studio-fold-body')).toBeVisible()

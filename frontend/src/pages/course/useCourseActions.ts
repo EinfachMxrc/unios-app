@@ -13,7 +13,9 @@ import type { CourseDetail } from '@/types'
 export function useCourseActions(id: string | undefined, detail: CourseDetail | null, reload: () => void) {
   const { busy, error: actionError, run: runAction } = useBusyAction()
   const [downloadOther, setDownloadOther] = useState<boolean | null>(null)
-  useEffect(() => { setDownloadOther(null) }, [detail?.course.download_other_groups])
+  useEffect(() => {
+    setDownloadOther(null)
+  }, [detail?.course.download_other_groups])
 
   function run(path: string, body: unknown, onError?: () => void) {
     return runAction(async () => {
@@ -29,8 +31,10 @@ export function useCourseActions(id: string | undefined, detail: CourseDetail | 
   async function changeActivity() {
     if (!detail) return
     const active = detail.course.is_active
-    const done = await run(`/api/entities/course/${id}/actions/course.set_activity`,
-      { confirmed: true, input: { active: !active, expected: active } })
+    const done = await run(`/api/entities/course/${id}/actions/course.set_activity`, {
+      confirmed: true,
+      input: { active: !active, expected: active },
+    })
     if (!done) return
     notifySyncCompleted()
     reload()
@@ -46,7 +50,10 @@ export function useCourseActions(id: string | undefined, detail: CourseDetail | 
 
   async function changeGroupDownload(enabled: boolean) {
     setDownloadOther(enabled)
-    if (await run(`/api/courses/${id}/group-download`, { download_other_groups: enabled }, () => setDownloadOther(null))) reload()
+    if (
+      await run(`/api/courses/${id}/group-download`, { download_other_groups: enabled }, () => setDownloadOther(null))
+    )
+      reload()
   }
 
   return { busy, actionError, downloadOther, changeActivity, changeSemester, changeGroup, changeGroupDownload }

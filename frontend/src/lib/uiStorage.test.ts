@@ -3,10 +3,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { readMigratedStorage } from './uiStorage'
 describe('UI preference migration', () => {
   beforeEach(() => {
-    const values = new Map<string,string>()
-    vi.stubGlobal('localStorage', { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => values.set(key,value) })
+    const values = new Map<string, string>()
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => values.set(key, value),
+    })
   })
-  afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals() })
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
   it('copies legacy values once and preserves newer choices', () => {
     localStorage.setItem('marc-theme', 'dark')
     expect(readMigratedStorage('unios-theme', 'marc-theme')).toBe('dark')
@@ -17,7 +23,9 @@ describe('UI preference migration', () => {
   })
   it('keeps a readable legacy preference even when durable migration cannot write', () => {
     localStorage.setItem('marc-sidebar-width', '320')
-    vi.spyOn(localStorage, 'setItem').mockImplementation(() => { throw new DOMException('quota', 'QuotaExceededError') })
+    vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
+      throw new DOMException('quota', 'QuotaExceededError')
+    })
     expect(readMigratedStorage('unios-sidebar-width', 'marc-sidebar-width')).toBe('320')
   })
 })

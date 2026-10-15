@@ -8,13 +8,26 @@ import releaseOnboarding from '@/i18n/locales/de/releaseOnboarding'
 import { ImportWizard } from './ImportWizard'
 import { request } from '@/api'
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
-vi.mock('@/api', () => ({ request: vi.fn().mockResolvedValue({}), useApi: () => ({ data: { courses: [{ id: 4, name: 'Demo Course' }] } }) }))
+vi.mock('@/api', () => ({
+  request: vi.fn().mockResolvedValue({}),
+  useApi: () => ({ data: { courses: [{ id: 4, name: 'Demo Course' }] } }),
+}))
 i18n.addResourceBundle('de', 'releaseOnboarding', releaseOnboarding)
-afterEach(() => { cleanup(); vi.mocked(request).mockReset(); vi.mocked(request).mockResolvedValue({}) })
+afterEach(() => {
+  cleanup()
+  vi.mocked(request).mockReset()
+  vi.mocked(request).mockResolvedValue({})
+})
 it('imports Markdown only after course selection and confirmation; reports preserved partial success', async () => {
-  const first = new File(['# A'], 'A.md'); Object.defineProperty(first, 'text', { value: async () => '# A' })
-  const second = new File(['# B'], 'B.md'); Object.defineProperty(second, 'text', { value: async () => '# B' })
-  render(<MemoryRouter><ImportWizard /></MemoryRouter>)
+  const first = new File(['# A'], 'A.md')
+  Object.defineProperty(first, 'text', { value: async () => '# A' })
+  const second = new File(['# B'], 'B.md')
+  Object.defineProperty(second, 'text', { value: async () => '# B' })
+  render(
+    <MemoryRouter>
+      <ImportWizard />
+    </MemoryRouter>,
+  )
   fireEvent.change(screen.getByLabelText('Dateien auswählen'), { target: { files: [first, second] } })
   expect((screen.getByRole('button', { name: 'Auswahl prüfen' }) as HTMLButtonElement).disabled).toBe(true)
   fireEvent.change(screen.getByLabelText('Kurs für die Notizen'), { target: { value: '4' } })
@@ -24,7 +37,10 @@ it('imports Markdown only after course selection and confirmation; reports prese
   vi.mocked(request).mockResolvedValueOnce({}).mockRejectedValueOnce(new Error('offline'))
   fireEvent.click(screen.getByRole('button', { name: 'Import bestätigen' }))
   await waitFor(() => expect(screen.getByRole('alert').textContent).toContain('1 bestätigten Dateien'))
-  expect(vi.mocked(request).mock.calls[0]).toEqual(['/api/notes', { method: 'POST', body: JSON.stringify({ course_id: 4, resource_id: null, title: 'A', body: '# A' }) }])
+  expect(vi.mocked(request).mock.calls[0]).toEqual([
+    '/api/notes',
+    { method: 'POST', body: JSON.stringify({ course_id: 4, resource_id: null, title: 'A', body: '# A' }) },
+  ])
   fireEvent.click(screen.getByRole('button', { name: 'Auswahl prüfen' }))
   expect(screen.queryByText('A.md')).toBeNull()
   expect(screen.getByText('B.md')).toBeTruthy()
@@ -32,7 +48,11 @@ it('imports Markdown only after course selection and confirmation; reports prese
 it('previews CSV without writing and retries only remaining notes after partial failure', async () => {
   const file = new File(['Title,Body\nA,First\nB,Second'], 'notes.csv')
   Object.defineProperty(file, 'text', { value: async () => 'Title,Body\nA,First\nB,Second' })
-  render(<MemoryRouter><ImportWizard /></MemoryRouter>)
+  render(
+    <MemoryRouter>
+      <ImportWizard />
+    </MemoryRouter>,
+  )
   fireEvent.click(screen.getByRole('button', { name: 'CSV-Notizen' }))
   fireEvent.change(screen.getByLabelText('Dateien auswählen'), { target: { files: [file] } })
   fireEvent.change(screen.getByLabelText('Kurs für die Notizen'), { target: { value: '4' } })
@@ -45,5 +65,9 @@ it('previews CSV without writing and retries only remaining notes after partial 
   expect(screen.queryByText('First')).toBeNull()
   fireEvent.click(screen.getByRole('button', { name: 'Import bestätigen' }))
   await screen.findByText('1 Notizen übernommen')
-  expect(vi.mocked(request).mock.calls.map(([, options]) => JSON.parse(options?.body as string).title)).toEqual(['A', 'B', 'B'])
+  expect(vi.mocked(request).mock.calls.map(([, options]) => JSON.parse(options?.body as string).title)).toEqual([
+    'A',
+    'B',
+    'B',
+  ])
 })

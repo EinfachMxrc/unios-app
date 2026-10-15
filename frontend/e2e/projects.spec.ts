@@ -22,7 +22,10 @@ test('course project can be created, updated and archived', async ({ page }) => 
   await expect(page.getByText('Alex')).toBeVisible()
   await page.getByRole('button', { name: 'Verknüpfen', exact: true }).click()
   await page.getByRole('textbox', { name: 'Kurs, Projekt, Material oder Eintrag suchen' }).fill('Programmieren')
-  await page.getByRole('list', { name: 'Suchergebnisse für Verknüpfungen' }).getByRole('button', { name: 'Verknüpfen' }).click()
+  await page
+    .getByRole('list', { name: 'Suchergebnisse für Verknüpfungen' })
+    .getByRole('button', { name: 'Verknüpfen' })
+    .click()
   await expect(page.getByRole('link', { name: 'Programmieren 1' })).toHaveCount(2)
   await page.screenshot({ path: screenshotPath('test-results/projects-desktop.png'), fullPage: true })
   await page.setViewportSize({ width: 390, height: 844 })
@@ -42,13 +45,18 @@ test('course project can be created, updated and archived', async ({ page }) => 
 
 test('saved project code search shows file and line on the project page', async ({ page }) => {
   await page.route(/\/api\/projects\/\d+\/mirror$/, async (route) => {
-    await route.fulfill({ json: { id: 1, repository: 'team/repo', fetched_at: '2026-09-25T12:00:00Z',
-      refs_count: 1, head: 'a'.repeat(40) } })
+    await route.fulfill({
+      json: { id: 1, repository: 'team/repo', fetched_at: '2026-09-25T12:00:00Z', refs_count: 1, head: 'a'.repeat(40) },
+    })
   })
   await page.route(/\/api\/projects\/\d+\/mirror\/search\?/, async (route) => {
-    await route.fulfill({ json: { snapshot_id: 1, head: 'a'.repeat(40), matches: [
-      { path: 'src/main.py', line: 12, excerpt: 'def fictional_feature():' },
-    ] } })
+    await route.fulfill({
+      json: {
+        snapshot_id: 1,
+        head: 'a'.repeat(40),
+        matches: [{ path: 'src/main.py', line: 12, excerpt: 'def fictional_feature():' }],
+      },
+    })
   })
   await page.goto('/settings')
   await page.getByRole('switch', { name: 'Projekte' }).click()
@@ -58,8 +66,10 @@ test('saved project code search shows file and line on the project page', async 
   await page.getByRole('combobox', { name: 'Kurs' }).selectOption({ label: 'Programmieren 1' })
   await page.getByRole('textbox', { name: 'GitHub-Repository (optional)' }).fill('team/repo')
   await page.getByRole('button', { name: 'Projekt anlegen' }).click()
-  await expect(page.getByRole('link', { name: 'Gesicherten Code als ZIP herunterladen' }))
-    .toHaveAttribute('href', /\/api\/projects\/\d+\/mirror\/archive/)
+  await expect(page.getByRole('link', { name: 'Gesicherten Code als ZIP herunterladen' })).toHaveAttribute(
+    'href',
+    /\/api\/projects\/\d+\/mirror\/archive/,
+  )
   await page.getByRole('textbox', { name: 'Gesicherten Code durchsuchen' }).fill('fictional')
   await page.getByRole('button', { name: 'Suchen', exact: true }).click()
   await expect(page.getByText('src/main.py:12')).toBeVisible()
@@ -69,12 +79,16 @@ test('saved project code search shows file and line on the project page', async 
 test('linked Moodle assignment starts the confirmed submission flow on the project page', async ({ page }) => {
   const head = 'a'.repeat(40)
   await page.route(/\/api\/projects\/\d+\/mirror$/, async (route) => {
-    await route.fulfill({ json: { id: 1, repository: 'team/repo', fetched_at: '2026-09-25T12:00:00Z',
-      refs_count: 1, head } })
+    await route.fulfill({
+      json: { id: 1, repository: 'team/repo', fetched_at: '2026-09-25T12:00:00Z', refs_count: 1, head },
+    })
   })
   await page.route(/\/api\/projects\/\d+\/mirror\/archive$/, async (route) => {
-    await route.fulfill({ body: Buffer.from('UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==', 'base64'),
-      contentType: 'application/zip', headers: { 'x-unios-archive-head': head } })
+    await route.fulfill({
+      body: Buffer.from('UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA==', 'base64'),
+      contentType: 'application/zip',
+      headers: { 'x-unios-archive-head': head },
+    })
   })
   await page.request.post('/api/__test__/submission-write-reset')
   await page.request.put('/api/submissions/control', { data: { enabled: true } })

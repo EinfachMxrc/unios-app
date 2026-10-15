@@ -92,7 +92,9 @@ export function validateLocaleMeta(folder: string, candidate: unknown): LocaleMe
     throw new Error(`Locale "${folder}": folder name is not a valid BCP-47 language tag`)
   }
   if (meta.code !== folder) {
-    throw new Error(`Locale "${folder}": locale.json declares code "${String(meta.code)}", which must match the folder name`)
+    throw new Error(
+      `Locale "${folder}": locale.json declares code "${String(meta.code)}", which must match the folder name`,
+    )
   }
   if (!isNonEmptyString(meta.nativeName)) {
     throw new Error(`Locale "${folder}": locale.json is missing a non-empty "nativeName"`)
@@ -101,7 +103,9 @@ export function validateLocaleMeta(folder: string, candidate: unknown): LocaleMe
     throw new Error(`Locale "${folder}": locale.json is missing a non-empty "englishName"`)
   }
   if (!meta.dir || !DIRECTIONS.includes(meta.dir)) {
-    throw new Error(`Locale "${folder}": locale.json has invalid "dir" (expected "ltr" or "rtl", got ${JSON.stringify(meta.dir)})`)
+    throw new Error(
+      `Locale "${folder}": locale.json has invalid "dir" (expected "ltr" or "rtl", got ${JSON.stringify(meta.dir)})`,
+    )
   }
   if (meta.intlLocale !== undefined && !isNonEmptyString(meta.intlLocale)) {
     throw new Error(`Locale "${folder}": locale.json has an invalid "intlLocale"`)

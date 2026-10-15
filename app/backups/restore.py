@@ -134,6 +134,12 @@ def apply_pending_restore(settings: Settings, database: Path) -> dict | None:
         _swap_database(database, incoming, keep)
         for setting in (snapshot / "local").glob("*.json"):
             shutil.copy2(setting, settings.local_dir / setting.name)
+        saved_anki = snapshot / "local" / "anki"
+        if (saved_anki / "collection.anki2").is_file():
+            live_anki = settings.local_dir / "anki"
+            if live_anki.exists():
+                os.replace(live_anki, keep / "anki")
+            shutil.copytree(saved_anki, live_anki)
         result.update(status="success", files=copied, previous=keep.name)
     except (OSError, KeyError, BackupError) as exc:
         result.update(status="error", message=str(exc) if isinstance(exc, BackupError) else type(exc).__name__)

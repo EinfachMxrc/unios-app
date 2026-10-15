@@ -12,9 +12,10 @@ for (const theme of ['light', 'dark']) {
         width === 390 ? page.getByRole('navigation', { name: 'Mobile Navigation' }) : page.locator('.app-nav')
       // Desktop also lists "Neue Notiz", pinned courses and recent objects; the main
       // areas are the nav items of the area groups.
-      const core = width === 390
-        ? navigation.locator('a:not([href="/more"])')
-        : navigation.locator('.sidebar-group:not(.sidebar-courses):not(.sidebar-recents) a.nav-item')
+      const core =
+        width === 390
+          ? navigation.locator('a:not([href="/more"])')
+          : navigation.locator('.sidebar-group:not(.sidebar-courses):not(.sidebar-recents) a.nav-item')
       await expect(core).toHaveText(['Heute', 'Kurse', 'Lernen', 'Notizen', 'Termine'])
       await expect(page.locator('.app-nav').getByRole('button', { name: 'Bibliothek' })).toHaveCount(0)
       const tools = page.locator('.more-tools')

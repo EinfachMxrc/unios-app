@@ -7,9 +7,25 @@ export function stripSnippetMarks(text: string) {
 
 export function SearchHighlight({ text, query }: { text: string; query: string }) {
   text = stripSnippetMarks(text)
-  const terms = query.trim().split(/\s+/).filter(term => term.length > 1 && !term.includes(':')).slice(0, 12)
+  const terms = query
+    .trim()
+    .split(/\s+/)
+    .filter((term) => term.length > 1 && !term.includes(':'))
+    .slice(0, 12)
   if (!terms.length) return <>{text}</>
-  const escaped = terms.map(term => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const escaped = terms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp(`(${escaped.join('|')})`, 'giu')
-  return <>{text.split(pattern).map((part, index) => index % 2 ? <mark className="search-highlight" key={index}>{part}</mark> : part)}</>
+  return (
+    <>
+      {text.split(pattern).map((part, index) =>
+        index % 2 ? (
+          <mark className="search-highlight" key={index}>
+            {part}
+          </mark>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  )
 }

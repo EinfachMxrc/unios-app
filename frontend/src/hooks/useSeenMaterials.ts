@@ -5,7 +5,11 @@ const key = 'unios.materials.seen-through'
 const changed = 'unios:materials-seen'
 let memory = 0
 function snapshot() {
-  try { return Math.max(memory, Number(localStorage.getItem(key)) || 0) } catch { return memory }
+  try {
+    return Math.max(memory, Number(localStorage.getItem(key)) || 0)
+  } catch {
+    return memory
+  }
 }
 function subscribe(callback: () => void) {
   window.addEventListener(changed, callback)
@@ -17,7 +21,11 @@ function subscribe(callback: () => void) {
 }
 export function markMaterialsSeen(ids: number[]) {
   memory = Math.max(snapshot(), ...ids)
-  try { localStorage.setItem(key, String(memory)) } catch { /* Keep the acknowledgement for this session. */ }
+  try {
+    localStorage.setItem(key, String(memory))
+  } catch {
+    /* Keep the acknowledgement for this session. */
+  }
   window.dispatchEvent(new Event(changed))
 }
 export function useSeenMaterials() {

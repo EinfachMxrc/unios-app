@@ -927,6 +927,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ai/provider": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get State */
+        get: operations["get_state_api_ai_provider_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/provider/key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Connect */
+        put: operations["connect_api_ai_provider_key_put"];
+        post?: never;
+        /** Disconnect */
+        delete: operations["disconnect_api_ai_provider_key_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ai/provider/model": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Choose */
+        put: operations["choose_api_ai_provider_model_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/analytics/material-versions/{version_id}/opened": {
         parameters: {
             query?: never;
@@ -7346,6 +7398,11 @@ export interface components {
              */
             limit: number;
         };
+        /** ChooseModelRequest */
+        ChooseModelRequest: {
+            /** Model */
+            model: string;
+        };
         /** ClipInput */
         ClipInput: {
             /**
@@ -7993,6 +8050,11 @@ export interface components {
             reviewed: boolean;
             /** Winning Device */
             winning_device: string;
+        };
+        /** ConnectRequest */
+        ConnectRequest: {
+            /** Api Key */
+            api_key: string;
         };
         /** ConnectorChangeView */
         ConnectorChangeView: {
@@ -10349,6 +10411,13 @@ export interface components {
             /** Weekly Cost With Batch */
             weekly_cost_with_batch: number;
         };
+        /** ModelOptionView */
+        ModelOptionView: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+        };
         /** ModuleRename */
         ModuleRename: {
             /** Expected Revision */
@@ -11309,6 +11378,15 @@ export interface components {
             resource_name: string;
             /** Version Id */
             version_id: number;
+        };
+        /** ProviderStateView */
+        ProviderStateView: {
+            /** Configured */
+            configured: boolean;
+            /** Model */
+            model: string;
+            /** Models */
+            models: components["schemas"]["ModelOptionView"][];
         };
         /** PublicPeriodView */
         PublicPeriodView: {
@@ -14593,6 +14671,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PackageResource"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_state_api_ai_provider_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProviderStateView"];
+                };
+            };
+        };
+    };
+    connect_api_ai_provider_key_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConnectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProviderStateView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    disconnect_api_ai_provider_key_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    choose_api_ai_provider_model_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChooseModelRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProviderStateView"];
                 };
             };
             /** @description Validation Error */

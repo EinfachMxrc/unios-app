@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
-  operatorsHint: 'Filters: course:"Programming 1" type:note semester:1 has:question before:2027-02-01. Structured filters require a host connection.',
+  operatorsHint:
+    'Filters: course:"Programming 1" type:note semester:1 has:question before:2027-02-01. Structured filters require a host connection.',
   title: 'Search',
   eyebrow: 'Find your knowledge again',
   panelTitle: 'Search materials',

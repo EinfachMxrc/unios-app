@@ -12,8 +12,8 @@ import { TableView } from './TableView'
 import { useFileContent } from './useFileContent'
 import './viewers.css'
 
-const DocxView = lazy(() => import('./OfficeViews').then(module => ({ default: module.DocxView })))
-const XlsxView = lazy(() => import('./OfficeViews').then(module => ({ default: module.XlsxView })))
+const DocxView = lazy(() => import('./OfficeViews').then((module) => ({ default: module.DocxView })))
+const XlsxView = lazy(() => import('./OfficeViews').then((module) => ({ default: module.XlsxView })))
 
 /** CSV beyond this many rows is cut off in the view; the download has everything. */
 const CSV_ROWS = 1000
@@ -22,9 +22,10 @@ type Props = { versionId: number; kind: FileViewKind; filename: string }
 
 function useFailureText() {
   const { t } = useT('material')
-  return (cause: unknown) => cause instanceof ApiError && cause.status === 413
-    ? t('viewerTooLarge')
-    : t('viewerFailed', { reason: cause instanceof Error ? cause.message : String(cause) })
+  return (cause: unknown) =>
+    cause instanceof ApiError && cause.status === 413
+      ? t('viewerTooLarge')
+      : t('viewerFailed', { reason: cause instanceof Error ? cause.message : String(cause) })
 }
 
 function TextFile({ versionId, kind, filename }: Props) {
@@ -48,35 +49,49 @@ function OfficeFile({ versionId, kind }: Props) {
   if (content.isPending) return <Loading />
   if (content.error) return <Failure message={failureText(content.error)} />
   if (failure) return <Failure message={failure} />
-  return <Suspense fallback={<Loading />}>
-    {kind === 'docx' ? <DocxView data={content.data} onError={failed} /> : <XlsxView data={content.data} onError={failed} />}
-  </Suspense>
+  return (
+    <Suspense fallback={<Loading />}>
+      {kind === 'docx' ? (
+        <DocxView data={content.data} onError={failed} />
+      ) : (
+        <XlsxView data={content.data} onError={failed} />
+      )}
+    </Suspense>
+  )
 }
 
 function ImageFile({ versionId, filename }: Props) {
   const { t } = useT('material')
   const [actual, setActual] = useState(false)
-  return <figure className="image-view">
-    <figcaption className="viewer-bar">
-      <span>{filename}</span>
-      <button type="button" aria-pressed={actual} onClick={() => setActual(!actual)}>
-        {actual ? <Minimize2 size={14} /> : <Maximize2 size={14} />} {actual ? t('viewerFitSize') : t('viewerActualSize')}
-      </button>
-    </figcaption>
-    <div className={`image-view-body ${actual ? 'is-actual' : ''}`}>
-      <img src={`/files/${versionId}/view`} alt={filename} />
-    </div>
-  </figure>
+  return (
+    <figure className="image-view">
+      <figcaption className="viewer-bar">
+        <span>{filename}</span>
+        <button type="button" aria-pressed={actual} onClick={() => setActual(!actual)}>
+          {actual ? <Minimize2 size={14} /> : <Maximize2 size={14} />}{' '}
+          {actual ? t('viewerFitSize') : t('viewerActualSize')}
+        </button>
+      </figcaption>
+      <div className={`image-view-body ${actual ? 'is-actual' : ''}`}>
+        <img src={`/files/${versionId}/view`} alt={filename} />
+      </div>
+    </figure>
+  )
 }
 
 /** A stored file shown by UniOS itself, chosen by what the file is. */
 export function FileViewer(props: Props) {
   switch (props.kind) {
-    case 'image': return <ImageFile {...props} />
-    case 'video': return <video className="media-view" src={`/files/${props.versionId}/view`} controls preload="metadata" />
-    case 'audio': return <audio className="media-view" src={`/files/${props.versionId}/view`} controls preload="metadata" />
+    case 'image':
+      return <ImageFile {...props} />
+    case 'video':
+      return <video className="media-view" src={`/files/${props.versionId}/view`} controls preload="metadata" />
+    case 'audio':
+      return <audio className="media-view" src={`/files/${props.versionId}/view`} controls preload="metadata" />
     case 'docx':
-    case 'xlsx': return <OfficeFile {...props} />
-    default: return <TextFile {...props} />
+    case 'xlsx':
+      return <OfficeFile {...props} />
+    default:
+      return <TextFile {...props} />
   }
 }

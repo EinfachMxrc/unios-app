@@ -11,7 +11,11 @@ import './TrashUndo.css'
 export type Trashed = { kind: TrashKind; id: string; title: string }
 
 /** Says what just went to the trash and offers to take it back right here. */
-export function TrashUndo({ item, onRestored, onDismiss }: {
+export function TrashUndo({
+  item,
+  onRestored,
+  onDismiss,
+}: {
   item: Trashed
   onRestored: (item: Trashed) => void
   onDismiss: () => void
@@ -30,10 +34,16 @@ export function TrashUndo({ item, onRestored, onDismiss }: {
       setBusy(false)
     }
   }
-  return <div className="trash-undo" role="status">
-    <Trash2 size={16} aria-hidden="true" />
-    <span>{failure || t('movedToTrash', { title: item.title })}</span>
-    <button type="button" className="trash-undo-action" disabled={busy} onClick={() => void undo()}>{t('undo')}</button>
-    <Link className="trash-undo-link" to="/trash" onClick={onDismiss}>{t('openTrash')}</Link>
-  </div>
+  return (
+    <div className="trash-undo" role="status">
+      <Trash2 size={16} aria-hidden="true" />
+      <span>{failure || t('movedToTrash', { title: item.title })}</span>
+      <button type="button" className="trash-undo-action" disabled={busy} onClick={() => void undo()}>
+        {t('undo')}
+      </button>
+      <Link className="trash-undo-link" to="/trash" onClick={onDismiss}>
+        {t('openTrash')}
+      </Link>
+    </div>
+  )
 }

@@ -4,27 +4,42 @@ import { calendarNow, calendarStatus, calendarEvents, calendarDeadlines } from '
 
 test.beforeEach(async ({ page }) => {
   await page.clock.install({ time: new Date(calendarNow) })
-  await page.route('**/api/timetable/status', route => route.fulfill({ json: calendarStatus }))
-  await page.route('**/api/timetable/events?**', route => {
+  await page.route('**/api/timetable/status', (route) => route.fulfill({ json: calendarStatus }))
+  await page.route('**/api/timetable/events?**', (route) => {
     const start = new URL(route.request().url()).searchParams.get('day')!
-    const end = new Date(`${start}T00:00:00Z`); end.setUTCDate(end.getUTCDate() + 7)
-    return route.fulfill({ json: calendarEvents.filter(event => event.starts_at.slice(0, 10) >= start && event.starts_at.slice(0, 10) < end.toISOString().slice(0, 10)) })
+    const end = new Date(`${start}T00:00:00Z`)
+    end.setUTCDate(end.getUTCDate() + 7)
+    return route.fulfill({
+      json: calendarEvents.filter(
+        (event) =>
+          event.starts_at.slice(0, 10) >= start && event.starts_at.slice(0, 10) < end.toISOString().slice(0, 10),
+      ),
+    })
   })
-  await page.route('**/api/deadlines', route => route.fulfill({ json: calendarDeadlines }))
+  await page.route('**/api/deadlines', (route) => route.fulfill({ json: calendarDeadlines }))
 })
 
-test('work week places overlaps side by side, opens event details with keyboard and restores focus', async ({ page }) => {
+test('work week places overlaps side by side, opens event details with keyboard and restores focus', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/deadlines')
   const schedule = page.locator('#timetable')
-  await expect(schedule.getByRole('button', { name: 'Arbeitswoche', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(schedule.getByRole('button', { name: 'Arbeitswoche', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  )
   await expect(schedule.locator('.timetable-navigation')).toContainText('5. Oktober – 9. Oktober 2026')
-  const lecture = schedule.getByTestId('timetable-event-9004'), overlap = schedule.getByTestId('timetable-event-9005')
-  await expect(lecture).toBeVisible(); await expect(overlap).toBeVisible()
-  const a = (await lecture.boundingBox())!, b = (await overlap.boundingBox())!
+  const lecture = schedule.getByTestId('timetable-event-9004'),
+    overlap = schedule.getByTestId('timetable-event-9005')
+  await expect(lecture).toBeVisible()
+  await expect(overlap).toBeVisible()
+  const a = (await lecture.boundingBox())!,
+    b = (await overlap.boundingBox())!
   expect(a.x + a.width).toBeLessThanOrEqual(b.x)
   const trigger = lecture.getByRole('button')
-  await trigger.focus(); await page.keyboard.press('Enter')
+  await trigger.focus()
+  await page.keyboard.press('Enter')
   await expect(page.getByRole('dialog')).toContainText('R101, Fictional Campus')
   await expect(page.getByRole('dialog')).toContainText('10:00')
   await page.keyboard.press('Escape')
@@ -39,7 +54,8 @@ test('day navigation crosses a week boundary, remembers the view and returns to 
   await schedule.getByRole('button', { name: /Sonntag, 11\. Oktober 2026$/ }).click()
   await schedule.getByRole('button', { name: 'Nächster Tag', exact: true }).click()
   await expect(schedule.locator('.timetable-navigation strong')).toContainText('12. Oktober')
-  await page.goto('/courses'); await page.goBack()
+  await page.goto('/courses')
+  await page.goBack()
   await expect(schedule.getByRole('button', { name: 'Tag', exact: true })).toHaveAttribute('aria-pressed', 'true')
   await expect(schedule.locator('.timetable-navigation strong')).toContainText('12. Oktober')
   await schedule.getByRole('button', { name: 'Heute', exact: true }).click()
@@ -52,7 +68,8 @@ test('mobile selects one readable day with arrow keys and offers the full week a
   const schedule = page.locator('#timetable')
   await expect(schedule.locator('article')).toHaveCount(3)
   const wednesday = schedule.getByRole('button', { name: /Mittwoch, 7\. Oktober 2026$/ })
-  await wednesday.focus(); await page.keyboard.press('ArrowRight')
+  await wednesday.focus()
+  await page.keyboard.press('ArrowRight')
   await expect(schedule.getByRole('button', { name: /Donnerstag, 8\. Oktober 2026$/ })).toBeFocused()
   await expect(schedule.locator('article')).toHaveCount(1)
   await expect(schedule.locator('article')).toContainText('English Workshop')
@@ -65,8 +82,12 @@ test('month preserves all deadline titles on mobile and supports keyboard month 
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/deadlines')
   await page.locator('.deadline-page-switch').getByRole('button', { name: 'Abgaben', exact: true }).click()
-  await page.locator('.view-switch[aria-label="Fristenansicht"]').getByRole('button', { name: 'Kalender', exact: true }).click()
-  const calendar = page.locator('.deadline-calendar'), agenda = calendar.getByRole('region', { name: 'Fristen am ausgewählten Tag' })
+  await page
+    .locator('.view-switch[aria-label="Fristenansicht"]')
+    .getByRole('button', { name: 'Kalender', exact: true })
+    .click()
+  const calendar = page.locator('.deadline-calendar'),
+    agenda = calendar.getByRole('region', { name: 'Fristen am ausgewählten Tag' })
   await expect(agenda.getByRole('button')).toHaveCount(3)
   await expect(agenda).toContainText('Mathematik Übungsblatt')
   await expect(agenda).toContainText('23:59')

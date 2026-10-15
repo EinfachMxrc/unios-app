@@ -1,41 +1,191 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.assessment-question-document { display: grid; grid-template-columns: minmax(0,1fr); gap: 18px; min-width: 0; max-width: 100%; }
+.assessment-question-document {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  min-width: 0;
+  max-width: 100%;
+}
 .assessment-question-document .assessment-question-text,
-.assessment-inline { font-size: 1rem; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; max-width: 100%; margin: 0; }
-.assessment-inline { font-size: inherit; }
-.assessment-question-document .assessment-question-text { max-width: min(65ch,100%); }
-.assessment-question-document code, .assessment-inline code { font-family: 'Fira Code', monospace; font-size: .9em; background: var(--muted); padding: 2px 5px; border-radius: 4px; }
-.assessment-question-document .assessment-math, .assessment-inline .assessment-math { display: inline-block; max-width: 100%; overflow-x: auto; vertical-align: middle; }
-.assessment-code-block { min-width: 0; overflow: hidden; background: var(--background); border: 1px solid var(--border); border-radius: 10px; }
-.assessment-code-language { padding: 9px 16px; border-bottom: 1px solid var(--border); color: var(--muted-foreground); font-size: .75rem; }
-.assessment-question-document .assessment-code-block pre { margin: 0; padding: 18px 16px; overflow-x: auto; white-space: pre; overflow-wrap: normal; font-family: 'Fira Code', monospace; font-variant-ligatures: none; font-size: .8125rem; line-height: 1.85; tab-size: 2; max-width: 100%; }
-.assessment-code-block pre:focus-visible, .assessment-table-block:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
-.assessment-question-document .assessment-code-block code { font: inherit; background: none; padding: 0; border-radius: 0; }
-.assessment-code-block .hljs-keyword { color: #8a4264; }
-.assessment-code-block .hljs-string { color: #32684b; }
-.assessment-code-block .hljs-number { color: #805c23; }
-.assessment-code-block .hljs-comment { color: #68737a; }
-.assessment-code-block .hljs-title { color: #2a5c7b; }
-.dark .assessment-code-block .hljs-keyword { color: #e3a4bc; }
-.dark .assessment-code-block .hljs-string { color: #a1c6a8; }
-.dark .assessment-code-block .hljs-number { color: #e0b46b; }
-.dark .assessment-code-block .hljs-comment { color: #a1a6aa; }
-.dark .assessment-code-block .hljs-title { color: #aacbdf; }
-.assessment-display-math { min-width: 0; overflow-x: auto; padding: 8px 0; }
-.assessment-display-math .katex-display { margin: 0; }
-.assessment-question-document .assessment-document-heading { margin: 0; font-size: 1rem; line-height: 1.5; font-weight: 650; overflow-wrap: anywhere; }
-.assessment-question-document .assessment-document-list { margin: 0; padding-left: 1.5em; display: grid; gap: 8px; list-style-position: outside; font-size: 1rem; line-height: 1.65; }
-.assessment-document-list:is(ol) { list-style-type: decimal; }
-.assessment-document-list:is(ul) { list-style-type: disc; }
-.assessment-question-document .assessment-document-list li { display: list-item; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
-.assessment-table-block { min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
-.assessment-question-document .assessment-table-block table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: .875rem; line-height: 1.6; }
+.assessment-inline {
+  font-size: 1rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+}
+.assessment-inline {
+  font-size: inherit;
+}
+.assessment-question-document .assessment-question-text {
+  max-width: min(65ch, 100%);
+}
+.assessment-question-document code,
+.assessment-inline code {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  background: var(--muted);
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.assessment-question-document .assessment-math,
+.assessment-inline .assessment-math {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  vertical-align: middle;
+}
+.assessment-code-block {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.assessment-code-language {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.assessment-question-document .assessment-code-block pre {
+  margin: 0;
+  padding: 18px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+  font-family: 'Fira Code', monospace;
+  font-variant-ligatures: none;
+  font-size: 0.8125rem;
+  line-height: 1.85;
+  tab-size: 2;
+  max-width: 100%;
+}
+.assessment-code-block pre:focus-visible,
+.assessment-table-block:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+.assessment-question-document .assessment-code-block code {
+  font: inherit;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+.assessment-code-block .hljs-keyword {
+  color: #8a4264;
+}
+.assessment-code-block .hljs-string {
+  color: #32684b;
+}
+.assessment-code-block .hljs-number {
+  color: #805c23;
+}
+.assessment-code-block .hljs-comment {
+  color: #68737a;
+}
+.assessment-code-block .hljs-title {
+  color: #2a5c7b;
+}
+.dark .assessment-code-block .hljs-keyword {
+  color: #e3a4bc;
+}
+.dark .assessment-code-block .hljs-string {
+  color: #a1c6a8;
+}
+.dark .assessment-code-block .hljs-number {
+  color: #e0b46b;
+}
+.dark .assessment-code-block .hljs-comment {
+  color: #a1a6aa;
+}
+.dark .assessment-code-block .hljs-title {
+  color: #aacbdf;
+}
+.assessment-display-math {
+  min-width: 0;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+.assessment-display-math .katex-display {
+  margin: 0;
+}
+.assessment-question-document .assessment-document-heading {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.assessment-question-document .assessment-document-list {
+  margin: 0;
+  padding-left: 1.5em;
+  display: grid;
+  gap: 8px;
+  list-style-position: outside;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.assessment-document-list:is(ol) {
+  list-style-type: decimal;
+}
+.assessment-document-list:is(ul) {
+  list-style-type: disc;
+}
+.assessment-question-document .assessment-document-list li {
+  display: list-item;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.assessment-table-block {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.assessment-question-document .assessment-table-block table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
 .assessment-question-document .assessment-table-block th,
-.assessment-question-document .assessment-table-block td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; min-width: 4ch; max-width: 40ch; overflow-wrap: anywhere; }
-.assessment-table-block th { background: var(--muted); font-weight: 600; white-space: nowrap; }
-.assessment-table-block td { white-space: pre-wrap; }
-.assessment-table-block thead tr:first-child th { border-top: 0; }
-.assessment-table-block tr > :first-child { border-left: 0; }
-.assessment-table-block tr > :last-child { border-right: 0; }
-.assessment-table-block tbody tr:last-child td { border-bottom: 0; }
-@media(max-width:520px) { .assessment-question-document .assessment-code-block pre { padding: 14px 12px; font-size: .75rem; } }
+.assessment-question-document .assessment-table-block td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  min-width: 4ch;
+  max-width: 40ch;
+  overflow-wrap: anywhere;
+}
+.assessment-table-block th {
+  background: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.assessment-table-block td {
+  white-space: pre-wrap;
+}
+.assessment-table-block thead tr:first-child th {
+  border-top: 0;
+}
+.assessment-table-block tr > :first-child {
+  border-left: 0;
+}
+.assessment-table-block tr > :last-child {
+  border-right: 0;
+}
+.assessment-table-block tbody tr:last-child td {
+  border-bottom: 0;
+}
+@media (max-width: 520px) {
+  .assessment-question-document .assessment-code-block pre {
+    padding: 14px 12px;
+    font-size: 0.75rem;
+  }
+}

@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
-  tokensReserved: '{{count}} tokens are reserved for running requests or requests with unconfirmed usage. They remain unavailable until usage is resolved.',
+  tokensReserved:
+    '{{count}} tokens are reserved for running requests or requests with unconfirmed usage. They remain unavailable until usage is resolved.',
   agentCategories: 'Release additional sources for agents',
   agentCategory: {
     notes: 'Personal notes',
@@ -18,9 +19,18 @@ export default {
   agentIndexJobs: 'Manage indexing jobs',
 
   adapterPanelTitle: 'AI adapter',
-  adapterOffText:
-    'Off. Optional automatic provider for card and exercise suggestions, off by default. Set up with your own key and monthly budget in the configuration.',
-  adapterUnconfiguredText: 'On, but no own key configured yet. Nothing is sent.',
+  adapterConnectText:
+    "Paste your Anthropic API key. After that you only pick the model. The key is kept in this device's keychain; to check it, only the model list is requested, never study content.",
+  apiKeyLabel: 'API key', // pragma: allowlist secret
+  connectKeyButton: 'Connect',
+  connectingKeyButton: 'Checking key…',
+  modelLabel: 'Model',
+  chooseModelAria: 'Choose AI model',
+  chooseModelOption: 'Choose a model',
+  modelHint:
+    'The list comes straight from the provider and the newest model is preselected. Your choice determines the cost.',
+  removeKeyButton: 'Remove key',
+  removingKeyButton: 'Removing…',
   tokensUsedWithBudget: 'Used this month: {{used}} tokens of {{budget}}.',
   tokensUsedNoBudget: 'Used this month: {{used}} tokens (no budget limit set).',
   courseLabel: 'Course',

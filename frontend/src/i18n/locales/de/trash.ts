@@ -18,8 +18,10 @@ export default {
   eraseText: '„{{title}}“ wird mit allen Versionen und Verknüpfungen gelöscht. Das lässt sich nicht rückgängig machen.',
   emptyTrash: 'Papierkorb leeren',
   emptyTrashTitle: 'Papierkorb leeren?',
-  emptyTrashText_one: '{{count}} Eintrag wird mit allen Versionen und Verknüpfungen gelöscht. Das lässt sich nicht rückgängig machen.',
-  emptyTrashText_other: '{{count}} Einträge werden mit allen Versionen und Verknüpfungen gelöscht. Das lässt sich nicht rückgängig machen.',
+  emptyTrashText_one:
+    '{{count}} Eintrag wird mit allen Versionen und Verknüpfungen gelöscht. Das lässt sich nicht rückgängig machen.',
+  emptyTrashText_other:
+    '{{count}} Einträge werden mit allen Versionen und Verknüpfungen gelöscht. Das lässt sich nicht rückgängig machen.',
   cancel: 'Abbrechen',
   restored: '„{{title}}“ ist wiederhergestellt.',
   erased: '„{{title}}“ ist endgültig gelöscht.',

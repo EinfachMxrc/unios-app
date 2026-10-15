@@ -30,7 +30,9 @@ test('coding draft survives reload, deterministic reports and diff work', async 
   await page.getByRole('checkbox', { name: 'Mit Versuch vergleichen', exact: true }).uncheck()
   await page.getByRole('combobox', { name: 'Versuch', exact: true }).selectOption({ index: 0 })
   await page.getByRole('button', { name: 'Tutor-Paket für Work anfordern', exact: true }).click()
-  await expect(page.getByText('Paket bereit. Work kann es nach deiner Freigabe über den Agent Gateway lesen.', { exact: true })).toBeVisible()
+  await expect(
+    page.getByText('Paket bereit. Work kann es nach deiner Freigabe über den Agent Gateway lesen.', { exact: true }),
+  ).toBeVisible()
   for (const theme of ['dark', 'light'] as const) {
     await page.evaluate((value) => document.documentElement.classList.toggle('dark', value === 'dark'), theme)
     for (const width of [1440, 390]) {
@@ -57,9 +59,23 @@ test('choice, math and exam enforce clear checking and locked hints', async ({ p
   await page.getByRole('combobox', { name: 'Wie sicher bist du?', exact: true }).selectOption('5')
   await page.getByRole('button', { name: 'Antwort prüfen', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Noch nicht richtig', exact: true })).toBeVisible()
-  await expect(page.getByText('Du warst sehr sicher. Diese Stelle lohnt sich beim nächsten Üben besonders.', { exact: true })).toBeVisible()
-  const math = await (await page.request.post(`/api/learning/assessment/courses/${course}/tasks`, { data: { type: 'symbolic_math', title: 'Quadratische Gleichung', question: 'Bestimme alle Nullstellen.', expression: '2*x^2-8*x+6', math_operation: 'roots' } })).json()
-  expect((await page.request.post(`/api/learning/assessment/tasks/${math.id}/accept`, { data: { confirmed: true } })).ok()).toBeTruthy()
+  await expect(
+    page.getByText('Du warst sehr sicher. Diese Stelle lohnt sich beim nächsten Üben besonders.', { exact: true }),
+  ).toBeVisible()
+  const math = await (
+    await page.request.post(`/api/learning/assessment/courses/${course}/tasks`, {
+      data: {
+        type: 'symbolic_math',
+        title: 'Quadratische Gleichung',
+        question: 'Bestimme alle Nullstellen.',
+        expression: '2*x^2-8*x+6',
+        math_operation: 'roots',
+      },
+    })
+  ).json()
+  expect(
+    (await page.request.post(`/api/learning/assessment/tasks/${math.id}/accept`, { data: { confirmed: true } })).ok(),
+  ).toBeTruthy()
   await page.goto(`/assessment?task=${math.id}`)
   await page.getByLabel('Antwort eingeben', { exact: true }).fill('1,3')
   await page.getByLabel('Rechenweg · ein Ausdruck oder eine Gleichung je Zeile').fill('x^2-4*x+3=0\n(x-1)*(x-3)=0')
@@ -74,7 +90,11 @@ test('choice, math and exam enforce clear checking and locked hints', async ({ p
       await page.screenshot({ path: screenshotPath(`test-results/assessment-${theme}-${width}.png`), fullPage: true })
     }
   }
-  const exam = await (await page.request.post('/api/learning/assessment/exams', { data: { task_ids: [math.id], minutes: 2, confirmed: true } })).json()
+  const exam = await (
+    await page.request.post('/api/learning/assessment/exams', {
+      data: { task_ids: [math.id], minutes: 2, confirmed: true },
+    })
+  ).json()
   await page.goto(`/assessment?task=${math.id}&exam=${exam.id}`)
   await expect(page.getByRole('timer')).toBeVisible()
   await expect(page.getByText('Hilfe öffnen', { exact: true })).toHaveCount(0)
@@ -91,8 +111,14 @@ test('ordering, free recall, oral transcript and scoped PDF requests work', asyn
   const courses = await (await page.request.get('/api/courses')).json()
   const course = courses.courses[0].id
   async function task(type: string, extra: Record<string, unknown> = {}) {
-    const row = await (await page.request.post(`/api/learning/assessment/courses/${course}/tasks`, { data: { type, title: `Synthetic ${type}`, question: 'Synthetic question', ...extra } })).json()
-    expect((await page.request.post(`/api/learning/assessment/tasks/${row.id}/accept`, { data: { confirmed: true } })).ok()).toBeTruthy()
+    const row = await (
+      await page.request.post(`/api/learning/assessment/courses/${course}/tasks`, {
+        data: { type, title: `Synthetic ${type}`, question: 'Synthetic question', ...extra },
+      })
+    ).json()
+    expect(
+      (await page.request.post(`/api/learning/assessment/tasks/${row.id}/accept`, { data: { confirmed: true } })).ok(),
+    ).toBeTruthy()
     await page.goto(`/assessment?task=${row.id}`)
     return row.id
   }
@@ -103,19 +129,32 @@ test('ordering, free recall, oral transcript and scoped PDF requests work', asyn
   await task('free_recall', { concepts: ['base case'] })
   await page.getByLabel('Antwort eingeben', { exact: true }).fill('My explanation has a base case.')
   await page.getByRole('button', { name: 'Antwort prüfen', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Antwort gespeichert · Tutor-Prüfung offen', exact: true })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Antwort gespeichert · Tutor-Prüfung offen', exact: true }),
+  ).toBeVisible()
   await task('oral', { concepts: ['recursion'] })
-  await page.route('**/api/voice/transcribe', (route) => route.fulfill({ json: { transcript: 'Synthetic spoken answer', local: true, language: 'en' } }))
+  await page.route('**/api/voice/transcribe', (route) =>
+    route.fulfill({ json: { transcript: 'Synthetic spoken answer', local: true, language: 'en' } }),
+  )
   await page.getByRole('combobox', { name: 'Sprache', exact: true }).selectOption('en')
-  await page.locator('input[type=file]').setInputFiles({ name: 'fixture.wav', mimeType: 'audio/wav', buffer: Buffer.from('synthetic-audio-fixture') })
+  await page
+    .locator('input[type=file]')
+    .setInputFiles({ name: 'fixture.wav', mimeType: 'audio/wav', buffer: Buffer.from('synthetic-audio-fixture') })
   await expect(page.getByLabel('Transkript prüfen und ergänzen')).toHaveValue('Synthetic spoken answer')
   await expect(page.locator('audio')).toHaveAttribute('src', /^blob:/)
   await page.getByRole('button', { name: 'Antwort prüfen', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Antwort gespeichert · Tutor-Prüfung offen', exact: true })).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Antwort gespeichert · Tutor-Prüfung offen', exact: true }),
+  ).toBeVisible()
   const material = await (await page.request.get('/api/search?q=Schleifen')).json()
   const version = material.results[0]?.version_id
   expect(version).toBeTruthy()
   await page.goto(`/assessment?course=${material.results[0].course_id}&version=${version}&page=1`)
   await page.getByRole('button', { name: 'Abschnitt für Work vorbereiten', exact: true }).click()
-  await expect(page.getByText('Anfrage bereit. Work kann sie nach deiner Freigabe im Agent Gateway abholen. Es startet kein Agent automatisch.', { exact: true })).toBeVisible()
+  await expect(
+    page.getByText(
+      'Anfrage bereit. Work kann sie nach deiner Freigabe im Agent Gateway abholen. Es startet kein Agent automatisch.',
+      { exact: true },
+    ),
+  ).toBeVisible()
 })

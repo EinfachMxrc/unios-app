@@ -70,3 +70,16 @@ def test_api_selection_filters_every_personal_calendar_view_but_retains_manual_e
 def test_slot_identity_is_subject_and_local_weekly_slot_not_room_or_event_id(settings):
     assert slot(row('one', 8), settings)['id'] == slot(row('two', 8, day=12, room='Other'), settings)['id']
     assert slot(row('one', 8), settings)['id'] != slot(row('two', 8, day=6), settings)['id']
+
+
+def test_slots_the_student_hid_stay_hidden_from_the_assistant(settings, factory, coordinator):
+    from app.ai.context import timetable_context
+
+    service = TimetableService(settings, factory, coordinator)
+    service.repository.replace(service.source, [row('first', 8), row('second', 9, 45)], coordinator)
+    later = next(option for option in service.slots() if option['start_time'] == '11:45')
+    service.select_slot(later['id'], False)
+    start, end = datetime(2026, 10, 5, tzinfo=UTC), datetime(2026, 10, 6, tzinfo=UTC)
+    with factory() as session:
+        assert len(timetable_context(session, start, end, settings)) == 1
+        assert len(timetable_context(session, start, end)) == 2  # without settings nothing is hidden

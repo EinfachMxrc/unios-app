@@ -7,7 +7,9 @@ test('myCampus updates in the background across pages and refreshes the visible 
 }, testInfo) => {
   let state = 'idle'
   let completed = false
-  page.on('pageerror', error => { throw error })
+  page.on('pageerror', (error) => {
+    throw error
+  })
   await page.addInitScript(() => localStorage.setItem('unios-alpha-welcome-v1', 'seen'))
   await page.route('**/api/setup/status', (route) =>
     route.fulfill({

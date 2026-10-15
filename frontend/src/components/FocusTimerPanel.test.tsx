@@ -7,20 +7,39 @@ import { clearWorkspace } from '@/lib/workspaceState'
 import { FocusTimerPanel } from './FocusTimerPanel'
 
 const mocks = vi.hoisted(() => ({ blocks: [] as unknown[], api: vi.fn() }))
-vi.mock('@/api', () => ({ dateFromApi: (value: string) => new Date(value),
+vi.mock('@/api', () => ({
+  dateFromApi: (value: string) => new Date(value),
   useApi: (path: string, options: unknown) => {
     mocks.api(path, options)
     return { data: mocks.blocks, loading: false, error: null }
-  } }))
+  },
+}))
 vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string) => key }) }))
 
 function block(id: number, dayOffset = 0) {
-  return { id, course_id: id, course_name: `Course ${id}`, topic: `Topic ${id}`, topic_id: id,
-    exam_id: id, exam_title: `Exam ${id}`, duration_minutes: 35, status: 'accepted' as const,
-    starts_at: new Date(Date.now() + dayOffset * 86_400_000).toISOString() }
+  return {
+    id,
+    course_id: id,
+    course_name: `Course ${id}`,
+    topic: `Topic ${id}`,
+    topic_id: id,
+    exam_id: id,
+    exam_title: `Exam ${id}`,
+    duration_minutes: 35,
+    status: 'accepted' as const,
+    starts_at: new Date(Date.now() + dayOffset * 86_400_000).toISOString(),
+  }
 }
-beforeEach(() => { clearWorkspace(); localStorage.clear(); mocks.api.mockClear(); mocks.blocks = [block(12), block(13)] })
-afterEach(() => { cleanup(); clearWorkspace() })
+beforeEach(() => {
+  clearWorkspace()
+  localStorage.clear()
+  mocks.api.mockClear()
+  mocks.blocks = [block(12), block(13)]
+})
+afterEach(() => {
+  cleanup()
+  clearWorkspace()
+})
 
 it('uses one running timer across two views and keeps another block stoppable after its view closes', () => {
   const first = render(<FocusTimerPanel blockId={12} />)

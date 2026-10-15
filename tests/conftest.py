@@ -30,6 +30,14 @@ def read_fixture(name):
     return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
 
 
+@pytest.fixture(autouse=True)
+def isolated_provider_keychain(monkeypatch):
+    """Tests never read or write a developer's saved AI provider key."""
+    monkeypatch.setattr("app.ai.provider_repository.load_connector_secret", lambda connector, alias: "")
+    monkeypatch.setattr("app.ai.provider_repository.save_connector_secret", lambda connector, alias, value: False)
+    monkeypatch.setattr("app.ai.provider_repository.delete_connector_secret", lambda connector, alias: None)
+
+
 @pytest.fixture
 def settings(tmp_path):
     return Settings(_env_file=None, moodle_base_url="https://moodle.example.invalid", moodle_token="fixture-token",

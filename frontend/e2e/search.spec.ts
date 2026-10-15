@@ -37,7 +37,10 @@ test('full-text search finds the right PDF page and respects course filters', as
       await page.reload()
       await expect(result).toContainText('Seite/Folie 2')
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-      await page.screenshot({ path: screenshotPath(path.join(output, `search-results-${theme}-${width}.png`)), fullPage: true })
+      await page.screenshot({
+        path: screenshotPath(path.join(output, `search-results-${theme}-${width}.png`)),
+        fullPage: true,
+      })
     }
   }
 })

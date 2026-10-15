@@ -4,7 +4,9 @@ import { expect, test } from './fixtures'
 import type { Page } from '@playwright/test'
 
 async function editor(page: Page) {
-  const response = await page.request.post('/api/notes', { data: { course_id: 1, title: 'Synthetische Tastatur-Mitschrift', body: 'Vorlesung: ' } })
+  const response = await page.request.post('/api/notes', {
+    data: { course_id: 1, title: 'Synthetische Tastatur-Mitschrift', body: 'Vorlesung: ' },
+  })
   expect(response.ok()).toBeTruthy()
   const id = (await response.json()).note.id
   await page.goto(`/notes?id=${id}`)
@@ -14,7 +16,9 @@ async function editor(page: Page) {
 }
 const formula = (page: Page) => page.getByRole('dialog', { name: 'Formel schreiben', exact: true })
 
-test('favorite templates persist, keyboard search resumes writing, and cancelled templates stay out of recents', async ({ page }) => {
+test('favorite templates persist, keyboard search resumes writing, and cancelled templates stay out of recents', async ({
+  page,
+}) => {
   const id = await editor(page)
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
   await body.press('ControlOrMeta+Shift+M')
@@ -26,13 +30,17 @@ test('favorite templates persist, keyboard search resumes writing, and cancelled
   await dialog.getByRole('textbox', { name: 'Vorlage suchen', exact: true }).press('ArrowDown')
   await dialog.getByRole('textbox', { name: 'Vorlage suchen', exact: true }).press('Enter')
   await expect(dialog.locator('math-field')).toBeFocused()
-  await page.keyboard.type('1'); await page.keyboard.press('Tab'); await page.keyboard.type('2')
+  await page.keyboard.type('1')
+  await page.keyboard.press('Tab')
+  await page.keyboard.type('2')
   await expect(dialog.getByRole('button', { name: 'Formel einfügen', exact: true })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(body).toBeFocused()
   await page.keyboard.type(' weiter')
   await expect(body).toContainText('weiter')
-  await body.press('Enter'); await body.pressSequentially('/integral'); await body.press('Tab')
+  await body.press('Enter')
+  await body.pressSequentially('/integral')
+  await body.press('Tab')
   dialog = formula(page)
   await expect(dialog.locator('math-field')).toBeFocused()
   await page.keyboard.press('Escape')
@@ -50,7 +58,8 @@ test('favorite templates persist, keyboard search resumes writing, and cancelled
   await dialog.getByRole('button', { name: 'Bruch aus Favoriten entfernen', exact: true }).click()
   await expect(dialog).toContainText('Noch keine Favoriten.')
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('unios-study-quick-access-v1')!))).toEqual({
-    templates: { favorites: [], recent: ['fraction'] }, tools: { favorites: [], recent: [] },
+    templates: { favorites: [], recent: ['fraction'] },
+    tools: { favorites: [], recent: [] },
   })
 })
 
@@ -63,18 +72,27 @@ test('study helper favorites and recents select the next tool without reopening 
   await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).press('ControlOrMeta+Enter')
   await expect(page.locator('.studio-document table')).toContainText('11')
   await page.getByRole('button', { name: 'Lernwerkzeuge', exact: true }).click()
-  await expect(dialog.getByRole('group', { name: 'Deine Lernhelfer', exact: true }).getByRole('button', { name: 'Zahlensysteme', exact: true })).toBeVisible()
+  await expect(
+    dialog
+      .getByRole('group', { name: 'Deine Lernhelfer', exact: true })
+      .getByRole('button', { name: 'Zahlensysteme', exact: true }),
+  ).toBeVisible()
   await dialog.getByRole('combobox', { name: 'Werkzeug', exact: true }).selectOption('diagram')
   await dialog.getByRole('textbox', { name: 'Verbindungen', exact: true }).press('ControlOrMeta+Enter')
   await expect(page.locator('.studio-document .study-diagram')).toBeVisible()
   await page.getByRole('button', { name: 'Lernwerkzeuge', exact: true }).click()
-  await dialog.getByRole('group', { name: 'Zuletzt benutzt', exact: true }).getByRole('button', { name: 'Diagramm', exact: true }).click()
+  await dialog
+    .getByRole('group', { name: 'Zuletzt benutzt', exact: true })
+    .getByRole('button', { name: 'Diagramm', exact: true })
+    .click()
   await expect(dialog.getByRole('textbox', { name: 'Verbindungen', exact: true })).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toBeFocused()
 })
 
-test('PDF note slash commands preserve surrounding text and restore the exact caret after Escape and insertion', async ({ page }) => {
+test('PDF note slash commands preserve surrounding text and restore the exact caret after Escape and insertion', async ({
+  page,
+}) => {
   await page.goto('/material/1')
   await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
   const tools = page.getByRole('dialog', { name: 'Markierungen & Fragen', exact: true })
@@ -88,10 +106,14 @@ test('PDF note slash commands preserve surrounding text and restore the exact ca
   await expect(body).toBeFocused()
   await expect(body).toHaveValue('Start /bruch Ende')
   // Escape preserves the command and the original typing position.
-  await expect.poll(() => body.evaluate((field: HTMLTextAreaElement) => [field.selectionStart, field.selectionEnd])).toEqual([12, 12])
+  await expect
+    .poll(() => body.evaluate((field: HTMLTextAreaElement) => [field.selectionStart, field.selectionEnd]))
+    .toEqual([12, 12])
   await body.evaluate((field: HTMLTextAreaElement) => field.setSelectionRange(12, 12))
   await body.press('Enter')
-  await page.keyboard.type('3'); await page.keyboard.press('Tab'); await page.keyboard.type('4')
+  await page.keyboard.type('3')
+  await page.keyboard.press('Tab')
+  await page.keyboard.type('4')
   await expect(formula(page).getByRole('button', { name: 'Formel einfügen', exact: true })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(body).toBeFocused()
@@ -107,7 +129,11 @@ test('PDF note slash commands preserve surrounding text and restore the exact ca
   await body.fill('Start /bin Ende')
   await body.evaluate((field: HTMLTextAreaElement) => field.setSelectionRange(10, 10))
   await body.press('Tab')
-  await expect(page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true }).getByRole('textbox', { name: 'Zahl', exact: true })).toBeFocused()
+  await expect(
+    page
+      .getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
+      .getByRole('textbox', { name: 'Zahl', exact: true }),
+  ).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(body).toBeFocused()
   await expect(body).toHaveValue('Start /bin Ende')

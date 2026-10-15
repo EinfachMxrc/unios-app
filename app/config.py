@@ -80,7 +80,7 @@ class Settings(BaseSettings):
     ai_adapter_enabled: bool = False
     ai_adapter_monthly_budget_tokens: int | None = Field(default=None, ge=0)
     ai_adapter_api_key: str = Field(default="", repr=False)
-    ai_adapter_model: str = "claude-opus-5"
+    ai_adapter_model: str = ""  # chosen in the app from the provider's own model list
     ai_adapter_max_output_tokens: int = Field(default=16000, ge=1)
     ai_adapter_effort: Literal["low", "medium", "high"] | None = None
     submission_tsa_url: str = ""

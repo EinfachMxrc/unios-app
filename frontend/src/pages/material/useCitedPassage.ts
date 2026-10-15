@@ -21,7 +21,8 @@ export function readCitation(search: string): Citation | null {
   const page = Number(params.get('page'))
   if (!Number.isSafeInteger(page) || page < 1) return null
   const clip = parseClip(params.get('clip'))
-  const rects = parseMark(params.get('mark')) ?? (clip ? [[clip.x, clip.y, clip.x + clip.width, clip.y + clip.height]] : null)
+  const rects =
+    parseMark(params.get('mark')) ?? (clip ? [[clip.x, clip.y, clip.x + clip.width, clip.y + clip.height]] : null)
   const quote = params.get('quote')?.replace(/\s+/g, ' ').trim() || null
   return rects || quote ? { page, rects, quote: rects ? null : quote } : null
 }
@@ -38,7 +39,7 @@ function pageElement(page: number) {
 function reveal(page: number, rects: PassageRects) {
   const box = pageElement(page)?.getBoundingClientRect()
   if (!box) return
-  const top = Math.min(...rects.map(rect => rect[1]))
+  const top = Math.min(...rects.map((rect) => rect[1]))
   const below = box.top + top * box.height - window.innerHeight * READING_HEIGHT
   if (below > 0) window.scrollBy({ top: below, behavior: 'instant' })
 }
@@ -68,12 +69,24 @@ function searchText(page: number, quote: string, found: (rects: PassageRects) =>
  * while the reader is already showing this document, even the same link a
  * second time (each click is a new navigation, so `navigationKey` changes).
  */
-export function useCitedPassage({ search, navigationKey, ready, enabled, goToPage }: {
-  search: string; navigationKey: string; ready: boolean; enabled: boolean; goToPage: (page: number) => void
+export function useCitedPassage({
+  search,
+  navigationKey,
+  ready,
+  enabled,
+  goToPage,
+}: {
+  search: string
+  navigationKey: string
+  ready: boolean
+  enabled: boolean
+  goToPage: (page: number) => void
 }): CitedPassage | null {
   const [passage, setPassage] = useState<CitedPassage | null>(null)
   const jump = useRef(goToPage)
-  useEffect(() => { jump.current = goToPage })
+  useEffect(() => {
+    jump.current = goToPage
+  })
   useEffect(() => {
     const citation = enabled && ready ? readCitation(search) : null
     setPassage(null)

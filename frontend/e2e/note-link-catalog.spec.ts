@@ -5,8 +5,8 @@ import { expect, test } from './fixtures'
 test('global note links survive 51 notes, filters, duplicate titles and renames', async ({ page }) => {
   test.setTimeout(120_000)
   const courses = (await (await page.request.get('/api/courses')).json()).courses as { id: number; name: string }[]
-  const courseId = courses.find(course => course.name === 'Programmieren 1')!.id
-  const otherCourseId = courses.find(course => course.id !== courseId)!.id
+  const courseId = courses.find((course) => course.name === 'Programmieren 1')!.id
+  const otherCourseId = courses.find((course) => course.id !== courseId)!.id
   const create = async (title: string, body: string, course_id = courseId) => {
     const response = await page.request.post('/api/notes', { data: { course_id, title, body } })
     expect(response.ok()).toBeTruthy()
@@ -35,7 +35,8 @@ test('global note links survive 51 notes, filters, duplicate titles and renames'
   await page.getByRole('button', { name: 'Markdown', exact: true }).click()
   const editor = page.getByRole('textbox', { name: 'Notizinhalt' })
   await editor.fill('[[Straße K')
-  const option = page.getByRole('listbox', { name: 'Notizen verknüpfen' })
+  const option = page
+    .getByRole('listbox', { name: 'Notizen verknüpfen' })
     .getByRole('option', { name: 'Straße Katalogquelle', exact: true })
   await expect(option).toBeVisible()
   await option.click()

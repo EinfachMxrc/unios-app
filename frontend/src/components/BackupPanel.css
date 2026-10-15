@@ -1,23 +1,125 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.backup-panel { display: grid; gap: 14px; }
-.backup-panel > p { margin: 0; line-height: 1.55; }
-.backup-field { display: grid; gap: 6px; font-size: .85rem; font-weight: 600; }
-.backup-field .native-input, .backup-field .native-select { font-weight: 400; }
-.backup-keep { max-width: 22rem; }
-.backup-folder-form { display: grid; gap: 10px; }
-.backup-suggestions { display: flex; flex-wrap: wrap; gap: 6px; }
-.backup-suggestions button { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 4px 10px; border: 1px solid var(--app-border); border-radius: 999px; background: var(--app-surface); color: var(--app-text); font: inherit; font-size: .8rem; overflow-wrap: anywhere; text-align: left; cursor: pointer; }
-.backup-suggestions button:hover { background: var(--app-surface-alt); }
-.backup-suggestions button.is-chosen { border-color: var(--app-text); }
-.backup-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.backup-folder { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.backup-folder > svg { color: var(--app-muted); }
-.backup-folder code { min-width: 0; padding: 3px 8px; border-radius: 6px; background: var(--app-surface-alt); font-size: .8rem; overflow-wrap: anywhere; }
-.backup-run { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: .85rem; }
-.backup-snapshots h3 { margin: 0 0 6px; color: var(--app-muted); font-size: .72rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
-.backup-snapshots ul { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--app-border); border-radius: 10px; }
-.backup-snapshots li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; font-size: .85rem; }
-.backup-snapshots li + li { border-top: 1px solid var(--app-border); }
-.backup-pending { display: grid; gap: 8px; padding: 10px 12px; border: 1px solid var(--app-border); border-left: 3px solid var(--app-blue); border-radius: 10px; background: var(--app-surface); }
-.backup-pending p { margin: 0; }
-.backup-restore-dialog .backup-field { margin-top: 4px; }
+.backup-panel {
+  display: grid;
+  gap: 14px;
+}
+.backup-panel > p {
+  margin: 0;
+  line-height: 1.55;
+}
+.backup-field {
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.backup-field .native-input,
+.backup-field .native-select {
+  font-weight: 400;
+}
+.backup-keep {
+  max-width: 22rem;
+}
+.backup-folder-form {
+  display: grid;
+  gap: 10px;
+}
+.backup-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.backup-suggestions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-surface);
+  color: var(--app-text);
+  font: inherit;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+  text-align: left;
+  cursor: pointer;
+}
+.backup-suggestions button:hover {
+  background: var(--app-surface-alt);
+}
+.backup-suggestions button.is-chosen {
+  border-color: var(--app-text);
+}
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.backup-folder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.backup-folder > svg {
+  color: var(--app-muted);
+}
+.backup-folder code {
+  min-width: 0;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--app-surface-alt);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.backup-run {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: 0.85rem;
+}
+.backup-snapshots h3 {
+  margin: 0 0 6px;
+  color: var(--app-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.backup-snapshots ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+}
+.backup-snapshots li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+  font-size: 0.85rem;
+}
+.backup-snapshots li + li {
+  border-top: 1px solid var(--app-border);
+}
+.backup-pending {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--app-border);
+  border-left: 3px solid var(--app-blue);
+  border-radius: 10px;
+  background: var(--app-surface);
+}
+.backup-pending p {
+  margin: 0;
+}
+.backup-restore-dialog .backup-field {
+  margin-top: 4px;
+}

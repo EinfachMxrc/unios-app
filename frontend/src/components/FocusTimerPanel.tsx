@@ -41,7 +41,15 @@ function notifyCompletion(topic: string): void {
   }
 }
 
-function FocusTimerFace({ state, now, finished, minuteLabel, onPause, onResume, onStop }: {
+function FocusTimerFace({
+  state,
+  now,
+  finished,
+  minuteLabel,
+  onPause,
+  onResume,
+  onStop,
+}: {
   state: FocusTimerState
   now: number
   finished: boolean
@@ -63,33 +71,59 @@ function FocusTimerFace({ state, now, finished, minuteLabel, onPause, onResume, 
           <div className="focus-timer-progress" aria-hidden="true">
             <div className="focus-timer-progress-fill" style={{ width: `${progressRatio(state, now) * 100}%` }} />
           </div>
-          <span className="focus-timer-clock" aria-hidden="true">{formatClock(remainingSeconds(state, now))}</span>
+          <span className="focus-timer-clock" aria-hidden="true">
+            {formatClock(remainingSeconds(state, now))}
+          </span>
           {paused ? (
-            <Button size="sm" variant="outline" onClick={onResume} aria-label={t('focusTimerResumeAriaLabel', { topic: state.topic })}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={onResume}
+              aria-label={t('focusTimerResumeAriaLabel', { topic: state.topic })}
+            >
               <Play size={14} /> {t('focusTimerResume')}
             </Button>
           ) : (
-            <Button size="sm" variant="outline" onClick={onPause} aria-label={t('focusTimerPauseAriaLabel', { topic: state.topic })}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={onPause}
+              aria-label={t('focusTimerPauseAriaLabel', { topic: state.topic })}
+            >
               <Pause size={14} /> {t('focusTimerPause')}
             </Button>
           )}
         </>
       )}
-      <Button size="sm" variant="outline" onClick={onStop} aria-label={t('focusTimerStopAriaLabel', { topic: state.topic })}>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={onStop}
+        aria-label={t('focusTimerStopAriaLabel', { topic: state.topic })}
+      >
         <Square size={14} /> {t('focusTimerStop')}
       </Button>
-      <span className="sr-only" role="status" aria-live="polite">{minuteLabel}</span>
+      <span className="sr-only" role="status" aria-live="polite">
+        {minuteLabel}
+      </span>
     </div>
   )
 }
 
-export type FocusTimerBlock = Pick<StudyBlock, 'id' | 'topic' | 'course_name' | 'duration_minutes' | 'starts_at' | 'status'>
+export type FocusTimerBlock = Pick<
+  StudyBlock,
+  'id' | 'topic' | 'course_name' | 'duration_minutes' | 'starts_at' | 'status'
+>
 
 /**
  * Existing accepted work shares one timer; the overview may discover today's blocks.
  * With `hideWhenEmpty` the panel disappears on days without a block instead of showing an empty state.
  */
-export function FocusTimerPanel({ blockId, acceptedBlock, hideWhenEmpty = false }: { blockId?: number; acceptedBlock?: FocusTimerBlock; hideWhenEmpty?: boolean } = {}) {
+export function FocusTimerPanel({
+  blockId,
+  acceptedBlock,
+  hideWhenEmpty = false,
+}: { blockId?: number; acceptedBlock?: FocusTimerBlock; hideWhenEmpty?: boolean } = {}) {
   const { t } = useT('learning')
   const overview = useApi<StudyBlock[]>('/api/learning/blocks', { enabled: !acceptedBlock })
   const data = acceptedBlock ? [acceptedBlock] : overview.data
@@ -130,30 +164,43 @@ export function FocusTimerPanel({ blockId, acceptedBlock, hideWhenEmpty = false 
   }, [timer, now])
 
   const todaysBlocks = (data ?? []).filter(
-    (block) => block.status === 'accepted' && (blockId !== undefined ? block.id === blockId
-      : isSameLocalDay(dateFromApi(block.starts_at), new Date(now))),
+    (block) =>
+      block.status === 'accepted' &&
+      (blockId !== undefined ? block.id === blockId : isSameLocalDay(dateFromApi(block.starts_at), new Date(now))),
   )
-  const timerOutsideSelection = timer && !todaysBlocks.some(block => block.id === timer.blockId)
+  const timerOutsideSelection = timer && !todaysBlocks.some((block) => block.id === timer.blockId)
 
   function start(block: FocusTimerBlock) {
-    setTimer(startTimer(
-      { id: block.id, topic: block.topic, courseName: block.course_name, durationMinutes: block.duration_minutes },
-      Date.now(),
-    ))
+    setTimer(
+      startTimer(
+        { id: block.id, topic: block.topic, courseName: block.course_name, durationMinutes: block.duration_minutes },
+        Date.now(),
+      ),
+    )
   }
 
   if (hideWhenEmpty && !loading && !error && !todaysBlocks.length && !timer) return null
 
   return (
-    <Panel title={t(blockId === undefined ? 'focusTimerTodayTitle' : 'focusTimerContextTitle')} action={<Timer size={20} />}>
+    <Panel
+      title={t(blockId === undefined ? 'focusTimerTodayTitle' : 'focusTimerContextTitle')}
+      action={<Timer size={20} />}
+    >
       <p className="muted-text mb-4">{t(blockId === undefined ? 'focusTimerIntro' : 'focusTimerContextIntro')}</p>
-      {timerOutsideSelection && timer && <div className="data-row focus-timer-row mb-4">
-        <p className="muted-text">{t('focusTimerOtherBlock', { topic: timer.topic, course: timer.courseName })}</p>
-        <FocusTimerFace state={timer} now={now} finished={isFinished(timer, now)} minuteLabel={minuteLabel}
-          onPause={() => setTimer(current => current ? pauseTimer(current, Date.now()) : current)}
-          onResume={() => setTimer(current => current ? resumeTimer(current, Date.now()) : current)}
-          onStop={() => setTimer(null)} />
-      </div>}
+      {timerOutsideSelection && timer && (
+        <div className="data-row focus-timer-row mb-4">
+          <p className="muted-text">{t('focusTimerOtherBlock', { topic: timer.topic, course: timer.courseName })}</p>
+          <FocusTimerFace
+            state={timer}
+            now={now}
+            finished={isFinished(timer, now)}
+            minuteLabel={minuteLabel}
+            onPause={() => setTimer((current) => (current ? pauseTimer(current, Date.now()) : current))}
+            onResume={() => setTimer((current) => (current ? resumeTimer(current, Date.now()) : current))}
+            onStop={() => setTimer(null)}
+          />
+        </div>
+      )}
       {loading && !data ? (
         <Loading />
       ) : error ? (
@@ -166,7 +213,9 @@ export function FocusTimerPanel({ blockId, acceptedBlock, hideWhenEmpty = false 
               <div className="data-row focus-timer-row" key={block.id}>
                 <div className="min-w-0 flex-1">
                   <strong>{block.topic}</strong>
-                  <span className="row-subtitle">{t('focusTimerBlockMeta', { course: block.course_name, minutes: block.duration_minutes })}</span>
+                  <span className="row-subtitle">
+                    {t('focusTimerBlockMeta', { course: block.course_name, minutes: block.duration_minutes })}
+                  </span>
                 </div>
                 {isActive && timer ? (
                   <FocusTimerFace
@@ -188,8 +237,11 @@ export function FocusTimerPanel({ blockId, acceptedBlock, hideWhenEmpty = false 
           })}
         </div>
       ) : (
-        <Empty icon={Timer} title={t(blockId === undefined ? 'focusTimerEmptyTitle' : 'focusContextUnavailable')}
-          text={t(blockId === undefined ? 'focusTimerEmptyText' : 'focusTimerContextEmptyText')} />
+        <Empty
+          icon={Timer}
+          title={t(blockId === undefined ? 'focusTimerEmptyTitle' : 'focusContextUnavailable')}
+          text={t(blockId === undefined ? 'focusTimerEmptyText' : 'focusTimerContextEmptyText')}
+        />
       )}
     </Panel>
   )

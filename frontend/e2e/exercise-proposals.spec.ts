@@ -8,11 +8,20 @@ test('exercise package returns proposals that need explicit approval', async ({ 
   const version = detail.versions[resource.id][0].version
   const initialCards = (await (await page.request.get('/api/anki/queue')).json()).length
   const payload = {
-    schema_version: 1, generated_by: 'browser-test', generated_at: new Date().toISOString(),
+    schema_version: 1,
+    generated_by: 'browser-test',
+    generated_at: new Date().toISOString(),
     source: { resource_id: resource.id, version },
-    exercises: [{ question: 'Erkläre eine while-Schleife.', topic: 'schleifen', difficulty: 'easy',
-      sample_solution: 'Sie wiederholt einen Block.',
-      solution_steps: 'Bedingung prüfen, Block ausführen, erneut prüfen.', source_page: 1 }],
+    exercises: [
+      {
+        question: 'Erkläre eine while-Schleife.',
+        topic: 'schleifen',
+        difficulty: 'easy',
+        sample_solution: 'Sie wiederholt einen Block.',
+        solution_steps: 'Bedingung prüfen, Block ausführen, erneut prüfen.',
+        source_page: 1,
+      },
+    ],
   }
 
   await page.goto('/more')
@@ -33,11 +42,13 @@ test('exercise package returns proposals that need explicit approval', async ({ 
   await page.locator('.more-tools > summary').click()
   await page.getByRole('link', { name: 'Übungsaufgaben' }).click()
   await page.locator('details > summary').filter({ hasText: 'Vorschläge importieren' }).click()
-  await page.getByRole('textbox', { name: 'JSON-Antwort aus einem Übungspaket einfügen' })
-    .fill(JSON.stringify(payload))
+  await page.getByRole('textbox', { name: 'JSON-Antwort aus einem Übungspaket einfügen' }).fill(JSON.stringify(payload))
   await page.getByRole('button', { name: 'Vorschläge prüfen' }).click()
-  await page.locator('article').filter({ has: page.getByText('Erkläre eine while-Schleife.', { exact: true }) })
-    .getByRole('button', { name: 'Vorschlag öffnen', exact: true }).click()
+  await page
+    .locator('article')
+    .filter({ has: page.getByText('Erkläre eine while-Schleife.', { exact: true }) })
+    .getByRole('button', { name: 'Vorschlag öffnen', exact: true })
+    .click()
   await expect(page.getByRole('textbox', { name: 'Aufgabe' })).toHaveValue('Erkläre eine while-Schleife.')
   const queue = await (await page.request.get('/api/ai/exercises')).json()
   expect(queue[0].status).toBe('proposed')

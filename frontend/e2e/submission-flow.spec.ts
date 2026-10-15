@@ -8,15 +8,23 @@ test('Moodle file submission needs file preview, statement and explicit confirma
   await page.getByText('Details zu Verbindung, Sicherung und Export').click()
   await page.getByRole('switch', { name: 'Abgabe über die App' }).click()
   const response = await page.request.get('/api/courses')
-  const courses = await response.json() as { courses: { id: number; name: string }[] }
+  const courses = (await response.json()) as { courses: { id: number; name: string }[] }
   const courseId = courses.courses.find((item) => item.name === 'Programmieren 1')?.id
   expect(courseId).toBeDefined()
   await page.goto(`/courses/${courseId}`)
-  await page.getByRole('button', { name: /Schleifen üben/ }).first().click()
+  await page
+    .getByRole('button', { name: /Schleifen üben/ })
+    .first()
+    .click()
   await page.getByRole('button', { name: 'Dateiabgabe vorbereiten' }).first().click()
-  await page.getByLabel('Dateien für Moodle auswählen').first().setInputFiles({
-    name: 'Antwort.pdf', mimeType: 'application/pdf', buffer: Buffer.from('Erfundene PDF-Abgabe'),
-  })
+  await page
+    .getByLabel('Dateien für Moodle auswählen')
+    .first()
+    .setInputFiles({
+      name: 'Antwort.pdf',
+      mimeType: 'application/pdf',
+      buffer: Buffer.from('Erfundene PDF-Abgabe'),
+    })
   await page.getByLabel('Nach dem Speichern final einreichen').first().check()
   await page.getByRole('button', { name: 'Vorgaben und Dateien prüfen' }).first().click()
   await expect(page.getByText('Erfundene Erklärung zur eigenen Arbeit.')).toBeVisible()

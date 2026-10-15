@@ -41,7 +41,7 @@ The release notes list which platforms each release contains. Snapshot and verif
 
 ## Try the demo
 
-Needs Python 3.12+, [uv](https://docs.astral.sh/uv/) and Node.js 22+.
+Needs Python 3.13+, [uv](https://docs.astral.sh/uv/) and Node.js 22+.
 
 ```sh
 git clone https://github.com/EinfachMxrc/unios-app.git

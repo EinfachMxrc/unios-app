@@ -4,8 +4,11 @@ import { expect, test } from './fixtures'
 
 test('PDF search finds text on another page and navigates between results', async ({ page }) => {
   await page.goto('/courses/1')
-  await page.locator('.resource-row').filter({ hasText: '04_Schleifen.pdf' })
-    .getByRole('link', { name: 'PDF öffnen' }).click()
+  await page
+    .locator('.resource-row')
+    .filter({ hasText: '04_Schleifen.pdf' })
+    .getByRole('link', { name: 'PDF öffnen' })
+    .click()
   await expect(page.getByText('Seite 1 von 2')).toBeVisible()
   await page.locator('[data-reader-page="2"]').scrollIntoViewIfNeeded()
   await expect(page.getByText('Seite 2 von 2')).toBeVisible()

@@ -9,8 +9,14 @@ const listeners = new Set<() => void>()
 function read(): Accessibility {
   try {
     const saved = JSON.parse(localStorage.getItem(key) ?? '{}') as Partial<Accessibility>
-    return { scale: [100, 112, 125, 150].includes(saved.scale ?? 0) ? saved.scale! : 100, contrast: saved.contrast === true, reduceMotion: saved.reduceMotion === true }
-  } catch { return defaults }
+    return {
+      scale: [100, 112, 125, 150].includes(saved.scale ?? 0) ? saved.scale! : 100,
+      contrast: saved.contrast === true,
+      reduceMotion: saved.reduceMotion === true,
+    }
+  } catch {
+    return defaults
+  }
 }
 let current = read()
 function apply() {
@@ -21,9 +27,25 @@ function apply() {
 apply()
 export function setAccessibility(next: Partial<Accessibility>) {
   current = { ...current, ...next }
-  localStorage.setItem(key, JSON.stringify(current)); apply()
-  listeners.forEach(listener => listener())
+  localStorage.setItem(key, JSON.stringify(current))
+  apply()
+  listeners.forEach((listener) => listener())
 }
-window.addEventListener('storage', event => { if (event.key === key) { current = read(); apply(); listeners.forEach(listener => listener()) } })
-function subscribe(listener: () => void) { listeners.add(listener); return () => listeners.delete(listener) }
-export function useAccessibility() { return useSyncExternalStore(subscribe, () => current, () => defaults) }
+window.addEventListener('storage', (event) => {
+  if (event.key === key) {
+    current = read()
+    apply()
+    listeners.forEach((listener) => listener())
+  }
+})
+function subscribe(listener: () => void) {
+  listeners.add(listener)
+  return () => listeners.delete(listener)
+}
+export function useAccessibility() {
+  return useSyncExternalStore(
+    subscribe,
+    () => current,
+    () => defaults,
+  )
+}

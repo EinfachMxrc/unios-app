@@ -17,8 +17,12 @@ export type TrashItem = {
 const AFFECTED = ['/api/notes', '/api/jots', '/api/search', '/api/trash', '/api/links', '/api/courses', '/api/overview']
 
 export function refreshAfterTrash() {
-  return queryClient.invalidateQueries({ predicate: query => query.queryKey[0] === 'api' &&
-    typeof query.queryKey[1] === 'string' && AFFECTED.some(prefix => (query.queryKey[1] as string).startsWith(prefix)) })
+  return queryClient.invalidateQueries({
+    predicate: (query) =>
+      query.queryKey[0] === 'api' &&
+      typeof query.queryKey[1] === 'string' &&
+      AFFECTED.some((prefix) => (query.queryKey[1] as string).startsWith(prefix)),
+  })
 }
 
 export async function moveToTrash(kind: TrashKind, id: string) {

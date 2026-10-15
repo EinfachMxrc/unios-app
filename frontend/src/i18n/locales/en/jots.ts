@@ -43,14 +43,16 @@ export default {
   assignmentHint: 'Assign links the course and note. It leaves the note text unchanged.',
   transferButton: 'Add to notes',
   transferPending: 'Adding …',
-  transferHint: 'Add appends the text to the selected note with a link to the original quick note. The quick note and its assignment are kept.',
+  transferHint:
+    'Add appends the text to the selected note with a link to the original quick note. The quick note and its assignment are kept.',
   transferSucceeded: 'Text added to the note.',
   alreadyLinked: 'This quick note is already linked as a source in the note.',
   openTransferredNote: 'Open note',
   originalJotLabel: 'Original quick note',
   transferLocalDraft: 'This note has a local draft. Open and save it first to keep your changes.',
   transferHostUnavailable: 'The host is not ready for writing. Try again when it is reachable.',
-  transferWrongNote: 'The note does not match the selected course or is not the current version. Select the target again.',
+  transferWrongNote:
+    'The note does not match the selected course or is not the current version. Select the target again.',
   transferTooLong: 'The extended note would be too long. Choose another or a new note.',
   transferFailed: 'The text could not be added. The quick note is kept.',
   newNoteButton: 'New note with this entry',

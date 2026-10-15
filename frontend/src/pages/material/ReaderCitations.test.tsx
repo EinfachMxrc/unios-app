@@ -9,22 +9,45 @@ import { ReaderCitations, citationsByPage, type MaterialCitation } from './Reade
 
 vi.mock('@/api', () => ({ useApi: () => ({ data: null, error: null, reload: () => undefined }) }))
 vi.mock('@/i18n/useT', () => ({
-  useT: () => ({ t: (key: string, values?: Record<string, unknown>) => values ? `${key}:${JSON.stringify(values)}` : key }),
+  useT: () => ({
+    t: (key: string, values?: Record<string, unknown>) => (values ? `${key}:${JSON.stringify(values)}` : key),
+  }),
 }))
 vi.mock('@/components/State', () => ({
-  Panel: ({ title, children }: { title: string; children: React.ReactNode }) => <section aria-label={title}>{children}</section>,
-  Failure: ({ message, retry }: { message: string; retry?: () => void }) => <p role="alert" onClick={retry}>{message}</p>,
+  Panel: ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <section aria-label={title}>{children}</section>
+  ),
+  Failure: ({ message, retry }: { message: string; retry?: () => void }) => (
+    <p role="alert" onClick={retry}>
+      {message}
+    </p>
+  ),
 }))
 
 const material = { course_name: 'Synthetic Informatics', version_id: 17 } as Material
 const sameCourse: MaterialCitation = {
-  note_id: 'note-a', title: 'Lecture 04', course_name: 'Synthetic Informatics', revision: 3, pages: [2, 5], current_version: true,
+  note_id: 'note-a',
+  title: 'Lecture 04',
+  course_name: 'Synthetic Informatics',
+  revision: 3,
+  pages: [2, 5],
+  current_version: true,
 }
 const otherCourse: MaterialCitation = {
-  note_id: 'note-b', title: 'Exam summary', course_name: 'Synthetic Maths', revision: 1, pages: [5], current_version: true,
+  note_id: 'note-b',
+  title: 'Exam summary',
+  course_name: 'Synthetic Maths',
+  revision: 1,
+  pages: [5],
+  current_version: true,
 }
 const olderVersion: MaterialCitation = {
-  note_id: 'note-c', title: 'Old script note', course_name: 'Synthetic Informatics', revision: 1, pages: [9], current_version: false,
+  note_id: 'note-c',
+  title: 'Old script note',
+  course_name: 'Synthetic Informatics',
+  revision: 1,
+  pages: [9],
+  current_version: false,
 }
 
 afterEach(cleanup)
@@ -33,15 +56,28 @@ function show(citations: MaterialCitation[] | undefined, error: string | null = 
   const onPage = vi.fn()
   const onOpenBeside = vi.fn()
   const retry = vi.fn()
-  render(<MemoryRouter><ReaderCitations material={material} citations={citations} error={error} retry={retry}
-    onPage={onPage} onOpenBeside={onOpenBeside} /></MemoryRouter>)
+  render(
+    <MemoryRouter>
+      <ReaderCitations
+        material={material}
+        citations={citations}
+        error={error}
+        retry={retry}
+        onPage={onPage}
+        onOpenBeside={onOpenBeside}
+      />
+    </MemoryRouter>,
+  )
   return { onPage, onOpenBeside, retry }
 }
 
 describe('citationsByPage', () => {
   it('counts citing notes per page of the open version only', () => {
     const pages = citationsByPage([sameCourse, otherCourse, olderVersion])
-    expect([...pages.entries()].sort()).toEqual([[2, 1], [5, 2]])
+    expect([...pages.entries()].sort()).toEqual([
+      [2, 1],
+      [5, 2],
+    ])
     expect(citationsByPage(undefined).size).toBe(0)
   })
 })

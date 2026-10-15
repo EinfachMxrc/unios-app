@@ -87,5 +87,9 @@
   overflow: hidden;
 }
 
-.app-shell { --topbar-height: 56px; }
-.app-shell.focus-layout { --topbar-height: 0px; }
+.app-shell {
+  --topbar-height: 56px;
+}
+.app-shell.focus-layout {
+  --topbar-height: 0px;
+}
