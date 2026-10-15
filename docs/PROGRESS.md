@@ -1,5 +1,24 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Kursnamen nach Cache-Hydrierung und PDF-Testvorbedingung
+
+Lauf 38770630888 bestand alle Plattform-/Betriebsjobs: Linux 1.361 Tests mit
+84,53 % Coverage, macOS 1.363 und Windows 1.364 Tests samt Dienststartprüfung.
+Browser 528 von 530 bestanden, einschließlich sämtlicher KI- und Mitschriftfälle.
+Das Kursnamenformular übernahm nach einem frischen Server-Refetch seinen alten
+Vergleichswert aus dem ersten Cache-Render. Unberührte Formulare gleichen jetzt
+Wert und Vergleichswert vor dem Paint ab; eigene Eingaben und deren ursprünglicher
+Vergleichswert bleiben erhalten, sodass echte Fremdänderungen weiterhin kollidieren.
+Zwei gezielte Regressionen prüfen beide Fälle.
+
+Der PDF-Test verließ nach einem Deep-Link die Ansicht, bevor der asynchron
+geöffnete Dialog sichtbar war. Er bestätigt jetzt zunächst den geöffneten Dialog
+und prüft danach unverändert dessen Rückkehr/Persistenz. Keine Produkt-Speicherung,
+Tests oder Coverage-Grenzen werden deaktiviert; noch keine Paketfreigabe.
+Die Kursnamen-Regression schlägt mit dem bisherigen Produktcode fehl und
+besteht mit der Korrektur. Beide Unit-Fälle sowie 16 Browserfälle in zwei
+aufeinanderfolgenden Ausführungen bestehen; Typecheck, Lint und Build sind grün.
+
 ## 15.10.2026 – Befunde aus dem festen Kandidaten
 
 Lauf 38756486505 bestand Linux, macOS, Docker und GLib; Browser 526 bestanden /

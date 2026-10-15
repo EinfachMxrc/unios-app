@@ -2,7 +2,16 @@
 
 # Öffentlicher Release 0.1.28 – Prüfnachweise
 
-Aktueller Kandidatenbefund: Lauf 38756486505 bestand Linux, macOS, Docker
+Letzter vollständiger Kandidatenlauf 38770630888: alle fünf Plattform-/Betriebsjobs
+bestanden, Browser 528/530. Das Kursnamenformular nutzte nach Cache-Hydrierung
+einen veralteten Vergleichswert; unberührte Formulare übernehmen jetzt frische
+Serverwerte, eigene Eingaben behalten ihren ursprünglichen Konfliktvergleich.
+Zwei Regressionen bestehen, die erste schlägt ohne Produktkorrektur fehl.
+Der PDF-Test bestätigt das asynchrone Öffnen, bevor er den geöffneten Zustand
+nach Rückkehr erwartet. Alle 16 betroffenen Browserfälle bestehen in zwei
+aufeinanderfolgenden Läufen. Vollständige Matrix am neuen Commit und Pakete offen.
+
+Vorheriger Kandidatenbefund: Lauf 38756486505 bestand Linux, macOS, Docker
 und GLib, jedoch nur 526 von 530 Browserfällen. Drei KI-Fälle erforderten
 das fehlende SDK im Browser-CI; ein Mitschriftfall fand einen veralteten
 Editor-Rückruf, der den neuen Titel überschreiben konnte. SDK-Extra und

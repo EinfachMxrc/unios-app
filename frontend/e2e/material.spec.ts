@@ -79,6 +79,8 @@ test('PDF viewer stores a question beside the source and exports an annotated co
   await expect(page.getByRole('link', { name: 'Warum endet meine Testschleife?' })).toBeVisible()
   await page.getByRole('link', { name: 'Warum endet meine Testschleife?' }).click()
   await expect(page).toHaveURL(/\/material\/\d+#annotation-/)
+  // The deep link opens the drawer after material hydration; establish that state before leaving.
+  await expect(page.getByRole('dialog')).toBeVisible()
 
   const detailResponse = await page.request.get(`/api/material/${new URL(page.url()).pathname.split('/').pop()}`)
   expect(detailResponse.ok(), await detailResponse.text()).toBeTruthy()

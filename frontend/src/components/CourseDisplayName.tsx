@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import './CourseDisplayName.css'
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { notifySyncCompleted, request } from '@/api'
 import { useT } from '@/i18n/useT'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,16 @@ export function CourseDisplayName({
   const { t } = useT('courses')
   const [value, setValue] = useState(course.display_name ?? '')
   const [expected, setExpected] = useState(course.display_name ?? null)
+  const dirty = useRef(false)
+  const courseId = useRef(course.id)
+  useLayoutEffect(() => {
+    if (courseId.current !== course.id || !dirty.current) {
+      courseId.current = course.id
+      dirty.current = false
+      setValue(course.display_name ?? '')
+      setExpected(course.display_name ?? null)
+    }
+  }, [course.id, course.display_name])
   const { busy, error, run } = useBusyAction()
   return (
     <form
@@ -32,6 +42,7 @@ export function CourseDisplayName({
           })
           setValue(saved.display_name ?? '')
           setExpected(saved.display_name)
+          dirty.current = false
         })
         if (saved) {
           notifySyncCompleted()
@@ -46,7 +57,10 @@ export function CourseDisplayName({
           maxLength={80}
           disabled={disabled || busy}
           placeholder={course.name}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={(event) => {
+            dirty.current = true
+            setValue(event.target.value)
+          }}
         />
       </label>
       <p className="muted-text">{t('originalName', { name: course.name })}</p>
