@@ -97,7 +97,7 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      - run: uv sync --locked --group dev
+      - run: uv sync --locked --group dev --extra ai
       - run: npm ci
         working-directory: frontend
       - run: uv run --no-sync python scripts/export_openapi.py --check

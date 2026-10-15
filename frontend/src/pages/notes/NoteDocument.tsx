@@ -411,12 +411,14 @@ export function NoteDocument({
                       aria-label={t('noteTitleAria')}
                       maxLength={200}
                       value={title}
-                      onChange={(event) => changeDraft(event.target.value, body)}
+                      onChange={(event) =>
+                        changeDraft(event.target.value, draftRef.current?.body ?? liveRef.current.body)
+                      }
                     />
                     {lectureSource ? (
                       <LectureCoveragePanel
                         body={body}
-                        onChange={(next) => changeDraft(title, next)}
+                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
                         source={lectureSource}
                         disabled={!canWrite || !!conflict}
                       />
@@ -425,7 +427,7 @@ export function NoteDocument({
                         courseId={data.note.course_id}
                         resourceId={data.note.resource_id}
                         body={body}
-                        onChange={(next) => changeDraft(title, next)}
+                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
                         disabled={!canWrite || !!conflict}
                       />
                     )}
@@ -433,7 +435,7 @@ export function NoteDocument({
                       workspaceKey={`note:${id}`}
                       id="note-edit-body"
                       value={body}
-                      onChange={(next) => changeDraft(title, next)}
+                      onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
                       notes={notes}
                       cardSource={{
                         noteId: id,

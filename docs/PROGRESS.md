@@ -1,5 +1,26 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Befunde aus dem festen Kandidaten
+
+Lauf 38756486505 bestand Linux, macOS, Docker und GLib; Browser 526 bestanden /
+vier fehlgeschlagen. Drei KI-Fälle fehlten wegen des im Browser-CI nicht
+installierten optionalen SDKs; das Extra `ai` wird dort jetzt wie im Backend
+installiert. Der vierte Fall verlor einen umbenannten Mitschrifttitel beim
+folgenden Texteingang. Feldänderungen lesen das andere Feld nun aus dem neuesten
+Entwurf beziehungsweise Live-Ref statt aus einem älteren Editor-Rückruf.
+Ein gezielter Regressionstest hält bewusst einen alten Rückruf fest und prüft
+den erhaltenen Titel. Alle neun NoteDocument-Tests bestehen.
+
+Windows bestand die korrigierte Anki-Backup-Prüfung, scheiterte später beim
+Host-Übergabetest am einsekündigen Warten auf den HTTP-Arbeiter. Ereignisgesteuerte
+Wartefristen erlauben nun CI-Anlaufzeit; alle bisherigen Sperr- und Reihenfolge-
+Prüfungen bleiben erhalten, der gehaltene Arbeiter wird auch nach einem
+fehlgeschlagenen Assert freigegeben. 17 Host-/Backupfälle, Ruff und mypy bestehen.
+Der vorherige Kandidat ist weiterhin keine Paketfreigabe.
+Nach Korrektur zusätzlich 23 kombinierte Browserfälle für KI-Verbindung und
+Mitschrift einschließlich Titel-/Inhaltsfortsetzung, Hell/Dunkel und Mobil
+bestanden. Typecheck, Lint und endgültiger Frontend-Build sind grün.
+
 ## 15.10.2026 – Fester öffentlicher Release-Kandidat nach PR #22
 
 Der parallele Merge von PR #22 hat den manuellen Freigabelauf auf `main`
