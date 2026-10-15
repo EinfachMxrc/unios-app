@@ -3,7 +3,7 @@
 export default {
   openIssue: 'Bericht auf GitHub öffnen',
   githubHint:
-    'GitHub öffnet einen Entwurf mit deiner Beschreibung. Prüfe ihn dort und sende ihn selbst ab. Diagnosedaten werden nicht übertragen.',
+    'GitHub öffnet einen Entwurf mit deiner Beschreibung. Prüfe ihn dort und sende ihn selbst ab (dafür brauchst du ein GitHub-Konto). Diagnosedaten werden nicht übertragen.',
   goalLabel: 'Was wolltest du tun?',
   goalPlaceholder: 'Beschreibe kurz dein Ziel.',
   attachDiagnostics: 'Diagnose an die heruntergeladene Datei anhängen',

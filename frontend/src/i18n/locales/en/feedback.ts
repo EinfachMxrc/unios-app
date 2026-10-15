@@ -3,7 +3,7 @@
 export default {
   openIssue: 'Open report on GitHub',
   githubHint:
-    'GitHub opens a draft with your description. Review and submit it there yourself. Diagnostic data is not transferred.',
+    'GitHub opens a draft with your description. Review and submit it there yourself (you need a GitHub account). Diagnostic data is not transferred.',
   goalLabel: 'What were you trying to do?',
   goalPlaceholder: 'Briefly describe your goal.',
   attachDiagnostics: 'Include diagnostics in the downloaded file',

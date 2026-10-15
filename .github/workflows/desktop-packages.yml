@@ -3,6 +3,11 @@ name: Desktop-Pakete
 
 on:
   workflow_dispatch:
+    inputs:
+      release_draft:
+        description: 'Nach dem Paketbau einen Release-Entwurf mit signiertem Update-Feed (latest.json) anlegen'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -95,3 +100,37 @@ jobs:
           path: desktop/src-tauri/target/release/bundle/
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    needs: package
+    if: ${{ inputs.release_draft }}
+    name: Release-Entwurf mit Update-Feed
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.13'
+          enable-cache: true
+      - run: uv sync --locked
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: unios-*
+          path: artifacts
+      - name: Artefakte je Plattform ablegen und Update-Feed erzeugen
+        run: |
+          set -euo pipefail
+          for folder in artifacts/unios-*; do mv "$folder" "artifacts/${folder#artifacts/unios-}"; done
+          version=$(uv run --no-sync python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          uv run --no-sync python scripts/stage_desktop_release.py "$version" artifacts release-staging --notes "UniOS $version"
+      - name: Entwurf anlegen (veröffentlicht wird bewusst von Hand)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="docs/releases/${VERSION}.md"
+          [ -f "$notes" ] || { echo "Release-Notizen fehlen: $notes" >&2; exit 1; }
+          gh release create "v${VERSION}" --draft --target "$GITHUB_SHA" \
+            --title "UniOS ${VERSION}" --notes-file "$notes" release-staging/*
