@@ -3,7 +3,8 @@
 
 ## UniOS verwenden
 
-- [Installation und Alpha-Downloads](../README.md)
+- [Installation und Alpha-Downloads](../README.md) · [English README](README.en.md)
+- [Änderungen je Version](../CHANGELOG.md)
 - [Erste Schritte und einfache Navigation](ALPHA_FOCUS.md)
 - [Notizen und Editor](NOTE_STUDIO.md)
 - [Räume und Buchung](ROOM_BOOKING.md)
@@ -14,7 +15,7 @@
 ## Entwickeln
 
 - [Verbindlicher Bauauftrag](BAUAUFTRAG.md) und [Fortschritt](PROGRESS.md)
-- [Architektur](ARCHITEKTUR.md)
+- [Architektur-Überblick](ARCHITECTURE.md) und [Backend-Schichten](ARCHITEKTUR.md)
 - [Navigation und UI-Struktur](NAVIGATION_CLEANUP.md)
 - [Einstiegshürden und Studienabläufe](ENTRY_BARRIERS.md)
 - [Design-System](DESIGN_SYSTEM.md) und [UI-Grundsätze](UI_PRINCIPLES.md)
@@ -26,7 +27,7 @@
 ## Betreiben und veröffentlichen
 
 - [Server](SERVER.md), [Dienste](SERVICES.md), [Programmier-Runner](RUNNER.md)
-- [Desktop-Pakete](DESKTOP_PACKAGES.md) und [Veröffentlichung](PUBLISHING.md)
+- [Desktop-Pakete](DESKTOP_PACKAGES.md), [Release-Ablauf](RELEASING.md) und [Veröffentlichung](PUBLISHING.md)
 - [Release-Abnahme und offene Grenzen](RELEASE_READINESS.md)
 - [Release-Labor](RELEASE_LAB.md), [Performance-Budgets](PERFORMANCE_BUDGETS.md)
 - [Visuelle Prüfung](VISUAL_AUDIT_2026-10-04.md) und [Roadmap](ROADMAP.md)

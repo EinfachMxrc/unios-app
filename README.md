@@ -110,14 +110,18 @@ Grenzen, die du vor dem Einrichten kennen solltest:
 - **Portale:** PRIMUSS und myCampus sind lesend und noch nicht für jede Hochschule abgenommen.
 - **Work:** MCP liefert Daten mit Rechten und Quellen; den KI-Client richtest du separat ein ([MCP-Anleitung](clients/uni_mcp/README.md)).
 
-## Mitmachen und Dokumentation
+## Dokumentation und Mitmachen
 
-| Thema | Weiter |
+Alle Dokumente stehen in der [Dokumentationsübersicht](docs/README.md). Die wichtigsten Einstiege:
+
+| Ich möchte … | Weiter |
 | --- | --- |
-| Betrieb | [Server](docs/SERVER.md) · [Desktop-Pakete](docs/DESKTOP_PACKAGES.md) · [Release-Ablauf](docs/RELEASING.md) |
-| Verbindungen | [Kompatibilität](docs/COMPATIBILITY.md) · [Neue Hochschule](docs/ADD_UNIVERSITY.md) · [Übersetzen](docs/TRANSLATING.md) |
-| Entwicklung | [Beitragen](.github/CONTRIBUTING.md) · [Fortschritt](docs/PROGRESS.md) · [Roadmap](docs/ROADMAP.md) · [Änderungen](CHANGELOG.md) |
-| Vertrauen | [Sicherheit](.github/SECURITY.md) · [Release-Abnahme](docs/RELEASE_READINESS.md) |
+| wissen, **was neu ist** | [Änderungen je Version](CHANGELOG.md) · [Releases](https://github.com/EinfachMxrc/unios-app/releases) |
+| UniOS **benutzen** | [Erste Schritte](docs/ALPHA_FOCUS.md) · [Notizen](docs/NOTE_STUDIO.md) · [Daten und Rechte](docs/TRUST.md) |
+| einen **Server** betreiben oder die App installieren | [Server](docs/SERVER.md) · [Desktop-Pakete](docs/DESKTOP_PACKAGES.md) |
+| eine **Hochschule** oder Sprache ergänzen | [Hochschule hinzufügen](docs/ADD_UNIVERSITY.md) · [Übersetzen](docs/TRANSLATING.md) · [Kompatibilität](docs/COMPATIBILITY.md) |
+| am **Code** mitarbeiten | [Beitragen](.github/CONTRIBUTING.md) · [Architektur](docs/ARCHITECTURE.md) · [Roadmap](docs/ROADMAP.md) |
+| **Sicherheit** und Prüfstand verstehen | [Sicherheit](.github/SECURITY.md) · [Release-Abnahme](docs/RELEASE_READINESS.md) |
 
 ## Fehler melden und Fragen stellen
 

@@ -43,7 +43,9 @@ und [DESKTOP_PACKAGES](DESKTOP_PACKAGES.md).
    Vorabversionen (Alpha/Beta) mit `--prerelease` statt `--latest`.
 9. **Prüfen:** `gh release view vX.Y.Z` zeigt kein Draft, die Assets sind vollständig,
    `releases/latest` löst auf diese Version auf.
-10. **Fortschritt** in [PROGRESS](PROGRESS.md) eintragen.
+10. **Dokumentation:** Neue Dokumente in [docs/README.md](README.md) verlinken; das README bleibt eine kurze
+    Einstiegstabelle und listet keine Einzeländerungen, die stehen im CHANGELOG und in den Release-Notizen.
+11. **Fortschritt** in [PROGRESS](PROGRESS.md) eintragen.
 
 ## Auto-Update
 
