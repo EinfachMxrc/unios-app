@@ -16,10 +16,22 @@ export function Loading({ variant = 'page' }: { variant?: 'page' | 'rows' | 'edi
   const { t } = useT('quality')
   return (
     <div className={`loading-layout loading-${variant}`} aria-busy="true" role="status" aria-label={t('loading')}>
-      {variant === 'rows' ? Array.from({ length: 4 }, (_, index) => <div className="loading-row" key={index}><Skeleton className="size-10 rounded-lg" /><div><Skeleton className="h-4 w-3/4" /><Skeleton className="h-3 w-1/2 mt-3" /></div></div>) : <>
-        <Skeleton className={variant === 'editor' ? 'h-12 w-2/3' : 'h-24 w-full rounded-xl'} />
-        <Skeleton className={variant === 'editor' ? 'h-80 w-full rounded-xl' : 'h-56 w-full rounded-xl'} />
-      </>}
+      {variant === 'rows' ? (
+        Array.from({ length: 4 }, (_, index) => (
+          <div className="loading-row" key={index}>
+            <Skeleton className="size-10 rounded-lg" />
+            <div>
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2 mt-3" />
+            </div>
+          </div>
+        ))
+      ) : (
+        <>
+          <Skeleton className={variant === 'editor' ? 'h-12 w-2/3' : 'h-24 w-full rounded-xl'} />
+          <Skeleton className={variant === 'editor' ? 'h-80 w-full rounded-xl' : 'h-56 w-full rounded-xl'} />
+        </>
+      )}
     </div>
   )
 }
@@ -33,14 +45,38 @@ export function Failure({ message, retry }: { message: string; retry?: () => voi
     <Alert variant="destructive">
       <CloudOff className="size-4" />
       <AlertTitle>{t('failureTitle')}</AlertTitle>
-      <AlertDescription><p>{detail}</p><div className="state-actions">
-        <Button size="sm" variant="outline" onClick={retry ?? (() => { void queryClient.invalidateQueries({ queryKey: ['api'] }) })}>{quality('retry')}</Button>
-        <Link to="/system">{quality('connection')}</Link>
-      </div></AlertDescription>
+      <AlertDescription>
+        <p>{detail}</p>
+        <div className="state-actions">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={
+              retry ??
+              (() => {
+                void queryClient.invalidateQueries({ queryKey: ['api'] })
+              })
+            }
+          >
+            {quality('retry')}
+          </Button>
+          <Link to="/system">{quality('connection')}</Link>
+        </div>
+      </AlertDescription>
     </Alert>
   )
 }
-export function Empty({ icon: Icon = Sparkles, title, text, action }: { icon?: typeof Sparkles; title: string; text: string; action?: ReactNode }) {
+export function Empty({
+  icon: Icon = Sparkles,
+  title,
+  text,
+  action,
+}: {
+  icon?: typeof Sparkles
+  title: string
+  text: string
+  action?: ReactNode
+}) {
   return (
     <div className="empty-state">
       <span className="empty-icon">
@@ -72,11 +108,7 @@ export function SyncContinuityNotice({
         <CheckCircle2 className="size-4" />
       )}
       <AlertTitle>
-        {value.state === 'never'
-          ? t('syncNeverTitle')
-          : overdue
-            ? t('syncOverdueTitle')
-            : t('syncCurrentTitle')}
+        {value.state === 'never' ? t('syncNeverTitle') : overdue ? t('syncOverdueTitle') : t('syncCurrentTitle')}
       </AlertTitle>
       <AlertDescription>
         {value.state === 'never'
@@ -100,7 +132,16 @@ export function Panel({ title, action, children }: { title: string; action?: Rea
   )
 }
 type StatusValue = 'success' | 'ok' | 'warning' | 'error' | 'running' | 'paused' | 'unknown' | 'not_configured'
-const STATUS_VALUES: readonly StatusValue[] = ['success', 'ok', 'warning', 'error', 'running', 'paused', 'unknown', 'not_configured']
+const STATUS_VALUES: readonly StatusValue[] = [
+  'success',
+  'ok',
+  'warning',
+  'error',
+  'running',
+  'paused',
+  'unknown',
+  'not_configured',
+]
 
 function isStatusValue(value: string): value is StatusValue {
   return (STATUS_VALUES as readonly string[]).includes(value)
@@ -116,12 +157,12 @@ export function Status({ value }: { value: string }) {
         : value === 'unknown' || value === 'not_configured' || value === 'paused' || value === 'running'
           ? 'neutral'
           : 'bad'
-  return (
-    <Badge className={`status-badge ${tone}`}>
-      {isStatusValue(value) ? t(`status.${value}`) : value}
-    </Badge>
-  )
+  return <Badge className={`status-badge ${tone}`}>{isStatusValue(value) ? t(`status.${value}`) : value}</Badge>
 }
 export function ListRows({ children }: { children: ReactNode }) {
-  return <div className="row-list" data-keyboard-list>{children}</div>
+  return (
+    <div className="row-list" data-keyboard-list>
+      {children}
+    </div>
+  )
 }

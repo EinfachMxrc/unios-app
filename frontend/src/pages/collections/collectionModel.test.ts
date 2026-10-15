@@ -7,8 +7,23 @@ import { berlinDay, emptyConfig, groupItems, previewPath, type Item } from './co
 const t = ((key: string) => key) as unknown as TypedT<'collections'>
 
 function item(id: string, patch: Partial<Item>): Item {
-  return { id, title: id, subtitle: '', course_name: null, url: `/x/${id}`, date: null, score: null, status: 'open',
-    tags: [], priority: null, exam_relevant: null, kind: 'materials', source: 'moodle', course_id: null, ...patch }
+  return {
+    id,
+    title: id,
+    subtitle: '',
+    course_name: null,
+    url: `/x/${id}`,
+    date: null,
+    score: null,
+    status: 'open',
+    tags: [],
+    priority: null,
+    exam_relevant: null,
+    kind: 'materials',
+    source: 'moodle',
+    course_id: null,
+    ...patch,
+  }
 }
 
 it('asks the host only for the filters that are set', () => {
@@ -22,8 +37,10 @@ it('asks the host only for the filters that are set', () => {
 
 it('keeps groups in the order they first appear and every item in its group', () => {
   const items = [item('a', { status: 'done' }), item('b', { status: 'open' }), item('c', { status: 'done' })]
-  expect(groupItems(items, 'status', t).map(([label, group]) => [label, group.map((entry) => entry.id)]))
-    .toEqual([['done', ['a', 'c']], ['open', ['b']]])
+  expect(groupItems(items, 'status', t).map(([label, group]) => [label, group.map((entry) => entry.id)])).toEqual([
+    ['done', ['a', 'c']],
+    ['open', ['b']],
+  ])
   expect(groupItems([item('d', {})], 'course', t)[0][0]).toBe('noCourseLabel')
 })
 

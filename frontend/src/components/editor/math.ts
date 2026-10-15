@@ -19,10 +19,16 @@ export function renderFormula(latex: string, displayMode: boolean): string | nul
       maxExpand: 200,
       maxSize: 20,
       macros: {
-        '\\xor': '\\oplus', '\\N': '\\mathbb{N}', '\\Z': '\\mathbb{Z}', '\\Q': '\\mathbb{Q}',
-        '\\R': '\\mathbb{R}', '\\C': '\\mathbb{C}',
-        '\\differentialD': '\\mathrm{d}', '\\imaginaryI': '\\mathrm{i}',
-        '\\imaginaryJ': '\\mathrm{j}', '\\exponentialE': '\\mathrm{e}',
+        '\\xor': '\\oplus',
+        '\\N': '\\mathbb{N}',
+        '\\Z': '\\mathbb{Z}',
+        '\\Q': '\\mathbb{Q}',
+        '\\R': '\\mathbb{R}',
+        '\\C': '\\mathbb{C}',
+        '\\differentialD': '\\mathrm{d}',
+        '\\imaginaryI': '\\mathrm{i}',
+        '\\imaginaryJ': '\\mathrm{j}',
+        '\\exponentialE': '\\mathrm{e}',
       },
     })
   } catch {

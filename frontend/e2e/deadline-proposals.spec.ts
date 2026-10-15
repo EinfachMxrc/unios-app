@@ -13,6 +13,10 @@ test('a document date reaches the calendar only after review', async ({ page }) 
   await page.getByRole('button', { name: 'Kalender aktualisieren' }).click()
   await expect(page.getByText('Terminvorschlag prüfen')).toHaveCount(0)
   await expect(page.locator('.deadline-table-row').getByText('04_Schleifen: Frist', { exact: true })).toBeVisible()
-  await expect(page.locator('.deadline-table-row').filter({ hasText: '04_Schleifen: Frist' })
-    .getByRole('link', { name: 'Quelle' })).toHaveAttribute('href', /\/material\/\d+\?page=2/)
+  await expect(
+    page
+      .locator('.deadline-table-row')
+      .filter({ hasText: '04_Schleifen: Frist' })
+      .getByRole('link', { name: 'Quelle' }),
+  ).toHaveAttribute('href', /\/material\/\d+\?page=2/)
 })

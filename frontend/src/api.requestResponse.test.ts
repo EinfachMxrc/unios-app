@@ -33,5 +33,7 @@ it('keeps the offline write lock for package downloads too', async () => {
 
 it('turns a server refusal into the readable detail', async () => {
   fetchMock.mockResolvedValue(new Response(JSON.stringify({ detail: 'Kurs nicht freigegeben' }), { status: 403 }))
-  await expect(requestResponse('/api/ai/package', { method: 'POST', body: '{}' })).rejects.toThrow('Kurs nicht freigegeben')
+  await expect(requestResponse('/api/ai/package', { method: 'POST', body: '{}' })).rejects.toThrow(
+    'Kurs nicht freigegeben',
+  )
 })

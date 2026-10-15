@@ -28,7 +28,9 @@ describe('checkNamespace: missing keys', () => {
       isStrict: false,
     })
     expect(report.errors).toEqual([])
-    expect(report.warnings).toEqual([{ namespace: 'common', key: 'title', message: expect.stringContaining('missing key "title"') }])
+    expect(report.warnings).toEqual([
+      { namespace: 'common', key: 'title', message: expect.stringContaining('missing key "title"') },
+    ])
   })
 
   it('errors about a missing key when the locale is strict (English)', () => {
@@ -42,7 +44,9 @@ describe('checkNamespace: missing keys', () => {
       isStrict: true,
     })
     expect(report.warnings).toEqual([])
-    expect(report.errors).toEqual([{ namespace: 'common', key: 'title', message: expect.stringContaining('missing key "title"') }])
+    expect(report.errors).toEqual([
+      { namespace: 'common', key: 'title', message: expect.stringContaining('missing key "title"') },
+    ])
   })
 
   it('does not flag a key covered by a plural-suffix base match', () => {
@@ -75,7 +79,9 @@ describe('checkNamespace: extra keys', () => {
       target: { close: 'Fermer', ghost: 'Fantôme' },
       isStrict: false,
     })
-    expect(report.errors).toEqual([{ namespace: 'common', key: 'ghost', message: expect.stringContaining('does not exist in German') }])
+    expect(report.errors).toEqual([
+      { namespace: 'common', key: 'ghost', message: expect.stringContaining('does not exist in German') },
+    ])
   })
 })
 
@@ -90,7 +96,9 @@ describe('checkNamespace: untranslated values', () => {
       target: { close: 'Close' },
       isStrict: false,
     })
-    expect(report.warnings).toEqual([{ namespace: 'common', key: 'close', message: expect.stringContaining('identical to its source copy') }])
+    expect(report.warnings).toEqual([
+      { namespace: 'common', key: 'close', message: expect.stringContaining('identical to its source copy') },
+    ])
   })
 
   it('does not flag a value made only of cognates/short words', () => {
@@ -118,7 +126,9 @@ describe('checkNamespace: interpolation mismatches', () => {
       target: { greeting: 'Bonjour' },
       isStrict: false,
     })
-    expect(report.errors).toEqual([{ namespace: 'common', key: 'greeting', message: expect.stringContaining('interpolation variables') }])
+    expect(report.errors).toEqual([
+      { namespace: 'common', key: 'greeting', message: expect.stringContaining('interpolation variables') },
+    ])
   })
 
   it('does not flag matching interpolation variables', () => {

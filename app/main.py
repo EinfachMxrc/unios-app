@@ -29,6 +29,9 @@ from app.ai.connection_api import connection_router
 from app.ai.exercises import exercise_router
 from app.ai.explanations import explanation_router
 from app.ai.mcp_api import mcp_router
+from app.ai.provider_api import provider_router
+from app.ai.provider_repository import ProviderRepository
+from app.ai.provider_service import ProviderService
 from app.analytics.api import analytics_router
 from app.analytics.repository import AnalyticsRepository
 from app.analytics.service import AnalyticsService
@@ -230,6 +233,8 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
         return JSONResponse({"detail": "Lokale KI-Verbindung konnte die Anfrage nicht abschließen.",
                              "code": "AI_CONNECTION_FAILURE"}, status_code=500)
 
+    ai_provider = ProviderService(settings, ProviderRepository(settings))
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         configure_logging(settings.local_dir, settings.secret_values)
@@ -340,7 +345,8 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
         app.include_router(note_card_router(settings, factory, coordinator, transfer_service))
         app.include_router(anki_router(settings, factory, coordinator,
                                        StudyService(StudyRepository(settings, factory)), transfer_service))
-    app.include_router(ai_router(settings, factory, coordinator))
+    app.include_router(provider_router(settings, coordinator, ai_provider))
+    app.include_router(ai_router(settings, factory, coordinator, ai_provider))
     app.include_router(exercise_router(factory, coordinator))
     app.include_router(practice_router(factory, coordinator))
     app.include_router(learning_router(settings, factory, coordinator))

@@ -3,14 +3,19 @@
 import { expect, test } from './fixtures'
 import type { ExamImpact } from '../src/components/ExamImpactDialog'
 
-test('a changed exam offers an explicit old/new plan preview and updates accepted work only after confirmation', async ({ page }) => {
+test('a changed exam offers an explicit old/new plan preview and updates accepted work only after confirmation', async ({
+  page,
+}) => {
   const fixture = await page.request.post('/api/__test__/exam-impact-plan')
   expect(fixture.ok()).toBeTruthy()
   const ids = await fixture.json()
   const before = await (await page.request.get('/api/learning/blocks')).json()
   const original = before.find((block: { id: number }) => block.id === ids.block_id)
   await page.goto('/learning')
-  const row = page.locator('.study-cycle').filter({ hasText: 'Synthetische Terminänderung' }).filter({ hasText: 'Anwenden und üben' })
+  const row = page
+    .locator('.study-cycle')
+    .filter({ hasText: 'Synthetische Terminänderung' })
+    .filter({ hasText: 'Anwenden und üben' })
   await expect(row).toContainText('Prüfungstermin geändert')
   await row.getByRole('button', { name: 'Lernplan prüfen', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Lernplan neu planen', exact: true })
@@ -22,7 +27,11 @@ test('a changed exam offers an explicit old/new plan preview and updates accepte
   expect(untouched.find((block: { id: number }) => block.id === ids.block_id).starts_at).toBe(original.starts_at)
   await row.getByRole('button', { name: 'Lernplan prüfen', exact: true }).click()
   await expect(dialog.getByRole('button', { name: 'Diese Termine übernehmen', exact: true })).toBeEnabled()
-  const applied = page.waitForResponse(response => response.url().endsWith(`/api/learning/cycles/${ids.cycle_id}/exam-impact`) && response.request().method() === 'POST')
+  const applied = page.waitForResponse(
+    (response) =>
+      response.url().endsWith(`/api/learning/cycles/${ids.cycle_id}/exam-impact`) &&
+      response.request().method() === 'POST',
+  )
   await dialog.getByRole('button', { name: 'Diese Termine übernehmen', exact: true }).click()
   expect((await applied).ok()).toBeTruthy()
   await expect(dialog).toHaveCount(0)
@@ -36,17 +45,25 @@ test('a changed exam offers an explicit old/new plan preview and updates accepte
   expect(cycles.find((cycle: { id: number }) => cycle.id === ids.cycle_id).exam_changed).toBe(false)
 })
 
-test('a changed accepted plan rejects a stale preview and offers refresh without closing the dialog', async ({ page }) => {
+test('a changed accepted plan rejects a stale preview and offers refresh without closing the dialog', async ({
+  page,
+}) => {
   const fixture = await page.request.post('/api/__test__/exam-impact-plan')
   expect(fixture.ok()).toBeTruthy()
   const ids = await fixture.json()
   await page.goto('/learning')
-  await page.locator('.study-cycle').filter({ hasText: 'Synthetische Terminänderung' }).filter({ hasText: 'Anwenden und üben' })
-    .getByRole('button', { name: 'Lernplan prüfen', exact: true }).click()
+  await page
+    .locator('.study-cycle')
+    .filter({ hasText: 'Synthetische Terminänderung' })
+    .filter({ hasText: 'Anwenden und üben' })
+    .getByRole('button', { name: 'Lernplan prüfen', exact: true })
+    .click()
   const dialog = page.getByRole('dialog', { name: 'Lernplan neu planen', exact: true })
   await expect(dialog.getByRole('button', { name: 'Diese Termine übernehmen', exact: true })).toBeEnabled()
   // Change an accepted block through an independently confirmed new plan, as another window could do.
-  const preview = await (await page.request.get(`/api/learning/cycles/${ids.cycle_id}/exam-impact`)).json() as ExamImpact
+  const preview = (await (
+    await page.request.get(`/api/learning/cycles/${ids.cycle_id}/exam-impact`)
+  ).json()) as ExamImpact
   const updated = await page.request.post(`/api/learning/cycles/${ids.cycle_id}/exam-impact`, {
     data: { revision: preview.revision, planned_at: preview.planned_at },
   })

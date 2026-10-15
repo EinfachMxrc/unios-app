@@ -20,22 +20,53 @@ vi.mock('@/api', () => ({
   useApi: () => ({ data: { items: mocks.items }, loading: false, error: null, updatedAt: 0, reload: mocks.reload }),
   localDate: (value: string) => value,
 }))
-vi.mock('@/lib/trash', () => ({ restoreFromTrash: mocks.restore, eraseFromTrash: mocks.erase, emptyTrash: mocks.empty }))
+vi.mock('@/lib/trash', () => ({
+  restoreFromTrash: mocks.restore,
+  eraseFromTrash: mocks.erase,
+  emptyTrash: mocks.empty,
+}))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
 vi.mock('@/components/Shell', () => ({ Shell: ({ children }: { children: ReactNode }) => <main>{children}</main> }))
-vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string, values: Record<string, unknown> = {}) => {
-  const table = messages as Record<string, string>
-  const plural = typeof values.count === 'number' ? table[`${key}_${values.count === 1 ? 'one' : 'other'}`] : undefined
-  return (plural ?? table[key] ?? key).replace(/\{\{(\w+)\}\}/g, (_, name: string) => String(values[name]))
-} }) }))
+vi.mock('@/i18n/useT', () => ({
+  useT: () => ({
+    t: (key: string, values: Record<string, unknown> = {}) => {
+      const table = messages as Record<string, string>
+      const plural =
+        typeof values.count === 'number' ? table[`${key}_${values.count === 1 ? 'one' : 'other'}`] : undefined
+      return (plural ?? table[key] ?? key).replace(/\{\{(\w+)\}\}/g, (_, name: string) => String(values[name]))
+    },
+  }),
+}))
 
-const note: TrashItem = { kind: 'note', id: 'n1', title: 'Eigenwerte', course_id: 3, course_name: 'Mathematik', deleted_at: '12.10.2026' }
-const jot: TrashItem = { kind: 'jot', id: 'j1', title: 'Buch zurückgeben', course_id: null, course_name: null, deleted_at: '11.10.2026' }
+const note: TrashItem = {
+  kind: 'note',
+  id: 'n1',
+  title: 'Eigenwerte',
+  course_id: 3,
+  course_name: 'Mathematik',
+  deleted_at: '12.10.2026',
+}
+const jot: TrashItem = {
+  kind: 'jot',
+  id: 'j1',
+  title: 'Buch zurückgeben',
+  course_id: null,
+  course_name: null,
+  deleted_at: '11.10.2026',
+}
 
-beforeEach(() => { vi.clearAllMocks(); mocks.items = [note, jot] })
+beforeEach(() => {
+  vi.clearAllMocks()
+  mocks.items = [note, jot]
+})
 afterEach(cleanup)
 
-const open = () => render(<MemoryRouter><TrashPage /></MemoryRouter>)
+const open = () =>
+  render(
+    <MemoryRouter>
+      <TrashPage />
+    </MemoryRouter>,
+  )
 
 it('lists what is in the trash with its kind, course and when it was deleted', () => {
   open()

@@ -5,7 +5,7 @@ import { PUPIL_REACH, mascotLine, pupilOffset } from './mascotBehavior'
 
 describe('mascotLine', () => {
   it('starts with what fits the mood, then cycles through the tips', () => {
-    expect([0, 1, 2, 3].map(click => mascotLine('sleepy', click))).toEqual(['sleepy1', 'sleepy2', 'tip1', 'tip2'])
+    expect([0, 1, 2, 3].map((click) => mascotLine('sleepy', click))).toEqual(['sleepy1', 'sleepy2', 'tip1', 'tip2'])
     expect(mascotLine('focus', 0)).toBe('focus1')
     expect(mascotLine('awake', 0)).toBe('tip1')
   })

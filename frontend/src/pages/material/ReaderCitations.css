@@ -1,45 +1,126 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 @layer workspace {
-  .reader-citations { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+  .reader-citations {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
   .reader-citations > li {
-    display: grid; gap: 6px; padding: 10px 8px; border-radius: var(--ui-radius-item);
+    display: grid;
+    gap: 6px;
+    padding: 10px 8px;
+    border-radius: var(--ui-radius-item);
     transition: background-color var(--ui-color-duration) var(--ui-color-ease);
   }
-  .reader-citations > li:hover { background: var(--nav-hover); }
-  .reader-citations > li + li { border-top: 1px solid var(--app-border); }
-  .reader-citations > li:hover + li, .reader-citations > li:hover { border-top-color: transparent; }
-  .reader-citation-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: .84rem; }
-  .reader-citation-head svg { color: var(--app-muted); flex: none; }
-  .reader-citation-head strong { font-weight: 620; min-width: 0; overflow-wrap: anywhere; }
-  .reader-citation-head .muted-text { font-size: .76rem; }
+  .reader-citations > li:hover {
+    background: var(--nav-hover);
+  }
+  .reader-citations > li + li {
+    border-top: 1px solid var(--app-border);
+  }
+  .reader-citations > li:hover + li,
+  .reader-citations > li:hover {
+    border-top-color: transparent;
+  }
+  .reader-citation-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.84rem;
+  }
+  .reader-citation-head svg {
+    color: var(--app-muted);
+    flex: none;
+  }
+  .reader-citation-head strong {
+    font-weight: 620;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .reader-citation-head .muted-text {
+    font-size: 0.76rem;
+  }
   .reader-citation-version {
-    padding: 1px 6px; border: 1px solid var(--app-border); border-radius: 999px;
-    color: var(--app-muted); font-size: .7rem;
+    padding: 1px 6px;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    color: var(--app-muted);
+    font-size: 0.7rem;
   }
-  .reader-citation-pages { display: flex; flex-wrap: wrap; gap: 4px; padding-left: 20px; }
+  .reader-citation-pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding-left: 20px;
+  }
   .reader-citation-pages button {
-    min-height: 24px; padding: 0 8px; border: 1px solid var(--app-border); border-radius: var(--ui-radius-control);
-    background: var(--app-surface); color: var(--app-text); font-size: .74rem; font-variant-numeric: tabular-nums;
-    transition: background-color var(--ui-color-duration) var(--ui-color-ease), border-color var(--ui-color-duration) var(--ui-color-ease);
+    min-height: 24px;
+    padding: 0 8px;
+    border: 1px solid var(--app-border);
+    border-radius: var(--ui-radius-control);
+    background: var(--app-surface);
+    color: var(--app-text);
+    font-size: 0.74rem;
+    font-variant-numeric: tabular-nums;
+    transition:
+      background-color var(--ui-color-duration) var(--ui-color-ease),
+      border-color var(--ui-color-duration) var(--ui-color-ease);
   }
-  .reader-citation-pages button:hover { background: var(--app-blue-soft); border-color: transparent; }
-  .reader-citation-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-left: 12px; font-size: .78rem; }
+  .reader-citation-pages button:hover {
+    background: var(--app-blue-soft);
+    border-color: transparent;
+  }
+  .reader-citation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding-left: 12px;
+    font-size: 0.78rem;
+  }
 
   /* Per-page marker: sits in the page's top-right corner, outside the text column. */
   .reader-page-citations {
     /* Above react-pdf's text and annotation layers, which share the slot's stacking context. */
-    position: absolute; top: 8px; right: 8px; z-index: 10;
-    display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 0 8px;
-    border: 1px solid var(--app-border); border-radius: 999px;
-    background: color-mix(in srgb, var(--app-surface) 92%, transparent); color: var(--app-text);
-    font-size: .72rem; font-weight: 600; font-variant-numeric: tabular-nums;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
+    padding: 0 8px;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--app-surface) 92%, transparent);
+    color: var(--app-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
     box-shadow: var(--ui-panel-shadow);
-    opacity: .82;
-    transition: opacity var(--ui-color-duration) var(--ui-color-ease), background-color var(--ui-color-duration) var(--ui-color-ease);
+    opacity: 0.82;
+    transition:
+      opacity var(--ui-color-duration) var(--ui-color-ease),
+      background-color var(--ui-color-duration) var(--ui-color-ease);
   }
-  .reader-page-citations:hover, .reader-page-citations:focus-visible { opacity: 1; background: var(--app-blue-soft); }
-  @media (pointer: coarse) { .reader-page-citations { min-height: 32px; padding: 0 10px; } }
+  .reader-page-citations:hover,
+  .reader-page-citations:focus-visible {
+    opacity: 1;
+    background: var(--app-blue-soft);
+  }
+  @media (pointer: coarse) {
+    .reader-page-citations {
+      min-height: 32px;
+      padding: 0 10px;
+    }
+  }
 }
 @layer workspace {
-  .material-page-position:has(> .reader-page-citations) { position: relative; }
+  .material-page-position:has(> .reader-page-citations) {
+    position: relative;
+  }
 }

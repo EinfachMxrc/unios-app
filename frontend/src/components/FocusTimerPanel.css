@@ -1,10 +1,39 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.focus-timer-row { flex-wrap: wrap; row-gap: 10px; }
-.focus-timer-face { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; flex: 1 1 auto; min-width: 0; }
-.focus-timer-progress { width: 96px; height: 6px; border-radius: 999px; background: var(--app-surface-alt);
-  overflow: hidden; }
-.focus-timer-progress-fill { height: 100%; border-radius: inherit; background: var(--app-blue);
-  transition: width 0.3s ease; }
-.focus-timer-clock { font-variant-numeric: tabular-nums; font-weight: 650; min-width: 3ch; }
-.focus-timer-done { display: flex; align-items: center; gap: 8px; color: var(--app-blue); font-weight: 600; }
+.focus-timer-row {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.focus-timer-face {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.focus-timer-progress {
+  width: 96px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--app-surface-alt);
+  overflow: hidden;
+}
+.focus-timer-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--app-blue);
+  transition: width 0.3s ease;
+}
+.focus-timer-clock {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  min-width: 3ch;
+}
+.focus-timer-done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--app-blue);
+  font-weight: 600;
+}

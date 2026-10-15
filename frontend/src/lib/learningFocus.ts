@@ -26,7 +26,8 @@ export function readFocusRef(search: string | URLSearchParams): LearningFocusRef
 }
 
 export function focusQuery(ref: LearningFocusRef): string {
-  if (!positiveId(ref.id) || !['block', 'cycle', 'course'].includes(ref.kind)) throw new Error('Invalid learning focus reference')
+  if (!positiveId(ref.id) || !['block', 'cycle', 'course'].includes(ref.kind))
+    throw new Error('Invalid learning focus reference')
   return new URLSearchParams({ focus: `${ref.kind}:${ref.id}` }).toString()
 }
 

@@ -12,7 +12,7 @@ export type AddonSlot =
 export type AddonItem = { label: string; detail?: string; href: string }
 
 export type AddonView = {
-  runtime?: "declarative" | "wasm"
+  runtime?: 'declarative' | 'wasm'
   fingerprint?: string
   addon_id: string
   view: 'text' | 'courses' | 'study_blocks' | 'focus_timer'

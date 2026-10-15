@@ -30,38 +30,79 @@ test('manual modules show ECTS and a separate hypothetical average', async ({ pa
 })
 
 test('PRIMUSS preview labels uncertain registration without changing saved grades', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { grades: true } })))
+  await page.addInitScript(() =>
+    localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { grades: true } })),
+  )
   let aliasAvailable = false
   let syncAvailable = false
   let gradeSyncAvailable = false
   let hasSaved = false
   const preview = {
-    exams: [{ source_key: null, title: 'Fiktive Prüfung', exam_at: null, registration: 'unclear',
-      registration_text: 'Wird bearbeitet', registration_deadline: null }],
+    exams: [
+      {
+        source_key: null,
+        title: 'Fiktive Prüfung',
+        exam_at: null,
+        registration: 'unclear',
+        registration_text: 'Wird bearbeitet',
+        registration_deadline: null,
+      },
+    ],
     grades: [{ title: 'Fiktive Informatik', value: '1,7', ects: '5', status: 'bestanden' }],
     warnings: ['Prüfung „Fiktive Prüfung“: Termin unklar.'],
-    proof_id: '20260925T200000Z-0123456789abcdef0123456789abcdef', proof_at: '2026-09-25T20:00:00Z',
+    proof_id: '20260925T200000Z-0123456789abcdef0123456789abcdef',
+    proof_at: '2026-09-25T20:00:00Z',
     saved: false,
   }
-  await page.route('**/api/primuss/status', (route) => route.fulfill({ json: {
-    configured: aliasAvailable, session_available: true, missing_fields: [], alias_map_available: aliasAvailable,
-    sync_available: syncAvailable, grades_sync_available: gradeSyncAvailable,
-  } }))
+  await page.route('**/api/primuss/status', (route) =>
+    route.fulfill({
+      json: {
+        configured: aliasAvailable,
+        session_available: true,
+        missing_fields: [],
+        alias_map_available: aliasAvailable,
+        sync_available: syncAvailable,
+        grades_sync_available: gradeSyncAvailable,
+      },
+    }),
+  )
   await page.route('**/api/primuss/preview', (route) => route.fulfill({ json: preview }))
   await page.route('**/api/primuss/recheck', (route) => {
     hasSaved = true
     return route.fulfill({ json: { ...preview, saved: true } })
   })
-  await page.route('**/api/primuss/exams', (route) => route.fulfill({ json: hasSaved ? [{
-    id: 1, title: 'Fiktive Prüfung', exam_at: null, registration: 'unclear',
-    checked_at: '2026-09-25T20:00:00Z', proof_id: preview.proof_id,
-  }] : [] }))
-  await page.route('**/api/primuss/grades/sync', (route) => route.fulfill({ json: {
-    created: 1, updated: 0, unchanged: 0, skipped: 0, warnings: [],
-  } }))
+  await page.route('**/api/primuss/exams', (route) =>
+    route.fulfill({
+      json: hasSaved
+        ? [
+            {
+              id: 1,
+              title: 'Fiktive Prüfung',
+              exam_at: null,
+              registration: 'unclear',
+              checked_at: '2026-09-25T20:00:00Z',
+              proof_id: preview.proof_id,
+            },
+          ]
+        : [],
+    }),
+  )
+  await page.route('**/api/primuss/grades/sync', (route) =>
+    route.fulfill({
+      json: {
+        created: 1,
+        updated: 0,
+        unchanged: 0,
+        skipped: 0,
+        warnings: [],
+      },
+    }),
+  )
   await page.goto('/grades')
   const ectsBeforePreview = await page.locator('.grades-summary strong').first().textContent()
-  await expect(page.getByText('Die lokale CSS-Zuordnung fehlt im System-Schlüsselbund dieses Hauptgeräts.')).toBeVisible()
+  await expect(
+    page.getByText('Die lokale CSS-Zuordnung fehlt im System-Schlüsselbund dieses Hauptgeräts.'),
+  ).toBeVisible()
   await expect(page.getByRole('button', { name: 'PRIMUSS lesen' })).toBeDisabled()
   aliasAvailable = true
   await page.reload()
@@ -70,8 +111,12 @@ test('PRIMUSS preview labels uncertain registration without changing saved grade
   await expect(page.getByText('Anmeldung: Unklar', { exact: false })).toBeVisible()
   await expect(page.getByText('Portalwert: 1,7', { exact: false })).toBeVisible()
   // The proof opens in the app, not in the browser.
-  await page.route('**/api/primuss/proofs/*', (route) => route.fulfill({ contentType: 'image/svg+xml',
-    body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="#ddd"/></svg>' }))
+  await page.route('**/api/primuss/proofs/*', (route) =>
+    route.fulfill({
+      contentType: 'image/svg+xml',
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="#ddd"/></svg>',
+    }),
+  )
   await page.getByRole('button', { name: 'Bild öffnen' }).click()
   const proof = page.getByRole('dialog', { name: 'Nachweis' })
   await expect(proof.getByRole('img', { name: 'Nachweis' })).toBeVisible()
@@ -87,5 +132,7 @@ test('PRIMUSS preview labels uncertain registration without changing saved grade
   gradeSyncAvailable = true
   await page.reload()
   await page.getByRole('button', { name: 'Noten und ECTS abgleichen' }).click()
-  await expect(page.getByText('PRIMUSS-Noten abgeglichen: 1 neu, 0 aktualisiert, 0 unverändert, 0 ausgelassen.')).toBeVisible()
+  await expect(
+    page.getByText('PRIMUSS-Noten abgeglichen: 1 neu, 0 aktualisiert, 0 unverändert, 0 ausgelassen.'),
+  ).toBeVisible()
 })

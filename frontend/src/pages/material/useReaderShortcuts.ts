@@ -20,7 +20,9 @@ type ReaderShortcutActions = {
  */
 export function useReaderShortcuts(actions: ReaderShortcutActions) {
   const current = useRef(actions)
-  useLayoutEffect(() => { current.current = actions })
+  useLayoutEffect(() => {
+    current.current = actions
+  })
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (event.defaultPrevented) return
@@ -37,7 +39,13 @@ export function useReaderShortcuts(actions: ReaderShortcutActions) {
         current.current.jumpToPage()
         return
       }
-      if (event.key.toLowerCase() === 'f' && (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && !typing) {
+      if (
+        event.key.toLowerCase() === 'f' &&
+        (event.ctrlKey || event.metaKey) &&
+        !event.altKey &&
+        !event.shiftKey &&
+        !typing
+      ) {
         event.preventDefault()
         current.current.focusSearch()
         return

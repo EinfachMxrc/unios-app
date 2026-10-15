@@ -37,11 +37,17 @@ test('planned handoff refuses incomplete Syncthing and then leaves the old host 
 
   const screenshots = path.resolve(import.meta.dirname, '../test-results/screenshots/phase2')
   await mkdir(screenshots, { recursive: true })
-  await page.screenshot({ path: screenshotPath(path.join(screenshots, 'handoff-released-light-1280.png')), fullPage: true })
+  await page.screenshot({
+    path: screenshotPath(path.join(screenshots, 'handoff-released-light-1280.png')),
+    fullPage: true,
+  })
   await page.setViewportSize({ width: 390, height: 850 })
   await page.evaluate(() => localStorage.setItem('unios-theme', 'dark'))
   await page.reload()
   await expect(page.getByText('Hauptgerät wechselt · nur lesen')).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
-  await page.screenshot({ path: screenshotPath(path.join(screenshots, 'handoff-released-dark-390.png')), fullPage: true })
+  await page.screenshot({
+    path: screenshotPath(path.join(screenshots, 'handoff-released-dark-390.png')),
+    fullPage: true,
+  })
 })

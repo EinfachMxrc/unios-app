@@ -26,7 +26,15 @@ type Peek = {
   open_url: string
 }
 
-export function TaskPeekDrawer({ target, onClose, detail }: { target: PeekTarget; onClose: () => void; detail?: ReactNode }) {
+export function TaskPeekDrawer({
+  target,
+  onClose,
+  detail,
+}: {
+  target: PeekTarget
+  onClose: () => void
+  detail?: ReactNode
+}) {
   const { t } = useT('taskPeek')
   const dialog = useRef<HTMLDialogElement>(null)
   const closeTimer = useRef<number | null>(null)
@@ -70,52 +78,58 @@ export function TaskPeekDrawer({ target, onClose, detail }: { target: PeekTarget
     >
       <div className="task-peek-content">
         <header>
-          <span>{target.kind === 'assignment' ? t('assignmentKind') : t('deadlineKind')}{t('quickViewSuffix')}</span>
+          <span>
+            {target.kind === 'assignment' ? t('assignmentKind') : t('deadlineKind')}
+            {t('quickViewSuffix')}
+          </span>
           <button type="button" aria-label={t('closeAria')} onClick={requestClose}>
             <X size={18} />
           </button>
         </header>
-        {detail ?? (loading && !data ? (
-          <Loading />
-        ) : error ? (
-          <Failure message={error} />
-        ) : (
-          data && (
-            <>
-              <h2>{data.title}</h2>
-              <PersonalTaskStatus key={`${data.assignment_id ? 'assignment' : target.kind}:${data.assignment_id ?? target.id}`}
-                kind={data.assignment_id ? 'assignment' : target.kind} id={data.assignment_id ?? target.id}
-                courseId={data.course_id} removed={data.removed_upstream} />
-              <dl className="task-peek-facts">
-                <div>
-                  <dt>{t('courseLabel')}</dt>
-                  <dd>{data.course_name ?? t('noCourseText')}</dd>
-                </div>
-                <div>
-                  <dt>{t('dueLabel')}</dt>
-                  <dd>{data.due_at ? localDate(data.due_at) : t('noDateSavedText')}</dd>
-                </div>
-                <div>
-                  <dt>{t('sourceLabel')}</dt>
-                  <dd>{data.source}</dd>
-                </div>
-                {data.latest_submission_state && (
+        {detail ??
+          (loading && !data ? (
+            <Loading />
+          ) : error ? (
+            <Failure message={error} />
+          ) : (
+            data && (
+              <>
+                <h2>{data.title}</h2>
+                <PersonalTaskStatus
+                  key={`${data.assignment_id ? 'assignment' : target.kind}:${data.assignment_id ?? target.id}`}
+                  kind={data.assignment_id ? 'assignment' : target.kind}
+                  id={data.assignment_id ?? target.id}
+                  courseId={data.course_id}
+                  removed={data.removed_upstream}
+                />
+                <dl className="task-peek-facts">
                   <div>
-                    <dt>{t('submissionLabel')}</dt>
-                    <dd>{t('lastAttemptText', { state: data.latest_submission_state })}</dd>
+                    <dt>{t('courseLabel')}</dt>
+                    <dd>{data.course_name ?? t('noCourseText')}</dd>
                   </div>
-                )}
-              </dl>
-              {data.removed_upstream && (
-                <p className="task-peek-warning">{t('removedUpstreamWarning')}</p>
-              )}
-              {data.assignment_id && <LinkedItems kind="assignment" id={String(data.assignment_id)} />}
-              <Link className="task-peek-open" to={data.open_url} onClick={requestClose}>
-                {data.assignment_id ? t('openAssignmentLink') : t('openAllDeadlinesLink')} <ArrowRight size={15} />
-              </Link>
-            </>
-          )
-        ))}
+                  <div>
+                    <dt>{t('dueLabel')}</dt>
+                    <dd>{data.due_at ? localDate(data.due_at) : t('noDateSavedText')}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('sourceLabel')}</dt>
+                    <dd>{data.source}</dd>
+                  </div>
+                  {data.latest_submission_state && (
+                    <div>
+                      <dt>{t('submissionLabel')}</dt>
+                      <dd>{t('lastAttemptText', { state: data.latest_submission_state })}</dd>
+                    </div>
+                  )}
+                </dl>
+                {data.removed_upstream && <p className="task-peek-warning">{t('removedUpstreamWarning')}</p>}
+                {data.assignment_id && <LinkedItems kind="assignment" id={String(data.assignment_id)} />}
+                <Link className="task-peek-open" to={data.open_url} onClick={requestClose}>
+                  {data.assignment_id ? t('openAssignmentLink') : t('openAllDeadlinesLink')} <ArrowRight size={15} />
+                </Link>
+              </>
+            )
+          ))}
       </div>
     </dialog>
   )

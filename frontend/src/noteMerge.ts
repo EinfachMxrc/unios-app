@@ -49,16 +49,25 @@ export function mergeNoteText(base: string, local: string, remote: string): Merg
   for (const left of localChanges) {
     for (const right of remoteChanges) {
       if (!overlaps(left, right)) continue
-      if (left.start === right.start && left.end === right.end &&
-          left.replacement.join('\n') === right.replacement.join('\n')) continue
+      if (
+        left.start === right.start &&
+        left.end === right.end &&
+        left.replacement.join('\n') === right.replacement.join('\n')
+      )
+        continue
       return { clean: false }
     }
   }
   const all = [...localChanges]
   for (const remoteChange of remoteChanges) {
-    if (!all.some((localChange) => localChange.start === remoteChange.start &&
-        localChange.end === remoteChange.end &&
-        localChange.replacement.join('\n') === remoteChange.replacement.join('\n'))) {
+    if (
+      !all.some(
+        (localChange) =>
+          localChange.start === remoteChange.start &&
+          localChange.end === remoteChange.end &&
+          localChange.replacement.join('\n') === remoteChange.replacement.join('\n'),
+      )
+    ) {
       all.push(remoteChange)
     }
   }

@@ -12,13 +12,7 @@ import { MoodleRefresh } from '@/components/MoodleRefresh'
 import { PortalSamplePanel } from '@/components/PortalSamplePanel'
 import { Button } from '@/components/ui/button'
 import { useInitialSync, useMoodleLogin, useSetupSteps } from './setup/setupHooks'
-import {
-  capturePortalLogin,
-  closePortalLogin,
-  isDesktopApp,
-  openPortalLogin,
-  type PortalName,
-} from '@/lib/desktop'
+import { capturePortalLogin, closePortalLogin, isDesktopApp, openPortalLogin, type PortalName } from '@/lib/desktop'
 
 const alphaWelcomeKey = 'unios-alpha-welcome-v1'
 
@@ -80,8 +74,16 @@ export function SetupPage({ status, reload }: { status: SetupStatus; reload: () 
   const [desktop] = useState(isDesktopApp)
   const { busy, error, setError, guard, step } = useSetupSteps(reload)
   const {
-    loginUrl, moodleError, moodlePending, moodleOpening, moodleWindowOpened,
-    callback, setCallback, manualToken, setManualToken, startMoodleLogin,
+    loginUrl,
+    moodleError,
+    moodlePending,
+    moodleOpening,
+    moodleWindowOpened,
+    callback,
+    setCallback,
+    manualToken,
+    setManualToken,
+    startMoodleLogin,
   } = useMoodleLogin({ step, reload, desktop })
   const [openedPortal, setOpenedPortal] = useState<PortalName | null>(null)
   const [programName, setProgramName] = useState('')

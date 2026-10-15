@@ -4,7 +4,9 @@ import { screenshotPath } from './artifacts'
 
 import { expect, test } from './fixtures'
 
-test('Aufnahme und gespeicherte Sprachnotiz spielen unter der ausgelieferten Sicherheitsrichtlinie', async ({ page }) => {
+test('Aufnahme und gespeicherte Sprachnotiz spielen unter der ausgelieferten Sicherheitsrichtlinie', async ({
+  page,
+}) => {
   const response = await page.request.get('http://127.0.0.1:8173/api/host')
   const policy = response.headers()['content-security-policy']
   expect(policy).toBeTruthy()
@@ -22,9 +24,15 @@ test('Aufnahme und gespeicherte Sprachnotiz spielen unter der ausgelieferten Sic
     gain.gain.value = 0.01
     oscillator.connect(gain).connect(output)
     oscillator.start()
-    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: {
-      getUserMedia: async () => { await context.resume(); return output.stream },
-    } })
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: async () => {
+          await context.resume()
+          return output.stream
+        },
+      },
+    })
     Object.defineProperty(window, 'SpeechRecognition', { configurable: true, value: undefined })
     Object.defineProperty(window, 'webkitSpeechRecognition', { configurable: true, value: undefined })
   })
@@ -55,41 +63,72 @@ test('Aufnahme und gespeicherte Sprachnotiz spielen unter der ausgelieferten Sic
 test('Sprachnotiz wird aufgenommen, korrigiert und als Schnellerfassung gespeichert', async ({ page }) => {
   await page.route('**/api/voice/transcription/status', (route) => route.fulfill({ json: { available: false } }))
   await page.addInitScript(() => {
-    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: {
-      getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }),
-    } })
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }),
+      },
+    })
     class FakeRecorder {
-      static isTypeSupported() { return true }
+      static isTypeSupported() {
+        return true
+      }
       mimeType = 'audio/webm'
       state = 'inactive'
       ondataavailable: ((event: { data: Blob }) => void) | null = null
       onstop: (() => void) | null = null
-      start() { this.state = 'recording' }
+      start() {
+        this.state = 'recording'
+      }
       stop() {
         this.state = 'inactive'
-        this.ondataavailable?.({ data: new Blob([new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x00])], { type: 'audio/webm' }) })
+        this.ondataavailable?.({
+          data: new Blob([new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0x00])], { type: 'audio/webm' }),
+        })
         this.onstop?.()
       }
     }
     Object.defineProperty(window, 'MediaRecorder', { configurable: true, value: FakeRecorder })
     class FakeRecognition {
-      static async available() { return 'available' }
-      lang = ''; continuous = false; interimResults = false; processLocally = false
-      onresult: ((event: { resultIndex: number; results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }> }) => void) | null = null
+      static async available() {
+        return 'available'
+      }
+      lang = ''
+      continuous = false
+      interimResults = false
+      processLocally = false
+      onresult:
+        | ((event: {
+            resultIndex: number
+            results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>
+          }) => void)
+        | null = null
       onerror = null
       onend: (() => void) | null = null
-      start() { this.onresult?.({ resultIndex: 0, results: [{ 0: { transcript: 'Rekursion braucht einen Basisfall.' }, length: 1, isFinal: true }] }) }
-      stop() { this.onend?.() }
+      start() {
+        this.onresult?.({
+          resultIndex: 0,
+          results: [{ 0: { transcript: 'Rekursion braucht einen Basisfall.' }, length: 1, isFinal: true }],
+        })
+      }
+      stop() {
+        this.onend?.()
+      }
     }
     Object.defineProperty(window, 'SpeechRecognition', { configurable: true, value: FakeRecognition })
   })
   await page.goto('/voice')
   await page.getByRole('button', { name: 'Aufnahme starten' }).click()
   await expect(page.getByText('Aufnahme läuft')).toBeVisible()
-  await expect(page.getByRole('textbox', { name: 'Transkript' }).first()).toHaveValue('Rekursion braucht einen Basisfall.')
+  await expect(page.getByRole('textbox', { name: 'Transkript' }).first()).toHaveValue(
+    'Rekursion braucht einen Basisfall.',
+  )
   await page.getByRole('button', { name: 'Aufnahme stoppen' }).click()
   await page.getByRole('textbox', { name: 'Titel' }).first().fill('Gedanke zu Schleifen')
-  await page.getByRole('textbox', { name: 'Transkript' }).first().fill('Bei Rekursion braucht jeder Aufruf einen Basisfall.')
+  await page
+    .getByRole('textbox', { name: 'Transkript' })
+    .first()
+    .fill('Bei Rekursion braucht jeder Aufruf einen Basisfall.')
   await page.getByRole('combobox', { name: 'Kurs' }).first().selectOption({ label: 'Programmieren 1' })
   await page.getByRole('button', { name: 'Audio und Text speichern' }).click()
   await expect(page.getByRole('status')).toContainText('lokal gespeichert')

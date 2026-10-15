@@ -11,7 +11,10 @@ vi.mock('@/api', () => api)
 
 const detail = { course: { is_active: true, download_other_groups: false } } as unknown as CourseDetail
 
-beforeEach(() => { api.request.mockReset(); api.notifySyncCompleted.mockReset() })
+beforeEach(() => {
+  api.request.mockReset()
+  api.notifySyncCompleted.mockReset()
+})
 afterEach(cleanup)
 
 function setup() {
@@ -24,8 +27,10 @@ it('toggles activity with the expected old value and announces the sync', async 
   api.request.mockResolvedValue({})
   const { result, reload } = setup()
   await act(() => result.current.changeActivity())
-  expect(api.request).toHaveBeenCalledWith('/api/entities/course/7/actions/course.set_activity',
-    { method: 'POST', body: JSON.stringify({ confirmed: true, input: { active: false, expected: true } }) })
+  expect(api.request).toHaveBeenCalledWith('/api/entities/course/7/actions/course.set_activity', {
+    method: 'POST',
+    body: JSON.stringify({ confirmed: true, input: { active: false, expected: true } }),
+  })
   expect(api.notifySyncCompleted).toHaveBeenCalledOnce()
   expect(reload).toHaveBeenCalledOnce()
   expect(result.current.busy).toBe(false)
@@ -44,10 +49,16 @@ it('shows a failure, keeps the data, and clears the old error on the next attemp
 
 it('shows the group-download choice at once and rolls it back when saving fails', async () => {
   let fail: (reason: Error) => void = () => undefined
-  api.request.mockReturnValue(new Promise((_, reject) => { fail = reject }))
+  api.request.mockReturnValue(
+    new Promise((_, reject) => {
+      fail = reject
+    }),
+  )
   const { result } = setup()
   let pending: Promise<void> = Promise.resolve()
-  act(() => { pending = result.current.changeGroupDownload(true) })
+  act(() => {
+    pending = result.current.changeGroupDownload(true)
+  })
   expect(result.current.downloadOther).toBe(true)
   expect(result.current.busy).toBe(true)
   fail(new Error('HTTP 503'))

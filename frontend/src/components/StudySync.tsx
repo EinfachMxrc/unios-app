@@ -32,11 +32,16 @@ export function StudySync() {
         // A failed replay remains in IndexedDB and is shown on the study page.
       }
     }
-    const onOnline = () => { void sync() }
+    const onOnline = () => {
+      void sync()
+    }
     window.addEventListener('online', onOnline)
     const interval = window.setInterval(onOnline, 5 * 60_000)
     onOnline()
-    return () => { window.removeEventListener('online', onOnline); window.clearInterval(interval) }
+    return () => {
+      window.removeEventListener('online', onOnline)
+      window.clearInterval(interval)
+    }
   }, [])
   return null
 }

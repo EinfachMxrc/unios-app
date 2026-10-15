@@ -7,7 +7,9 @@ import { UliBuddy } from './UliBuddy'
 
 vi.mock('@/i18n/useT', () => ({ useT: () => ({ t: (key: string) => key }) }))
 
-beforeEach(() => { vi.useFakeTimers() })
+beforeEach(() => {
+  vi.useFakeTimers()
+})
 afterEach(() => {
   cleanup()
   vi.useRealTimers()
@@ -45,12 +47,16 @@ it('waves and says what fits the moment, then a tip, then falls quiet', () => {
   fireEvent.click(owl())
   expect(bubble.textContent).toBe('mascot.focus1')
   expect(svg().classList.contains('mascot-waving')).toBe(true)
-  act(() => { vi.advanceTimersByTime(1000) })
+  act(() => {
+    vi.advanceTimersByTime(1000)
+  })
   expect(svg().classList.contains('mascot-waving')).toBe(false)
   fireEvent.click(owl())
   fireEvent.click(owl())
   expect(bubble.textContent).toBe('mascot.tip1')
-  act(() => { vi.advanceTimersByTime(6000) })
+  act(() => {
+    vi.advanceTimersByTime(6000)
+  })
   expect(bubble.textContent).toBe('')
 })
 
@@ -58,6 +64,8 @@ it('gets dizzy when clicked four times in a row', () => {
   const { container } = render(<UliBuddy mood="awake" />)
   for (let i = 0; i < 4; i++) fireEvent.click(owl())
   expect(container.querySelector('.uli-buddy')!.classList.contains('is-dizzy')).toBe(true)
-  act(() => { vi.advanceTimersByTime(900) })
+  act(() => {
+    vi.advanceTimersByTime(900)
+  })
   expect(container.querySelector('.uli-buddy')!.classList.contains('is-dizzy')).toBe(false)
 })

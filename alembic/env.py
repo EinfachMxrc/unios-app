@@ -20,7 +20,8 @@ target_metadata = Base.metadata
 def include_name(name, type_, parent_names):
     # FTS5 und seine Shadow-Tabellen werden bewusst per SQL migriert.
     return not (type_ == "table" and name.startswith(("resource_texts_fts", "notes_fts", "jots_fts",
-                                                        "material_annotations_fts", "course_scratchpads_fts")))
+                                                        "material_annotations_fts", "course_scratchpads_fts",
+                                                        "inbox_clips_fts")))
 
 
 def run_migrations_offline() -> None:

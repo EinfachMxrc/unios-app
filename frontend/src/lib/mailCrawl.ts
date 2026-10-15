@@ -15,7 +15,13 @@
 
 import type { CrawlBridge, PortalLink } from './portalCrawl'
 
-export type ScrapedMessage = { messageKey: string; sender: string; subject: string; receivedAt: string | null; body: string }
+export type ScrapedMessage = {
+  messageKey: string
+  sender: string
+  subject: string
+  receivedAt: string | null
+  body: string
+}
 
 const MAX_MESSAGES = 150
 const MAX_EMPTY_SCROLLS = 3
@@ -72,12 +78,16 @@ export function extractMessage(html: string, messageKey: string): ScrapedMessage
   const subject = textOf(first(doc, SUBJECT_SELECTORS)).slice(0, 500)
   const senderField = first(doc, SENDER_SELECTORS)
   const senderAttr = senderField?.getAttribute('title') ?? senderField?.getAttribute('aria-label') ?? ''
-  const senderMatch = senderAttr.match(/[^\s<>"']+@[^\s<>"']+\.[^\s<>"']+/) ?? textOf(senderField).match(/[^\s<>"']+@[^\s<>"']+\.[^\s<>"']+/)
+  const senderMatch =
+    senderAttr.match(/[^\s<>"']+@[^\s<>"']+\.[^\s<>"']+/) ??
+    textOf(senderField).match(/[^\s<>"']+@[^\s<>"']+\.[^\s<>"']+/)
   const sender = (senderMatch?.[0] ?? '').toLowerCase()
   const dateField = first(doc, DATE_SELECTORS)
   const dateText = dateField?.getAttribute('datetime') || dateField?.getAttribute('title') || ''
-  const receivedAt = /^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/i.test(dateText)
-    && Number.isFinite(Date.parse(dateText)) ? dateText : null
+  const receivedAt =
+    /^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/i.test(dateText) && Number.isFinite(Date.parse(dateText))
+      ? dateText
+      : null
   const bodyField = first(doc, BODY_SELECTORS)
   const body = textOf(bodyField).slice(0, 20_000)
   if (!MAILBOX.test(sender) || (!subject && !body)) return null
@@ -95,8 +105,13 @@ export async function readMailWindow(
 ): Promise<{ messages: ScrapedMessage[]; partial: boolean }> {
   const start = await bridge.status()
   const address = new URL(start.url)
-  if (start.hasPassword || address.protocol !== 'https:' || address.hostname !== 'outlook.office.com'
-    || !address.pathname.startsWith('/mail')) throw new Error('login-required')
+  if (
+    start.hasPassword ||
+    address.protocol !== 'https:' ||
+    address.hostname !== 'outlook.office.com' ||
+    !address.pathname.startsWith('/mail')
+  )
+    throw new Error('login-required')
   if (!(await bridge.capabilities()).traversal) throw new Error('traversal-unavailable')
   const messages: ScrapedMessage[] = []
   const visitedThisRun = new Set<string>()

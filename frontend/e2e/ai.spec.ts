@@ -3,13 +3,19 @@
 import { expect, test } from './fixtures'
 
 test('AI package requires a course permission and downloads the selected course', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })))
+  await page.addInitScript(() =>
+    localStorage.setItem('marc-ui-preferences-v1', JSON.stringify({ modules: { ai: true } })),
+  )
   await page.goto('/more')
   await page.locator('.more-tools > summary').click()
   await page.getByRole('link', { name: 'KI-Paket' }).click()
   await expect(page.getByRole('heading', { name: 'KI-Paket' })).toBeVisible()
-  const examStatus = page.getByRole('checkbox', { name: 'Prüfungsanmeldestatus für die lokale KI-Verbindung freigeben' })
-  const submissionStatus = page.getByRole('checkbox', { name: 'Gespeicherten Abgabestatus für die lokale KI-Verbindung freigeben' })
+  const examStatus = page.getByRole('checkbox', {
+    name: 'Prüfungsanmeldestatus für die lokale KI-Verbindung freigeben',
+  })
+  const submissionStatus = page.getByRole('checkbox', {
+    name: 'Gespeicherten Abgabestatus für die lokale KI-Verbindung freigeben',
+  })
   await expect(examStatus).not.toBeChecked()
   await expect(submissionStatus).not.toBeChecked()
   await examStatus.check()

@@ -42,7 +42,7 @@ export function nextSearchResult(
 
 /** Where the reader stands among the hit pages ("2 / 3"), plus all hits; index is null between hit pages. */
 export function searchPosition(results: readonly PdfSearchResult[], page: number) {
-  const at = results.findIndex(result => result.page === page)
+  const at = results.findIndex((result) => result.page === page)
   return {
     index: at < 0 ? null : at + 1,
     pages: results.length,

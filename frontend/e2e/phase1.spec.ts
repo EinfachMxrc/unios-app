@@ -87,7 +87,9 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
   test('calendar feed, activity filter and manual sync work', async ({ page }) => {
     await page.goto('/deadlines')
     await page.locator('.deadline-page-switch').getByRole('button', { name: 'Abgaben', exact: true }).click()
-    await expect(page.getByRole('table', { name: 'Fristen als Tabelle' }).getByText('Schleifen üben', { exact: true })).toBeVisible()
+    await expect(
+      page.getByRole('table', { name: 'Fristen als Tabelle' }).getByText('Schleifen üben', { exact: true }),
+    ).toBeVisible()
     await page.locator('.deadline-page-switch').getByRole('button', { name: 'Kalender', exact: true }).click()
     // The fixture event lies in the past, so it waits behind the past-events disclosure.
     await page.getByText(/^Vergangene Termine/).click()
@@ -183,7 +185,10 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
           }
           await expect(page.locator('html')).toHaveClass(theme === 'dark' ? /dark/ : /^(?!.*dark)/)
           expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
-          await page.screenshot({ path: screenshotPath(path.join(output, `${route.name}-${theme}-${width}.png`)), fullPage: true })
+          await page.screenshot({
+            path: screenshotPath(path.join(output, `${route.name}-${theme}-${width}.png`)),
+            fullPage: true,
+          })
         }
       }
     }
@@ -241,7 +246,9 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
     )
     await page.goto('/deadlines')
     await page.locator('.deadline-page-switch').getByRole('button', { name: 'Abgaben', exact: true }).click()
-    await expect(page.getByRole('table', { name: 'Fristen als Tabelle' }).getByText('Abgabe aus Fake-Server', { exact: true })).toBeVisible()
+    await expect(
+      page.getByRole('table', { name: 'Fristen als Tabelle' }).getByText('Abgabe aus Fake-Server', { exact: true }),
+    ).toBeVisible()
   })
 
   test('expired Moodle token is visible and sends one safe push', async ({ page }) => {
@@ -285,7 +292,9 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
     await expect(page.getByText('Moodle braucht deine Aufmerksamkeit')).toBeVisible()
     await expect(page.getByRole('link', { name: 'Moodle prüfen' })).toBeVisible()
     await page.goto('/system')
-    await expect(page.locator('dl').getByText('MoodleError: Ungültige Kursliste von Moodle', { exact: true })).toBeVisible()
+    await expect(
+      page.locator('dl').getByText('MoodleError: Ungültige Kursliste von Moodle', { exact: true }),
+    ).toBeVisible()
     const courses = (await (await page.request.get('/api/courses?all_semesters=true')).json()) as {
       courses: { id: number }[]
     }
@@ -392,11 +401,11 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
     await page.screenshot({ path: screenshotPath(path.join(output, 'system-doctor-light-1280.png')), fullPage: true })
     await page.setViewportSize({ width: 390, height: 850 })
     {
-    const returnTo = page.url()
-    await page.goto('/settings#appearance')
-    await page.getByRole('combobox', { name: 'Design', exact: true }).selectOption('dark')
-    await page.goto(returnTo)
-  }
+      const returnTo = page.url()
+      await page.goto('/settings#appearance')
+      await page.getByRole('combobox', { name: 'Design', exact: true }).selectOption('dark')
+      await page.goto(returnTo)
+    }
     await expect(page.locator('html')).toHaveClass(/dark/)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
     await page.screenshot({ path: screenshotPath(path.join(output, 'system-doctor-dark-390.png')), fullPage: true })
@@ -541,7 +550,10 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
     expect((await page.getByRole('heading', { name: 'Programmieren 1' }).boundingBox())?.height).toBeLessThan(50)
     const output = path.resolve(import.meta.dirname, '../test-results/screenshots/phase1')
     await mkdir(output, { recursive: true })
-    await page.screenshot({ path: screenshotPath(path.join(output, 'course-other-group-dark-390.png')), fullPage: true })
+    await page.screenshot({
+      path: screenshotPath(path.join(output, 'course-other-group-dark-390.png')),
+      fullPage: true,
+    })
     const after = (await (await page.request.get('/api/overview')).json()) as { new_files: number }
     expect(after.new_files).toBe(before.new_files)
     await page.goto('/')

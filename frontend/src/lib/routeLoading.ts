@@ -8,10 +8,11 @@ const routes = new Map<string, () => Promise<unknown>>()
 /** One promise for intent preloads and React; a failed speculative load can retry. */
 export function lazyRoute<T extends ComponentType>(pattern: string, loader: () => Promise<{ default: T }>) {
   let pending: ReturnType<typeof loader> | undefined
-  const load = () => pending ??= loader().catch(error => {
-    pending = undefined
-    throw error
-  })
+  const load = () =>
+    (pending ??= loader().catch((error) => {
+      pending = undefined
+      throw error
+    }))
   routes.set(pattern, load)
   return lazy(load)
 }

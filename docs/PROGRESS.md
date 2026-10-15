@@ -1,5 +1,18 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – 0.1.28: KI-Schlüssel, Backup mit Anki, Prüfung der Fremdbefunde, Öffentlichkeit
+
+API-Schlüssel einfügen und Modell aus der Anbieterliste wählen (Schlüsselbund, keine
+Modell-IDs mehr). Zwölf Befunde eines externen Code-Reviews gegen den Code geprüft:
+sieben bestätigt und behoben (Budgetsperre nach abgelehnten Anfragen, Anki fehlt im
+Backup, ausgeblendete Slots im KI-Kontext, unlösbare Nullstellen, Prüfungssperre,
+Desktop-Berechtigung, Deploy-Tags), mehrere widerlegt (Papierkorb wird global
+gefiltert, Hinweisstand 4 ist beabsichtigt, SQLite-Downgrade funktioniert). Python 3.13
+vereinheitlicht, Frontend einmal mit Prettier formatiert. Öffentliches Repository
+`unios-app` mit neuer Historie angelegt. Backend 1359 Tests
+(ein umgebungsbedingter Fehlschlag), Frontend 1427 Tests, Playwright KI-Ablauf grün.
+Keine Windows-/macOS-Pakete gebaut; echter Anthropic-Schlüssel nicht geprüft.
+
 ## 15.10.2026 – Öffentlicher Release 0.1.28 in Vorbereitung
 
 Auf ausdrücklichen Auftrag im öffentlichen Repository EinfachMxrc/unios-app

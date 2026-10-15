@@ -3,11 +3,14 @@
 import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { clearWorkspace, rememberWorkspace, useWorkspaceState, workspaceValue } from './workspaceState'
-beforeEach(() => { clearWorkspace(); sessionStorage.clear() })
+beforeEach(() => {
+  clearWorkspace()
+  sessionStorage.clear()
+})
 afterEach(() => vi.restoreAllMocks())
 it('isolates course versions, functional updates and remounts', () => {
   const first = renderHook(() => useWorkspaceState('pdf:1:page', 1))
-  act(() => first.result.current[1](page => page + 46))
+  act(() => first.result.current[1]((page) => page + 46))
   expect(first.result.current[0]).toBe(47)
   first.unmount()
   expect(renderHook(() => useWorkspaceState('pdf:1:page', 1)).result.current[0]).toBe(47)
@@ -31,7 +34,9 @@ it('rejects malformed state and uses explicit shape validation', () => {
   expect(workspaceValue('cursor', null, { valid: (value): value is null => value === null })).toBeNull()
 })
 it('still works if session storage is denied', () => {
-  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('denied') })
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('denied')
+  })
   rememberWorkspace('course:3:filter', 'script')
   expect(workspaceValue('course:3:filter', '')).toBe('script')
 })
@@ -39,7 +44,9 @@ it('bounds persisted UTF-8 data and least recently used entries', () => {
   for (let index = 0; index < 200; index++) rememberWorkspace(`course:${index}`, index)
   expect(JSON.parse(sessionStorage.getItem('unios-workspace-session-v1')!).length).toBeLessThanOrEqual(160)
   rememberWorkspace('large', '界'.repeat(300_000))
-  expect(new TextEncoder().encode(sessionStorage.getItem('unios-workspace-session-v1')!).byteLength).toBeLessThanOrEqual(768 * 1024)
+  expect(
+    new TextEncoder().encode(sessionStorage.getItem('unios-workspace-session-v1')!).byteLength,
+  ).toBeLessThanOrEqual(768 * 1024)
 })
 
 it('does not rewrite session storage on every editor cursor move', () => {
@@ -55,8 +62,9 @@ it('keeps unsaved RAM drafts when large lists evict navigation history', () => {
     rememberWorkspace(`exercise-proposal:${index + 2}:draft`, { question: `Draft ${index}` }, false)
     rememberWorkspace(`course:${index}:offset`, index)
   }
-  expect(workspaceValue('exercise-proposal:1:draft', { question: '' }, { persist: false }))
-    .toEqual({ question: 'Unsent correction' })
+  expect(workspaceValue('exercise-proposal:1:draft', { question: '' }, { persist: false })).toEqual({
+    question: 'Unsent correction',
+  })
   expect(sessionStorage.getItem('unios-workspace-session-v1')).not.toContain('Unsent correction')
   expect(JSON.parse(sessionStorage.getItem('unios-workspace-session-v1')!).length).toBeLessThanOrEqual(160)
 })

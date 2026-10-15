@@ -8,11 +8,20 @@ test('approved exercise can be answered and reviewed on a narrow screen', async 
   const resource = detail.resources.find((item: { name: string }) => item.name === '04_Schleifen.pdf')
   const version = detail.versions[resource.id][0].version
   const payload = {
-    schema_version: 1, generated_by: 'browser-test', generated_at: new Date().toISOString(),
+    schema_version: 1,
+    generated_by: 'browser-test',
+    generated_at: new Date().toISOString(),
     source: { resource_id: resource.id, version },
-    exercises: [{ question: 'Warum endet eine while-Schleife?', topic: 'Schleifen', difficulty: 'easy',
-      sample_solution: 'Weil ihre Bedingung falsch wird.',
-      solution_steps: 'Bedingung vor jedem Durchlauf prüfen.', source_page: 1 }],
+    exercises: [
+      {
+        question: 'Warum endet eine while-Schleife?',
+        topic: 'Schleifen',
+        difficulty: 'easy',
+        sample_solution: 'Weil ihre Bedingung falsch wird.',
+        solution_steps: 'Bedingung vor jedem Durchlauf prüfen.',
+        source_page: 1,
+      },
+    ],
   }
   const created = await page.request.post('/api/ai/exercises/import', { data: payload })
   expect(created.ok()).toBeTruthy()

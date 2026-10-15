@@ -223,3 +223,30 @@ def test_mcp_personal_status_needs_release_and_omits_grades_and_files(settings, 
                           headers=headers).status_code == 404
         assert client.get("/api/ai/mcp/submission-status", params={"course_id": permitted_course_id},
                           headers=headers).json() == submissions
+
+
+def test_mcp_anki_status_counts_manual_note_cards(settings, factory, coordinator):
+    from app.db.models import AnkiCardQueue, LearningTopic
+
+    settings.mcp_enabled = True
+    settings.mcp_token = "fixture-mcp-token"
+    with factory() as session:
+        course = Course(source="fixture", source_id="anki", name="Mathematik")
+        session.add(course)
+        session.flush()
+        resource = Resource(source="fixture", source_key="anki-r", course_id=course.id,
+                            kind="file", name="Folien.pdf", url="https://example.invalid/file")
+        topic = LearningTopic(course_id=course.id, slug="mengen", name="Mengen")
+        session.add_all([resource, topic])
+        session.flush()
+        session.add_all([
+            AnkiCardQueue(resource_id=resource.id, status="proposed", payload="{}"),
+            AnkiCardQueue(resource_id=None, topic_id=topic.id, origin="manual", status="approved", payload="{}"),
+        ])
+        session.commit()
+
+    app = create_app(settings, connectors=[], start_scheduler=False, coordinator=coordinator)
+    with TestClient(app) as client:
+        status = client.get("/api/ai/mcp/anki-status", headers={"X-UniOS-MCP-Token": "fixture-mcp-token"})
+    assert status.status_code == 200
+    assert status.json()["proposed"] == 1 and status.json()["approved"] == 1

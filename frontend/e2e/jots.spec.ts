@@ -82,17 +82,30 @@ test('quick capture works offline, retries once and can be assigned', async ({ p
   }
 })
 
-test('explicit note copy keeps the original jot, deduplicates its source and protects local drafts', async ({ page }) => {
+test('explicit note copy keeps the original jot, deduplicates its source and protects local drafts', async ({
+  page,
+}) => {
   const generation = (await (await page.request.get('/api/host')).json()).generation
   const headers = { 'X-UniOS-Lease-Generation': String(generation) }
-  const created = await page.request.post('/api/notes', { headers,
-    data: { course_id: 1, resource_id: null, title: 'Synthetische Mitschrift', body: 'Vorhandener Unterrichtstext' } })
+  const created = await page.request.post('/api/notes', {
+    headers,
+    data: { course_id: 1, resource_id: null, title: 'Synthetische Mitschrift', body: 'Vorhandener Unterrichtstext' },
+  })
   expect(created.status()).toBe(201)
   const initial = await created.json()
   const jotId = crypto.randomUUID()
   const body = 'Synthetischer Gedanke zur Matrix'
-  const captured = await page.request.post('/api/jots', { headers, data: { id: jotId, kind: 'thought', body,
-    course_id: 1, note_id: initial.note.id, created_at: new Date().toISOString() } })
+  const captured = await page.request.post('/api/jots', {
+    headers,
+    data: {
+      id: jotId,
+      kind: 'thought',
+      body,
+      course_id: 1,
+      note_id: initial.note.id,
+      created_at: new Date().toISOString(),
+    },
+  })
   expect(captured.status()).toBe(200)
   await page.goto(`/jots#jot-${jotId}`)
   const row = page.locator(`#jot-${jotId}`)
@@ -109,15 +122,34 @@ test('explicit note copy keeps the original jot, deduplicates its source and pro
   await expect(row.getByRole('status')).toContainText('bereits als Quelle verknüpft')
   expect((await (await page.request.get(`/api/notes/${initial.note.id}`)).json()).note.current_revision).toBe(2)
   const original = (await (await page.request.get(`/api/jots?jot_id=${jotId}`)).json()).jots[0]
-  expect(original.body).toBe(body); expect(original.course_id).toBe(1); expect(original.note_id).toBe(initial.note.id)
+  expect(original.body).toBe(body)
+  expect(original.course_id).toBe(1)
+  expect(original.note_id).toBe(initial.note.id)
 
-  await page.evaluate(note => localStorage.setItem(`unios:note-draft:v1:${note.id}`, JSON.stringify({
-    noteId: note.id, baseRevision: note.current_revision, baseTitle: note.title, baseBody: 'Host baseline',
-    title: note.title, body: 'Lokaler ungesicherter Entwurf', updatedAt: Date.now(), deviceId: 'synthetic-device', writeId: crypto.randomUUID(),
-  })), first.note)
+  await page.evaluate(
+    (note) =>
+      localStorage.setItem(
+        `unios:note-draft:v1:${note.id}`,
+        JSON.stringify({
+          noteId: note.id,
+          baseRevision: note.current_revision,
+          baseTitle: note.title,
+          baseBody: 'Host baseline',
+          title: note.title,
+          body: 'Lokaler ungesicherter Entwurf',
+          updatedAt: Date.now(),
+          deviceId: 'synthetic-device',
+          writeId: crypto.randomUUID(),
+        }),
+      ),
+    first.note,
+  )
   await copy.click()
   await expect(row.getByRole('alert')).toContainText('hat einen lokalen Entwurf')
-  const retained = await page.evaluate(id => JSON.parse(localStorage.getItem(`unios:note-draft:v1:${id}`) ?? 'null'), first.note.id)
+  const retained = await page.evaluate(
+    (id) => JSON.parse(localStorage.getItem(`unios:note-draft:v1:${id}`) ?? 'null'),
+    first.note.id,
+  )
   expect(retained.body).toBe('Lokaler ungesicherter Entwurf')
   expect((await (await page.request.get(`/api/notes/${initial.note.id}`)).json()).note.current_revision).toBe(2)
 })

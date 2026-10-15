@@ -25,13 +25,13 @@
     min-width: 0;
   }
   .practice-panel .practice-question {
-    margin: .7rem 0;
-    font-size: .95rem;
+    margin: 0.7rem 0;
+    font-size: 0.95rem;
     line-height: 1.65;
   }
   .practice-panel .practice-item label > input[type='radio'] {
     flex-shrink: 0;
-    margin-top: .25rem;
+    margin-top: 0.25rem;
   }
   .practice-panel .practice-item label > .assessment-inline {
     min-width: 0;

@@ -14,8 +14,10 @@ export function validCalendarView(value: unknown): value is CalendarView {
 export function normalizeCalendarPreferences(value: unknown): CalendarPreferences {
   if (!value || typeof value !== 'object') return defaults
   const saved = value as Partial<CalendarPreferences>
-  const hourPx = typeof saved.hourPx === 'number' && Number.isFinite(saved.hourPx)
-    ? Math.max(40, Math.min(112, saved.hourPx)) : defaults.hourPx
+  const hourPx =
+    typeof saved.hourPx === 'number' && Number.isFinite(saved.hourPx)
+      ? Math.max(40, Math.min(112, saved.hourPx))
+      : defaults.hourPx
   return {
     view: validCalendarView(saved.view) ? saved.view : defaults.view,
     hourPx,
@@ -25,35 +27,48 @@ export function normalizeCalendarPreferences(value: unknown): CalendarPreference
 }
 
 function read(): CalendarPreferences {
-  try { return normalizeCalendarPreferences(JSON.parse(localStorage.getItem(KEY) ?? 'null')) }
-  catch { return defaults }
+  try {
+    return normalizeCalendarPreferences(JSON.parse(localStorage.getItem(KEY) ?? 'null'))
+  } catch {
+    return defaults
+  }
 }
 
 let current = read()
 function publish(value: CalendarPreferences) {
   current = value
-  listeners.forEach(listener => listener())
+  listeners.forEach((listener) => listener())
 }
 function subscribe(listener: () => void) {
   listeners.add(listener)
-  return () => { listeners.delete(listener) }
+  return () => {
+    listeners.delete(listener)
+  }
 }
 
-if (typeof window !== 'undefined') window.addEventListener('storage', event => {
-  if (event.key === KEY || event.key === null) publish(read())
-})
+if (typeof window !== 'undefined')
+  window.addEventListener('storage', (event) => {
+    if (event.key === KEY || event.key === null) publish(read())
+  })
 
 /** Only display settings are stored, never appointments, links or account data. */
 function update(change: Partial<CalendarPreferences>) {
   const next = normalizeCalendarPreferences({ ...current, ...change })
-  try { localStorage.setItem(KEY, JSON.stringify(next)) }
-  catch { /* The current window remains usable when storage is denied. */ }
+  try {
+    localStorage.setItem(KEY, JSON.stringify(next))
+  } catch {
+    /* The current window remains usable when storage is denied. */
+  }
   publish(next)
 }
 const setView = (view: CalendarView) => update({ view })
 const setHourPx = (hourPx: number) => update({ hourPx, fit: false })
 const setFit = (fit: boolean) => update({ fit })
 export function useCalendarPreferences() {
-  const value = useSyncExternalStore(subscribe, () => current, () => defaults)
+  const value = useSyncExternalStore(
+    subscribe,
+    () => current,
+    () => defaults,
+  )
   return { ...value, setView, setHourPx, setFit }
 }

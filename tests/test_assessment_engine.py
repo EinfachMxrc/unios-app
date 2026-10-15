@@ -186,3 +186,25 @@ def test_agent_learning_proposals_require_category_scope_and_course(assessment, 
             session.add(AiAccess(key=f'course:{course}', allowed=False))
             session.commit()
         assert client.post(path, json=payload, headers=headers).status_code == 403
+
+
+def test_root_tasks_need_rational_roots_a_student_can_actually_type():
+    def create(expression):
+        return Create(type='symbolic_math', title='Nullstellen', question='Löse', math_operation='roots',
+                      expression=expression)
+
+    registry.validate(create('x^2-1'))
+    for unsolvable in ('x^2-2', 'x^2+1'):
+        with pytest.raises(ValueError, match='MATH_ROOTS'):
+            registry.validate(create(unsolvable))
+
+
+def test_an_expired_exam_stops_locking_its_tasks(assessment, factory):
+    service, _course_id = assessment
+    repository = service.repository
+    with factory() as session:
+        session.add(AssessmentSession(task_ids=[7], ends_at=datetime.now(UTC) + timedelta(minutes=5), state='running'))
+        session.add(AssessmentSession(task_ids=[8], ends_at=datetime.now(UTC) - timedelta(minutes=5), state='running'))
+        session.commit()
+        assert repository.locked(session, 7) is True
+        assert repository.locked(session, 8) is False

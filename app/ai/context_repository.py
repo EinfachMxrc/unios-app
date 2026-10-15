@@ -8,8 +8,8 @@ from app.db.models import Deadline, MailItem
 from app.timeutil import as_utc
 
 
-def timetable_rows(session, start, end):
-    return [row for row in visible_events(session)
+def timetable_rows(session, start, end, settings=None):
+    return [row for row in visible_events(session, settings)
             if as_utc(start) <= as_utc(row.starts_at) < as_utc(end)][:500]
 
 

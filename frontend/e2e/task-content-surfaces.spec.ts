@@ -9,12 +9,14 @@ import type { Assignment, CourseDetail, PracticeItem } from '../src/types'
 import { expect, test } from './fixtures'
 
 const qaDirectory = path.resolve(import.meta.dirname, '../../docs/qa/task-presentation-20261010')
-const taskText = '# Synthetische Aufgabe\n\nPrüfe $x^2+1$ und `values`.\n\n'
-  + '```java\nint[] a = {1,4,7};\nint s = 0;\n```\n\n'
-  + '- Initialisierung lesen\n- Bedingung prüfen\n\n'
-  + '| A | B |\n| --- | --- |\n| 0 | 1 |\n| 1 | 0 |'
-const sample = '## Erst nach dem Aufdecken\n\nDas Ergebnis ist $x=1$.\n\n'
-  + '```python\nreturn values[::-1]\n```\n\n- Ergebnis vergleichen\n- Randfall prüfen'
+const taskText =
+  '# Synthetische Aufgabe\n\nPrüfe $x^2+1$ und `values`.\n\n' +
+  '```java\nint[] a = {1,4,7};\nint s = 0;\n```\n\n' +
+  '- Initialisierung lesen\n- Bedingung prüfen\n\n' +
+  '| A | B |\n| --- | --- |\n| 0 | 1 |\n| 1 | 0 |'
+const sample =
+  '## Erst nach dem Aufdecken\n\nDas Ergebnis ist $x=1$.\n\n' +
+  '```python\nreturn values[::-1]\n```\n\n- Ergebnis vergleichen\n- Randfall prüfen'
 
 async function enableProposals(page: Page) {
   await page.addInitScript(() => {
@@ -44,17 +46,31 @@ async function image(page: Page, info: TestInfo, name: string) {
   await info.attach(name, { path: screenshotPath(destination), contentType: 'image/png' })
 }
 
-test('Übung zeigt strukturierte Inhalte, hält die Lösung verborgen und sendet den Originalwert der Radioauswahl', async ({ page }, info) => {
+test('Übung zeigt strukturierte Inhalte, hält die Lösung verborgen und sendet den Originalwert der Radioauswahl', async ({
+  page,
+}, info) => {
   const item: PracticeItem = {
-    id: 9901, exercise_id: null, course_id: 1, course_name: 'Fiktiver Darstellungskurs',
-    resource_id: 9902, resource_name: 'Synthetische Quelle.pdf', question: taskText, topic: 'Darstellung prüfen', difficulty: 'easy',
-    sample_solution: sample, solution_steps: '1. Bedingung $x=0$ prüfen\n2. `values` umdrehen', source_page: 12,
-    choices: ['`LIFO`', '`FIFO`'], correct_choice: 0, attempt_count: 0, last_correct: null,
+    id: 9901,
+    exercise_id: null,
+    course_id: 1,
+    course_name: 'Fiktiver Darstellungskurs',
+    resource_id: 9902,
+    resource_name: 'Synthetische Quelle.pdf',
+    question: taskText,
+    topic: 'Darstellung prüfen',
+    difficulty: 'easy',
+    sample_solution: sample,
+    solution_steps: '1. Bedingung $x=0$ prüfen\n2. `values` umdrehen',
+    source_page: 12,
+    choices: ['`LIFO`', '`FIFO`'],
+    correct_choice: 0,
+    attempt_count: 0,
+    last_correct: null,
   }
   const writes: Record<string, unknown>[] = []
-  await page.route(/\/api\/learning\/practice(?:\?.*)?$/, route => route.fulfill({ json: [item] }))
-  await page.route(/\/api\/learning\/practice\/history(?:\?.*)?$/, route => route.fulfill({ json: [] }))
-  await page.route('**/api/learning/practice/9901/attempt', async route => {
+  await page.route(/\/api\/learning\/practice(?:\?.*)?$/, (route) => route.fulfill({ json: [item] }))
+  await page.route(/\/api\/learning\/practice\/history(?:\?.*)?$/, (route) => route.fulfill({ json: [] }))
+  await page.route('**/api/learning/practice/9901/attempt', async (route) => {
     writes.push(route.request().postDataJSON() as Record<string, unknown>)
     await route.fulfill({ json: { id: 9903, correct: true } })
   })
@@ -92,16 +108,32 @@ test('Übung zeigt strukturierte Inhalte, hält die Lösung verborgen und sendet
   expect(writes[0]).toMatchObject({ answer: '`LIFO`', correct: true })
 })
 
-test('Vorschlagseditor bleibt auf 390 px untereinander, die Vorschau verändert den Quelltext nicht', async ({ page }, info) => {
+test('Vorschlagseditor bleibt auf 390 px untereinander, die Vorschau verändert den Quelltext nicht', async ({
+  page,
+}, info) => {
   await enableProposals(page)
   let question = taskText
   const writes: Record<string, unknown>[] = []
-  const proposal = () => ({ id: 9911, resource_id: 9912, resource_name: 'Synthetischer Vorschlag.pdf', course_id: 1,
-    course_name: 'Fiktiver Darstellungskurs', status: 'proposed', exercise: { question, topic: 'Darstellung prüfen', difficulty: 'easy',
-      sample_solution: sample, solution_steps: '1. Formel prüfen\n2. Ergebnis vergleichen', source_page: 4,
-      choices: ['`LIFO`', '`FIFO`'], correct_choice: 0 } })
-  await page.route(/\/api\/ai\/exercises(?:\?.*)?$/, route => route.fulfill({ json: [proposal()] }))
-  await page.route('**/api/ai/exercises/9911', async route => {
+  const proposal = () => ({
+    id: 9911,
+    resource_id: 9912,
+    resource_name: 'Synthetischer Vorschlag.pdf',
+    course_id: 1,
+    course_name: 'Fiktiver Darstellungskurs',
+    status: 'proposed',
+    exercise: {
+      question,
+      topic: 'Darstellung prüfen',
+      difficulty: 'easy',
+      sample_solution: sample,
+      solution_steps: '1. Formel prüfen\n2. Ergebnis vergleichen',
+      source_page: 4,
+      choices: ['`LIFO`', '`FIFO`'],
+      correct_choice: 0,
+    },
+  })
+  await page.route(/\/api\/ai\/exercises(?:\?.*)?$/, (route) => route.fulfill({ json: [proposal()] }))
+  await page.route('**/api/ai/exercises/9911', async (route) => {
     const body = route.request().postDataJSON() as Record<string, unknown>
     writes.push(body)
     question = String(body.question)
@@ -114,24 +146,27 @@ test('Vorschlagseditor bleibt auf 390 px untereinander, die Vorschau verändert 
   await row.getByRole('button', { name: 'Vorschlag öffnen', exact: true }).click()
   const field = row.getByRole('textbox', { name: 'Aufgabe', exact: true })
   await expect(field).toHaveValue(taskText)
-  expect(await row.evaluate(node => getComputedStyle(node).display)).toBe('block')
+  expect(await row.evaluate((node) => getComputedStyle(node).display)).toBe('block')
   await row.locator('.exercise-proposal-preview > summary').click()
   await formatted(row.locator('.exercise-proposal-preview'))
   for (const theme of ['light', 'dark']) {
-    await page.evaluate(value => {
+    await page.evaluate((value) => {
       document.documentElement.classList.toggle('dark', value === 'dark')
       document.documentElement.style.fontSize = '150%'
     }, theme)
     const rowBox = await row.boundingBox()
     const fieldBox = await field.boundingBox()
-    expect(fieldBox!.width).toBeGreaterThan(rowBox!.width * .75)
+    expect(fieldBox!.width).toBeGreaterThan(rowBox!.width * 0.75)
     await expect(field).toBeEditable()
     await fit(page)
     const title = page.getByRole('heading', { name: 'Übungsaufgaben', exact: true })
-    expect(await title.evaluate(element => {
-      const range = document.createRange(); range.selectNodeContents(element)
-      return range.getClientRects().length
-    })).toBe(1)
+    expect(
+      await title.evaluate((element) => {
+        const range = document.createRange()
+        range.selectNodeContents(element)
+        return range.getClientRects().length
+      }),
+    ).toBe(1)
     if (theme === 'dark') await image(page, info, 'task-proposal-dark-390-font150')
   }
   const edited = `${taskText}\n\nZusätzlicher Ausdruck $n+1$.`
@@ -143,16 +178,42 @@ test('Vorschlagseditor bleibt auf 390 px untereinander, die Vorschau verändert 
   await expect(field).toHaveValue(edited)
 })
 
-test('Kursaufgabe und Fristklärung zeigen dieselbe formatierte Beschreibung mit erreichbaren langen Titeln', async ({ page }) => {
-  const assignment: Assignment = { id: 9921, course_id: 1, title: `Darstellungsaufgabe_${'A'.repeat(150)}`,
-    description: taskText, due_at: null, due_note: '', due_origin: 'unknown', delivery: 'in_person', removed_upstream: false, url: null }
-  const course: CourseDetail = {
-    course: { id: 1, name: 'Fiktiver Darstellungskurs', source: 'moodle', source_id: 'synthetic-1', short_name: null,
-      semester_id: null, is_active: true, download_other_groups: false },
-    assignments: [assignment], resources: [], announcements: [], sections: [], semesters: [], group_assignments: [], versions: {},
+test('Kursaufgabe und Fristklärung zeigen dieselbe formatierte Beschreibung mit erreichbaren langen Titeln', async ({
+  page,
+}) => {
+  const assignment: Assignment = {
+    id: 9921,
+    course_id: 1,
+    title: `Darstellungsaufgabe_${'A'.repeat(150)}`,
+    description: taskText,
+    due_at: null,
+    due_note: '',
+    due_origin: 'unknown',
+    delivery: 'in_person',
+    removed_upstream: false,
+    url: null,
   }
-  await page.route(/\/api\/courses\/1(?:\?.*)?$/, route => route.fulfill({ json: course }))
-  await page.route('**/api/assignments/unresolved', route => route.fulfill({ json: [assignment] }))
+  const course: CourseDetail = {
+    course: {
+      id: 1,
+      name: 'Fiktiver Darstellungskurs',
+      source: 'moodle',
+      source_id: 'synthetic-1',
+      short_name: null,
+      semester_id: null,
+      is_active: true,
+      download_other_groups: false,
+    },
+    assignments: [assignment],
+    resources: [],
+    announcements: [],
+    sections: [],
+    semesters: [],
+    group_assignments: [],
+    versions: {},
+  }
+  await page.route(/\/api\/courses\/1(?:\?.*)?$/, (route) => route.fulfill({ json: course }))
+  await page.route('**/api/assignments/unresolved', (route) => route.fulfill({ json: [assignment] }))
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto('/courses/1#assignment-9921')
   const drawer = page.getByRole('dialog', { name: 'Schnellansicht', exact: true })
@@ -161,19 +222,21 @@ test('Kursaufgabe und Fristklärung zeigen dieselbe formatierte Beschreibung mit
   await expect(drawer.getByRole('heading', { name: assignment.title, exact: true })).toHaveText(assignment.title)
   for (const theme of ['light', 'dark']) {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.evaluate(value => {
+    await page.evaluate((value) => {
       document.documentElement.classList.toggle('dark', value === 'dark')
       document.documentElement.style.fontSize = '150%'
     }, theme)
     await fit(page)
-    expect(await drawer.evaluate(node => node.scrollWidth)).toBeLessThanOrEqual(390)
+    expect(await drawer.evaluate((node) => node.scrollWidth)).toBeLessThanOrEqual(390)
     await expect(drawer.getByRole('button', { name: 'Schnellansicht schließen', exact: true })).toBeVisible()
   }
   await page.keyboard.press('Escape')
   await expect(drawer).toHaveCount(0)
   await page.goto('/deadlines')
   await page.locator('.deadline-page-switch').getByRole('button', { name: 'Abgaben', exact: true }).click()
-  const unresolved = page.locator('.data-row').filter({ has: page.getByRole('link', { name: assignment.title, exact: true }) })
+  const unresolved = page
+    .locator('.data-row')
+    .filter({ has: page.getByRole('link', { name: assignment.title, exact: true }) })
   await unresolved.locator('details > summary').filter({ hasText: 'Aufgabentext' }).click()
   await formatted(unresolved)
   await fit(page)

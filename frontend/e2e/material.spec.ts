@@ -9,10 +9,14 @@ test('PDF viewer stores a question beside the source and exports an annotated co
   await resource.getByRole('link', { name: 'PDF öffnen' }).click()
   await expect(page).toHaveURL(/\/material\/\d+/)
   await expect(page.getByText('Seite 1 von 2')).toBeVisible()
-  await expect(page.locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent')).toContainText('Schleifen und Python Beispiele')
+  await expect(
+    page.locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent'),
+  ).toContainText('Schleifen und Python Beispiele')
 
   await page.evaluate(() => {
-    const text = document.querySelector('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span')?.firstChild
+    const text = document.querySelector(
+      '[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span',
+    )?.firstChild
     if (!text) throw new Error('PDF text layer missing')
     const range = document.createRange()
     range.selectNodeContents(text)
@@ -28,30 +32,48 @@ test('PDF viewer stores a question beside the source and exports an annotated co
   const pending = page.locator('[data-material-page="1"] .material-mark.pending')
   await expect(pending.first()).toBeVisible()
   const pendingBox = await pending.first().boundingBox()
-  const quoteBox = await page.locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span').first().boundingBox()
-  expect(pendingBox && quoteBox && Math.abs(pendingBox.x - quoteBox.x) < 3 && Math.abs(pendingBox.y - quoteBox.y) < 6).toBeTruthy()
-  const savedQuestion = page.waitForResponse((response) =>
-    response.url().includes('/annotations') && response.request().method() === 'POST')
+  const quoteBox = await page
+    .locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span')
+    .first()
+    .boundingBox()
+  expect(
+    pendingBox && quoteBox && Math.abs(pendingBox.x - quoteBox.x) < 3 && Math.abs(pendingBox.y - quoteBox.y) < 6,
+  ).toBeTruthy()
+  const savedQuestion = page.waitForResponse(
+    (response) => response.url().includes('/annotations') && response.request().method() === 'POST',
+  )
   await page.getByRole('button', { name: 'Verstehe ich nicht' }).click()
   expect((await savedQuestion).ok()).toBeTruthy()
   await expect(page.locator('.material-mark.pending')).toHaveCount(0) // saved: now a normal mark
   await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
-  await expect(page.getByRole('dialog').getByRole('textbox', { name: 'Kommentar' })).toHaveValue('Warum endet meine Testschleife?')
+  await expect(page.getByRole('dialog').getByRole('textbox', { name: 'Kommentar' })).toHaveValue(
+    'Warum endet meine Testschleife?',
+  )
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
 
   await page.getByRole('link', { name: 'Lernen', exact: true }).first().click()
   await expect(page.getByRole('heading', { name: 'Lernen' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Warum endet meine Testschleife?' })).toBeVisible()
-  const resolvedResponse = page.waitForResponse((response) => response.url().includes('/api/material/annotations/') && response.request().method() === 'PATCH')
-  await page.locator('.data-row').filter({ hasText: 'Warum endet meine Testschleife?' })
-    .getByRole('button', { name: 'Als geklärt markieren' }).click()
+  const resolvedResponse = page.waitForResponse(
+    (response) => response.url().includes('/api/material/annotations/') && response.request().method() === 'PATCH',
+  )
+  await page
+    .locator('.data-row')
+    .filter({ hasText: 'Warum endet meine Testschleife?' })
+    .getByRole('button', { name: 'Als geklärt markieren' })
+    .click()
   const resolved = await resolvedResponse
   expect(resolved.ok(), await resolved.text()).toBeTruthy()
   await expect(page.getByRole('link', { name: 'Warum endet meine Testschleife?' })).toHaveCount(0)
   await page.getByRole('checkbox', { name: 'Geklärte Fragen anzeigen' }).check()
-  const reopenedResponse = page.waitForResponse((response) => response.url().includes('/api/material/annotations/') && response.request().method() === 'PATCH')
-  await page.locator('.data-row').filter({ hasText: 'Warum endet meine Testschleife?' })
-    .getByRole('button', { name: 'Wieder öffnen' }).click()
+  const reopenedResponse = page.waitForResponse(
+    (response) => response.url().includes('/api/material/annotations/') && response.request().method() === 'PATCH',
+  )
+  await page
+    .locator('.data-row')
+    .filter({ hasText: 'Warum endet meine Testschleife?' })
+    .getByRole('button', { name: 'Wieder öffnen' })
+    .click()
   const reopened = await reopenedResponse
   expect(reopened.ok(), await reopened.text()).toBeTruthy()
   await expect(page.getByRole('link', { name: 'Warum endet meine Testschleife?' })).toBeVisible()
@@ -98,11 +120,15 @@ test('PDF viewer stores a question beside the source and exports an annotated co
   await expect(page.locator('.material-side-drawer')).toHaveCSS('bottom', '0px')
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
   await expect(page.getByRole('button', { name: 'Nächste Seite' })).toBeVisible()
-  await expect.poll(async () => page.evaluate(() => {
-    const reader = document.querySelector('.material-reader') as HTMLElement
-    const canvas = document.querySelector('.react-pdf__Page__canvas') as HTMLElement
-    return canvas.getBoundingClientRect().width <= reader.clientWidth - 31
-  })).toBe(true)
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const reader = document.querySelector('.material-reader') as HTMLElement
+        const canvas = document.querySelector('.react-pdf__Page__canvas') as HTMLElement
+        return canvas.getBoundingClientRect().width <= reader.clientWidth - 31
+      }),
+    )
+    .toBe(true)
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
 })
 
@@ -127,10 +153,14 @@ test('a question selected while offline is sent once after reconnection', async 
     .getByRole('link', { name: 'PDF öffnen' })
     .click()
   await page.getByRole('button', { name: 'Nächste Seite' }).click()
-  await expect(page.locator('[data-material-page="2"] [data-reader-render-active="true"] .react-pdf__Page__textContent')).toContainText('Rekursionstiefe')
+  await expect(
+    page.locator('[data-material-page="2"] [data-reader-render-active="true"] .react-pdf__Page__textContent'),
+  ).toContainText('Rekursionstiefe')
   await page.context().setOffline(true)
   await page.evaluate(() => {
-    const text = document.querySelector('[data-material-page="2"] [data-reader-render-active="true"] .react-pdf__Page__textContent span')?.firstChild
+    const text = document.querySelector(
+      '[data-material-page="2"] [data-reader-render-active="true"] .react-pdf__Page__textContent span',
+    )?.firstChild
     if (!text) throw new Error('PDF text layer missing')
     const range = document.createRange()
     range.selectNodeContents(text)
@@ -185,9 +215,13 @@ test('an unclear mark can be assigned by selecting text in the viewer', async ({
   await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
   await expect(page.getByText('Markierungen prüfen')).toBeVisible()
   await page.getByRole('button', { name: 'Stelle neu zuordnen' }).click()
-  await expect(page.locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent')).toContainText('Schleifen und Python Beispiele')
+  await expect(
+    page.locator('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent'),
+  ).toContainText('Schleifen und Python Beispiele')
   await page.evaluate(() => {
-    const text = document.querySelector('[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span')?.firstChild
+    const text = document.querySelector(
+      '[data-material-page="1"] [data-reader-render-active="true"] .react-pdf__Page__textContent span',
+    )?.firstChild
     if (!text) throw new Error('PDF text layer missing')
     const range = document.createRange()
     range.selectNodeContents(text)

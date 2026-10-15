@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           enable-cache: true
       # Adapter tests cover the optional AI dependency; production remains opt-in.
       - run: uv sync --locked --group dev --extra ai
@@ -90,7 +90,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           enable-cache: true
       - uses: actions/setup-node@v6
         with:

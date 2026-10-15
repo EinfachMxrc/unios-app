@@ -17,15 +17,15 @@
     max-width: 100%;
   }
   .exercise-proposal-heading {
-    margin-bottom: .65rem;
+    margin-bottom: 0.65rem;
     font-weight: 600;
   }
   .exercise-proposal-row > .assessment-question-document {
-    margin-bottom: .7rem;
+    margin-bottom: 0.7rem;
   }
   .exercise-proposal-preview {
     min-width: 0;
-    padding: .7rem .85rem;
+    padding: 0.7rem 0.85rem;
     border: 1px solid var(--app-border);
     border-radius: var(--ui-radius-control);
   }
@@ -34,7 +34,7 @@
     color: var(--app-muted);
   }
   .exercise-proposal-preview[open] > .assessment-question-document {
-    margin-top: .85rem;
+    margin-top: 0.85rem;
   }
   @media (max-width: 520px) {
     .content:has(> .exercise-queue-intro) > .page-heading h1 {

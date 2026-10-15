@@ -6,12 +6,21 @@ export const RuntimeModeContext = createContext<'normal' | 'client' | 'demo' | n
 
 const listeners = new Set<() => void>()
 let verified = false
-export function runtimeWritesAllowed() { return verified }
+export function runtimeWritesAllowed() {
+  return verified
+}
 export function setRuntimeVerified(value: boolean) {
   if (value === verified) return
   verified = value
   for (const listener of listeners) listener()
 }
 export function useRuntimeVerified() {
-  return useSyncExternalStore((listener) => { listeners.add(listener); return () => listeners.delete(listener) }, runtimeWritesAllowed, () => false)
+  return useSyncExternalStore(
+    (listener) => {
+      listeners.add(listener)
+      return () => listeners.delete(listener)
+    },
+    runtimeWritesAllowed,
+    () => false,
+  )
 }

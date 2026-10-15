@@ -4,9 +4,15 @@ import { expect, test } from './fixtures'
 test('startup sync is visible and a competing manual refresh waits without a false error', async ({ page }) => {
   let running = true
   let posts = 0
-  await page.route('**/api/sync/status', (route) => route.fulfill({ json: {
-    running, last_run_id: 1, last_status: running ? 'running' : 'success',
-  } }))
+  await page.route('**/api/sync/status', (route) =>
+    route.fulfill({
+      json: {
+        running,
+        last_run_id: 1,
+        last_status: running ? 'running' : 'success',
+      },
+    }),
+  )
   await page.route('**/api/sync', (route) => {
     posts++
     running = true

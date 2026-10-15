@@ -2,13 +2,17 @@
 
 import { expect, test } from './fixtures'
 
-test('a free TipTap composition survives pending remount and quota failure without a second create', async ({ page }) => {
+test('a free TipTap composition survives pending remount and quota failure without a second create', async ({
+  page,
+}) => {
   let release!: () => void
-  const gate = new Promise<void>(resolve => { release = resolve })
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
   let creates = 0
   let createdId = ''
   let sentBody = ''
-  await page.route('**/api/notes', async route => {
+  await page.route('**/api/notes', async (route) => {
     if (route.request().method() !== 'POST') return route.continue()
     creates += 1
     const response = await route.fetch()
@@ -33,8 +37,10 @@ test('a free TipTap composition survives pending remount and quota failure witho
     await page.evaluate(() => {
       const original = Storage.prototype.setItem
       const testWindow = window as typeof window & { restoreSyntheticQuota?: () => void }
-      testWindow.restoreSyntheticQuota = () => { Storage.prototype.setItem = original }
-      Storage.prototype.setItem = function(key, value) {
+      testWindow.restoreSyntheticQuota = () => {
+        Storage.prototype.setItem = original
+      }
+      Storage.prototype.setItem = function (key, value) {
         if (key.startsWith('unios:new-note-draft:v1:') || key.startsWith('unios:note-draft:v1:'))
           throw new DOMException('Synthetic note quota', 'QuotaExceededError')
         return original.call(this, key, value)
@@ -60,7 +66,9 @@ test('a free TipTap composition survives pending remount and quota failure witho
     })
     await page.getByRole('button', { name: 'Mitschrift fortsetzen', exact: true }).click()
     await expect(page).toHaveURL(new RegExp(`/notes\\?[^#]*id=${createdId}`))
-    await expect.poll(async () => (await (await page.request.get(`/api/notes/${createdId}`)).json()).body).toContain(newerBody)
+    await expect
+      .poll(async () => (await (await page.request.get(`/api/notes/${createdId}`)).json()).body)
+      .toContain(newerBody)
     expect(creates).toBe(1)
     await page.getByRole('button', { name: 'Neu', exact: true }).click()
     await page.getByRole('menuitem', { name: 'Neue Notiz', exact: true }).click()
@@ -70,10 +78,11 @@ test('a free TipTap composition survives pending remount and quota failure witho
     expect(creates).toBe(1)
   } finally {
     release()
-    if (!page.isClosed()) await page.evaluate(() => {
-      const testWindow = window as typeof window & { restoreSyntheticQuota?: () => void }
-      testWindow.restoreSyntheticQuota?.()
-      delete testWindow.restoreSyntheticQuota
-    })
+    if (!page.isClosed())
+      await page.evaluate(() => {
+        const testWindow = window as typeof window & { restoreSyntheticQuota?: () => void }
+        testWindow.restoreSyntheticQuota?.()
+        delete testWindow.restoreSyntheticQuota
+      })
   }
 })

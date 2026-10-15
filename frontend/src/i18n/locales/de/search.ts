@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
-  operatorsHint: 'Filter: course:"Programmieren 1" type:note semester:1 has:question before:2027-02-01. Strukturierte Filter benötigen eine Verbindung zum Hauptgerät.',
+  operatorsHint:
+    'Filter: course:"Programmieren 1" type:note semester:1 has:question before:2027-02-01. Strukturierte Filter benötigen eine Verbindung zum Hauptgerät.',
   title: 'Suche',
   eyebrow: 'Wissen wiederfinden',
   panelTitle: 'Unterlagen durchsuchen',
@@ -25,7 +26,8 @@ export default {
   preparingOfflineSearch: 'Suche wird für unterwegs vorbereitet…',
   offlineSearchUnavailable: 'Offline-Suche derzeit nicht verfügbar.',
   offlineNotReadyTitle: 'Offline-Suche noch nicht bereit',
-  offlineNotReadyText: 'Öffne die Suche einmal mit Verbindung, damit deine Lerninhalte auf diesem Gerät durchsuchbar sind.',
+  offlineNotReadyText:
+    'Öffne die Suche einmal mit Verbindung, damit deine Lerninhalte auf diesem Gerät durchsuchbar sind.',
   offlinePromptTitle: 'Gespeicherte Inhalte durchsuchen',
   offlinePromptText: 'Gib einen Suchbegriff ein. Die Suche funktioniert auch ohne Verbindung.',
   offlineResultsTitle: '{{count}} Treffer in gespeicherten Inhalten',

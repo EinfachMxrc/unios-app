@@ -1,16 +1,68 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
-.trash-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
-.trash-head > p { margin: 0; }
-.trash-list { display: grid; margin: 0; padding: 0; list-style: none; border: 1px solid var(--app-border); border-radius: var(--ui-radius-overlay); background: var(--app-surface); overflow: hidden; }
-.trash-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
-.trash-row + .trash-row { border-top: 1px solid var(--app-border); }
-.trash-row-icon { flex: none; color: var(--app-muted); }
-.trash-row-text { display: grid; flex: 1; min-width: 0; gap: 2px; }
-.trash-row-text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.trash-row-text small { color: var(--app-muted); font-size: .78rem; }
-.trash-row-actions { display: flex; flex: none; gap: 6px; }
-.trash-erase { color: var(--destructive); }
+.trash-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+.trash-head > p {
+  margin: 0;
+}
+.trash-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay);
+  background: var(--app-surface);
+  overflow: hidden;
+}
+.trash-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+.trash-row + .trash-row {
+  border-top: 1px solid var(--app-border);
+}
+.trash-row-icon {
+  flex: none;
+  color: var(--app-muted);
+}
+.trash-row-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.trash-row-text strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.trash-row-text small {
+  color: var(--app-muted);
+  font-size: 0.78rem;
+}
+.trash-row-actions {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+.trash-erase {
+  color: var(--destructive);
+}
 @media (max-width: 600px) {
-  .trash-row { flex-wrap: wrap; }
-  .trash-row-actions { width: 100%; justify-content: flex-end; }
+  .trash-row {
+    flex-wrap: wrap;
+  }
+  .trash-row-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }

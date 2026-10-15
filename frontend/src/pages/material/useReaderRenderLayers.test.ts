@@ -6,12 +6,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { READER_RENDER_IDLE_MS, useReaderRenderLayers } from './useReaderRenderLayers'
 
 beforeEach(() => vi.useFakeTimers())
-afterEach(() => { cleanup(); vi.useRealTimers() })
-const advance = (milliseconds: number) => act(() => { vi.advanceTimersByTime(milliseconds) })
+afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
+})
+const advance = (milliseconds: number) =>
+  act(() => {
+    vi.advanceTimersByTime(milliseconds)
+  })
 
 describe('deferred PDF rendering', () => {
   it('keeps a finished raster through a burst and requests only the final idle width', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     expect(vi.getTimerCount()).toBe(0)
     rerender({ width: 900 })
     advance(READER_RENDER_IDLE_MS - 1)
@@ -30,7 +38,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('rejects an obsolete render completion when another gesture has superseded it', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     rerender({ width: 900 })
     advance(READER_RENDER_IDLE_MS)
     rerender({ width: 1100 })
@@ -42,7 +52,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('retains the last good page on rendering failure and permits a later zoom attempt', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     rerender({ width: 900 })
     advance(READER_RENDER_IDLE_MS)
     act(() => result.current.failed(900))
@@ -57,7 +69,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('keeps an initial layer failure visible after a zoom burst returns to its width', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     act(() => result.current.failed(760))
     expect(result.current.hasError).toBe(true)
     rerender({ width: 900 })
@@ -71,7 +85,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('retains a late initial failure during another desired width until its replacement finishes', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     rerender({ width: 900 })
     advance(READER_RENDER_IDLE_MS)
     act(() => result.current.failed(760))
@@ -91,7 +107,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('ignores obsolete pending failures while a different replacement is rendering', () => {
-    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { result, rerender } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     rerender({ width: 900 })
     advance(READER_RENDER_IDLE_MS)
     rerender({ width: 1100 })
@@ -103,7 +121,9 @@ describe('deferred PDF rendering', () => {
   })
 
   it('cancels idle work when a lazy page leaves the rendered region', () => {
-    const { rerender, unmount } = renderHook(({ width }) => useReaderRenderLayers(width), { initialProps: { width: 760 } })
+    const { rerender, unmount } = renderHook(({ width }) => useReaderRenderLayers(width), {
+      initialProps: { width: 760 },
+    })
     rerender({ width: 900 })
     expect(vi.getTimerCount()).toBe(1)
     unmount()

@@ -8,8 +8,8 @@ it('keeps all installed KaTeX faces and WOFF2 sources while avoiding duplicate f
   const require = createRequire(import.meta.url)
   const source = readFileSync(require.resolve('katex/dist/katex.min.css'), 'utf8')
   const output = modernMathFontCss(source)
-  const sources = (value: string) => [...value.matchAll(/url\([^)]*\.woff2\)/g)].map(match => match[0])
-  const families = (value: string) => [...value.matchAll(/font-family:[^;}]+/g)].map(match => match[0])
+  const sources = (value: string) => [...value.matchAll(/url\([^)]*\.woff2\)/g)].map((match) => match[0])
+  const families = (value: string) => [...value.matchAll(/font-family:[^;}]+/g)].map((match) => match[0])
   expect(sources(output)).toEqual(sources(source))
   expect(sources(output).length).toBeGreaterThan(15)
   expect(families(output)).toEqual(families(source))
@@ -21,7 +21,8 @@ it('leaves unrelated fonts and declarations intact', () => {
   expect(modernMathFontCss(source)).toBe(source)
 })
 it('uses a shared local font only when its filename is verified, preserving differing faces', () => {
-  const source = '@font-face{src:url(fonts/KaTeX_Main-Regular.woff2) format("woff2"),url(fonts/KaTeX_Main-Regular.woff) format("woff")}@font-face{src:url(fonts/KaTeX_Size3-Regular.woff2) format("woff2")}'
+  const source =
+    '@font-face{src:url(fonts/KaTeX_Main-Regular.woff2) format("woff2"),url(fonts/KaTeX_Main-Regular.woff) format("woff")}@font-face{src:url(fonts/KaTeX_Size3-Regular.woff2) format("woff2")}'
   const output = modernMathFontCss(source, new Set(['KaTeX_Main-Regular.woff2']), '/app/mathlive/fonts/')
   expect(output).toContain('url("/app/mathlive/fonts/KaTeX_Main-Regular.woff2")')
   expect(output).toContain('url(fonts/KaTeX_Size3-Regular.woff2)')

@@ -20,9 +20,6 @@ from app.config import Settings
 
 log = logging.getLogger(__name__)
 
-DEFAULT_MODEL = "claude-opus-5"
-FALLBACK_MODEL = "claude-opus-4-8"
-FALLBACK_BETA = "server-side-fallback-2026-06-01"
 SYSTEM_PROMPT = (
     "Du bist ein Assistent für UniOS. Antworte ausschließlich mit einem einzigen JSON-Dokument "
     "im vorgegebenen Schema. Kein Freitext davor oder danach, keine Markdown-Codeblöcke, keine "
@@ -31,16 +28,16 @@ SYSTEM_PROMPT = (
 
 
 class AnthropicAdapter:
-    """Calls the Anthropic Messages API with a server-side refusal fallback."""
+    """Calls the Anthropic Messages API with the model the user chose in the app."""
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
 
     def maximum_billable_tokens(self, prompt: str, max_output_tokens: int) -> int:
-        # Reserve both configured attempts; include the system prompt and request
-        # framing. No SDK retry may duplicate an ambiguously billed request.
+        # Reserve the worst case of the single attempt: prompt, system prompt, request
+        # framing and the output cap. No SDK retry may duplicate an ambiguously billed request.
         output_cap = max(max_output_tokens, self._settings.ai_adapter_max_output_tokens)
-        return 2 * (len(prompt.encode('utf-8')) + len(SYSTEM_PROMPT.encode('utf-8')) + 512 + output_cap)
+        return len(prompt.encode('utf-8')) + len(SYSTEM_PROMPT.encode('utf-8')) + 512 + output_cap
 
     def propose(self, prompt: str) -> AdapterResult:
         try:
@@ -51,27 +48,32 @@ class AnthropicAdapter:
 
         settings = self._settings
         model = settings.ai_adapter_model
+        if not model:
+            raise NotConfiguredError("Kein KI-Modell gewählt")
         client = anthropic.Anthropic(api_key=settings.ai_adapter_api_key, max_retries=0, timeout=120.0)
         extra_kwargs: dict = {}
         if settings.ai_adapter_effort:
             extra_kwargs["output_config"] = {"effort": settings.ai_adapter_effort}
         try:
-            response = client.beta.messages.create(
+            response = client.messages.create(
                 model=model,
                 max_tokens=settings.ai_adapter_max_output_tokens,
-                betas=[FALLBACK_BETA],
-                fallbacks=[{"model": FALLBACK_MODEL}],
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": prompt}],
                 **extra_kwargs,
             )
         except anthropic.AuthenticationError as exc:
-            raise AdapterCallError("API-Schlüssel ungültig", status_code=502) from exc
+            # A rejected request is never billed; settling with 0 keeps the monthly budget intact.
+            raise AdapterCallError("API-Schlüssel ungültig", status_code=502, tokens_used=0) from exc
         except anthropic.RateLimitError as exc:
-            raise AdapterCallError("Rate-Limit erreicht, später erneut versuchen", status_code=503) from exc
+            raise AdapterCallError("Rate-Limit erreicht, später erneut versuchen", status_code=503,
+                                   tokens_used=0) from exc
         except anthropic.APIStatusError as exc:
+            # 4xx means the provider refused before generating; 5xx may have been billed, so it stays uncertain.
+            rejected = 400 <= exc.status_code < 500
             raise AdapterCallError(
-                f"KI-Anbieter meldete einen Fehler (Status {exc.status_code})", status_code=502) from exc
+                f"KI-Anbieter meldete einen Fehler (Status {exc.status_code})", status_code=502,
+                tokens_used=0 if rejected else None) from exc
         except anthropic.APIConnectionError as exc:
             raise AdapterCallError("Netzwerkfehler beim KI-Anbieter", status_code=503) from exc
 

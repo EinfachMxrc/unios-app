@@ -33,7 +33,12 @@ export function readerWidthForWheel(width: number, deltaY: number) {
 }
 
 export function captureReaderZoomAnchor(rect: ReaderRect, point: ReaderPoint): ReaderZoomAnchor | null {
-  if (rect.width <= 0 || rect.height <= 0 || ![rect.left, rect.top, rect.width, rect.height, point.x, point.y].every(Number.isFinite)) return null
+  if (
+    rect.width <= 0 ||
+    rect.height <= 0 ||
+    ![rect.left, rect.top, rect.width, rect.height, point.x, point.y].every(Number.isFinite)
+  )
+    return null
   return {
     ...point,
     // Gutter coordinates are intentional: zoom must not pull the nearest page edge to the cursor.
@@ -127,7 +132,9 @@ export function readerWidthForStep(width: number, direction: -1 | 1) {
 export type ReaderZoomCommand = { kind: 'step'; direction: -1 | 1 } | { kind: 'fit' }
 
 /** Cmd/Ctrl +, -, 0 inside the reader zoom the PDF instead of the whole webview. */
-export function readerZoomCommand(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey'>): ReaderZoomCommand | null {
+export function readerZoomCommand(
+  event: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey'>,
+): ReaderZoomCommand | null {
   if (!(event.ctrlKey || event.metaKey) || event.altKey) return null
   if (event.key === '+' || event.key === '=') return { kind: 'step', direction: 1 }
   if (event.key === '-' || event.key === '_') return { kind: 'step', direction: -1 }
@@ -136,7 +143,13 @@ export function readerZoomCommand(event: Pick<KeyboardEvent, 'key' | 'ctrlKey' |
 }
 
 /** Cmd/Ctrl+Shift+B toggles the note beside the PDF. */
-export function isReaderSplitToggle(event: Pick<KeyboardEvent, 'key' | 'code' | 'ctrlKey' | 'metaKey' | 'shiftKey' | 'altKey'>) {
-  return (event.ctrlKey || event.metaKey) && event.shiftKey && !event.altKey &&
+export function isReaderSplitToggle(
+  event: Pick<KeyboardEvent, 'key' | 'code' | 'ctrlKey' | 'metaKey' | 'shiftKey' | 'altKey'>,
+) {
+  return (
+    (event.ctrlKey || event.metaKey) &&
+    event.shiftKey &&
+    !event.altKey &&
     (event.code === 'KeyB' || event.key.toLowerCase() === 'b')
+  )
 }

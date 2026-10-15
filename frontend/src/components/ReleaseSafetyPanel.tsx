@@ -27,23 +27,52 @@ export function ReleaseSafetyPanel() {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   async function snapshot() {
-    setBusy(true); setMessage('')
-    try { await snapshotBeforeUpdate(); setMessage(t('snapshotOk')); reload() }
-    catch { setMessage(t('snapshotBad')) } finally { setBusy(false) }
+    setBusy(true)
+    setMessage('')
+    try {
+      await snapshotBeforeUpdate()
+      setMessage(t('snapshotOk'))
+      reload()
+    } catch {
+      setMessage(t('snapshotBad'))
+    } finally {
+      setBusy(false)
+    }
   }
   async function recover() {
-    setBusy(true); setMessage('')
-    try { await invoke('restart_backend', { mode: 'safe' }) }
-    catch { setMessage(t('failure')); setBusy(false) }
+    setBusy(true)
+    setMessage('')
+    try {
+      await invoke('restart_backend', { mode: 'safe' })
+    } catch {
+      setMessage(t('failure'))
+      setBusy(false)
+    }
   }
-  return <Panel title={t('safetyTitle')}>
-    <p>{t('safetyIntro')}</p>
-    <p className="muted-text mt-3">{data?.snapshot?.status === 'ok' && data.snapshot.created_at ? t('snapshotDate', { date: localDate(data.snapshot.created_at) }) : t('snapshotUnknown')}</p>
-    <div className="flex flex-wrap gap-2 mt-4">
-      <Button disabled={busy || !writable} onClick={() => void snapshot()}>{t('snapshot')}</Button>
-      {isDesktopApp() && <Button variant="outline" disabled={busy} onClick={() => void recover()}>{t('safe')}</Button>}
-    </div>
-    {!isDesktopApp() && <p className="muted-text mt-3">{t('desktopOnly')}</p>}
-    {message && <p role="status" className="mt-3">{message}</p>}
-  </Panel>
+  return (
+    <Panel title={t('safetyTitle')}>
+      <p>{t('safetyIntro')}</p>
+      <p className="muted-text mt-3">
+        {data?.snapshot?.status === 'ok' && data.snapshot.created_at
+          ? t('snapshotDate', { date: localDate(data.snapshot.created_at) })
+          : t('snapshotUnknown')}
+      </p>
+      <div className="flex flex-wrap gap-2 mt-4">
+        <Button disabled={busy || !writable} onClick={() => void snapshot()}>
+          {t('snapshot')}
+        </Button>
+        {isDesktopApp() && (
+          <Button variant="outline" disabled={busy} onClick={() => void recover()}>
+            {t('safe')}
+          </Button>
+        )}
+      </div>
+      {!isDesktopApp() && <p className="muted-text mt-3">{t('desktopOnly')}</p>}
+      {message && (
+        <p role="status" className="mt-3">
+          {message}
+        </p>
+      )}
+    </Panel>
+  )
 }

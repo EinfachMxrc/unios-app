@@ -29,35 +29,55 @@ export function DocumentPage() {
   const { data, error, loading, updatedAt } = useApi<DocumentView>(`/api/documents/${id}`)
   const title = data?.resource_name ?? t('documentLoading')
   return (
-    <Shell title={title} cachedAt={updatedAt}
-      breadcrumbs={[{ label: nav('courses'), to: '/courses' },
-        ...(data ? [{ label: data.course_name, to: `/courses/${data.course_id}` }] : []), { label: title }]}>
-      {loading && !data ? <Loading /> : error && !data ? <Failure message={error} /> : data && <>
-        <div className="document-actions">
-          {canWrite && <Button asChild size="sm">
-            <Link to={`/notes?new=1&course_id=${data.course_id}&title=${encodeURIComponent(data.resource_name)}`}>
-              <NotebookPen size={15} aria-hidden="true" /> {t('documentPrepareNote')}
-            </Link>
-          </Button>}
-          <Button asChild size="sm" variant="ghost">
-            <a href={`/files/${data.version_id}`}><ArrowDownToLine size={15} aria-hidden="true" /> {t('documentDownload')}</a>
-          </Button>
-        </div>
-        {data.view !== 'page' ? (
-          <FileViewer versionId={data.version_id} kind={data.view} filename={data.filename} />
-        ) : data.markdown.trim() ? (
-          <article className="document-reading">
-            <Suspense fallback={<Loading />}><NoteMarkdownDocument body={data.markdown} notes={[]} /></Suspense>
-          </article>
-        ) : (
-          <Panel title={t('documentEmptyTitle')}>
-            <div className="document-empty">
-              <UliBuddy mood="awake" size={56} />
-              <p className="muted-text">{t('documentEmptyText')}</p>
+    <Shell
+      title={title}
+      cachedAt={updatedAt}
+      breadcrumbs={[
+        { label: nav('courses'), to: '/courses' },
+        ...(data ? [{ label: data.course_name, to: `/courses/${data.course_id}` }] : []),
+        { label: title },
+      ]}
+    >
+      {loading && !data ? (
+        <Loading />
+      ) : error && !data ? (
+        <Failure message={error} />
+      ) : (
+        data && (
+          <>
+            <div className="document-actions">
+              {canWrite && (
+                <Button asChild size="sm">
+                  <Link to={`/notes?new=1&course_id=${data.course_id}&title=${encodeURIComponent(data.resource_name)}`}>
+                    <NotebookPen size={15} aria-hidden="true" /> {t('documentPrepareNote')}
+                  </Link>
+                </Button>
+              )}
+              <Button asChild size="sm" variant="ghost">
+                <a href={`/files/${data.version_id}`}>
+                  <ArrowDownToLine size={15} aria-hidden="true" /> {t('documentDownload')}
+                </a>
+              </Button>
             </div>
-          </Panel>
-        )}
-      </>}
+            {data.view !== 'page' ? (
+              <FileViewer versionId={data.version_id} kind={data.view} filename={data.filename} />
+            ) : data.markdown.trim() ? (
+              <article className="document-reading">
+                <Suspense fallback={<Loading />}>
+                  <NoteMarkdownDocument body={data.markdown} notes={[]} />
+                </Suspense>
+              </article>
+            ) : (
+              <Panel title={t('documentEmptyTitle')}>
+                <div className="document-empty">
+                  <UliBuddy mood="awake" size={56} />
+                  <p className="muted-text">{t('documentEmptyText')}</p>
+                </div>
+              </Panel>
+            )}
+          </>
+        )
+      )}
     </Shell>
   )
 }

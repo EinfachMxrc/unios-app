@@ -4,20 +4,35 @@
 import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mathTemplates } from './mathTemplates'
-import { matchesMathTemplate, readStudyQuickAccess, STUDY_QUICK_ACCESS_KEY, updateStudyQuickAccess, useStudyQuickAccess } from './studyQuickAccess'
+import {
+  matchesMathTemplate,
+  readStudyQuickAccess,
+  STUDY_QUICK_ACCESS_KEY,
+  updateStudyQuickAccess,
+  useStudyQuickAccess,
+} from './studyQuickAccess'
 import { quickStudyCommand } from './studyCommands'
 import { insertStudyText, studyTextSelection } from './studyTextInsertion'
 
 beforeEach(() => localStorage.clear())
-afterEach(() => { cleanup(); vi.restoreAllMocks() })
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
 
 describe('study quick access without private content', () => {
   it('rejects corrupt and foreign IDs, deduplicates and bounds recent shelves', () => {
-    localStorage.setItem(STUDY_QUICK_ACCESS_KEY, JSON.stringify({
-      templates: { favorites: ['fraction', 'fraction', '<script>', 'private formula'], recent: Object.keys(mathTemplates) },
-      tools: { favorites: ['number', 'private answer', 9], recent: ['recall', 'recall', 'number'] },
-      body: 'synthetic text must not enter preferences',
-    }))
+    localStorage.setItem(
+      STUDY_QUICK_ACCESS_KEY,
+      JSON.stringify({
+        templates: {
+          favorites: ['fraction', 'fraction', '<script>', 'private formula'],
+          recent: Object.keys(mathTemplates),
+        },
+        tools: { favorites: ['number', 'private answer', 9], recent: ['recall', 'recall', 'number'] },
+        body: 'synthetic text must not enter preferences',
+      }),
+    )
     const result = readStudyQuickAccess()
     expect(result.templates.favorites).toEqual(['fraction'])
     expect(result.templates.recent).toHaveLength(6)
@@ -30,7 +45,8 @@ describe('study quick access without private content', () => {
 
   it('keeps the most recent accepted templates once and toggles favorites independently', () => {
     let preferences = readStudyQuickAccess()
-    for (const key of Object.keys(mathTemplates).slice(0, 8)) preferences = updateStudyQuickAccess(preferences, 'templates', key, 'use')
+    for (const key of Object.keys(mathTemplates).slice(0, 8))
+      preferences = updateStudyQuickAccess(preferences, 'templates', key, 'use')
     preferences = updateStudyQuickAccess(preferences, 'templates', 'fraction', 'use')
     expect(preferences.templates.recent).toEqual(['fraction', 'limit', 'matrix', 'integral', 'sum', 'index'])
     preferences = updateStudyQuickAccess(preferences, 'templates', 'fraction', 'favorite')
@@ -40,7 +56,8 @@ describe('study quick access without private content', () => {
   })
 
   it('merges changes from two dialogs and responds only to relevant cross-tab storage events', () => {
-    const first = renderHook(useStudyQuickAccess), second = renderHook(useStudyQuickAccess)
+    const first = renderHook(useStudyQuickAccess),
+      second = renderHook(useStudyQuickAccess)
     act(() => first.result.current.toggleTemplate('matrix'))
     act(() => second.result.current.toggleTool('recall'))
     expect(first.result.current.preferences.tools.favorites).toEqual(['recall'])
@@ -55,7 +72,9 @@ describe('study quick access without private content', () => {
   })
 
   it('keeps choices in memory when storage fails and persists them when it recovers', () => {
-    const storage = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('blocked') })
+    const storage = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked')
+    })
     const hook = renderHook(useStudyQuickAccess)
     act(() => hook.result.current.toggleTemplate('fraction'))
     act(() => hook.result.current.toggleTool('number'))
@@ -85,7 +104,10 @@ describe('fast keyboard entry', () => {
   it('replaces only the remembered UTF-16 range and continues typing immediately after the insertion', () => {
     const source = '📚 F = /bruch weiter'
     const selection = studyTextSelection(source, 7, 13)
-    expect(insertStudyText(source, selection, '$\\frac12$', 100)).toEqual({ body: '📚 F = $\\frac12$ weiter', caret: 16 })
+    expect(insertStudyText(source, selection, '$\\frac12$', 100)).toEqual({
+      body: '📚 F = $\\frac12$ weiter',
+      caret: 16,
+    })
     expect(insertStudyText('newer note', selection, 'x', 100)).toBe('changed')
     expect(insertStudyText(source, selection, 'x'.repeat(100), 30)).toBe('long')
     expect(studyTextSelection(source, -10, 1000)).toEqual({ source, from: 0, to: source.length })

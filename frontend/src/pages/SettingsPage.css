@@ -5,15 +5,38 @@
   gap: 8px;
   margin: 0 0 24px;
 }
-.settings-workspace { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 28px; align-items: start; }
-.settings-stack { min-width: 0; }
-.settings-section[hidden] { display: none; }
-.settings-mobile-section { display: none; }
-.settings-jump-nav a[aria-current="page"] { color: var(--app-text); background: var(--nav-active); font-weight: 600; }
+.settings-workspace {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.settings-stack {
+  min-width: 0;
+}
+.settings-section[hidden] {
+  display: none;
+}
+.settings-mobile-section {
+  display: none;
+}
+.settings-jump-nav a[aria-current='page'] {
+  color: var(--app-text);
+  background: var(--nav-active);
+  font-weight: 600;
+}
 @media (max-width: 760px) {
-  .settings-workspace { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .settings-jump-nav { display: none; }
-  .settings-mobile-section { display: grid; gap: 6px; }
+  .settings-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .settings-jump-nav {
+    display: none;
+  }
+  .settings-mobile-section {
+    display: grid;
+    gap: 6px;
+  }
 }
 .settings-jump-nav a {
   padding: 8px 12px;

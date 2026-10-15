@@ -8,7 +8,15 @@ import { useQuery } from '@tanstack/react-query'
 import { matchesMensa } from '@/lib/mensa'
 import { matchesRooms } from '@/lib/rooms'
 import { useT } from '@/i18n/useT'
-import { ArrowRight, FileText, Lightbulb, Link2, MessageSquareText, NotebookPen, Search as SearchIcon } from 'lucide-react'
+import {
+  ArrowRight,
+  FileText,
+  Lightbulb,
+  Link2,
+  MessageSquareText,
+  NotebookPen,
+  Search as SearchIcon,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { request, useApi } from '@/api'
@@ -55,7 +63,14 @@ export function SearchPage() {
   const notes = !kind || kind === 'note' ? (data?.note_results ?? []) : []
   const jots = !kind || kind === 'jot' ? (data?.jot_results ?? []) : []
   const clips = !kind || kind === 'clip' ? (data?.clip_results ?? []) : []
-  const resultCount = documents.length + announcements.length + annotations.length + courseNotes.length + notes.length + jots.length + clips.length
+  const resultCount =
+    documents.length +
+    announcements.length +
+    annotations.length +
+    courseNotes.length +
+    notes.length +
+    jots.length +
+    clips.length
   const courseOptions =
     data?.courses ??
     Array.from(
@@ -91,57 +106,77 @@ export function SearchPage() {
       <Panel title={t('panelTitle')}>
         <p className="muted-text">{t('operatorsHint')}</p>
         <form onSubmit={submit} className="search-form">
-          <FormField label={t('queryLabel')}>{control => <div className="search-input-wrap">
-            <SearchIcon size={17} />
-            <Input {...control}
-              aria-label={t('queryLabel')}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={t('queryPlaceholder')}
-              maxLength={400}
-            />
-          </div>}</FormField>
-          <FormField label={t('filterCourseLabel')}>{control => <select {...control}
-            className="native-select"
-            aria-label={t('filterCourseLabel')}
-            value={courseId}
-            onChange={(event) => updateParam('course_id', event.target.value)}
-          >
-            <option value="">{t('allCourses')}</option>
-            {courseOptions.map((item) => (
-              <option key={item.id} value={item.id ?? ''}>
-                {item.name}
-              </option>
-            ))}
-          </select>}</FormField>
-          <FormField label={t('filterSemesterLabel')}>{control => <select {...control}
-            className="native-select"
-            aria-label={t('filterSemesterLabel')}
-            value={semesterId}
-            onChange={(event) => updateParam('semester_id', event.target.value)}
-          >
-            <option value="">{t('allSemesters')}</option>
-            {semesterOptions.map((item) => (
-              <option key={item.id} value={item.id ?? ''}>
-                {item.name}
-              </option>
-            ))}
-          </select>}</FormField>
-          <FormField label={t('filterTypeLabel')}>{control => <select {...control}
-            className="native-select"
-            aria-label={t('filterTypeLabel')}
-            value={kind}
-            onChange={(event) => updateParam('type', event.target.value)}
-          >
-            <option value="">{t('allTypes')}</option>
-            <option value="document">{t('typeDocument')}</option>
-            <option value="annotation">{t('typeAnnotation')}</option>
-            <option value="announcement">{t('typeAnnouncement')}</option>
-            <option value="course_note">{t('typeCourseNote')}</option>
-            <option value="note">{t('typeNote')}</option>
-            <option value="jot">{t('typeJot')}</option>
-            <option value="clip">{t('typeClip')}</option>
-          </select>}</FormField>
+          <FormField label={t('queryLabel')}>
+            {(control) => (
+              <div className="search-input-wrap">
+                <SearchIcon size={17} />
+                <Input
+                  {...control}
+                  aria-label={t('queryLabel')}
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder={t('queryPlaceholder')}
+                  maxLength={400}
+                />
+              </div>
+            )}
+          </FormField>
+          <FormField label={t('filterCourseLabel')}>
+            {(control) => (
+              <select
+                {...control}
+                className="native-select"
+                aria-label={t('filterCourseLabel')}
+                value={courseId}
+                onChange={(event) => updateParam('course_id', event.target.value)}
+              >
+                <option value="">{t('allCourses')}</option>
+                {courseOptions.map((item) => (
+                  <option key={item.id} value={item.id ?? ''}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+          <FormField label={t('filterSemesterLabel')}>
+            {(control) => (
+              <select
+                {...control}
+                className="native-select"
+                aria-label={t('filterSemesterLabel')}
+                value={semesterId}
+                onChange={(event) => updateParam('semester_id', event.target.value)}
+              >
+                <option value="">{t('allSemesters')}</option>
+                {semesterOptions.map((item) => (
+                  <option key={item.id} value={item.id ?? ''}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+          <FormField label={t('filterTypeLabel')}>
+            {(control) => (
+              <select
+                {...control}
+                className="native-select"
+                aria-label={t('filterTypeLabel')}
+                value={kind}
+                onChange={(event) => updateParam('type', event.target.value)}
+              >
+                <option value="">{t('allTypes')}</option>
+                <option value="document">{t('typeDocument')}</option>
+                <option value="annotation">{t('typeAnnotation')}</option>
+                <option value="announcement">{t('typeAnnouncement')}</option>
+                <option value="course_note">{t('typeCourseNote')}</option>
+                <option value="note">{t('typeNote')}</option>
+                <option value="jot">{t('typeJot')}</option>
+                <option value="clip">{t('typeClip')}</option>
+              </select>
+            )}
+          </FormField>
           <Button type="submit">{t('submit')}</Button>
         </form>
         {online && (
@@ -154,21 +189,25 @@ export function SearchPage() {
           </p>
         )}
       </Panel>
-      {matchesMensa(q) && <Panel title={tMensa('areas')}><Link className="more-row" to="/mensa">{tMensa('title')} →</Link></Panel>}
-      {matchesRooms(q) && <Panel title={tMensa('areas')}><Link className="more-row" to="/rooms">{tRooms('title')} →</Link></Panel>}
+      {matchesMensa(q) && (
+        <Panel title={tMensa('areas')}>
+          <Link className="more-row" to="/mensa">
+            {tMensa('title')} →
+          </Link>
+        </Panel>
+      )}
+      {matchesRooms(q) && (
+        <Panel title={tMensa('areas')}>
+          <Link className="more-row" to="/rooms">
+            {tRooms('title')} →
+          </Link>
+        </Panel>
+      )}
       {offline ? (
         !offlineIndex.data ? (
-          <Empty
-            icon={SearchIcon}
-            title={t('offlineNotReadyTitle')}
-            text={t('offlineNotReadyText')}
-          />
+          <Empty icon={SearchIcon} title={t('offlineNotReadyTitle')} text={t('offlineNotReadyText')} />
         ) : !q ? (
-          <Empty
-            icon={SearchIcon}
-            title={t('offlinePromptTitle')}
-            text={t('offlinePromptText')}
-          />
+          <Empty icon={SearchIcon} title={t('offlinePromptTitle')} text={t('offlinePromptText')} />
         ) : (
           <Panel title={t('offlineResultsTitle', { count: offlineResult?.total ?? 0 })}>
             {offlineResult?.hits.length ? (
@@ -180,10 +219,18 @@ export function SearchPage() {
                         <SearchIcon size={19} />
                       </span>
                       <div>
-                        {item.href.startsWith('https://') ? <a className="result-title" href={item.href}
-                          target="_blank" rel="noreferrer">{item.title}</a> :
-                          <Link className="result-title" to={item.href}>{item.title}</Link>}
-                        <p><SearchHighlight text={item.excerpt} query={q} /></p>
+                        {item.href.startsWith('https://') ? (
+                          <a className="result-title" href={item.href} target="_blank" rel="noreferrer">
+                            {item.title}
+                          </a>
+                        ) : (
+                          <Link className="result-title" to={item.href}>
+                            {item.title}
+                          </Link>
+                        )}
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
                         <span className="row-subtitle">
                           {
                             (
@@ -205,16 +252,10 @@ export function SearchPage() {
                     </div>
                   ))}
                 </ListRows>
-                {offlineResult.total > 100 && (
-                  <p className="muted-text mt-3">{t('offlineTruncated')}</p>
-                )}
+                {offlineResult.total > 100 && <p className="muted-text mt-3">{t('offlineTruncated')}</p>}
               </>
             ) : (
-              <Empty
-                icon={SearchIcon}
-                title={t('offlineNoResultsTitle')}
-                text={t('offlineNoResultsText')}
-              />
+              <Empty icon={SearchIcon} title={t('offlineNoResultsTitle')} text={t('offlineNoResultsText')} />
             )}
           </Panel>
         )
@@ -224,7 +265,8 @@ export function SearchPage() {
         <Failure message={error} />
       ) : (
         data &&
-        q && (resultCount > 0 || (!matchesMensa(q) && !matchesRooms(q))) && (
+        q &&
+        (resultCount > 0 || (!matchesMensa(q) && !matchesRooms(q))) && (
           <Panel title={t('resultsTitle', { count: resultCount })}>
             {documents.length ? (
               <ListRows>
@@ -237,12 +279,22 @@ export function SearchPage() {
                       <Link to={`/material/${item.version_id}?page=${item.page_number}`} className="result-title">
                         <SearchHighlight text={item.filename} query={q} />
                       </Link>
-                      <p><SearchHighlight text={item.excerpt} query={q} /></p>
+                      <p>
+                        <SearchHighlight text={item.excerpt} query={q} />
+                      </p>
                       <span className="row-subtitle">
-                        {item.course_name} · {item.semester_name ?? t('withoutSemester')} · {t('versionLabel', { version: item.version })} ·
-                        {' '}{t('pageLabel', { page: item.page_number })}
+                        {item.course_name} · {item.semester_name ?? t('withoutSemester')} ·{' '}
+                        {t('versionLabel', { version: item.version })} · {t('pageLabel', { page: item.page_number })}
                       </span>
-                      <details className="source-preview"><summary>{quality('documentPreview')}</summary><p><SearchHighlight text={item.excerpt} query={q} /></p><Link to={`/material/${item.version_id}?page=${item.page_number}`}>{quality('openSource')}</Link></details>
+                      <details className="source-preview">
+                        <summary>{quality('documentPreview')}</summary>
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
+                        <Link to={`/material/${item.version_id}?page=${item.page_number}`}>
+                          {quality('openSource')}
+                        </Link>
+                      </details>
                       <a className="subtle-link" href={`/files/${item.version_id}/markdown`}>
                         {t('openMarkdown')} <ArrowRight size={13} />
                       </a>
@@ -255,7 +307,11 @@ export function SearchPage() {
                 icon={SearchIcon}
                 title={t('noResultsTitle')}
                 text={t('noResultsText')}
-                action={<Button variant="outline" onClick={() => setParams({ q })}>{quality('clearFilters')}</Button>}
+                action={
+                  <Button variant="outline" onClick={() => setParams({ q })}>
+                    {quality('clearFilters')}
+                  </Button>
+                }
               />
             ) : null}
             {annotations.length > 0 && (
@@ -271,9 +327,12 @@ export function SearchPage() {
                         <Link to={`/material/${item.version_id}#annotation-${item.id}`} className="result-title">
                           {item.resource_name}
                         </Link>
-                        <p><SearchHighlight text={item.excerpt} query={q} /></p>
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
                         <span className="row-subtitle">
-                          {item.course_name} · {item.semester_name ?? t('withoutSemester')} · {t('pageOnly', { page: item.page_number })}
+                          {item.course_name} · {item.semester_name ?? t('withoutSemester')} ·{' '}
+                          {t('pageOnly', { page: item.page_number })}
                         </span>
                       </div>
                     </div>
@@ -281,18 +340,37 @@ export function SearchPage() {
                 </ListRows>
               </div>
             )}
-            {announcements.length > 0 && <div className="note-search-results">
-              <h3>{t('announcementsHeading')}</h3>
-              <ListRows>{announcements.map((item) => <div className="search-result" key={item.id}>
-                <span className="file-symbol"><MessageSquareText size={19} /></span>
-                <div>
-                  {item.url ? <a href={item.url} target="_blank" rel="noreferrer" className="result-title">{item.title}</a>
-                    : <Link to={`/courses/${item.course_id}`} className="result-title">{item.title}</Link>}
-                  <p><SearchHighlight text={item.excerpt} query={q} /></p>
-                  <span className="row-subtitle">{item.course_name} · {item.semester_name ?? t('withoutSemester')} · {t('moodleForum')}</span>
-                </div>
-              </div>)}</ListRows>
-            </div>}
+            {announcements.length > 0 && (
+              <div className="note-search-results">
+                <h3>{t('announcementsHeading')}</h3>
+                <ListRows>
+                  {announcements.map((item) => (
+                    <div className="search-result" key={item.id}>
+                      <span className="file-symbol">
+                        <MessageSquareText size={19} />
+                      </span>
+                      <div>
+                        {item.url ? (
+                          <a href={item.url} target="_blank" rel="noreferrer" className="result-title">
+                            {item.title}
+                          </a>
+                        ) : (
+                          <Link to={`/courses/${item.course_id}`} className="result-title">
+                            {item.title}
+                          </Link>
+                        )}
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
+                        <span className="row-subtitle">
+                          {item.course_name} · {item.semester_name ?? t('withoutSemester')} · {t('moodleForum')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </ListRows>
+              </div>
+            )}
             {courseNotes.length > 0 && (
               <div className="note-search-results">
                 <h3>{t('courseNotesHeading')}</h3>
@@ -306,7 +384,9 @@ export function SearchPage() {
                         <Link to={`/courses/${item.course_id}`} className="result-title">
                           {item.course_name}
                         </Link>
-                        <p><SearchHighlight text={item.excerpt} query={q} /></p>
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
                         <span className="row-subtitle">{item.semester_name ?? t('withoutSemester')}</span>
                       </div>
                     </div>
@@ -327,9 +407,12 @@ export function SearchPage() {
                         <StudyPeekLink id={item.id} className="result-title">
                           {item.title}
                         </StudyPeekLink>
-                        <p><SearchHighlight text={item.excerpt} query={q} /></p>
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
                         <span className="row-subtitle">
-                          {item.course_name} · {item.semester_name ?? t('withoutSemester')} · {t('versionLabel', { version: item.revision })}
+                          {item.course_name} · {item.semester_name ?? t('withoutSemester')} ·{' '}
+                          {t('versionLabel', { version: item.revision })}
                         </span>
                       </div>
                     </div>
@@ -359,12 +442,31 @@ export function SearchPage() {
                 </ListRows>
               </div>
             )}
-            {clips.length > 0 && <div className="note-search-results"><h3>{t('clipsHeading')}</h3>
-              <ListRows>{clips.map((item) => <div className="search-result" key={item.id}>
-                <span className="file-symbol"><Link2 size={19} /></span><div>
-                  <Link to={`/inbox#clip-${item.id}`} className="result-title">{item.title}</Link>
-                  <p><SearchHighlight text={item.excerpt} query={q} /></p><span className="row-subtitle">{item.course_name ?? t('withoutCourse')} · {item.semester_name ?? t('withoutSemester')}</span>
-                </div></div>)}</ListRows></div>}
+            {clips.length > 0 && (
+              <div className="note-search-results">
+                <h3>{t('clipsHeading')}</h3>
+                <ListRows>
+                  {clips.map((item) => (
+                    <div className="search-result" key={item.id}>
+                      <span className="file-symbol">
+                        <Link2 size={19} />
+                      </span>
+                      <div>
+                        <Link to={`/inbox#clip-${item.id}`} className="result-title">
+                          {item.title}
+                        </Link>
+                        <p>
+                          <SearchHighlight text={item.excerpt} query={q} />
+                        </p>
+                        <span className="row-subtitle">
+                          {item.course_name ?? t('withoutCourse')} · {item.semester_name ?? t('withoutSemester')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </ListRows>
+              </div>
+            )}
           </Panel>
         )
       )}

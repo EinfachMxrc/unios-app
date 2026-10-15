@@ -5,7 +5,10 @@ import { cleanup, renderHook } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import { useReaderShortcuts } from './useReaderShortcuts'
 
-afterEach(() => { cleanup(); document.body.replaceChildren() })
+afterEach(() => {
+  cleanup()
+  document.body.replaceChildren()
+})
 
 function press(target: EventTarget, init: KeyboardEventInit) {
   const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init })
@@ -14,7 +17,13 @@ function press(target: EventTarget, init: KeyboardEventInit) {
 }
 
 function setup() {
-  const actions = { zoom: vi.fn(), fitWidth: vi.fn(), toggleNoteBeside: vi.fn(), jumpToPage: vi.fn(), focusSearch: vi.fn() }
+  const actions = {
+    zoom: vi.fn(),
+    fitWidth: vi.fn(),
+    toggleNoteBeside: vi.fn(),
+    jumpToPage: vi.fn(),
+    focusSearch: vi.fn(),
+  }
   const hook = renderHook((props) => useReaderShortcuts(props), { initialProps: actions })
   return { actions, ...hook }
 }
@@ -41,7 +50,13 @@ it('leaves zoom keys to text fields but toggles the split view everywhere', () =
 
 it('always calls the latest handlers and stops listening on unmount', () => {
   const { actions, rerender, unmount } = setup()
-  const next = { zoom: vi.fn(), fitWidth: vi.fn(), toggleNoteBeside: vi.fn(), jumpToPage: vi.fn(), focusSearch: vi.fn() }
+  const next = {
+    zoom: vi.fn(),
+    fitWidth: vi.fn(),
+    toggleNoteBeside: vi.fn(),
+    jumpToPage: vi.fn(),
+    focusSearch: vi.fn(),
+  }
   rerender(next)
   press(window, { key: '+', ctrlKey: true })
   expect(next.zoom).toHaveBeenCalledWith(1)
