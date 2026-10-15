@@ -156,14 +156,6 @@ export function NoteDocument({
       setStatus(t('localSaveFailed'))
     }
   }
-  // Editor/coverage callbacks can arrive from the preceding render. Updating
-  // one field must preserve the other field's newest in-memory edit.
-  function changeBody(next: string) {
-    changeDraft(draftRef.current?.title ?? liveRef.current.title, next)
-  }
-  function changeTitle(next: string) {
-    changeDraft(next, draftRef.current?.body ?? liveRef.current.body)
-  }
   const sync = useCallback(async () => {
     const starting = draftRef.current
     if (!starting || syncingRef.current || conflict || manualResolution || !starting.title.trim()) return
