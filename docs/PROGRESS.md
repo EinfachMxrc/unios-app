@@ -27,6 +27,11 @@ Die gemeinsame Aufgabenanzeige lädt diese Bibliotheken jetzt erst bei Bedarf;
 der Originaltext bleibt währenddessen lesbar. Bestehende Größenlimits bleiben
 unverändert. Lokal bestehen alle 1.430 Frontendtests einschließlich einer
 neuen Prüfung für nachgeladene Formeln, Inline-Labels und unveränderten Code.
+39 passende Browserabläufe bestehen auch mit dem korrigierten endgültigen Build.
+Die Qualitätsmatrix führt den gesamten Linux-Pythonbestand beim manuellen
+Voll-Lauf direkt mit Coverage aus; derselbe Bestand wird nicht zusätzlich ohne
+Coverage wiederholt. macOS/Windows und normale PR-Läufe behalten ihren vollen
+pytest-Lauf. Alle sechs Pflichtjobs des Paket-Gates bleiben unverändert.
 Keine persönlichen Installations-/Betriebsbelege, Nutzerdaten, Secrets oder
 privaten Git-Referenzen übernehmen. Release erst mit wirklich erzeugten und
 geprüften Paketen veröffentlichen; offene Plattformen benennen und ohne
