@@ -4,6 +4,7 @@
 
 ## 0.1.28 – Navigation, Kursnamen und Kalender (15.10.2026)
 
+- Formelanzeige und Syntaxhervorhebung in Aufgabenbeschreibungen werden erst bei Bedarf geladen; das Startpaket hält die bestehende Größengrenze wieder ein.
 - Im Markdown-Quelltext bleibt die Schreibposition beim schnellen Weitertippen nach Tab/Enter korrekt; spätes Zurücksetzen des Cursors entfällt.
 - Seitenleiste behält beim Wechsel von Uni-Mail und anderen Bereichen ihren Scrollstand.
 - Mensabilder bleiben beim Filtern erhalten, begrenzter Server-Cache und passende Ersatzflächen für fehlende Fotos.

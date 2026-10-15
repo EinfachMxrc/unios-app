@@ -36,6 +36,17 @@ sind im Gesamtlauf und den gezielten Korrekturläufen erfolgreich zugeordnet;
 der ursprüngliche Gesamtlauf hatte zwei behobene Fehler und eine wiederholte
 Galerie. Das ist kein vollständig grüner Einzellauf.
 
+## Öffentlicher CI-Befund und Korrektur
+
+Der erste öffentliche Lauf meldete ein zu großes Startpaket (355.137 gzip-Bytes,
+Grenze 225.280). Aufgabenbeschreibungen importierten KaTeX und Syntaxhervorhebung
+bereits beim App-Start. Ihre gemeinsame Anzeige lädt die Renderer nun erst beim
+Anzeigen nach; währenddessen bleibt der Originaltext lesbar. Sämtliche bisherigen
+Sanitierungs- und Darstellungsprüfungen bleiben erhalten; eine zusätzliche Prüfung
+deckt nachgeladenen Inhalt, geänderte Texte und Inline-Labels ab. Die Größenlimits
+werden nicht angehoben. Lokal: 223.576 gzip-Bytes für das Startpaket; Precache
+18.552.995 rohe / 5.228.028 gzip-Bytes, jeweils innerhalb der Grenzen.
+
 ## Lokal tatsächlich geprüft
 
 - Python: 1.344 bestanden / acht Plattform-Skips im Gesamtlauf ohne das
@@ -45,7 +56,7 @@ Galerie. Das ist kein vollständig grüner Einzellauf.
   neue Identität auf diesem Mac vertraut. Die vorhandene GitHub-macOS-Prüfung
   benutzt eine kurzlebige erfundene Identität im separaten CI-Rechner.
 - Ruff 0.17.0 und mypy 2.4.0 für 642 Quelldateien bestanden.
-- Frontend: alle 1.429 Tests, Typecheck, ESLint, i18n-Prüfung und Build bestanden.
+- Frontend: alle 1.430 Tests, Typecheck, ESLint, i18n-Prüfung und Build bestanden.
 - 28 gezielte Paket-/Release-/Gate-Tests bestanden, einer plattformbedingt übersprungen.
 - OpenAPI nach Versionswechsel neu exportiert, Typen neu erzeugt, Vertrag geprüft.
 - Neun frische README-Screenshots gegen einen neu erzeugten isolierten Demo-Bestand

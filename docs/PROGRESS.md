@@ -21,6 +21,12 @@ Accessibility und Legacy-PWA jeweils 100. Belege unter
 `docs/qa/public-release-0.1.28-20261015/`.
 
 Öffentliche GitHub-Matrix, Docker-Smoke und native Pakete stehen noch aus.
+Der erste öffentliche CI-Lauf hat zusätzlich das übergroße Startpaket gefunden:
+KaTeX und Syntaxhervorhebung wurden über Aufgabenbeschreibungen früh geladen.
+Die gemeinsame Aufgabenanzeige lädt diese Bibliotheken jetzt erst bei Bedarf;
+der Originaltext bleibt währenddessen lesbar. Bestehende Größenlimits bleiben
+unverändert. Lokal bestehen alle 1.430 Frontendtests einschließlich einer
+neuen Prüfung für nachgeladene Formeln, Inline-Labels und unveränderten Code.
 Keine persönlichen Installations-/Betriebsbelege, Nutzerdaten, Secrets oder
 privaten Git-Referenzen übernehmen. Release erst mit wirklich erzeugten und
 geprüften Paketen veröffentlichen; offene Plattformen benennen und ohne
@@ -3296,4 +3302,4 @@ PDF-Seite zitieren, abgeleitet aus vorhandenen Quellenlinks, keine Migration).
 Einzige Token-Datei mit neutralem Höhenmodell; 427 Zeilen totes CSS, zwei
 überschriebene Token-Blöcke, acht ungenutzte Typen und zwei tote Python-Funktionen
 entfernt. Backend 1.084 Tests, Frontend-Unit- und Leser-E2E grün; native
-MacBook-Trackpad-Messung steht aus. 
+MacBook-Trackpad-Messung steht aus.
