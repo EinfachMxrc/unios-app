@@ -124,3 +124,45 @@ def test_http_flow_never_returns_the_key(settings, coordinator):
     assert client.put("/api/ai/provider/model", json={"model": "nope"}).status_code == 422
     assert client.delete("/api/ai/provider/key").status_code == 204
     assert client.get("/api/ai/provider").json()["configured"] is False
+
+
+def test_demo_state_does_not_open_storage_or_call_the_provider(settings, monkeypatch):
+    settings.demo_mode = True
+    settings.ai_adapter_api_key = "synthetic-existing-key"  # pragma: allowlist secret
+    settings.ai_adapter_model = "model-new"
+    settings.ai_adapter_enabled = True
+    repository = ProviderRepository(settings)
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("Demo must not access credentials, provider state or network")
+
+    monkeypatch.setattr(repository, "load_key", forbidden)
+    monkeypatch.setattr(repository, "load_choice", forbidden)
+    provider = ProviderService(settings, repository, forbidden)
+    provider.apply_stored()
+    assert provider.state().configured is False
+    assert provider.state().models == []
+    assert settings.ai_adapter_api_key == settings.ai_adapter_model == ""
+    assert settings.ai_adapter_enabled is False
+
+
+@pytest.mark.parametrize("method,path,payload", [
+    ("PUT", "/key", {"api_key": "synthetic-demo-key"}),  # pragma: allowlist secret
+    ("PUT", "/model", {"model": "model-new"}),
+    ("DELETE", "/key", None),
+])
+def test_demo_rejects_connection_changes_before_storage_or_network(settings, coordinator, monkeypatch,
+                                                                method, path, payload):
+    settings.demo_mode = True
+    repository = ProviderRepository(settings)
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("Demo must not access credentials, provider state or network")
+
+    for name in ("load_key", "load_choice", "save_key", "save_choice", "delete_key"):
+        monkeypatch.setattr(repository, name, forbidden)
+    provider = ProviderService(settings, repository, forbidden)
+    app = FastAPI()
+    app.include_router(provider_router(settings, coordinator, provider))
+    with TestClient(app) as client:
+        assert client.request(method, f"/api/ai/provider{path}", json=payload).status_code == 403

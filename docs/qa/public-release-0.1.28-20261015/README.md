@@ -10,6 +10,13 @@ Betriebsbelege sind davon ausgenommen.
 
 ## Abhängigkeiten
 
+Nach dem ersten Merge zusätzlich PRs #12–#18 aufgenommen: MathLive 0.111.1,
+lucide-react 1.55.0, FastAPI 0.143.0, jsdom 30.1.2, Anthropic 1.13.0,
+Radix UI 1.8.0 und Tauri-Frontend-API 2.12.3. Zusammen sind es 17
+Dependency-PRs. MathLive korrigiert mehrere Rendering-Sicherheitsfehler;
+[Upstream-Nachweis](https://github.com/arnog/mathlive/blob/30ad20a7a47ea43a2f6915808023202c78f37742/CHANGELOG.md).
+Lizenztexte und Herkunft bleiben erhalten.
+
 SQLAlchemy 2.1.4, filelock 4.1.1, Typer 0.27.3, Ruff 0.17.0, mypy 2.4.0,
 Playwright 1.64.0, React-Vite-Plugin 6.1.2, typescript-eslint 8.71.1,
 Prettier 3.9.10 und React Query 5.104.2.
@@ -75,3 +82,51 @@ werden über die öffentlichen Workflows am genauen Release-Commit geprüft.
 Ein gebautes Paket bleibt vom manuellen Nachweis auf einem frischen Gerät
 getrennt. Ohne Developer-ID/Notarisierung kein öffentlicher macOS-Installer;
 ohne signierte Pakete kein automatischer Updatefeed.
+
+## Tatsächlicher öffentlicher Voll-Lauf am ersten Integrationsstand
+
+Commit `3dbcee3630150d3f1a4b668f484d13bb87d43cc7`,
+[Lauf 38740042373](https://github.com/EinfachMxrc/unios-app/actions/runs/38740042373):
+Linux 1.342 bestanden / zwölf Skips, Coverage 84,47 % bei geforderten 80 %;
+macOS 1.344 bestanden / zehn Skips; Docker und GLib erfolgreich. Alle 1.430
+Frontendtests und **529 Browserfälle in einem vollständigen Lauf** bestanden.
+Windows erreichte nach rund 34 Minuten 37 % ohne bis dahin gemeldete Testfehler;
+wegen des nachfolgenden Dependency-Standes abgebrochen. Dieser Gesamtlauf ist
+daher ausdrücklich nicht vollständig erfolgreich und gibt keine neuen Pakete frei.
+
+Die globale pytest-Fixture kopiert nun ein einmal pro Worker angelegtes leeres
+Schema in je eine eigene SQLite-Datei. Tabellen, Fremdschlüssel, FTS-Trigger,
+Indizes und Durabilität bleiben erhalten; vorhandene Testdateien werden nicht
+überschrieben. Zwei identische lokale Stichprobenfälle bestanden vorher und
+nachher, der wiederholte Setup-Anteil sank von 0,13 auf 0,01 Sekunden. Kein
+`-n auto`, keine übersprungenen Pflichtfälle und keine gesenkte Coverage-Grenze.
+Die CI protokolliert künftig zusätzlich die 25 langsamsten Testphasen. Eine
+Beschleunigung der vollständigen Windows-Prüfung ist noch nicht nachgewiesen.
+
+Der Dependency-Nachlieferungsstand besteht lokal 1.430 Frontendtests,
+Typecheck, Lint, OpenAPI, Ruff, mypy, Build und Bundle-Grenzen sowie 52 passende
+Browserfälle für Formeln, Offline-Fonts, Tastaturbedienung und Lernwerkzeuge.
+Der vollständige Pythonlauf nach Fixture-Optimierung besteht mit 1.344 Fällen
+und acht Plattform-Skips. Zwei aufeinanderfolgende lokale Gesamtläufe dauerten
+416,54 Sekunden vorher und 297,03 Sekunden nachher; die parallel laufenden
+Browserprüfungen waren nicht identisch, daher ist dies kein kontrollierter
+plattformübergreifender Benchmark. Die reale macOS-Schlüsselbund-ACL-Prüfung
+bleibt lokal ausgenommen und wird im isolierten CI-Mac geprüft.
+
+## Gemeinsamer Stand mit PR #19
+
+Der inzwischen öffentliche PR #19 ist vollständig enthalten, einschließlich
+Python 3.13, KI-Modellliste und Anki-Backup. Am kombinierten Stand bestehen
+1.357 Backendfälle / acht Plattform-Skips, 1.430 Frontendtests, Typecheck,
+Lint, Ruff, mypy, OpenAPI, Build, Bundle-Grenzen und 25 passende Browserfälle.
+Danach wurde eine Demo-Regression korrigiert: weder gespeicherte KI-Schlüssel
+noch Modelllisten dürfen in einer Demo gelesen werden; Änderungen an diesen
+Verbindungen werden vor Speicher-/Netzwerkzugriff abgelehnt. 22 gezielte Fälle
+einschließlich vier neuer Schutzprüfungen und Ruff/mypy für 647 Dateien bestehen.
+Die neun README-Bilder wurden aus einer neuen CLI-Demo erneut aufgenommen und
+einzeln visuell geprüft; keine Browser-Ausnahmen und ausschließlich erfundene Daten.
+
+Der öffentliche Lauf von PR #19 fand zusätzlich das noch auf Python 3.12
+basierende lokale Docker-Image; es ist jetzt auf die Mindestversion 3.13
+angeglichen. Vollständige Plattformmatrix, Docker-Smoke und Paketbau müssen
+am endgültigen gemeinsamen Commit neu erfolgreich abgeschlossen werden.

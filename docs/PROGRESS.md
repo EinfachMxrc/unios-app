@@ -1,5 +1,55 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Öffentliche Dependency-Nachlieferung und Windows-Testdiagnose
+
+Nach dem Zusammenführen von PR #11 hat Dependabot die weiteren PRs #12–#18
+eröffnet. Diese sieben Köpfe werden zusätzlich gebündelt: MathLive 0.111.1
+(Sicherheitskorrekturen), lucide-react 1.55.0, FastAPI 0.143.0, jsdom 30.1.2,
+Anthropic 1.13.0, Radix UI 1.8.0 und Tauri-Frontend-API 2.12.3. Die neue
+MathLive-Lizenz bleibt unverändert erhalten; Paketübersicht und Herkunftshinweis
+sind anhand der installierten Pakete aktualisiert.
+
+Der vollständige öffentliche Lauf am vorherigen Stand 3dbcee36 bestand Linux
+inklusive 84,47 % Coverage, macOS, Docker, GLib und alle 529 Browserfälle in
+einem Lauf. Windows war nach rund 34 Minuten bei 37 % ohne bis dahin gemeldete
+Testfehler; der Lauf wurde wegen des nachfolgenden Quellstands abgebrochen.
+Das war kein festgefahrener Test und kein vollständig erfolgreicher Matrixlauf.
+
+Die Testfixture erstellt ihr leeres synthetisches SQLite-Schema jetzt einmal
+pro pytest-Worker. Jeder Fall erhält eine eigene kopierte Datei mit denselben
+Tabellen, Fremdschlüsseln, Indizes, FTS-Triggern und unveränderten Durabilitäts-
+Einstellungen. Vorhandene Testdatenbanken werden nicht überschrieben; Tests mit
+eigener Datenbank behalten den bisherigen Initialisierungspfad. Eine lokale
+Stichprobe senkt den wiederholten Setup-Anteil von 0,13 auf 0,01 Sekunden;
+die Verbesserung auf Windows muss der nächste vollständige CI-Lauf bestätigen.
+
+Parallel ist PR #19 mit weiteren Produktänderungen für dieselbe Version
+0.1.28 erschienen und inzwischen in main übernommen worden. Die Nachlieferung
+ist auf diesen öffentlichen Hauptzweig abgestimmt. Nach abgeschlossener
+kombinierter lokaler Prüfung braucht der gemeinsame Quellstand eine neue
+vollständige Release-Matrix; nur zu diesem Stand dürfen Pakete gebaut werden.
+Noch kein neuer Installer und kein Release veröffentlicht.
+
+Nachlieferung lokal geprüft: 1.344 Pythonfälle mit acht Plattform-Skips nach
+der Fixture-Änderung (297,03 Sekunden; vorher 416,54 Sekunden), 1.430
+Frontendtests, 52 Browserfälle, Typecheck, Lint, Ruff, mypy, i18n, OpenAPI,
+Build und Bundle-Grenzen bestanden. Keine native Neuinstallation durchgeführt.
+
+Nach Abgleich mit dem inzwischen übernommenen PR #19 erneut kombiniert geprüft:
+1.357 Backendfälle / acht Plattform-Skips, 1.430 Frontendtests und 25 passende
+Browserfälle für KI-Adapter, Backups und Lernwerkzeuge. Eine konkrete Demo-
+Regression des neuen Provider-Dienstes zusätzlich korrigiert: Der Demomodus
+liest keine gespeicherten KI-Schlüssel und ruft keine Modellliste ab; Verbinden,
+Modellwahl und Trennen werden vor Netzwerk-/Speicherzugriff mit 403 abgelehnt.
+Auch CLI-Demos setzen jetzt ausdrücklich das Demo-Flag. 22 gezielte Backendfälle
+einschließlich vier neuer Schutzprüfungen, Ruff und mypy für 647 Dateien bestehen.
+
+Neun README-Bilder nach dem Zusammenführen von PR #19 und allen 17 Updates
+erneut aus einer frischen CLI-Demo aufgenommen und einzeln angesehen; keine
+Browser-Ausnahmen. Der öffentliche PR-19-Lauf zeigte außerdem im lokalen
+Docker-Image noch Python 3.12 trotz Mindestversion 3.13. Das Basisimage ist
+angeglichen; der vollständige Docker-Smoke muss am gemeinsamen Stand bestehen.
+
 ## 15.10.2026 – 0.1.28: KI-Schlüssel, Backup mit Anki, Prüfung der Fremdbefunde, Öffentlichkeit
 
 API-Schlüssel einfügen und Modell aus der Anbieterliste wählen (Schlüsselbund, keine

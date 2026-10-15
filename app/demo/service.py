@@ -139,7 +139,7 @@ def _demo_settings(root: Path) -> Settings:
                     moodle_enabled=False, moodle_base_url="", moodle_token="",
                     public_periods_enabled=False, automatic_takeover_enabled=False,
                     host_health_url="", ntfy_url="", discord_webhook_url="", github_token="",
-                    connector_plugins="", mcp_enabled=False, ai_adapter_enabled=False)
+                    connector_plugins="", mcp_enabled=False, ai_adapter_enabled=False, demo_mode=True)
 
 
 def create_demo(directory: Path) -> dict[str, object]:

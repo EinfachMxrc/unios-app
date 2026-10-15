@@ -21,6 +21,8 @@
 - Termine einzeln, ab diesem Datum oder als Wochenserie bearbeiten; Quellen für iCal gezielt auswählen.
 - Geordnetes Beenden des eigenen Mac-Hintergrunddienstes; präzisere Moodle-Zugriffshinweise bei nachweisbar vollständigen Antworten.
 - Zehn öffentliche Dependency-PRs gebündelt: SQLAlchemy, filelock, Typer, Ruff, mypy, React Query, Playwright, React-Vite-Plugin, typescript-eslint und Prettier.
+- Sieben nachgelieferte Updates ergänzt: MathLive mit Sicherheitskorrekturen, lucide-react, FastAPI, jsdom, Anthropic, Radix UI und Tauri-Frontend-API.
+- Der Demomodus lädt keine persönlichen KI-Verbindungen und erlaubt keine Änderungen an deren Schlüsseln; auch CLI-Demos sind ausdrücklich als Demo markiert.
 - Qualitätsmatrix und native Paket-Workflows im öffentlichen Repository ergänzt.
 
 ## 0.1.24–0.1.27 – Papierkorb, Dateien in der App, eingebautes Backup (13.10.2026)
