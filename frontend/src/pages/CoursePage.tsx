@@ -33,6 +33,7 @@ import { AddonWidgetSlot } from '@/addons/AddonWidgetSlot'
 import { CourseAssignmentCard, CourseResourceList } from './course/CourseResourceList'
 import { useCourseActions } from './course/useCourseActions'
 import { CourseDisplayName } from '@/components/CourseDisplayName'
+import { CourseDesk, CourseDeskMaterials } from './course/CourseDesk'
 import './CoursePage.css'
 import './course/ResourceArrival.css'
 export function CoursePage() {
@@ -67,7 +68,9 @@ export function CoursePage() {
     data: courseNotes,
     error: notesError,
     loading: notesLoading,
-  } = useApi<NotesResponse>(`/api/notes?course_id=${id}${noteOffset ? `&offset=${noteOffset}` : ''}`)
+  } = useApi<NotesResponse>(
+    `/api/notes?course_id=${id}${selectedView === 'notes' && noteOffset ? `&offset=${noteOffset}` : ''}`,
+  )
   useAnchorScroll(data?.course.id === Number(id), updatedAt)
   const { busy, actionError, downloadOther, changeActivity, changeSemester, changeGroup, changeGroupDownload } =
     useCourseActions(id, data, reload)
@@ -98,11 +101,13 @@ export function CoursePage() {
         </Link>
         {data && (
           <div className="course-header-actions">
-            <Button asChild>
-              <Link to={focusPath({ kind: 'course', id: data.course.id })}>
-                {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
-              </Link>
-            </Button>
+            {selectedView !== 'overview' && (
+              <Button asChild variant="ghost">
+                <Link to={focusPath({ kind: 'course', id: data.course.id })}>
+                  {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              </Button>
+            )}
             {canWrite && (
               <Link
                 className="course-new-note"
@@ -240,6 +245,7 @@ export function CoursePage() {
                 <Badge>{t('inactive')}</Badge> {t('inactiveHint')}
               </p>
             )}
+            {selectedView === 'overview' && <CourseDesk detail={data} notes={courseNotes ?? undefined} />}
             <ScrollTabs className="course-tabs" label={t('courseViews')}>
               {(['overview', 'materials', 'tasks', 'notes'] as const).map((tab) => (
                 <Link
@@ -261,7 +267,7 @@ export function CoursePage() {
                 </Link>
               ))}
             </ScrollTabs>
-            <CourseOfflinePanel detail={data} notes={courseNotes} />
+            {selectedView !== 'overview' && <CourseOfflinePanel detail={data} notes={courseNotes} />}
             {data.group_assignments.length > 0 && (
               <div className="course-group-settings">
                 <Panel title={t('groupAssignmentTitle')}>
@@ -358,15 +364,12 @@ export function CoursePage() {
                   )}
                   {data.resources.some((resource) => resource.group_category !== 'other_group') ? (
                     selectedView === 'overview' ? (
-                      <CourseResourceList
-                        recent
+                      <CourseDeskMaterials
                         detail={data}
                         hash={hash}
                         canWrite={canWrite}
                         courseId={id}
-                        resources={[...materials]
-                          .sort((a, b) => (data.versions[b.id]?.[0]?.id ?? 0) - (data.versions[a.id]?.[0]?.id ?? 0))
-                          .slice(0, 6)}
+                        resources={materials.slice(0, 8)}
                       />
                     ) : (
                       <>
@@ -415,7 +418,16 @@ export function CoursePage() {
               </div>
               <aside className="course-side">
                 <div id="course-tasks" className="course-task-section">
-                  <Panel title={t('tasksTitle')}>
+                  <Panel
+                    title={t('tasksTitle')}
+                    action={
+                      selectedView === 'overview' && data.assignments.length > 2 ? (
+                        <Link className="subtle-link" to={`/courses/${id}`} onClick={() => setView('tasks')}>
+                          {t('allTasks')} <ArrowRight size={14} />
+                        </Link>
+                      ) : null
+                    }
+                  >
                     {data.assignments.length ? (
                       <div className="course-task-list">
                         {[...data.assignments]
@@ -424,6 +436,7 @@ export function CoursePage() {
                               Number(a.removed_upstream) - Number(b.removed_upstream) ||
                               (a.due_at ?? '9999').localeCompare(b.due_at ?? '9999'),
                           )
+                          .slice(0, selectedView === 'overview' ? 2 : undefined)
                           .map((item) => (
                             <CourseAssignmentCard key={item.id} item={item} onOpen={setActiveAssignmentId} />
                           ))}
@@ -502,6 +515,7 @@ export function CoursePage() {
                 )}
               </aside>
             </div>
+            {selectedView === 'overview' && <CourseOfflinePanel detail={data} notes={courseNotes} />}
             {data.resources.some((resource) => resource.group_category === 'other_group') && (
               <div className="course-materials-extra">
                 <Panel title={t('otherGroupsMaterialTitle')}>

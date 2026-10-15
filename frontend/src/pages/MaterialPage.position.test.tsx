@@ -90,6 +90,9 @@ beforeEach(() => {
   )
   vi.stubGlobal('cancelAnimationFrame', (id: number) => window.clearTimeout(id))
   vi.spyOn(window, 'scrollY', 'get').mockImplementation(() => scrollTop)
+  vi.spyOn(window, 'scrollBy').mockImplementation((options: ScrollToOptions | number) => {
+    if (typeof options === 'object') scrollTop += options.top ?? 0
+  })
   vi.spyOn(document.documentElement, 'scrollHeight', 'get').mockReturnValue(134_000)
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
     const number = Number(this.dataset.readerPage)
@@ -120,6 +123,28 @@ afterEach(() => {
   vi.unstubAllGlobals()
   if (originalScrollIntoView) Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', originalScrollIntoView)
   else Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView')
+})
+
+it('keeps the PDF position while writing and returns to the same source without losing the workspace', async () => {
+  const pageChanged = vi.fn()
+  render(
+    <MemoryRouter initialEntries={['/material/17?page=12']}>
+      <MaterialReader versionId={17} embedded expectedCourseId={9} onPageChange={pageChanged} />
+    </MemoryRouter>,
+  )
+  await screen.findByText('pageOfTotal:12/120')
+  await waitFor(() => expect(scrollTop).toBe(12_900))
+  fireEvent.click(screen.getByRole('button', { name: 'layout_write' }))
+  scrollTop = 0
+  fireEvent.scroll(window)
+  expect(screen.getByText('pageOfTotal:12/120')).toBeTruthy()
+  expect(pageChanged).not.toHaveBeenCalledWith(1)
+  fireEvent.click(screen.getByRole('button', { name: 'layout_split' }))
+  await waitFor(() => expect(scrollTop).toBe(12_900))
+  await waitFor(() =>
+    expect(screen.getByRole('button', { name: 'layout_split' }).getAttribute('aria-pressed')).toBe('true'),
+  )
+  expect(screen.getByText('pageOfTotal:12/120')).toBeTruthy()
 })
 
 it('keeps page 12 while scrolling to the workspace header and updates only when a source reaches the reading line', async () => {

@@ -12,6 +12,7 @@ test('a PDF opens the direct course workspace and Today resumes its page and dra
   const seed = await response.json()
   await page.goto(`/material/${seed.version_id}?page=12`)
   await expect(page.locator('[data-material-page="12"] canvas')).toBeVisible()
+  await page.locator('.material-file-actions > summary').click()
   await page.getByRole('link', { name: 'Arbeitsbereich öffnen', exact: true }).click()
   await expect(page).toHaveURL(
     new RegExp(`/learning/focus/course/${seed.course_id}\\?mode=source&version=${seed.version_id}&page=12`),

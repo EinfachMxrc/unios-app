@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  workspaceLayout: 'Arbeitsansicht',
+  layout_read: 'Lesen',
+  layout_split: 'Nebeneinander',
+  layout_write: 'Schreiben',
   clip: {
     open: 'Bildausschnitt',
     title: 'PDF-Ausschnitt übernehmen',

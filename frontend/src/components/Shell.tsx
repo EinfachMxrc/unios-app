@@ -25,16 +25,28 @@ export function Shell({
   title,
   cachedAt = 0,
   breadcrumbs,
+  compactNavigation = false,
 }: {
   children: ReactNode
   title: string
   eyebrow?: string
   cachedAt?: number
   breadcrumbs?: Breadcrumb[]
+  compactNavigation?: boolean
 }) {
   useStudyKeyboard()
   const sidebar = useSidebarState()
   const { sidebarHidden, sidebarWidth } = sidebar
+  const [readerNavigationExpanded, setReaderNavigationExpanded] = useWorkspaceState(
+    'reader:navigation-expanded',
+    false,
+    { persist: false },
+  )
+  const sidebarCompact = compactNavigation && !sidebarHidden && !readerNavigationExpanded
+  const toggleNavigation = () => {
+    if (compactNavigation && !sidebarHidden) setReaderNavigationExpanded((value) => !value)
+    else sidebar.toggleSidebar()
+  }
   const location = useLocation()
   const { t: quality } = useT('quality')
   const [focusMode, setFocusMode] = useWorkspaceState(`focus:${location.pathname}`, false)
@@ -68,17 +80,23 @@ export function Shell({
     .sort((a, b) => courseRank(a.id) - courseRank(b.id))
   const host = useContext(HostContext)
   const online = useHostOnline()
+  const focusControl = focusAvailable && (
+    <Button variant="outline" size="sm" aria-pressed={focusMode} onClick={() => setFocusMode((value) => !value)}>
+      {focusMode ? quality('exitFocus') : quality('focus')}
+    </Button>
+  )
   return (
     <div
       data-density={preferences.density}
-      className={`app-shell ${focusAvailable && focusMode ? 'focus-layout' : ''} ${sidebarHidden ? 'sidebar-hidden' : ''} ${location.pathname === '/' ? 'today-shell' : location.pathname.startsWith('/material/') ? 'material-shell' : location.pathname.startsWith('/courses/') ? 'course-shell' : location.pathname === '/notes' ? 'notes-shell' : ''}`}
+      className={`app-shell ${compactNavigation ? 'reader-workspace-shell' : ''} ${sidebarCompact ? 'sidebar-compact' : ''} ${focusAvailable && focusMode ? 'focus-layout' : ''} ${sidebarHidden ? 'sidebar-hidden' : ''} ${location.pathname === '/' ? 'today-shell' : location.pathname.startsWith('/material/') ? 'material-shell' : location.pathname.startsWith('/courses/') ? 'course-shell' : location.pathname === '/notes' ? 'notes-shell' : ''}`}
       style={{ '--sidebar-width': `${sidebarWidth}px` } as CSSProperties}
     >
       <a className="skip-link" href="#main-content">
         {t('skipContent')}
       </a>
       <Sidebar
-        state={sidebar}
+        state={{ ...sidebar, toggleSidebar: toggleNavigation }}
+        compact={sidebarCompact}
         layout={layout}
         catalog={catalog}
         courses={courseData?.courses}
@@ -90,7 +108,8 @@ export function Shell({
           title={title}
           breadcrumbs={breadcrumbs}
           sidebarHidden={sidebarHidden}
-          toggleSidebar={sidebar.toggleSidebar}
+          toggleSidebar={toggleNavigation}
+          workspaceAction={compactNavigation && !focusMode ? focusControl : undefined}
         />
         <main
           id="main-content"
@@ -98,18 +117,9 @@ export function Shell({
           tabIndex={-1}
           className={`content ${location.pathname.startsWith('/courses/') ? 'course-page' : ''}`}
         >
-          <div className="page-heading">
-            <h1>{title}</h1>
-            {focusAvailable && (
-              <Button
-                variant="outline"
-                size="sm"
-                aria-pressed={focusMode}
-                onClick={() => setFocusMode((value) => !value)}
-              >
-                {focusMode ? quality('exitFocus') : quality('focus')}
-              </Button>
-            )}
+          <div className={`page-heading ${compactNavigation && !focusMode ? 'reader-workspace-heading' : ''}`}>
+            <h1 className={compactNavigation && !focusMode ? 'sr-only' : undefined}>{title}</h1>
+            {(!compactNavigation || focusMode) && focusControl}
           </div>
           {!online && (
             <Alert role="status" className="notice mb-5">

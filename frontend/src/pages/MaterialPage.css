@@ -1,6 +1,178 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
 /* Reader-specific layout has one owner; shared workspace styles stay global. */
+.reader-continuous-note .note-studio .studio-document,
+.reader-continuous-note .note-studio .note-textarea {
+  font-size: 16px;
+  line-height: 1.8;
+}
+.app-shell.reader-workspace-shell.focus-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+.reader-continuous-note .reader-note-draft > textarea.study-writing-source {
+  font-family: inherit;
+}
+.reader-workspace-shell .reader-workspace-heading {
+  margin: 0;
+}
+.reader-workspace-shell.sidebar-compact .sidebar-customize-trigger {
+  display: none;
+}
+.reader-workspace-shell .topbar-actions .topbar-workspace-action [data-slot='button'] {
+  width: auto;
+  padding-inline: 10px;
+}
+.reader-workspace-shell .reader-notes-toggle > span {
+  display: none;
+}
+.reader-workspace-shell .material-search {
+  flex-basis: 210px;
+}
+.reader-workspace-shell .material-page-actions {
+  display: none;
+}
+.reader-workspace-shell > .app-main > .content {
+  max-width: none;
+  padding: 12px 16px 72px;
+}
+.reader-layout-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+}
+.reader-layout-modes button {
+  color: var(--app-muted);
+}
+.reader-layout-modes button[aria-pressed='true'] {
+  color: var(--app-accent);
+  background: var(--app-blue-soft);
+}
+.reader-workspace-shell .material-toolbar {
+  position: sticky;
+  top: var(--topbar-height, 56px);
+  z-index: 32;
+  margin: -12px 0 12px;
+  padding: 8px 0;
+  min-height: 48px;
+  background: var(--app-bg);
+}
+.reader-workspace-shell .material-toolbar .material-file-actions {
+  margin-left: auto;
+}
+.reader-workspace-shell .material-layout .material-controls {
+  top: calc(var(--topbar-height, 56px) + var(--reader-toolbar-height, 48px));
+}
+.reader-course-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  max-width: 18ch;
+  min-width: 0;
+}
+.reader-course-link > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reader-course-link > svg {
+  flex: none;
+}
+.reader-note-draft .study-insert-tools button {
+  font-size: 0.8rem;
+  min-height: 30px;
+  padding: 4px 8px;
+}
+.reader-continuous-note .lecture-coverage-panel {
+  margin-block: 6px;
+  border: 0;
+  background: transparent;
+}
+.reader-continuous-note .lecture-coverage-panel > summary {
+  padding: 5px 0;
+  font-size: 0.8rem;
+}
+.reader-workspace-shell .material-page-position {
+  scroll-margin-top: calc(var(--topbar-height, 56px) + var(--reader-toolbar-height, 48px) + 64px);
+}
+.reader-workspace-shell .material-side-inline {
+  top: calc(var(--topbar-height, 56px) + var(--reader-toolbar-height, 48px) + 8px);
+  max-height: calc(100dvh - var(--topbar-height, 56px) - var(--reader-toolbar-height, 48px) - 24px);
+}
+.material-layout[data-study-open='true'][data-reader-layout='write'] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.material-layout[data-reader-layout='write'] > .material-reader {
+  display: none;
+}
+.material-layout[data-reader-layout='write'] > .material-side-inline {
+  position: relative;
+  top: auto;
+  max-height: none;
+  min-height: calc(100dvh - var(--topbar-height, 56px) - 100px);
+}
+.material-layout[data-reader-layout='write'] .reader-continuous-note {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-inline: clamp(0px, 4vw, 48px);
+}
+.material-side-inline {
+  position: sticky;
+}
+.material-side-inline > .material-side-header {
+  position: relative;
+  margin: 0;
+  height: 0;
+  z-index: 2;
+}
+.material-side-inline > .material-side-header > div {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.material-side-inline > .material-side-header > button {
+  position: absolute;
+  right: 0;
+  top: 1px;
+  width: 32px;
+  height: 32px;
+}
+.material-side-inline .reader-study-tabs {
+  margin: 0 38px 14px 0;
+  padding: 2px;
+  border-radius: var(--ui-radius-control);
+}
+.material-side-inline .reader-study-tabs > button {
+  min-height: 32px;
+  font-size: 0.8rem;
+}
+@media (max-width: 959px) {
+  .reader-workspace-shell > .app-main > .content {
+    padding-inline: 12px;
+  }
+  .material-side-drawer {
+    width: 100%;
+    border-left: 0;
+  }
+}
+@media (max-width: 640px) {
+  .material-side-drawer:has(.reader-study-tools) {
+    top: 0;
+    bottom: 0;
+    height: 100dvh;
+    border-radius: 0;
+    padding: 16px;
+  }
+}
 .material-shell .content {
   max-width: none;
   padding: 20px 24px 70px;

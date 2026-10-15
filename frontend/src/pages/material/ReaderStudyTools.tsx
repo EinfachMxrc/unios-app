@@ -203,6 +203,16 @@ function ReaderSourceNotes(props: {
             {t('readerNewNote')}
           </Button>
         )}
+        {target && (
+          <Link
+            className="subtle-link reader-note-full-link"
+            aria-label={t('readerOpenNote')}
+            title={t('readerOpenNote')}
+            to={props.savedNoteHref?.(target) ?? `/notes?id=${target}`}
+          >
+            <ExternalLink size={16} aria-hidden="true" />
+          </Link>
+        )}
       </div>
       {resumeError && (
         <p className="muted-text reader-study-hint" role="status">
@@ -217,12 +227,6 @@ function ReaderSourceNotes(props: {
       {pickerOpen && <ReaderNotePicker material={material} target={target} disabled={busy} onChoose={choose} />}
       {target ? (
         <>
-          <Link
-            className="subtle-link reader-note-full-link"
-            to={props.savedNoteHref?.(target) ?? `/notes?id=${target}`}
-          >
-            {t('readerOpenNote')} <ExternalLink size={14} aria-hidden="true" />
-          </Link>
           <SavedReaderNote key={target} {...props} lectureSource={lectureSource} id={target} />
         </>
       ) : restoring ? (
@@ -577,9 +581,6 @@ function ReaderNoteDraft({
         : notes('draftSavedLocally')
   return (
     <form className="reader-note-draft" onSubmit={create}>
-      <p className="muted-text reader-study-hint" id={hintId}>
-        {t('readerNotesHint')}
-      </p>
       <label htmlFor={titleId}>{notes('noteTitleAria')}</label>
       <input
         id={titleId}
@@ -601,17 +602,22 @@ function ReaderNoteDraft({
         maxLength={READER_NOTE_BODY_LIMIT}
         onChange={(body) => change(editor.title, body)}
         disabled={busy}
-      />
-      <textarea
-        ref={bodyField}
-        id={bodyId}
-        value={editor.body}
-        maxLength={READER_NOTE_BODY_LIMIT}
-        aria-describedby={hintId}
-        placeholder={t('readerNotesPlaceholder')}
-        onChange={(event) => change(editor.title, event.target.value)}
-        rows={15}
-      />
+        compact
+      >
+        <textarea
+          ref={bodyField}
+          id={bodyId}
+          value={editor.body}
+          maxLength={READER_NOTE_BODY_LIMIT}
+          aria-describedby={hintId}
+          placeholder={t('readerNotesPlaceholder')}
+          onChange={(event) => change(editor.title, event.target.value)}
+          rows={15}
+        />
+      </StudyInsertTools>
+      <p className="muted-text reader-study-hint" id={hintId}>
+        {t('readerNotesHint')}
+      </p>
       {editor.status !== 'idle' && (
         <SaveIndicator phase={editor.status === 'error' ? 'error' : 'local'} message={statusMessage} />
       )}

@@ -125,7 +125,7 @@ test('PDF excerpts survive reload, append to the same draft and save with a work
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
   await page.reload()
   await expect(page.locator('[data-material-page="1"] canvas')).toBeVisible()
-  await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
+  await page.getByRole('button', { name: 'Mitschrift', exact: true }).click()
   await expect(body).toHaveValue(first + 'Mein eigener Kerngedanke.')
   await page.getByRole('button', { name: 'Nächste Seite', exact: true }).click()
   const secondQuote = await selectPassage(page, 2)
@@ -186,7 +186,7 @@ test('PDF excerpts survive reload, append to the same draft and save with a work
   await expect(page).toHaveURL(/\/notes\?(?:[^#]*&)?id=/)
   // Reader continuation opens in edit mode. Preview makes its retained source
   // links directly operable in the full document.
-  await page.getByRole('button', { name: 'Lesen', exact: true }).click()
+  await page.locator('.note-canvas .studio-modes').getByRole('button', { name: 'Lesen', exact: true }).click()
   await page.locator('.note-canvas a').filter({ hasText: '04_Schleifen.pdf' }).last().click()
   await expect(page).toHaveURL(new RegExp(`/material/${version}\\?page=2`))
   await expect(page.locator('.material-pager')).toContainText('Seite 2 von 2')
@@ -298,7 +298,9 @@ test('no-op split resize expires before same-page scrolling', async ({ page }) =
     window.scrollBy({ top: 320, behavior: 'instant' })
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
     const rect = document.querySelector('[data-reader-page="100"]')!.getBoundingClientRect()
-    return (140 - rect.top) / rect.height
+    const controls = document.querySelector('.material-controls')!.getBoundingClientRect()
+    // Compare the actual reading line below the sticky controls at each width.
+    return (Math.max(140, controls.bottom + 32) - rect.top) / rect.height
   })
   expect(before).toBeGreaterThan(0.1)
   await expect(page.locator('.material-pager')).toContainText('Seite 100 von 120')
@@ -306,11 +308,16 @@ test('no-op split resize expires before same-page scrolling', async ({ page }) =
   await expect(page.locator('.material-side-drawer')).toBeVisible()
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
   await expect(page.locator('.material-pager')).toContainText('Seite 100 von 120')
-  const after = await page.locator('[data-reader-page="100"]').evaluate((node) => {
-    const rect = node.getBoundingClientRect()
-    return (140 - rect.top) / rect.height
-  })
-  expect(Math.abs(before - after)).toBeLessThan(0.03)
+  await expect
+    .poll(async () => {
+      const after = await page.locator('[data-reader-page="100"]').evaluate((node) => {
+        const rect = node.getBoundingClientRect()
+        const controls = document.querySelector('.material-controls')!.getBoundingClientRect()
+        return (Math.max(140, controls.bottom + 32) - rect.top) / rect.height
+      })
+      return Math.abs(before - after)
+    })
+    .toBeLessThan(0.03)
 })
 
 test('closing and reopening the workspace during a save creates one note', async ({ page }) => {
