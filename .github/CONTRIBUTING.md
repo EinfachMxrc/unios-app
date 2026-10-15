@@ -7,6 +7,8 @@ Vor Änderungen [AGENTS.md](../AGENTS.md), [Bauauftrag](../docs/BAUAUFTRAG.md) u
 [Fortschritt](../docs/PROGRESS.md) lesen. Ein Release-Kandidat priorisiert Stabilität;
 größere neue Funktionen zuerst als Vorschlag beschreiben.
 
+**Zum Einstieg:** Issues mit dem Label [good first issue](https://github.com/EinfachMxrc/unios-app/labels/good%20first%20issue) sind klein und beschrieben (z. B. eine UI-Sprache, ein Hochschulprofil, ein Komponententest). Kommentiere kurz, welches du übernimmst.
+
 ## Lokal entwickeln
 
 Python 3.13+ über uv sowie Node.js 22+ verwenden. Im Repository:
