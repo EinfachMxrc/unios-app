@@ -1,0 +1,24 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "collectedCases": 526,
+  "passedCases": 526,
+  "unverifiedCases": [],
+  "method": "Match every currently collected Playwright case by file, line and title against successful continued-run output; duplicates counted once.",
+  "continuedRuns": [
+    "unios-ux-full-e2e-final.log",
+    "unios-ux-e2e-remaining.log",
+    "unios-ux-e2e-last.log",
+    "unios-ux-e2e-tail.log"
+  ],
+  "knownFlakyCases": [
+    {
+      "file": "ux-audit.spec.ts",
+      "title": "core surfaces at desktop and phone sizes",
+      "result": "passed on retry after a missing-heading timeout"
+    }
+  ],
+  "otherRecoveredTimeouts": [
+    "study-writing.spec.ts: formula and logic tools remain usable in dark at 390px passed on a separate rerun"
+  ]
+}

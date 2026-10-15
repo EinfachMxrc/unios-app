@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useEffect, useRef, useState, type KeyboardEvent, type DragEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type DragEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Bold, Code2, Eye, Heading2, Italic, Link2, List, ListChecks, Pencil, Table2 } from 'lucide-react'
 import { useT } from '@/i18n/useT'
@@ -62,6 +62,17 @@ export function NoteMarkdownEditor({
   currentValue.current = value
   const dropRequest = useRef(0)
   const previewSelection = useRef({ from: 0, to: 0 })
+  const pendingSelection = useRef<{ value: string; start: number; end: number } | null>(null)
+  useLayoutEffect(() => {
+    const selection = pendingSelection.current
+    const field = editor.current
+    if (!selection || !field || field.value !== selection.value) return
+    pendingSelection.current = null
+    // Commit the caret with the controlled text before another input can arrive.
+    // A later animation frame could move it behind a newly typed character.
+    field.focus({ preventScroll: true })
+    field.setSelectionRange(selection.start, selection.end)
+  })
   useEffect(
     () => () => {
       dropRequest.current += 1
@@ -90,13 +101,10 @@ export function NoteMarkdownEditor({
     selectionEnd = selectionStart,
   ) {
     const next = value.slice(0, start) + text + value.slice(end)
+    pendingSelection.current = { value: next, start: start + selectionStart, end: start + selectionEnd }
     onChange(next)
     setHidden(true)
     setCaret(start + selectionEnd)
-    requestAnimationFrame(() => {
-      editor.current?.focus()
-      editor.current?.setSelectionRange(start + selectionStart, start + selectionEnd)
-    })
   }
 
   function wrap(before: string, after: string, placeholder: string) {
