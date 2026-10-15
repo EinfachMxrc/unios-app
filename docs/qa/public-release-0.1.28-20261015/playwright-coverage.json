@@ -1,0 +1,18 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "collectedCases": 529,
+  "passedCases": 529,
+  "unverifiedCases": [],
+  "method": "Match every collected case by file, source line and title against successful main, editor-repair and isolated-gallery output. Duplicates counted once.",
+  "mainRun": {
+    "passed": 523,
+    "failedBeforeRepairs": 2,
+    "flakyBeforeGalleryIsolation": 1
+  },
+  "repairs": [
+    "Synchronous controlled-text caret restoration",
+    "Install Playwright 1.64 FFmpeg",
+    "Separate gallery browser contexts for each theme and viewport"
+  ]
+}

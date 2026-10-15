@@ -2,6 +2,19 @@
 
 # Änderungen
 
+## 0.1.28 – Navigation, Kursnamen und Kalender (15.10.2026)
+
+- Formelanzeige und Syntaxhervorhebung in Aufgabenbeschreibungen werden erst bei Bedarf geladen; das Startpaket hält die bestehende Größengrenze wieder ein.
+- Im Markdown-Quelltext bleibt die Schreibposition beim schnellen Weitertippen nach Tab/Enter korrekt; spätes Zurücksetzen des Cursors entfällt.
+- Seitenleiste behält beim Wechsel von Uni-Mail und anderen Bereichen ihren Scrollstand.
+- Mensabilder bleiben beim Filtern erhalten, begrenzter Server-Cache und passende Ersatzflächen für fehlende Fotos.
+- Eigene Kurs-Anzeigenamen, beständige Aktivitätsfilter und Dokumentlinks mit Nachbarn und dreifachem Hervorheben.
+- Benachrichtigungsmenü mit Ungelesen-Filter und einzelnen Gelesen-Schaltern; zusätzliche Uli-Reaktionen.
+- Termine einzeln, ab diesem Datum oder als Wochenserie bearbeiten; Quellen für iCal gezielt auswählen.
+- Geordnetes Beenden des eigenen Mac-Hintergrunddienstes; präzisere Moodle-Zugriffshinweise bei nachweisbar vollständigen Antworten.
+- Zehn öffentliche Dependency-PRs gebündelt: SQLAlchemy, filelock, Typer, Ruff, mypy, React Query, Playwright, React-Vite-Plugin, typescript-eslint und Prettier.
+- Qualitätsmatrix und native Paket-Workflows im öffentlichen Repository ergänzt.
+
 ## Unveröffentlicht – Papierkorb, Dateien in der App, eingebautes Backup (13.10.2026)
 
 - Papierkorb: Notizen und Schnellnotizen lassen sich löschen. Direkt danach bietet UniOS „Rückgängig“ an; unter „Mehr → Papierkorb“ liegt alles Gelöschte, bis man es wiederherstellt oder nach einer Rückfrage endgültig löscht (auch alles auf einmal). Gelöschtes verschwindet aus Listen, Suche, Zitaten und Wiki-Links und kommt beim Wiederherstellen unverändert zurück; eine gelöschte Vorlesungsnotiz legt der nächste Moodle-Abgleich nicht neu an.

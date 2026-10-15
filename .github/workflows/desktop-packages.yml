@@ -1,0 +1,97 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Desktop-Pakete
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  quality-gate:
+    name: Vollständige Qualitätsmatrix vor Paketbau
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Gleichen Commit und alle Plattformen prüfen
+        run: python3 scripts/check_release_quality.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  package:
+    needs: quality-gate
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            os: windows-latest
+            id: windows-x64
+          - name: Linux x64
+            os: ubuntu-22.04
+            id: linux-x64
+    runs-on: ${{ matrix.os }}
+    env:
+      UNIOS_UPDATER_PUBLIC_KEY: ${{ vars.UNIOS_UPDATER_PUBLIC_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            desktop/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Linux-Bibliotheken
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+      - run: uv sync --locked --extra package --extra voice --group dev
+      - run: npm ci
+        working-directory: frontend
+      - name: Installer bauen
+        run: uv run --no-sync python scripts/build_desktop.py
+      - name: Gebündelten Client mit leerem Testprofil starten
+        run: >-
+          uv run --no-sync python scripts/benchmark_desktop_startup.py
+          "${{ runner.os == 'Windows' && 'dist/desktop-backend/uniosd/uniosd.exe' || 'dist/desktop-backend/uniosd' }}"
+          --client-check --runs 1 > desktop/src-tauri/target/release/bundle/startup-check.json
+      - name: Quellstand im Paket nachweisen
+        shell: bash
+        run: |
+          uv run --no-sync python - <<'PYTHON'
+          import hashlib, json, os, pathlib, tomllib
+          root = pathlib.Path('.')
+          version = tomllib.loads((root / 'pyproject.toml').read_text())['project']['version']
+          desktop = json.loads((root / 'desktop/src-tauri/tauri.conf.json').read_text())
+          assert desktop['version'] == version
+          bundle = root / 'desktop/src-tauri/target/release/bundle'
+          def digest(path):
+              with path.open('rb') as stream:
+                  return hashlib.file_digest(stream, 'sha256').hexdigest()
+          packages = {str(path.relative_to(bundle)): digest(path) for path in bundle.rglob('*')
+              if path.is_file() and path.suffix in {'.exe', '.msi', '.deb', '.AppImage'}}
+          assert packages, 'No native package produced'
+          target = bundle / 'build-verification.json'
+          target.write_text(json.dumps({'source_revision': os.environ['GITHUB_SHA'],
+              'version': version, 'platform': '${{ matrix.id }}',
+              'startup_check': 'startup-check.json', 'package_sha256': packages,
+              'personal_data_used': False}, indent=2) + '\n')
+          PYTHON
+      - name: Artefakt hochladen
+        uses: actions/upload-artifact@v5
+        with:
+          name: unios-${{ matrix.id }}
+          path: desktop/src-tauri/target/release/bundle/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,5 +1,43 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – Öffentlicher Release 0.1.28 in Vorbereitung
+
+Auf ausdrücklichen Auftrag im öffentlichen Repository EinfachMxrc/unios-app
+arbeiten. Alle zehn offenen Dependency-PR-Köpfe in einem Release-Zweig
+zusammengeführt; Sperrdateien konfliktfrei. Die bereits geprüften Abschluss-
+Nachweise und zwei Test-/Auditkorrekturen als Patch ohne private Git-Historie
+übernommen. Versionsmanifeste auf 0.1.28 vereinheitlicht. Öffentlich fehlende
+Qualitäts- und Desktop-Paket-Workflows aus dem vorhandenen Projektablauf ergänzt;
+Paketbau bleibt an die volle Qualitätsmatrix desselben Commits gebunden.
+
+Lokal 1.345 Backendtests bestanden, acht Plattform-Skips; der einzelne echte
+macOS-Schlüsselbund-ACL-Test bleibt für den separaten CI-Mac. Ruff, mypy für
+642 Dateien, alle 1.429 Frontendtests, Typecheck, Lint, i18n, OpenAPI und Build
+bestanden. Alle 529 Browserfälle in Gesamtlauf und gezielten Korrekturläufen
+zugeordnet: verspätete Markdown-Cursorwiederherstellung behoben, neue Playwright-
+FFmpeg-Version installiert, Galerie pro Theme/Viewport getrennt. Deren fünf
+Fälle bestehen ohne Retry. Neun frische README-Bilder angesehen; Lighthouse
+Accessibility und Legacy-PWA jeweils 100. Belege unter
+`docs/qa/public-release-0.1.28-20261015/`.
+
+Öffentliche GitHub-Matrix, Docker-Smoke und native Pakete stehen noch aus.
+Der erste öffentliche CI-Lauf hat zusätzlich das übergroße Startpaket gefunden:
+KaTeX und Syntaxhervorhebung wurden über Aufgabenbeschreibungen früh geladen.
+Die gemeinsame Aufgabenanzeige lädt diese Bibliotheken jetzt erst bei Bedarf;
+der Originaltext bleibt währenddessen lesbar. Bestehende Größenlimits bleiben
+unverändert. Lokal bestehen alle 1.430 Frontendtests einschließlich einer
+neuen Prüfung für nachgeladene Formeln, Inline-Labels und unveränderten Code.
+39 passende Browserabläufe bestehen auch mit dem korrigierten endgültigen Build.
+Die Qualitätsmatrix führt den gesamten Linux-Pythonbestand beim manuellen
+Voll-Lauf direkt mit Coverage aus; derselbe Bestand wird nicht zusätzlich ohne
+Coverage wiederholt. macOS/Windows und normale PR-Läufe behalten ihren vollen
+pytest-Lauf. Alle sechs Pflichtjobs des Paket-Gates bleiben unverändert.
+Keine persönlichen Installations-/Betriebsbelege, Nutzerdaten, Secrets oder
+privaten Git-Referenzen übernehmen. Release erst mit wirklich erzeugten und
+geprüften Paketen veröffentlichen; offene Plattformen benennen und ohne
+signierte Pakete keinen automatischen Updatefeed anbieten.
+
+
 ## 15.10.2026 – Installiertes Paket: Start, Navigation, Mensa und Kalender
 
 Beim Mac-Start einen verwaisten PyInstaller-Arbeiter als belegenden Prozess
@@ -52,7 +90,13 @@ enthalten. Bisherige Links ohne Auswahl exportieren weiter alle Quellen.
 
 Lokale Prüfung: 50 gezielte Backendfälle, vollständiger Frontendlauf mit
 1.427 Fällen, Typecheck, Lint, Ruff, mypy und Build bestanden. Die geänderten
-Browserabläufe bestehen in Teilgruppen; der abschließende Gesamtlauf läuft.
+Browserabläufe sind vollständig in fortgesetzten Teilgruppen geprüft: alle
+526 aktuell gesammelten Fälle erfolgreich zugeordnet. Eine große Ansichten-
+Galerie bestand nach Retry (flaky), ein Formeleditor-Zeitlimit im separaten
+Wiederholungslauf. Die lange Sidebar-Prüfung wartet jetzt auf das Layout.
+Lighthouse: Kalender 96–100 Accessibility; Startseite und Legacy-PWA 100.
+Synthetische Bilder, Abdeckungs- und Installationsnachweise liegen unter
+docs/qa/workspace-ux-20261015/. Kein vollständig grüner Einzellauf.
 Ein älterer Anki-Test brauchte eine deterministische Ersatz-ID bei Erstellung
 innerhalb derselben Millisekunde (separater Test-Commit). Der lokale OS-ACL-
 Signiertest benötigt eine zusätzlich vertraute Wegwerfidentität und kann hier
@@ -64,12 +108,10 @@ ff9bf5d3c943 über die reguläre gekoppelte App einen Snapshot erzeugt und gepr�
 (10:48 UTC); neue Instanz um 10:49 UTC healthy, HTTPS ok, private API ohne
 Kopplung weiterhin 401. Bestehende Netzwerke, Mounts und Sicherheitsoptionen
 erhalten; vorheriges Image bleibt verfügbar.
-RA über die reguläre App-API ausschließlich für den Dienstags-Nachmittag
-auf 14:00–15:30 korrigiert: 13 bekannte Serientermine, auch nach Zeitumstellung
-geprüft, andere Termine unverändert und Rückgängig verfügbar. Keine
-Hochschulanmeldung oder zusätzliche Hochschulabfrage. Mail-Status separat live geprüft: Microsoft
-nicht verbunden, Weiterleitung vorbereitet aber nicht bereit, kein erfolgreicher
-Abruf; auf dem Server ist kein Playwright-Mail-Leser eingerichtet.
+Persönliche Kalenderkorrekturen und individuelle Verbindungszustände bleiben
+in privaten Betriebsnachweisen. Die öffentlichen Tests benutzen ausschließlich
+erfundene Termine und lokale Fake-Systeme. Serverseitiger automatischer
+Mailabruf ist nicht eingerichtet; die Windows-Browserfunktion ist getrennt.
 
 ## 15.10.2026 – Restliche VPS-Updates und Moodle-Zugriffshinweise
 
@@ -3265,4 +3307,4 @@ PDF-Seite zitieren, abgeleitet aus vorhandenen Quellenlinks, keine Migration).
 Einzige Token-Datei mit neutralem Höhenmodell; 427 Zeilen totes CSS, zwei
 überschriebene Token-Blöcke, acht ungenutzte Typen und zwei tote Python-Funktionen
 entfernt. Backend 1.084 Tests, Frontend-Unit- und Leser-E2E grün; native
-MacBook-Trackpad-Messung steht aus. 
+MacBook-Trackpad-Messung steht aus.

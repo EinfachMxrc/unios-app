@@ -1,0 +1,129 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: Qualität
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  glib:
+    name: Linux GLib-Sicherheitsbackport
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: sudo apt-get update && sudo apt-get install -y libglib2.0-dev
+      - run: cargo test --manifest-path desktop/src-tauri/vendor/glib/Cargo.toml --release --lib test_variant_str_iter
+        env:
+          CARGO_BUILD_JOBS: '2'
+
+  docker:
+    name: Linux Docker Compose
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: bash scripts/smoke_compose_ci.sh
+
+  backend:
+    name: Backend (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["ubuntu-latest","macos-latest","windows-latest"]' || '["ubuntu-latest"]') }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      # Adapter tests cover the optional AI dependency; production remains opt-in.
+      - run: uv sync --locked --group dev --extra ai
+      - run: uv run --no-sync python -m scripts.setup_token --help
+      - run: uv run --no-sync python -m app.cli.main --help
+      - run: uv run --no-sync python -m scripts.validate_connector_registry
+      - run: git fetch --depth=1 origin "$BASE_REF"
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+      - run: git show FETCH_HEAD:app/connectors/registry.json > previous-registry.json
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+      - run: uv run --no-sync python -m scripts.validate_connector_registry --previous previous-registry.json
+        if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest'
+      - run: uv run --no-sync unios --help
+      - run: uv run --no-sync python scripts/check_spdx.py
+        if: matrix.os == 'ubuntu-latest'
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync mypy app tests
+      - run: uv run --no-sync pytest -q
+        if: matrix.os != 'ubuntu-latest' || github.event_name != 'workflow_dispatch'
+      - run: uv run --no-sync pytest --cov=app --cov-branch -q
+        if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch'
+      - uses: actions/setup-node@v6
+        if: matrix.os == 'windows-latest'
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        if: matrix.os == 'windows-latest'
+        working-directory: frontend
+      - run: npm run build
+        if: matrix.os == 'windows-latest'
+        working-directory: frontend
+      - run: .\scripts\smoke_service_windows.ps1
+        if: matrix.os == 'windows-latest'
+
+  frontend:
+    name: React und Browser
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: uv sync --locked --group dev
+      - run: npm ci
+        working-directory: frontend
+      - run: uv run --no-sync python scripts/export_openapi.py --check
+      - run: npm run api:check
+        working-directory: frontend
+      - run: npm run typecheck && npm run lint && npm run test && npm run i18n:check
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+      - run: node scripts/check-bundle-budget.mjs
+        working-directory: frontend
+      - run: npx playwright install --with-deps chrome
+        working-directory: frontend
+      - run: npm run e2e:focused -- performance.spec.ts
+        if: github.event_name != 'workflow_dispatch'
+        working-directory: frontend
+      - run: npm run e2e
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: frontend
+      - run: uv run --no-sync python deploy/render_service.py linux && systemd-analyze verify local/services/marc-uni-os.service
+        if: github.event_name == 'workflow_dispatch'
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: playwright-diagnostics
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/
+          if-no-files-found: ignore

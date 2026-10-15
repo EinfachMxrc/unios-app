@@ -754,3 +754,15 @@ vollständigen Release- und Plattformprüfungen.
    belegen keine Gleichheit mit iPad/Pencil. Keine privaten Mitschriften protokollieren.
 
 Automatische Fake-Abnahme: [Kalender-Bilder und Prüfungen](qa/calendar-apple-20261007/README.md).
+
+## Mac-Beenden und Wiederöffnen – 15.10.2026
+
+Nach dem installierten Update zweimal UniOS über Cmd+Q vollständig beenden und
+wieder öffnen. Vorher offene Entwürfe speichern. Während die App geschlossen
+ist, darf kein zu dieser App gehörender `uniosd`-Arbeiter Port 8000 halten. Nach
+dem Öffnen müssen nativer Prozess, Supervisor und lauschender Arbeiter zur
+neu installierten App gehören und das Hauptfenster öffnen. Die Rust-Tests
+prüfen den echten Supervisor-/Arbeiter-Lebenszyklus; der installierte frische
+Start und seine Prozesszuordnung wurden geprüft. Der reale GUI-Beenden-Pfad
+bleibt offen, weil die Mac-Steuerung mit „native pipe startup failed“ ausfällt.
+Keine Systemfreigaben oder Vertrauensregeln dafür ändern.

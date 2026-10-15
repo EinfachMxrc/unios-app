@@ -3,7 +3,7 @@
 
 import { cleanup, render, screen, within } from '@testing-library/react'
 import { afterEach, expect, it } from 'vitest'
-import { AssessmentCode, AssessmentInline, AssessmentQuestion } from './AssessmentQuestion'
+import { AssessmentCode, AssessmentInline, AssessmentQuestion } from './AssessmentQuestionContent'
 
 afterEach(cleanup)
 
@@ -16,7 +16,9 @@ it('keeps explicit solution code literal even if it contains Markdown fences', (
 })
 
 it('separates paragraph text for copying and displays double-dollar formulas inside prose', () => {
-  const { container } = render(<AssessmentQuestion text={'First paragraph.\n\nSecond paragraph.\n\nSolve $$x^2=4$$ and explain.'} />)
+  const { container } = render(
+    <AssessmentQuestion text={'First paragraph.\n\nSecond paragraph.\n\nSolve $$x^2=4$$ and explain.'} />,
+  )
   expect(container.textContent).toContain('First paragraph.\nSecond paragraph.')
   expect(container.querySelector('.katex-display')).not.toBeNull()
   expect(container.querySelector('annotation')?.textContent).toBe('x^2=4')
@@ -24,22 +26,26 @@ it('separates paragraph text for copying and displays double-dollar formulas ins
 })
 
 it('renders instructions as semantic headings and lists while retaining ordered start values', () => {
-  render(<AssessmentQuestion text={[
-    '## Synthetic transfer question',
-    '',
-    'Read **every** condition before answering.',
-    '',
-    '3. Explain `a > 0`.',
-    '4. Compare both results.',
-    '',
-    '- Give one example.',
-    '- Explain the exception.',
-  ].join('\n')} />)
+  render(
+    <AssessmentQuestion
+      text={[
+        '## Synthetic transfer question',
+        '',
+        'Read **every** condition before answering.',
+        '',
+        '3. Explain `a > 0`.',
+        '4. Compare both results.',
+        '',
+        '- Give one example.',
+        '- Explain the exception.',
+      ].join('\n')}
+    />,
+  )
 
   expect(screen.getByRole('heading', { name: 'Synthetic transfer question' })).toBeTruthy()
   const lists = screen.getAllByRole('list')
   expect(lists).toHaveLength(2)
-  const ordered = lists.find(list => list.tagName === 'OL')
+  const ordered = lists.find((list) => list.tagName === 'OL')
   expect(ordered?.getAttribute('start')).toBe('3')
   expect(screen.getAllByRole('listitem')).toHaveLength(4)
   expect(screen.getByText('every').tagName).toBe('STRONG')
@@ -47,28 +53,40 @@ it('renders instructions as semantic headings and lists while retaining ordered 
 })
 
 it('renders all truth-table cells semantically with inline math and no lost rows', () => {
-  const { container } = render(<AssessmentQuestion text={String.raw`| A | B | $A \land B$ |
+  const { container } = render(
+    <AssessmentQuestion
+      text={String.raw`| A | B | $A \land B$ |
 | --- | --- | --- |
 | 0 | 0 | **0** |
 | 0 | 1 | 0 |
 | 1 | 0 | 0 |
-| 1 | 1 | \(1\) |`} />)
+| 1 | 1 | \(1\) |`}
+    />,
+  )
 
   const table = screen.getByRole('table')
   expect(within(table).getAllByRole('columnheader')).toHaveLength(3)
   expect(within(table).getAllByRole('row')).toHaveLength(5)
   expect(within(table).getAllByRole('cell')).toHaveLength(12)
   expect(within(table).getAllByRole('row')[4].textContent).toContain('1')
-  expect([...container.querySelectorAll('annotation')].map(node => node.textContent))
-    .toEqual([String.raw`A \land B`, '1'])
+  expect([...container.querySelectorAll('annotation')].map((node) => node.textContent)).toEqual([
+    String.raw`A \land B`,
+    '1',
+  ])
   expect(table.closest('[tabindex="0"]')).toBeTruthy()
 })
 
 it('supports standard inline LaTeX alongside code and bold without eating neighbouring text', () => {
-  const { container } = render(<AssessmentInline text={String.raw`Compare \(\frac{1}{2}\) with $x^2$, then inspect ` + '`return x;` and **explain**.'} />)
+  const { container } = render(
+    <AssessmentInline
+      text={String.raw`Compare \(\frac{1}{2}\) with $x^2$, then inspect ` + '`return x;` and **explain**.'}
+    />,
+  )
 
-  expect([...container.querySelectorAll('annotation')].map(node => node.textContent))
-    .toEqual([String.raw`\frac{1}{2}`, 'x^2'])
+  expect([...container.querySelectorAll('annotation')].map((node) => node.textContent)).toEqual([
+    String.raw`\frac{1}{2}`,
+    'x^2',
+  ])
   expect(screen.getByText('return x;').tagName).toBe('CODE')
   expect(screen.getByText('explain').tagName).toBe('STRONG')
   expect(container.textContent).toContain('Compare ')
@@ -78,7 +96,9 @@ it('supports standard inline LaTeX alongside code and bold without eating neighb
 })
 
 it('renders multiline dollars, bracket delimiters and same-line display formulas', () => {
-  const { container } = render(<AssessmentQuestion text={String.raw`First formula:
+  const { container } = render(
+    <AssessmentQuestion
+      text={String.raw`First formula:
 
 $$
 \sum_{i=1}^{3} i
@@ -90,15 +110,16 @@ $$
 
 $$x^2 + y^2 = z^2$$
 
-Explain the result.`} />)
+Explain the result.`}
+    />,
+  )
 
   expect(container.querySelectorAll('.katex-display')).toHaveLength(3)
-  expect([...container.querySelectorAll('annotation')].map(node => node.textContent))
-    .toEqual([
-      String.raw`\sum_{i=1}^{3} i`,
-      String.raw`\begin{pmatrix}1 & 0 \\ 0 & 1\end{pmatrix}`,
-      'x^2 + y^2 = z^2',
-    ])
+  expect([...container.querySelectorAll('annotation')].map((node) => node.textContent)).toEqual([
+    String.raw`\sum_{i=1}^{3} i`,
+    String.raw`\begin{pmatrix}1 & 0 \\ 0 & 1\end{pmatrix}`,
+    'x^2 + y^2 = z^2',
+  ])
   expect(screen.getByText('First formula:')).toBeTruthy()
   expect(screen.getByText('Explain the result.')).toBeTruthy()
 })
@@ -123,7 +144,9 @@ it('preserves source indentation, string literals and mathematical delimiters in
     '    return "no result";',
     '}',
   ].join('\n')
-  const { container } = render(<AssessmentQuestion text={`Read the code.\n\n\`\`\`javascript\n${source}\n\`\`\`\n\nExplain the output.`} />)
+  const { container } = render(
+    <AssessmentQuestion text={`Read the code.\n\n\`\`\`javascript\n${source}\n\`\`\`\n\nExplain the output.`} />,
+  )
 
   const code = container.querySelector('pre > code')
   expect(code?.textContent).toBe(source)
@@ -161,7 +184,11 @@ it('keeps imported HTML, image syntax and URLs passive text', () => {
 })
 
 it('does not grant trusted LaTeX commands permission to insert links or remote images', () => {
-  const { container } = render(<AssessmentInline text={String.raw`\(\href{https://example.invalid}{answer}\) and \(\includegraphics{https://example.invalid/picture.png}\)`} />)
+  const { container } = render(
+    <AssessmentInline
+      text={String.raw`\(\href{https://example.invalid}{answer}\) and \(\includegraphics{https://example.invalid/picture.png}\)`}
+    />,
+  )
 
   expect(container.querySelector('a, img, iframe')).toBeNull()
   expect(screen.queryByRole('link')).toBeNull()

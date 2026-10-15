@@ -2,6 +2,15 @@
 
 # Veröffentlichung vorbereiten
 
+## Öffentliches Repository seit 15.10.2026
+
+`EinfachMxrc/unios-app` ist das öffentliche Quell- und Downloadrepository.
+Seine Historie beginnt mit dem bereinigten öffentlichen Quellstand; private
+Git-Referenzen und Nutzerdaten werden nicht übernommen. Der Release 0.1.28
+bündelt die öffentlichen Dependency-PRs und aktiviert die Qualitäts- und
+Paketläufe dort. Der folgende Abnahmerahmen bleibt relevant; Hinweise auf
+den damals privaten Repositorybetrieb sind historische Protokolle.
+
 ## Alpha 1 · 0.1.19 (04.10.2026)
 
 Auf ausdrücklichen Nutzerwunsch wird `v0.1.19` als **Alpha-Vorabversion** im

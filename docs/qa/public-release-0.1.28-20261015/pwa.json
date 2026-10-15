@@ -1,0 +1,14 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "accessibility": 100,
+  "legacyPwa": 100,
+  "lighthouseVersions": [
+    "13.5.0",
+    "11.7.1"
+  ],
+  "runtimeErrors": [
+    null,
+    null
+  ]
+}

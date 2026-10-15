@@ -2,6 +2,15 @@
 
 # Desktop-Pakete
 
+## Öffentlicher Paketlauf ab 0.1.28
+
+Im öffentlichen Repository `EinfachMxrc/unios-app` ist der Paketlauf eingerichtet.
+Vor dem Bau muss die vollständige Qualitätsmatrix am selben Commit bestanden sein.
+Der öffentliche Paketlauf erzeugt Windows x64 (NSIS/MSI) und Linux x64
+(DEB/AppImage). macOS bleibt bei lokalen Entwicklerbauten, bis Developer-ID und
+Notarisierung für öffentliche Installer eingerichtet und geprüft sind. Die älteren
+Vier-Plattform-Tabellen unten beschreiben den allgemeinen Projektablauf.
+
 ## Alpha 1 / 0.1.19
 
 Die [Vorabversion](https://github.com/EinfachMxrc/unios-app/releases/tag/v0.1.19)
