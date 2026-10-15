@@ -1,0 +1,143 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "version": "0.1.28",
+  "source_revision": "461f567e22ea73dba1b748de02b4e58271ecbd12",
+  "release": "https://github.com/EinfachMxrc/unios-app/releases/tag/v0.1.28",
+  "published_at": "2026-10-15T18:07:14Z",
+  "quality_run": "https://github.com/EinfachMxrc/unios-app/actions/runs/38775534418",
+  "package_run": "https://github.com/EinfachMxrc/unios-app/actions/runs/38779476404",
+  "public_downloads_verified": [
+    "latest.json",
+    "SHA256SUMS.txt"
+  ],
+  "assets": [
+    {
+      "name": "latest.json",
+      "size": 1513,
+      "digest": "sha256:4d7e23cad3aa92820a90698c6ea9b419b6b4be6df789d0c94abd628aa3ab00cc",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/latest.json"
+    },
+    {
+      "name": "program-manifest.json",
+      "size": 486966,
+      "digest": "sha256:6ea8dca99eb87d1df7d5d231845f9644abc913b3dee30e4f5fdff495cd8f576c",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/program-manifest.json"
+    },
+    {
+      "name": "release-info.json",
+      "size": 173,
+      "digest": "sha256:2c8a3098a9da1918815471245b15b90ae78b8110aa767bc0c2c68dd5b3e15b8b",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/release-info.json"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 1136,
+      "digest": "sha256:ef95cfc622ccfb65dc1c41f8a984b7f690077357174382aed59a41f318d2529a",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/SHA256SUMS.txt"
+    },
+    {
+      "name": "UniOS-0.1.28-linux-x86_64.AppImage",
+      "size": 462129656,
+      "digest": "sha256:c897982e07cac649cd407cb1f7370146e6aed289aa33d16c1bc593758f680d63",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-linux-x86_64.AppImage"
+    },
+    {
+      "name": "UniOS-0.1.28-linux-x86_64.AppImage.sig",
+      "size": 436,
+      "digest": "sha256:acd212b746b515d45d39bb287b92e8f8c6066e130276b1dc2d091cf6d84334f9",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-linux-x86_64.AppImage.sig"
+    },
+    {
+      "name": "UniOS-0.1.28-linux-x86_64.deb",
+      "size": 384152436,
+      "digest": "sha256:86f63c1778b40ece75eb1e82b784837f066faeed9743a07f22de145c4ff451b3",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-linux-x86_64.deb"
+    },
+    {
+      "name": "UniOS-0.1.28-server-source.tar.gz",
+      "size": 2311076,
+      "digest": "sha256:58e145045f7ae06ca3c7e8190935f0f2b047d89a13d2a9555d8ecfb0b1f23508",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-server-source.tar.gz"
+    },
+    {
+      "name": "UniOS-0.1.28-windows-x86_64.exe",
+      "size": 278766959,
+      "digest": "sha256:e2872506e8106e1daac8997ede52746ed22f87f0d09ae5f9fdfe75ac6be9ebfd",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-windows-x86_64.exe"
+    },
+    {
+      "name": "UniOS-0.1.28-windows-x86_64.exe.sig",
+      "size": 436,
+      "digest": "sha256:329134abe55cae0af53d57eb341285c5f3c5626d0fe92e33f598e08a4613a641",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-windows-x86_64.exe.sig"
+    },
+    {
+      "name": "UniOS-0.1.28-windows-x86_64.msi",
+      "size": 334260400,
+      "digest": "sha256:1294a15410e7c402512d347e448d7e06ee3e8c32b21707c03af9331d46e8d143",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/UniOS-0.1.28-windows-x86_64.msi"
+    },
+    {
+      "name": "updater-signature-verification.json",
+      "size": 546,
+      "digest": "sha256:b29cf75ef5dd250678a12cecde439978f105d83908155ad27f71b006411d4f43",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/updater-signature-verification.json"
+    },
+    {
+      "name": "verification.json",
+      "size": 7341,
+      "digest": "sha256:56a06d75d66cae23b2dbc53c6fe0d9512f4b678d267bba9e4e4d791bfd7f1d44",
+      "browser_download_url": "https://github.com/EinfachMxrc/unios-app/releases/download/v0.1.28/verification.json"
+    }
+  ],
+  "included_prs": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    22,
+    23
+  ],
+  "startup_checks": {
+    "windows-x64": {
+      "mode": "client",
+      "runs": [
+        {
+          "seconds": 2.9759,
+          "client_seconds": 2.2196
+        }
+      ],
+      "median_seconds": 2.9759
+    },
+    "linux-x64": {
+      "mode": "client",
+      "runs": [
+        {
+          "seconds": 6.4482,
+          "client_seconds": 1.7677
+        }
+      ],
+      "median_seconds": 6.4482
+    }
+  },
+  "updater_signatures_verified": true,
+  "signed_version": "0.1.28",
+  "personal_data_used": false,
+  "fresh_device_installation": "manual_check_outstanding",
+  "public_macos_installer": false,
+  "windows_public_trust_signature": false
+}
