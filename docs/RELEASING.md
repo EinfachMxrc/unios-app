@@ -20,6 +20,10 @@ und [DESKTOP_PACKAGES](DESKTOP_PACKAGES.md).
    Versionsnummer im Fließtext, außer in diesem Ablauf und in Release-Notizen.
 6. **Pakete** bauen (`scripts/stage_desktop_release.py`), `SHA256SUMS.txt` und
    `verification.json` erzeugen. Nur Plattformen auflisten, die wirklich gebaut und geprüft wurden.
+   Das Staging-Skript erwartet das vollständige signierte Vier-Plattform-Set.
+   Für die öffentliche manuelle Windows-/Linux-Ausgabe stattdessen die erzeugten
+   CI-Pakete gegen `build-verification.json` und `startup-check.json` am selben
+   Quellcommit prüfen, Prüfsummen beilegen und keinen unsignierten Updatefeed erzeugen.
 7. **Release-Notizen** schreiben: was neu ist, was nicht verifiziert ist, Migrationen,
    Hinweis auf Snapshot. Ablage als `docs/releases/X.Y.Z.md`, ehrlich zu Grenzen
    (Signierung, Geräteabnahme, echte Hochschulkonten).

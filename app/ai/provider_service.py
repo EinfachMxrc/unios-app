@@ -69,6 +69,11 @@ class ProviderService:
         Runs on first use rather than at start-up, so a service that never touches the AI adapter
         never opens the credential store.
         """
+        if self._settings.demo_mode:
+            self._settings.ai_adapter_api_key = ""
+            self._settings.ai_adapter_model = ""
+            self._settings.ai_adapter_enabled = False
+            return
         if self._applied:
             return
         self._applied = True
@@ -90,6 +95,7 @@ class ProviderService:
         return ProviderState(True, self._settings.ai_adapter_model, models)
 
     def connect(self, api_key: str) -> ProviderState:
+        self._require_connection_changes()
         key = api_key.strip()
         models = fetch_models(key, self._client_factory)
         if not models:
@@ -103,6 +109,7 @@ class ProviderService:
         return ProviderState(True, self._settings.ai_adapter_model, models)
 
     def choose(self, model: str) -> ProviderState:
+        self._require_connection_changes()
         state = self.state()
         if not state.configured:
             raise AdapterCallError("Zuerst einen API-Schlüssel verbinden", status_code=409)
@@ -113,11 +120,16 @@ class ProviderService:
         return ProviderState(True, model, state.models)
 
     def disconnect(self) -> None:
+        self._require_connection_changes()
         self._repository.delete_key()
         self._repository.save_choice({})
         self._settings.ai_adapter_api_key = ""
         self._settings.ai_adapter_model = ""
         self._settings.ai_adapter_enabled = False
+
+    def _require_connection_changes(self) -> None:
+        if self._settings.demo_mode:
+            raise AdapterCallError("KI-Verbindungen sind im Demomodus deaktiviert", status_code=403)
 
     def _select(self, model: str) -> None:
         self._settings.ai_adapter_model = model

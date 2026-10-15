@@ -66,6 +66,6 @@ def provider_router(settings: Settings, coordinator: HostCoordinator,
     @router.delete("/key", status_code=204)
     def disconnect():
         coordinator.assert_writer()
-        provider.disconnect()
+        guarded(provider.disconnect)
 
     return router

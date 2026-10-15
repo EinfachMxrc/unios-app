@@ -73,4 +73,5 @@ def test_demo_never_adopts_settings_from_personal_environment(tmp_path, monkeypa
     assert settings.coding_runner_token == ""
     assert settings.connector_plugins == ""
     assert not settings.ai_adapter_enabled
+    assert settings.demo_mode is True
     assert str(settings.local_dir / "uni_os.sqlite3") == result["database"]

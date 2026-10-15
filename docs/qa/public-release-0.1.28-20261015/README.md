@@ -112,3 +112,21 @@ und acht Plattform-Skips. Zwei aufeinanderfolgende lokale Gesamtläufe dauerten
 Browserprüfungen waren nicht identisch, daher ist dies kein kontrollierter
 plattformübergreifender Benchmark. Die reale macOS-Schlüsselbund-ACL-Prüfung
 bleibt lokal ausgenommen und wird im isolierten CI-Mac geprüft.
+
+## Gemeinsamer Stand mit PR #19
+
+Der inzwischen öffentliche PR #19 ist vollständig enthalten, einschließlich
+Python 3.13, KI-Modellliste und Anki-Backup. Am kombinierten Stand bestehen
+1.357 Backendfälle / acht Plattform-Skips, 1.430 Frontendtests, Typecheck,
+Lint, Ruff, mypy, OpenAPI, Build, Bundle-Grenzen und 25 passende Browserfälle.
+Danach wurde eine Demo-Regression korrigiert: weder gespeicherte KI-Schlüssel
+noch Modelllisten dürfen in einer Demo gelesen werden; Änderungen an diesen
+Verbindungen werden vor Speicher-/Netzwerkzugriff abgelehnt. 22 gezielte Fälle
+einschließlich vier neuer Schutzprüfungen und Ruff/mypy für 647 Dateien bestehen.
+Die neun README-Bilder wurden aus einer neuen CLI-Demo erneut aufgenommen und
+einzeln visuell geprüft; keine Browser-Ausnahmen und ausschließlich erfundene Daten.
+
+Der öffentliche Lauf von PR #19 fand zusätzlich das noch auf Python 3.12
+basierende lokale Docker-Image; es ist jetzt auf die Mindestversion 3.13
+angeglichen. Vollständige Plattformmatrix, Docker-Smoke und Paketbau müssen
+am endgültigen gemeinsamen Commit neu erfolgreich abgeschlossen werden.
