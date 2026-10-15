@@ -1,5 +1,18 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 15.10.2026 – KI-SDK im öffentlichen Desktop-Paket
+
+Nach Zusammenführung aller 17 Dependency-PRs und PR #19 ist ein Paketierungs-
+Fehler aufgefallen: Der öffentliche Desktop-Workflow installierte das optionale
+Anthropic-SDK nicht. Der Paketbau installiert jetzt das vorhandene Extra `ai`;
+PyInstaller nimmt SDK und Metadaten ausdrücklich auf. Unpaketierte Installationen
+ohne Extra erhalten beim Verbinden einen erklärenden 503 statt eines Importfehlers.
+Ein Regressionstest prüft diesen echten HTTP-Fehlerpfad mit erfundenem Schlüssel.
+Die Startprobe des tatsächlich eingefrorenen Clients importiert zusätzlich das
+SDK ohne Schlüssel oder Netzwerk. 19 gezielte Backend-/Desktopfälle bestehen
+mit einem Windows-Skip; Ruff und mypy für 647 Dateien sind grün.
+Der vollständige Freigabelauf muss auch diesen endgültigen Quellstand einschließen.
+
 ## 15.10.2026 – Öffentliche Dependency-Nachlieferung und Windows-Testdiagnose
 
 Nach dem Zusammenführen von PR #11 hat Dependabot die weiteren PRs #12–#18
