@@ -5,6 +5,7 @@
 ## 0.1.29 – Lokaler Modus ohne Server und viele Korrekturen (16.10.2026)
 
 - Neu: Beim ersten Start der Desktop-App lässt sich „Nur auf diesem Gerät nutzen“ wählen. UniOS läuft dann mit einer lokalen Datenbank, ohne eigenen Server. Bestehende Installationen behalten ihren Modus; ein späterer Wechsel auf einen Server geht nur über die geprüfte Datenübernahme.
+- Neu: Kurs-Schreibtisch und geräumigere PDF-Mitschrift (Details in docs/qa/course-desk-20261016).
 - Behoben (Backup/Migration): Das Anki-Backup hält die Collection-Sperre und übernimmt offene Review-Receipts; ein Restore ohne Anki im Backup entfernt eine später angelegte Sammlung; KI-Modellwahl ist im Backup, der KI-Schlüssel wandert bei der Server-Migration mit; Restore ersetzt gleich große, geänderte Dateien und rotiert die Corpus-Epoche.
 - Behoben (Kalender): Ausgeblendete Stundenplan-Slots und die konfigurierte Zeitzone gelten jetzt auch für freie Lernblöcke, den Kalender-Export und den KI-Korpus.
 - Behoben (Prüfungsmodus): Eine abgelaufene Prüfung gibt Versuche, Berichte, Hinweise und Suche frei.
