@@ -53,7 +53,7 @@ try {
   await page.goto(`/notes?id=${noteId}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
   await expect(page.getByRole('textbox', { name: 'Notizinhalt' })).toContainText('Rekursionsschritt')
-  await page.getByRole('button', { name: 'Fokusmodus', exact: true }).click()
+  await page.getByRole('button', { name: 'Fokus', exact: true }).click()
   await page.evaluate(() => window.scrollTo(0, 0))
   await capture('editor')
   await page.goto('/learning')
