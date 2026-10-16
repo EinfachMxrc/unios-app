@@ -57,7 +57,7 @@ def test_failed_jobs_survive_job_table_rotation_without_requeue(settings, factor
 
 
 def test_empty_documents_are_indexed_once(settings, factory, coordinator, monkeypatch):
-    ((resource_id, version_id),) = seed_unindexed(factory, settings)
+    ((_resource_id, version_id),) = seed_unindexed(factory, settings)
     monkeypatch.setattr("app.extract.jobs.parse_path", lambda *args, **kwargs: [])
     jobs = IndexJobs(factory, settings, coordinator)
     job = IndexJob(version_id, generation=coordinator.current().generation)
