@@ -2,6 +2,21 @@
 
 # Änderungen
 
+## 0.1.29 – Lokaler Modus ohne Server und viele Korrekturen (16.10.2026)
+
+- Neu: Beim ersten Start der Desktop-App lässt sich „Nur auf diesem Gerät nutzen“ wählen. UniOS läuft dann mit einer lokalen Datenbank, ohne eigenen Server. Bestehende Installationen behalten ihren Modus; ein späterer Wechsel auf einen Server geht nur über die geprüfte Datenübernahme.
+- Behoben (Backup/Migration): Das Anki-Backup hält die Collection-Sperre und übernimmt offene Review-Receipts; ein Restore ohne Anki im Backup entfernt eine später angelegte Sammlung; KI-Modellwahl ist im Backup, der KI-Schlüssel wandert bei der Server-Migration mit; Restore ersetzt gleich große, geänderte Dateien und rotiert die Corpus-Epoche.
+- Behoben (Kalender): Ausgeblendete Stundenplan-Slots und die konfigurierte Zeitzone gelten jetzt auch für freie Lernblöcke, den Kalender-Export und den KI-Korpus.
+- Behoben (Prüfungsmodus): Eine abgelaufene Prüfung gibt Versuche, Berichte, Hinweise und Suche frei.
+- Behoben (Papierkorb): Gelöschte Notizen und Schnellerfassungen tauchen nicht mehr im KI-Korpus, im Offline-Suchindex oder bei Smart-Capture-Wiederholungen auf.
+- Behoben (Textindex): Fehlgeschlagene, leere oder zu große Dokumente werden nicht mehr alle zwei Sekunden neu eingereiht; Größenlimits von Warteschlange und Parser stimmen überein.
+- Behoben (Host): Nach einer Standby-Übernahme starten Hintergrund-Worker und Benachrichtigungs-Job; der Sync-Zyklus startet nach der Einrichtung ohne Neustart.
+- Behoben (Fokus): Notiz-Karteikarten ohne Datei-Quelle gehören wieder zu ihrem Kurs.
+- Behoben (Oberfläche): PDF-Auszüge und Bildausschnitte bei geschlossenem Notiz-Drawer landen in der gewählten Zielnotiz; Offline-Warteschlangen vergessen eine veraltete Host-Generation und laden Listen nach Teilerfolg neu; der Notizkarten-Dialog bleibt nach einem Workspace-Reset nicht im Ladezustand; Suchausschnitte zeigen die passende Textstelle.
+- Behoben (Desktop/Docker): Berechtigung für die Raumprüfung, getrennter Portal-Lesemodus je Fenster, interne Links im Demo- und Wiederherstellungsmodus, `config` im lokalen Docker-Image.
+- Logs: Zur Laufzeit gespeicherte Geheimnisse werden sofort geschwärzt.
+- Dokumentation: Server-Anleitung auch auf Englisch; neue Komponenten-Tests.
+
 ## 0.1.28 – KI-Schlüssel, Backup mit Anki, Navigation, Kursnamen und Kalender (15.10.2026)
 
 - Problem- und Ideenberichte öffnen das passende vorausgefüllte Formular im öffentlichen Repository; der Paket-Workflow kann einen Release-Entwurf mit signiertem Update-Feed vorbereiten.
