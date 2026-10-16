@@ -107,16 +107,26 @@ export function InsertMenu({
     return false
   }
   useEffect(() => {
-    const dom = editor.view.dom
+    let dom: HTMLElement | null = null
     const handler = (event: KeyboardEvent) => {
       if (keys.current(event)) {
         event.preventDefault()
         event.stopPropagation()
       }
     }
-    // Capture phase: the menu must see Enter before the list/paragraph keymaps do.
-    dom.addEventListener('keydown', handler, true)
-    return () => dom.removeEventListener('keydown', handler, true)
+    // The view exists only once the editor content is mounted; attach when it is.
+    const attach = () => {
+      if (dom || editor.isDestroyed) return
+      dom = editor.view.dom
+      // Capture phase: the menu must see Enter before the list/paragraph keymaps do.
+      dom.addEventListener('keydown', handler, true)
+    }
+    if (editor.isInitialized) attach()
+    else editor.on('create', attach)
+    return () => {
+      editor.off('create', attach)
+      dom?.removeEventListener('keydown', handler, true)
+    }
   }, [editor])
   useEffect(() => {
     document.getElementById(`${listId}-${selected}`)?.scrollIntoView?.({ block: 'nearest' })

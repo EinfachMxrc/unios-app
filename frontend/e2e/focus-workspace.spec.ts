@@ -211,9 +211,7 @@ test('course membership guards notes and sources before rendering foreign conten
   await page.goto(`${focus()}?mode=notes&note=${seed.note_id}`)
   await expect(page.locator('.note-canvas')).toContainText('Meine eigene Begründung.')
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await page
-    .getByRole('textbox', { name: 'Notizinhalt', exact: true })
-    .fill('Im echten Kursdokument gespeichert.')
+  await page.getByRole('textbox', { name: 'Notizinhalt', exact: true }).fill('Im echten Kursdokument gespeichert.')
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   expect((await (await page.request.get(`/api/notes/${seed.note_id}`)).json()).body).toContain(
     'Im echten Kursdokument gespeichert.',

@@ -34,3 +34,9 @@ export function documentText(document: { blocks: StoredBlock[] }): string {
   walk(document.blocks)
   return lines.join('\n')
 }
+
+/** Insert a block from the editor's "Einfügen" menu, the pointer-friendly way to the same blocks as "/". */
+export async function insertFromMenu(page: Page, scope: Page | Locator, name: string): Promise<void> {
+  await scope.getByRole('button', { name: 'Einfügen', exact: true }).click()
+  await page.getByRole('menuitem', { name, exact: true }).click()
+}

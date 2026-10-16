@@ -22,7 +22,7 @@ test('a PDF opens the direct course workspace and Today resumes its page and dra
   await note.fill('Meine direkte Mitschrift ohne Lernplan.')
   await page.getByRole('link', { name: 'Heute', exact: true }).first().click()
   await page.getByRole('link', { name: 'Hier weitermachen', exact: true }).click()
-  await expect(note).toHaveValue('Meine direkte Mitschrift ohne Lernplan.')
+  await expect(note).toHaveText('Meine direkte Mitschrift ohne Lernplan.')
   await expect(page.locator('[data-material-page="12"] canvas')).toBeInViewport()
   await page.reload()
   await expect(page.locator('.material-pager')).toContainText('Seite 12 von 120')
@@ -58,7 +58,7 @@ test('a new app tab resumes a local draft and source page from device storage', 
   const next = await context.newPage()
   await next.goto('/')
   await next.getByRole('link', { name: 'Hier weitermachen', exact: true }).click()
-  await expect(next.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(
+  await expect(next.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveText(
     'Mein lokaler Entwurf bleibt beim Neustart erhalten.',
   )
   await expect(next.locator('.material-pager')).toContainText('Seite 80 von 120')

@@ -1,13 +1,13 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 .note-prose {
-  min-height: 340px;
+  min-height: 400px;
   outline: none;
 }
 /* Calm reading type: modest heading steps, one rhythm unit between blocks. */
 .note-prose,
 .note-prose {
   line-height: 1.7;
-  font-size: 0.95rem;
+  font-size: 1rem;
   overflow-wrap: anywhere;
 }
 :is(.note-prose) > * {
@@ -425,6 +425,10 @@
 .note-editor:hover .note-editor-bar,
 .note-editor:focus-within .note-editor-bar {
   opacity: 1;
+}
+.note-insert-list {
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
 }
 .note-editor-bar-space {
   flex: 1;

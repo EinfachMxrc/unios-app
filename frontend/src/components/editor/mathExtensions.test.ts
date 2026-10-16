@@ -6,7 +6,8 @@ import { Editor } from '@tiptap/core'
 import { assignMissingIds, editorExtensions } from '@/editor/extensions'
 
 /** Block ids are assigned per editor; compare structure only. */
-const noIds = (json: unknown) => JSON.parse(JSON.stringify(json, (key, value) => (key === 'blockId' ? undefined : value)))
+const noIds = (json: unknown) =>
+  JSON.parse(JSON.stringify(json, (key, value) => (key === 'blockId' ? undefined : value)))
 const instances: Editor[] = []
 function parse(body: string) {
   const editor = new Editor({ extensions: editorExtensions(), content: body, contentType: 'markdown' })

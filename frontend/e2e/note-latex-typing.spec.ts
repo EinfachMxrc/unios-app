@@ -94,9 +94,6 @@ test('inline LaTeX transforms on the last delimiter, keeps surrounding prose and
   await expect(page.locator('.rendered-note')).toContainText('Ende.')
 })
 
-
-
-
 test('escaped dollar signs behave like normal text with Delete, Backspace and Undo', async ({ page }) => {
   const { editor } = await openEditor(page, String.raw`A\$B`)
   await editor.press('ControlOrMeta+Home')

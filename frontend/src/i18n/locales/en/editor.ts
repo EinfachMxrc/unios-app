@@ -9,6 +9,7 @@ export default {
   tools: 'Note tools',
   undo: 'Undo (Ctrl/⌘+Z)',
   redo: 'Redo (Ctrl/⌘+Shift+Z)',
+  insertMenu: 'Insert',
   outline: 'Outline',
   outlineEmpty: 'Headings appear here.',
   focusMode: 'Focus',

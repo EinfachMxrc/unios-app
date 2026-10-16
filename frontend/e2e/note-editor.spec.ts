@@ -3,7 +3,12 @@
 import { expect, test } from './fixtures'
 import { noteEditor, writeNote } from './noteEditor'
 
-type StoredBlock = { type: string; props: Record<string, unknown>; content: { text?: string; marks?: string[] }[]; children: StoredBlock[] }
+type StoredBlock = {
+  type: string
+  props: Record<string, unknown>
+  content: { text?: string; marks?: string[] }[]
+  children: StoredBlock[]
+}
 
 async function stored(page: import('@playwright/test').Page, id: string) {
   const detail = await (await page.request.get(`/api/notes/${id}`)).json()
@@ -120,7 +125,9 @@ test('a toggle folds its content and to-dos stay checkable', async ({ page }) =>
   await page.keyboard.press('Enter')
   await page.keyboard.press('Enter')
   await page.keyboard.type('/check')
-  await expect(page.getByRole('listbox', { name: 'Block einfügen' }).getByRole('option', { name: 'Checkliste' })).toBeVisible()
+  await expect(
+    page.getByRole('listbox', { name: 'Block einfügen' }).getByRole('option', { name: 'Checkliste' }),
+  ).toBeVisible()
   await page.keyboard.press('Enter')
   await page.keyboard.type('Aufgabe erledigen')
   await editor.getByRole('checkbox').check()

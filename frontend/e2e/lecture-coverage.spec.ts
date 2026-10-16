@@ -88,9 +88,7 @@ test('Enter records lecture pages without creating a note', async ({ page }) => 
   await pages.fill('1-2')
   await pages.press('Enter')
   await expect(
-    draft
-      .getByRole('textbox', { name: 'Notizinhalt', exact: true })
-      .locator(`a[href="/material/${version}?page=2"]`),
+    draft.getByRole('textbox', { name: 'Notizinhalt', exact: true }).locator(`a[href="/material/${version}?page=2"]`),
   ).toHaveCount(1)
   await expect(coverage.getByRole('status')).toContainText('Seitenangaben in die Mitschrift übernommen')
   expect(creates).toBe(0)

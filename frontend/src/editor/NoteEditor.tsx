@@ -2,7 +2,8 @@
 
 import { TextSelection } from '@tiptap/pm/state'
 import { EditorContent, useEditor, type Editor } from '@tiptap/react'
-import { Focus, ListTree, Redo2, Undo2 } from 'lucide-react'
+import { Focus, ListTree, Plus, Redo2, Undo2 } from 'lucide-react'
+import { DropdownMenu } from 'radix-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '@fontsource/fira-code/400.css'
 import { NoteSelectionCardDialog } from '@/components/NoteSelectionCardDialog'
@@ -11,7 +12,7 @@ import { useT } from '@/i18n/useT'
 import { rememberWorkspace, useWorkspaceState, workspaceValue } from '@/lib/workspaceState'
 import type { NoteCardContext } from '@/noteCardTypes'
 import { BlockHandle } from './BlockHandle'
-import { type DialogOptions, type InsertDialog, type Range } from './commands'
+import { blockCommands, topBlockAt, type DialogOptions, type InsertDialog, type Range } from './commands'
 import { docText, parseBody, serializeDoc } from './doc'
 import { editorExtensions } from './extensions'
 import { InsertDialogs, type OpenDialog } from './InsertDialogs'
@@ -247,6 +248,41 @@ export function NoteEditor({
         >
           <Redo2 size={17} aria-hidden="true" />
         </button>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>
+            <button type="button" className="note-editor-insert">
+              <Plus size={17} aria-hidden="true" />
+              {t('insertMenu')}
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content className="note-block-menu note-insert-list" align="start" sideOffset={4}>
+              {blockCommands.map((command) => (
+                <DropdownMenu.Item
+                  key={command.id}
+                  onSelect={() => {
+                    // Insert below the current block, in a fresh paragraph the command can take over.
+                    const block = topBlockAt(editor, editor.state.selection.from)
+                    const { $from } = editor.state.selection
+                    const empty = $from.parent.isTextblock && $from.parent.content.size === 0
+                    let at = $from.pos
+                    if (!empty) {
+                      at = (block ? block.pos + block.node.nodeSize : editor.state.doc.content.size) + 1
+                      editor
+                        .chain()
+                        .insertContentAt(at - 1, { type: 'paragraph' })
+                        .run()
+                    }
+                    command.run({ editor, range: { from: at, to: at }, openDialog })
+                  }}
+                >
+                  <command.icon size={16} aria-hidden="true" />
+                  {t(command.label)}
+                </DropdownMenu.Item>
+              ))}
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
         <span className="note-editor-bar-space" />
         <button type="button" aria-pressed={outline} onClick={() => setOutline(!outline)}>
           <ListTree size={17} aria-hidden="true" />
