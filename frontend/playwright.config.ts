@@ -8,6 +8,8 @@ const uvicorn = `"${path.resolve(import.meta.dirname, '..', '.venv', process.pla
 export default defineConfig({
   testDir: './e2e',
   workers: 1,
+  // Keyboard-focus races show up now and then on shared CI runners; a retry is reported as "flaky", not hidden.
+  retries: process.env.CI ? 1 : 0,
   timeout: 30_000,
   expect: { timeout: 10_000 },
   use: {
