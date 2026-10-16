@@ -359,7 +359,7 @@ async fn open_university_mail(app: tauri::AppHandle, url: String) -> Result<(), 
         .map_err(|error| error.to_string())?;
     // Only takes effect once a read-only walk-through is active (portal_crawl::portal_guard);
     // normal browsing in this window is unaffected until then.
-    portal_crawl::install_request_guard(&window);
+    portal_crawl::install_request_guard(&window, "mail");
     Ok(())
 }
 
@@ -408,7 +408,7 @@ async fn open_portal_login(
             })
             .build()
             .map_err(|error| error.to_string())?;
-    portal_crawl::install_request_guard(&window);
+    portal_crawl::install_request_guard(&window, &portal);
     Ok(())
 }
 
@@ -482,8 +482,11 @@ async fn close_portal_login(app: tauri::AppHandle, portal: String) -> Result<(),
 /// Let the React router classify local screens; server downloads keep their
 /// browser behaviour. Never load an external site's URL into the app window.
 fn native_link_target(url: &tauri::Url) -> Option<String> {
-    let local = tauri::Url::parse(APP_URL).ok()?;
-    if url.origin() != local.origin() || !url.username().is_empty() || url.password().is_some() {
+    // Normal, demo (8001) and recovery (8002) mode each serve the app on their own local port.
+    let local = url.scheme() == "http"
+        && url.host_str() == Some("127.0.0.1")
+        && matches!(url.port(), Some(8000 | 8001 | 8002));
+    if !local || !url.username().is_empty() || url.password().is_some() {
         return None;
     }
     let path = url.path();
@@ -737,6 +740,10 @@ mod tests {
     fn local_window_links_are_forwarded_without_opening_a_browser() {
         let link = tauri::Url::parse("http://127.0.0.1:8000/notes?course_id=1&id=fictional#section").unwrap();
         assert_eq!(super::native_link_target(&link), Some(link.to_string()));
+        for port in [8001, 8002] {
+            let link = tauri::Url::parse(&format!("http://127.0.0.1:{port}/notes?id=fictional")).unwrap();
+            assert_eq!(super::native_link_target(&link), Some(link.to_string()));
+        }
         for url in ["https://example.org/notes", "http://127.0.0.1.example.org:8000/notes",
             "http://127.0.0.1:8173/notes", "http://user@127.0.0.1:8000/notes",
             "http://127.0.0.1:8000/api/notes", "http://127.0.0.1:8000/files/41",

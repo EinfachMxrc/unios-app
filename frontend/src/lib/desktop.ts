@@ -78,7 +78,7 @@ export function desktopCrawlBridge(portal: PortalName): CrawlBridge {
     navigate: (url) => invokeDesktop('portal_navigate', { portal, url }),
     click: (index, text) => invokeDesktop('portal_click', { portal, index, expectedText: text }),
     scroll: () => invokeDesktop('portal_scroll', { portal }),
-    guard: (active, menuBudget) => invokeDesktop('portal_guard', { active, menuBudget }),
+    guard: (active, menuBudget) => invokeDesktop('portal_guard', { portal, active, menuBudget }),
     sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   }
 }

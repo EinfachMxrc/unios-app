@@ -71,7 +71,7 @@ fn main() {
                         return Err("a closed portal window was reported as readable".into());
                     }
                     if !cfg!(windows) {
-                        if portal_crawl::portal_guard(true, 1).await.is_ok()
+                        if portal_crawl::portal_guard("mycampus".into(), true, 1).await.is_ok()
                             || portal_crawl::portal_click(
                                 handle.clone(),
                                 "mycampus".into(),

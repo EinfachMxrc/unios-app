@@ -14,6 +14,7 @@ fn main() {
             "open_room_booking",
             "fill_room_booking",
             "read_room_booking",
+            "check_room_availability",
             "open_portal_login",
             "capture_portal_login",
             "portal_capture_capabilities",
