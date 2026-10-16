@@ -60,3 +60,14 @@ def test_connector_error_is_safe_for_dashboard_and_push(settings, factory, coord
     assert redact_sensitive("token=abc&sesskey=xyz&access_token=def&password=123") == (
         "token=[REDACTED]&sesskey=[REDACTED]&access_token=[REDACTED]&password=[REDACTED]"
     )
+
+
+def test_secrets_saved_while_running_are_redacted_immediately(tmp_path):
+    current: list[str] = []
+    configure_logging(tmp_path, lambda: tuple(current))
+    logging.getLogger("test.runtime").error("key=%s", "late-secret-value")  # pragma: allowlist secret
+    current.append("late-secret-value")  # pragma: allowlist secret
+    logging.getLogger("test.runtime").error("key=%s", "late-secret-value")  # pragma: allowlist secret
+    lines = (tmp_path / "logs" / "uni_os.log").read_text(encoding="utf-8").splitlines()
+    assert "late-secret-value" in lines[-2]
+    assert "late-secret-value" not in lines[-1]

@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends restic \
     && rm -rf /var/lib/apt/lists/*
 COPY pyproject.toml README.md LICENSE ./
 COPY app ./app
+COPY config ./config
 COPY institutions ./institutions
 COPY alembic ./alembic
 COPY alembic.ini ./

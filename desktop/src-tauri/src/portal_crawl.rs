@@ -11,8 +11,46 @@ use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::time::Duration;
 use tauri::Manager;
 
-static CRAWL_ACTIVE: AtomicBool = AtomicBool::new(false);
-static MENU_BUDGET: AtomicU32 = AtomicU32::new(0);
+/// Read-only walk-through state of one portal window. Each portal has its own, so a walk-through
+/// that ends in one window cannot lift the write block of another that is still running.
+struct Crawl {
+    portal: &'static str,
+    active: AtomicBool,
+    menu_budget: AtomicU32,
+}
+
+static CRAWLS: [Crawl; 3] = [
+    Crawl::new("mycampus"),
+    Crawl::new("primuss"),
+    Crawl::new(MAIL_PORTAL),
+];
+
+impl Crawl {
+    const fn new(portal: &'static str) -> Self {
+        Self {
+            portal,
+            active: AtomicBool::new(false),
+            menu_budget: AtomicU32::new(0),
+        }
+    }
+}
+
+fn crawl(portal: &str) -> Result<&'static Crawl, String> {
+    CRAWLS
+        .iter()
+        .find(|state| state.portal == portal)
+        .ok_or_else(|| "Unknown portal".to_string())
+}
+
+/// Navigation and clicks only run inside an active read-only walk-through of that portal.
+fn require_walkthrough(portal: &str) -> Result<(), String> {
+    require_traversal()?;
+    if crawl(portal)?.active.load(Ordering::SeqCst) {
+        Ok(())
+    } else {
+        Err("No read-only walk-through is active for this portal".into())
+    }
+}
 const MAX_MENU_BUDGET: u32 = 3;
 const MAX_SNAPSHOT_CHARS: usize = 3_000_000;
 const PORTALS: [&str; 2] = ["mycampus", "primuss"];
@@ -164,7 +202,7 @@ pub async fn portal_navigate(
     portal: String,
     url: String,
 ) -> Result<(), String> {
-    require_traversal()?;
+    require_walkthrough(&portal)?;
     let window = portal_window(&app, &portal)?;
     let target = tauri::Url::parse(&url).map_err(|error| error.to_string())?;
     let current = window.url().map_err(|error| error.to_string())?;
@@ -183,7 +221,7 @@ pub async fn portal_click(
     index: u32,
     expected_text: String,
 ) -> Result<bool, String> {
-    require_traversal()?;
+    require_walkthrough(&portal)?;
     let window = portal_window(&app, &portal)?;
     let expected = serde_json::to_string(&expected_text).map_err(|error| error.to_string())?;
     let is_mail = portal == MAIL_PORTAL;
@@ -211,21 +249,24 @@ pub async fn portal_click(
 /// message list) that render more rows only once their container actually scrolls.
 #[tauri::command]
 pub async fn portal_scroll(app: tauri::AppHandle, portal: String) -> Result<bool, String> {
-    require_traversal()?;
+    require_walkthrough(&portal)?;
     let window = portal_window(&app, &portal)?;
     let outcome = run_json(&window, SCROLL_SCRIPT).await?;
     Ok(outcome["scrolled"].as_bool().unwrap_or(false))
 }
 
-/// Switches the read-only mode of the portal window on or off. While it is on, every request
-/// that is not a plain read is refused, except up to `menu_budget` menu requests.
+/// Switches the read-only mode of one portal window on or off. While it is on, every request
+/// of that window that is not a plain read is refused, except up to `menu_budget` menu requests.
 #[tauri::command]
-pub async fn portal_guard(active: bool, menu_budget: u32) -> Result<(), String> {
+pub async fn portal_guard(portal: String, active: bool, menu_budget: u32) -> Result<(), String> {
+    let state = crawl(&portal)?;
     if active {
         require_traversal()?;
     }
-    MENU_BUDGET.store(menu_budget.min(MAX_MENU_BUDGET), Ordering::SeqCst);
-    CRAWL_ACTIVE.store(active, Ordering::SeqCst);
+    state
+        .menu_budget
+        .store(menu_budget.min(MAX_MENU_BUDGET), Ordering::SeqCst);
+    state.active.store(active, Ordering::SeqCst);
     Ok(())
 }
 
@@ -268,8 +309,11 @@ fn request_allowed(method: &str, url: &str, budget: &AtomicU32) -> bool {
 
 /// Refuses writes from the portal window while a walk-through is active.
 #[cfg(windows)]
-pub fn install_request_guard(window: &tauri::WebviewWindow) {
-    let _ = window.with_webview(|platform| unsafe {
+pub fn install_request_guard(window: &tauri::WebviewWindow, portal: &str) {
+    let Ok(state) = crawl(portal) else {
+        return;
+    };
+    let _ = window.with_webview(move |platform| unsafe {
         use webview2_com::Microsoft::Web::WebView2::Win32::COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL;
         use webview2_com::{take_pwstr, WebResourceRequestedEventHandler};
         use windows::core::{HSTRING, PWSTR};
@@ -293,7 +337,7 @@ pub fn install_request_guard(window: &tauri::WebviewWindow) {
                 let Some(args) = args else {
                     return Ok(());
                 };
-                if !CRAWL_ACTIVE.load(Ordering::SeqCst) {
+                if !state.active.load(Ordering::SeqCst) {
                     return Ok(());
                 }
                 let request = args.Request()?;
@@ -301,7 +345,7 @@ pub fn install_request_guard(window: &tauri::WebviewWindow) {
                 request.Method(&mut method)?;
                 let mut uri = PWSTR::null();
                 request.Uri(&mut uri)?;
-                if request_allowed(&take_pwstr(method), &take_pwstr(uri), &MENU_BUDGET) {
+                if request_allowed(&take_pwstr(method), &take_pwstr(uri), &state.menu_budget) {
                     return Ok(());
                 }
                 let response = environment.CreateWebResourceResponse(
@@ -318,7 +362,7 @@ pub fn install_request_guard(window: &tauri::WebviewWindow) {
 }
 
 #[cfg(not(windows))]
-pub fn install_request_guard(_window: &tauri::WebviewWindow) {}
+pub fn install_request_guard(_window: &tauri::WebviewWindow, _portal: &str) {}
 
 #[cfg(test)]
 mod tests {
@@ -366,6 +410,18 @@ mod tests {
             "https://portal.example/cgi-bin/index.pl",
             &budget
         ));
+    }
+
+    #[test]
+    fn walkthrough_state_is_kept_per_portal() {
+        crawl("primuss").unwrap().active.store(true, Ordering::SeqCst);
+        crawl("mycampus").unwrap().active.store(true, Ordering::SeqCst);
+        // Ending one portal's walk-through leaves the other one guarded.
+        crawl("mycampus").unwrap().active.store(false, Ordering::SeqCst);
+        assert!(crawl("primuss").unwrap().active.load(Ordering::SeqCst));
+        assert!(!crawl("mycampus").unwrap().active.load(Ordering::SeqCst));
+        crawl("primuss").unwrap().active.store(false, Ordering::SeqCst);
+        assert!(crawl("unknown").is_err());
     }
 
     #[test]

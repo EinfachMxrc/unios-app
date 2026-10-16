@@ -138,7 +138,8 @@ def _valid_ntfy_url(value: str) -> bool:
 
 
 def setup_router(settings: Settings, sync_engine, coordinator: HostCoordinator,
-                 on_campus_login: Callable[[], None] | None = None) -> APIRouter:
+                 on_campus_login: Callable[[], None] | None = None,
+                 on_sources_ready: Callable[[], None] | None = None) -> APIRouter:
     router = APIRouter(prefix="/api/setup", tags=["setup"])
     marker = settings.local_dir / "setup.json"
     profile = load_institution(settings.institution_slug)
@@ -365,6 +366,8 @@ def setup_router(settings: Settings, sync_engine, coordinator: HostCoordinator,
         if not any(connector.name == "moodle" for connector in sync_engine.connectors):
             sync_engine.connectors.append(MoodleClient(settings))
         connection_health.moodle_token_verified()
+        if on_sources_ready is not None:
+            on_sources_ready()
         return status()
 
     @router.post("/notifications", response_model=SetupStatusView, response_model_exclude_unset=True)
@@ -404,6 +407,8 @@ def setup_router(settings: Settings, sync_engine, coordinator: HostCoordinator,
             raise HTTPException(409, "Zuerst den Studiengang auswählen")
         state["completed"] = True
         _write_marker(marker, state)
+        if on_sources_ready is not None:
+            on_sources_ready()
         return status()
 
     return router

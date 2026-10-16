@@ -134,6 +134,9 @@ class BackgroundJobs:
                     self.repository.update(identifier, context.check, state="completed")
             except JobCancelled:
                 try:
+                    if context is None:
+                        log.warning("JOB_RESULT_DEFERRED")
+                        continue
                     self.repository.update(identifier, context.fence, state="cancelled", error_code=None)
                 except Exception:  # noqa: BLE001 - never write after losing ownership
                     log.warning("JOB_RESULT_DEFERRED")

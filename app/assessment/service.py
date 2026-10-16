@@ -8,6 +8,7 @@ from fastapi import HTTPException
 
 from app.assessment import registry
 from app.assessment.contracts import Create, Source
+from app.assessment.timing import is_running
 from app.coding.repository import Changed
 from app.db.models import (
     AssessmentAttempt,
@@ -111,7 +112,7 @@ class AssessmentService:
 
     def attempt_view(self, row):
         exam = self.repository.get(AssessmentSession, row.session_id) if row.session_id else None
-        visible = not exam or exam.state != 'running'
+        visible = not exam or not is_running(exam)
         return {'id': row.id, 'task_id': row.task_id, 'session_id': row.session_id, 'hint_level': row.hint_level,
                 'confidence': row.answer['confidence'], 'report': row.report if visible else {},
                 'feedback_requested': row.feedback_requested, 'created_at': row.created_at}

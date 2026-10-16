@@ -59,6 +59,7 @@ def offline_search_index(session) -> list[dict]:
             JOIN notes AS n ON n.id = f.note_id
             JOIN courses AS c ON c.id = n.course_id
             LEFT JOIN semesters AS s ON s.id = c.semester_id
+            WHERE n.deleted_at IS NULL
         """),
         ("jot", """
             SELECT j.id, 'Schnellerfassung' AS title, j.body,
@@ -68,6 +69,7 @@ def offline_search_index(session) -> list[dict]:
             FROM jots AS j
             LEFT JOIN courses AS c ON c.id = j.course_id
             LEFT JOIN semesters AS s ON s.id = c.semester_id
+            WHERE j.deleted_at IS NULL
         """),
         ("clip", """
             SELECT i.id, i.title, i.body || ' ' || COALESCE(i.url, '') AS body,

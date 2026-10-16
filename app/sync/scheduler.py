@@ -2,6 +2,7 @@
 
 import logging
 import random
+from collections.abc import Callable
 from datetime import datetime, timedelta
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -34,9 +35,22 @@ class SyncScheduler:
         self.coordinator = coordinator
         self.scheduler = BackgroundScheduler(timezone=settings.timezone)
         self._started_once = False
+        # Jobs owned by other services; re-registered on every start, because a restart
+        # after stop() builds a fresh BackgroundScheduler that would otherwise lose them.
+        self._recurring: dict[str, tuple[Callable[[], object], int]] = {}
         self.mail_service = mail_service
         self.timetable_service = timetable_service
         self.forwarding_service = forwarding_service
+
+    def add_recurring(self, job: Callable[[], object], *, job_id: str, minutes: int) -> None:
+        self._recurring[job_id] = (job, minutes)
+        if self.scheduler.running:
+            self._register_recurring(job_id)
+
+    def _register_recurring(self, job_id: str) -> None:
+        job, minutes = self._recurring[job_id]
+        self.scheduler.add_job(job, IntervalTrigger(minutes=minutes, timezone=self.settings.timezone),
+                               id=job_id, replace_existing=True, max_instances=1, coalesce=True)
 
     def start(self) -> None:
         if self.scheduler.running:
@@ -45,6 +59,8 @@ class SyncScheduler:
             self.scheduler = BackgroundScheduler(timezone=self.settings.timezone)
         self._started_once = True
         self.scheduler.start()
+        for job_id in self._recurring:
+            self._register_recurring(job_id)
         self.scheduler.add_job(self._run_forwarded_mail,
                                IntervalTrigger(minutes=5, timezone=self.settings.timezone),
                                next_run_time=datetime.now(self.settings.timezone) + timedelta(seconds=20),
@@ -116,6 +132,13 @@ class SyncScheduler:
         if target <= moment:
             target += timedelta(days=1)
         return target
+
+    def ensure_sync_scheduled(self) -> None:
+        """Start the sync cycle once a first source exists, without restarting UniOS."""
+        if not self.scheduler.running or self.scheduler.get_job("next_sync") is not None:
+            return
+        if getattr(self.engine, "connectors", True) or campus_ready(self.settings) or configured_urls(self.settings):
+            self._schedule_at(self._outside_quiet_hours(datetime.now(self.settings.timezone)))
 
     def _schedule_at(self, moment: datetime) -> None:
         self.scheduler.add_job(self._run_and_reschedule, DateTrigger(run_date=moment), id="next_sync",

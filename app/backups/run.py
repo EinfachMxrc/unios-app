@@ -13,6 +13,7 @@ from pathlib import Path
 from filelock import FileLock, Timeout
 from sqlalchemy.engine import make_url
 
+from app.anki.collection import snapshot_collection
 from app.backups.store import (
     BackupError,
     backup_root,
@@ -27,7 +28,8 @@ from app.host.lease import HostCoordinator
 # Device-bound or rebuildable: the host lease and its pre-migration copies, caches, older backup copies.
 SKIPPED_TOP_LEVEL = {"host", "derived", "backup-snapshots", "backup-status"}
 # Only what a fresh start needs, plus the Anki collection; sessions, tokens and secrets stay on this device.
-LOCAL_SETTINGS = ("setup.json", "institution-profile.json", "campus.json")
+# ai-provider.json holds only the model choice; the API key stays in the secret store.
+LOCAL_SETTINGS = ("setup.json", "institution-profile.json", "campus.json", "ai-provider.json")
 DAILY = timedelta(hours=24)
 
 
@@ -57,13 +59,17 @@ def _copy_database(source: Path, target: Path) -> str | None:
     return row[0] if row else None
 
 
-def _copy_anki_collection(source: Path, target: Path) -> None:
+def _copy_anki_collection(settings: Settings, target: Path) -> None:
     """The built-in Anki collection holds every card and review; it lives beside the database."""
-    collection = source / "collection.anki2"
-    if not collection.is_file():
+    source = settings.local_dir / "anki"
+    if not (source / "collection.anki2").is_file():
         return
     target.mkdir(parents=True)
-    _copy_database(collection, target / "collection.anki2")
+    # Holds the collection lock and closes an open study session first, so pending
+    # review receipts are written into the collection before it is copied.
+    if not snapshot_collection(settings, target / "collection.anki2"):
+        target.rmdir()
+        return
     media = source / "collection.media"
     if media.is_dir():
         shutil.copytree(media, target / "collection.media")
@@ -125,7 +131,7 @@ def run_backup(settings: Settings, coordinator: HostCoordinator, app_version: st
             for setting in LOCAL_SETTINGS:
                 if (settings.local_dir / setting).is_file():
                     shutil.copy2(settings.local_dir / setting, work / "local" / setting)
-            _copy_anki_collection(settings.local_dir / "anki", work / "local" / "anki")
+            _copy_anki_collection(settings, work / "local" / "anki")
             files, total = _mirror(settings.data_dir, root / "files")
             manifest = {"format": 1, "created_at": started, "app_version": app_version, "schema": schema,
                         "files": files, "bytes": total}

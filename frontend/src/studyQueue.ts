@@ -4,7 +4,7 @@ import { createStore, get, update } from 'idb-keyval'
 import { createEmptyCard, fsrs, type CardInput, type Grade } from 'ts-fsrs'
 import i18n from '@/i18n'
 import { isHostOnline, markHostReachable } from '@/hostAvailability'
-import { ApiError, request, verifiedMutationGeneration } from '@/api'
+import { ApiError, noteStaleHost, request, verifiedMutationGeneration } from '@/api'
 import { queryClient } from '@/offlineCache'
 import { invalidateStudyReads } from '@/studyQueries'
 import type { StudyCard } from '@/studyTypes'
@@ -166,6 +166,7 @@ export function flushReviews(): Promise<number> {
           break
         }
         if (!response.ok) {
+          await noteStaleHost(response)
           const unresolved = await serialized(async () =>
             (await pending()).find((entry) => entry.review_id === item.review_id),
           )

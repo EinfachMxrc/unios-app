@@ -11,6 +11,7 @@ from tempfile import TemporaryDirectory
 from sqlalchemy import select, text
 
 from app.ai.access import DEFAULT_CATEGORIES
+from app.assessment.timing import is_running
 from app.calendar.edit_repository import (
     ADJUSTMENT,
     DELETED,
@@ -96,8 +97,10 @@ def readable_sql(alias='d') -> str:
             extra = ' AND s.removed_upstream=0'
         if kind == 'event':
             extra = " AND s.source NOT IN ('calendar-adjustment','calendar-deleted')"
+        if kind == 'jot':
+            extra = ' AND s.deleted_at IS NULL'
         if kind == 'note':
-            extra = (" AND (s.resource_id IS NULL OR EXISTS(SELECT 1 FROM resources r WHERE "
+            extra = (" AND s.deleted_at IS NULL AND (s.resource_id IS NULL OR EXISTS(SELECT 1 FROM resources r WHERE "
                      "r.id=s.resource_id AND r.group_category!='other_group' AND r.removed_upstream=0 "
                      "AND coalesce((SELECT allowed FROM ai_access WHERE key='course:'||r.course_id),1)=1))")
         if kind == 'project':
@@ -110,7 +113,7 @@ def readable_sql(alias='d') -> str:
         if kind == 'assessment_task':
             extra = " AND s.status='active'"
         if kind == 'assessment_attempt':
-            extra = " AND (s.session_id IS NULL OR EXISTS(SELECT 1 FROM assessment_sessions e WHERE e.id=s.session_id AND e.state!='running')) AND EXISTS(SELECT 1 FROM assessment_tasks t WHERE t.id=s.task_id AND t.status='active' AND t.course_id=s.course_id)"
+            extra = " AND (s.session_id IS NULL OR EXISTS(SELECT 1 FROM assessment_sessions e WHERE e.id=s.session_id AND (e.state!='running' OR e.ends_at<=datetime('now')))) AND EXISTS(SELECT 1 FROM assessment_tasks t WHERE t.id=s.task_id AND t.status='active' AND t.course_id=s.course_id)"
         if kind == 'coding_task':
             extra = " AND s.status='active'"
         if kind == 'coding_attempt':
@@ -186,12 +189,12 @@ def sources(session, settings, entity_ref: str, guard=lambda: None) -> list[Sour
         if row.source in {ADJUSTMENT, DELETED}:
             return []
         adjustment = CalendarEditRepository.adjustment(session, adjustment_key(row))
-        row = effective_events([row, adjustment] if adjustment else [row], CalendarEditRepository.rules(session))[0]
+        row = effective_events([row, adjustment] if adjustment else [row], CalendarEditRepository.rules(session), settings.timezone)[0]
     if kind in {'coding_task', 'assessment_task'} and row.status != 'active':
         return []
     if kind == 'assessment_attempt' and row.session_id:
         exam = session.get(AssessmentSession, row.session_id)
-        if exam is None or exam.state == 'running':
+        if exam is None or is_running(exam):
             return []
     course_id = row.id if kind == 'course' else getattr(row, 'course_id', None)
     if kind == 'code':

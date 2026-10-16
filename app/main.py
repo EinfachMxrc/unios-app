@@ -216,7 +216,14 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
     write_gate = WriteGate()
     request_gate = WriteGate()
     action_journal = ActionJournal(settings)
-    standby_monitor = StandbyMonitor(settings, coordinator, engine, scheduler, request_gate)
+    
+
+    def start_writer_workers() -> None:
+        coding_service.repository.recover(coordinator.assert_writer)
+        background_jobs.start()
+        corpus_worker.start()
+
+    standby_monitor = StandbyMonitor(settings, coordinator, engine, scheduler, request_gate, start_writer_workers)
 
     async def assistant_failure(request: Request, exc: Exception):
         if not request.url.path.startswith(("/api/ai/mcp/", "/api/ai/connection")):
@@ -237,7 +244,7 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        configure_logging(settings.local_dir, settings.secret_values)
+        configure_logging(settings.local_dir, lambda: settings.secret_values)
         if start_scheduler and not settings.server_mode and settings.automatic_takeover_enabled and settings.host_health_url:
             lease = coordinator.current()
             if lease is not None and lease.released_at is None and lease.device_id != coordinator._device_id():
@@ -250,15 +257,14 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
             runtime_service.load()
         except (OperationalError, ValidationError) as exc:  # an older DB may lack the table
             log.warning("Laufzeiteinstellungen konnten nicht geladen werden: %s", type(exc).__name__)
+        if start_scheduler:
+            # Registered also in standby: a later takeover starts the scheduler with this job.
+            scheduler.add_recurring(notification_center.refresh, job_id="notification-center", minutes=15)
         if start_scheduler and coordinator.is_writer:
-            scheduler.scheduler.add_job(notification_center.refresh, "interval", minutes=15,
-                                        id="notification-center", max_instances=1, coalesce=True)
             scheduler.start()
         if start_scheduler:
             if coordinator.is_writer:
-                coding_service.repository.recover(coordinator.assert_writer)
-                background_jobs.start()
-                corpus_worker.start()
+                start_writer_workers()
             index_jobs.start(discover=True)
         if start_scheduler and not settings.server_mode:
             standby_monitor.start()
@@ -376,7 +382,8 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
     app.include_router(timetable_router(timetable_service))
     app.include_router(mensa_router(settings))
     app.include_router(rooms_router(settings))
-    app.include_router(setup_router(settings, sync_engine, coordinator, campus_import_job.login_saved))
+    app.include_router(setup_router(settings, sync_engine, coordinator, campus_import_job.login_saved,
+                                    scheduler.ensure_sync_scheduled))
     app.include_router(session_router(settings))
     app.include_router(connector_registry_router(settings, coordinator))
     app.include_router(addon_router(addon_service, coordinator))

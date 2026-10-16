@@ -173,6 +173,13 @@ export function ClientSettings() {
   ) : null
 }
 
+/** Records the choice in the companion service, then restarts it as the full local app. */
+async function useLocal(): Promise<void> {
+  const response = await fetch('/api/client/use-local', { method: 'POST' })
+  if (!response.ok) throw new Error('USE_LOCAL_FAILED')
+  await restartNativeBackend('normal')
+}
+
 export function ClientGate({ children }: { children: ReactNode }) {
   const status = useClientState()
   const restoring = useIsRestoring()
@@ -184,6 +191,7 @@ export function ClientGate({ children }: { children: ReactNode }) {
       <OnboardingPage
         onStartDemo={() => restartNativeBackend('demo')}
         onConnect={() => setConnect(true)}
+        onUseLocal={isDesktopApp() ? useLocal : undefined}
         demoAvailable={isDesktopApp()}
       />
     )

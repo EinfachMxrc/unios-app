@@ -208,3 +208,25 @@ def test_an_expired_exam_stops_locking_its_tasks(assessment, factory):
         session.commit()
         assert repository.locked(session, 7) is True
         assert repository.locked(session, 8) is False
+
+
+def test_an_expired_exam_releases_attempts_reports_and_feedback(assessment, factory):
+    service, course = assessment
+    task = service.create(course, Create(type='numeric', title='t', question='Number', expected='2'))
+    service.accept(task['id'])
+    exam = service.start_exam(StartExam(task_ids=[task['id']], minutes=1, confirmed=True))
+    result = service.answer(task['id'], Answer(text='2', confidence=5, session_id=exam['id']))
+    assert result['report'] == {}
+    assert service.repository.attempts(course_id=course, hide_running=True) == []
+    with pytest.raises(HTTPException):
+        service.feedback(result['id'])
+    with factory() as session:
+        session.get(AssessmentSession, exam['id']).ends_at = datetime.now(UTC) - timedelta(seconds=1)
+        session.commit()
+    # State is still 'running': the student never ended the exam.
+    attempts = service.repository.attempts(course_id=course, hide_running=True)
+    assert [row.id for row in attempts] == [result['id']]
+    with factory() as session:
+        attempt = session.get(AssessmentAttempt, result['id'])
+    assert service.attempt_view(attempt)['report'] != {}
+    service.feedback(result['id'])

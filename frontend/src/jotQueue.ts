@@ -7,7 +7,7 @@ import i18n from '@/i18n'
 import { isHostOnline, markHostReachable } from '@/hostAvailability'
 import { queryClient } from '@/offlineCache'
 import type { Jot } from '@/types'
-import { verifiedMutationGeneration } from '@/api'
+import { noteStaleHost, verifiedMutationGeneration } from '@/api'
 
 export type PendingJot = Pick<Jot, 'id' | 'kind' | 'body' | 'created_at' | 'course_id' | 'note_id'>
 
@@ -72,7 +72,10 @@ async function doFlush(): Promise<void> {
         headers: { 'Content-Type': 'application/json', 'X-UniOS-Lease-Generation': String(generation) },
         body: JSON.stringify(jot),
       })
-      if (!response.ok) return
+      if (!response.ok) {
+        await noteStaleHost(response)
+        break // Entries sent before this one are gone from the outbox: still refresh the list below.
+      }
       await del(jot.id, storage!)
       notify()
     }

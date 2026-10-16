@@ -4,7 +4,6 @@
 
 import json
 import sqlite3
-from contextlib import closing
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -134,27 +133,100 @@ def test_backup_api(settings, factory, coordinator, tmp_path):
                           json={"folder": str(tmp_path / "x")}).status_code == 403
 
 
+def _marker(path, value=None):
+    from anki.collection import Collection
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    collection = Collection(str(path))
+    try:
+        if value is not None:
+            collection.set_config("unios_backup_test", value)
+        return collection.get_config("unios_backup_test")
+    finally:
+        collection.close()
+
+
 def test_the_builtin_anki_collection_is_backed_up_and_restored(settings, factory, coordinator, tmp_path):
     seed(settings, factory)
     anki = settings.local_dir / "anki"
     (anki / "collection.media").mkdir(parents=True)
     (anki / "collection.media" / "bild.png").write_bytes(b"png")
-    # A real restore runs before Anki opens; transaction contexts alone keep Windows handles open.
-    with closing(sqlite3.connect(anki / "collection.anki2")) as collection, collection:
-        collection.execute("CREATE TABLE notes (flds TEXT)")
-        collection.execute("INSERT INTO notes VALUES ('Karte vor dem Backup')")
+    # A real restore runs before Anki opens; an open collection would keep Windows handles open.
+    _marker(anki / "collection.anki2", "vor dem Backup")
     configure(settings, tmp_path)
     name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
-    with closing(sqlite3.connect(anki / "collection.anki2")) as collection, collection:
-        collection.execute("UPDATE notes SET flds = 'Später geändert'")
+    _marker(anki / "collection.anki2", "später geändert")
 
     restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
     factory.kw["bind"].dispose()
     result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
 
     assert result is not None and result["status"] == "success"
-    with closing(sqlite3.connect(anki / "collection.anki2")) as collection:
-        assert collection.execute("SELECT flds FROM notes").fetchone() == ("Karte vor dem Backup",)
+    assert _marker(anki / "collection.anki2") == "vor dem Backup"
     assert (anki / "collection.media" / "bild.png").read_bytes() == b"png"
-    with closing(sqlite3.connect(settings.local_dir / result["previous"] / "anki" / "collection.anki2")) as previous:
-        assert previous.execute("SELECT flds FROM notes").fetchone() == ("Später geändert",)
+    assert _marker(settings.local_dir / result["previous"] / "anki" / "collection.anki2") == "später geändert"
+
+
+def test_backup_closes_the_open_study_collection_first(settings, factory, coordinator, tmp_path, monkeypatch):
+    from app.anki import collection as anki_collection
+
+    seed(settings, factory)
+    _marker(settings.local_dir / "anki" / "collection.anki2", "ruhend")
+    configure(settings, tmp_path)
+    closed = []
+    monkeypatch.setattr(anki_collection, "close_study_collection", lambda *a, **k: closed.append(True))
+    run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))
+    assert closed
+
+
+def test_restoring_a_backup_without_anki_removes_a_later_collection(settings, factory, coordinator, tmp_path):
+    seed(settings, factory)
+    configure(settings, tmp_path)
+    name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
+    anki = settings.local_dir / "anki"
+    _marker(anki / "collection.anki2", "erst nach dem Backup")
+
+    restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
+    factory.kw["bind"].dispose()
+    result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
+
+    assert result is not None and result["status"] == "success"
+    assert not anki.exists()
+    assert _marker(settings.local_dir / result["previous"] / "anki" / "collection.anki2") == "erst nach dem Backup"
+
+
+def test_the_ai_model_choice_is_part_of_the_backup(settings, factory, coordinator, tmp_path):
+    seed(settings, factory)
+    (settings.local_dir / "ai-provider.json").write_text('{"model": "m"}', encoding="utf-8")
+    configure(settings, tmp_path)
+    name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
+    folder = next((tmp_path / "usb").rglob(name))
+    assert (folder / "local" / "ai-provider.json").is_file()
+
+
+def test_restore_replaces_same_size_files_and_rotates_the_corpus_epoch(settings, factory, coordinator, tmp_path):
+    import os
+    import sqlite3
+    from contextlib import closing
+
+    seed(settings, factory)
+    with closing(sqlite3.connect(settings.local_dir / "uni_os.sqlite3")) as database:
+        database.execute("CREATE TABLE IF NOT EXISTS corpus_state(key TEXT PRIMARY KEY, value TEXT)")
+        database.execute("INSERT OR REPLACE INTO corpus_state VALUES ('epoch', 'alt')")
+        database.commit()
+    flag = settings.data_dir / "uni" / "flag.json"
+    flag.parent.mkdir(parents=True, exist_ok=True)
+    flag.write_text('{"done": true}', encoding="utf-8")
+    configure(settings, tmp_path)
+    name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
+    flag.write_text('{"done": fals}', encoding="utf-8")  # same byte count
+    os.utime(flag, (1_000_000_000, 1_000_000_000))
+
+    restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
+    factory.kw["bind"].dispose()
+    result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
+
+    assert result is not None and result["status"] == "success"
+    assert flag.read_text(encoding="utf-8") == '{"done": true}'
+    with closing(sqlite3.connect(settings.local_dir / "uni_os.sqlite3")) as database:
+        assert database.execute("SELECT value FROM corpus_state WHERE key='epoch'").fetchone()[0] != "alt"

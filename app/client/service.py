@@ -2,6 +2,7 @@
 """OS-keychain device binding to exactly one server identity."""
 
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlsplit
 
 from app.integrations.storage import ConnectionError, ConnectionStore, Vault
@@ -57,4 +58,30 @@ class ServerConnection:
 
 
 def client_enabled(home: Path) -> bool:
+    """Only an explicit client marker: a fresh source checkout without any marker is no client."""
     return ConnectionStore(home / "local", "server").read().get("mode") == "client"
+
+
+def choose_mode(home: Path) -> Literal["client", "local"]:
+    """Which service `uniosd serve` starts.
+
+    An explicit marker wins. Without one, an existing database means an installation from
+    before the choice existed and stays local; a first start has nothing yet, so the
+    client screen opens and offers both ways.
+    """
+    mode = ConnectionStore(home / "local", "server").read().get("mode")
+    if mode in {"client", "local"}:
+        return mode
+    return "local" if (home / "local" / "uni_os.sqlite3").exists() else "client"
+
+
+def use_local(home: Path) -> None:
+    """Remember that this device runs UniOS on its own, without a server.
+
+    Stores no credentials. A device that is already paired keeps its server: moving data
+    between the two needs the checked transfer described in docs/SERVER.md.
+    """
+    connection = ServerConnection(home)
+    if connection.state()["configured"]:
+        raise ConnectionError("Dieses Gerät ist bereits mit einem Server gekoppelt")
+    connection.store.save({"version": 1, "mode": "local"})

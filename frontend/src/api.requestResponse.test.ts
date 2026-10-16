@@ -37,3 +37,16 @@ it('turns a server refusal into the readable detail', async () => {
     'Kurs nicht freigegeben',
   )
 })
+
+it('noteStaleHost drops the cached generation for 423 and STALE_HOST, but not for other conflicts', async () => {
+  const { noteStaleHost } = await import('./api')
+  const { currentVerifiedGeneration } = await import('./hostAvailability')
+  await noteStaleHost(new Response('{}', { status: 409 }))
+  await noteStaleHost(new Response(JSON.stringify({ detail: 'Version veraltet' }), { status: 409 }))
+  expect(currentVerifiedGeneration()).toBe(7)
+  await noteStaleHost(new Response(JSON.stringify({ detail: 'STALE_HOST' }), { status: 409 }))
+  expect(currentVerifiedGeneration()).toBeNull()
+  markHostVerified(7)
+  await noteStaleHost(new Response('{}', { status: 423 }))
+  expect(currentVerifiedGeneration()).toBeNull()
+})

@@ -6,6 +6,9 @@ export default {
   demoHint: 'Eigenes Beispielsemester mit PDFs, Aufgaben und Lernkarten. Deine Hochschuldaten bleiben getrennt.',
   connect: 'Meine Hochschule verbinden',
   connectHint: 'Hochschule und Studiengang auswählen, anschließend deine persönlichen Verbindungen einrichten.',
+  local: 'Nur auf diesem Gerät nutzen',
+  localHint:
+    'UniOS läuft ohne eigenen Server mit einer lokalen Datenbank. Später kannst du deine Daten geprüft auf einen Server übernehmen.',
   starting: 'Demo wird vorbereitet …',
   failed: 'Das hat nicht geklappt. Bitte versuche es erneut.',
   demoActive: 'Demo-Semester · alle Inhalte sind erfunden',

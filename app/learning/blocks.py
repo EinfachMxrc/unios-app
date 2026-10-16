@@ -44,10 +44,10 @@ def _local_slot(settings: Settings, day: date, hour: int) -> datetime:
     return datetime.combine(day, time(hour, 0), settings.timezone).astimezone(UTC)
 
 
-def _busy_intervals(session, *, exclude_block_ids: set[int] | None = None) -> list[BusyInterval]:
+def _busy_intervals(session, settings: Settings, *, exclude_block_ids: set[int] | None = None) -> list[BusyInterval]:
     """Every already-committed instant a new study block must not overlap."""
     busy: list[BusyInterval] = []
-    for event in visible_events(session):
+    for event in visible_events(session, settings):
         start = as_utc(event.starts_at)
         end = as_utc(event.ends_at) if event.ends_at is not None else start + DEFAULT_EVENT_DURATION
         busy.append((start, end))
@@ -105,7 +105,7 @@ def suggest_blocks(session, settings: Settings, now: datetime) -> None:
     if not exams:
         session.commit()
         return
-    busy = _busy_intervals(session)
+    busy = _busy_intervals(session, settings)
     for exam in exams:
         all_progress = topics_for_course(session, settings, exam.course_id)
         progress = [item for item in all_progress if item.is_weak]

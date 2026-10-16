@@ -18,7 +18,7 @@ from starlette.concurrency import run_in_threadpool
 
 from app.ai.connection import McpConnection
 from app.client.citations import legacy_citations
-from app.client.service import ServerConnection, validate_server_url
+from app.client.service import ServerConnection, use_local, validate_server_url
 from app.config import Settings
 from app.integrations.storage import ConnectionError
 from app.rooms.service import config_for_server_profile
@@ -94,6 +94,17 @@ def create_client_app(home: Path, dist: Path, *, transport: httpx.AsyncBaseTrans
             return connection.state()
         except (ConnectionError, OSError):
             return {"mode": "client", "configured": False, "server_url": "", "keyring_available": False}
+
+    @app.post("/api/client/use-local")
+    def choose_local():
+        # Only records the choice; the desktop shell then restarts the service into local mode.
+        try:
+            use_local(home)
+        except ConnectionError:
+            raise HTTPException(409, "Dieses Gerät ist bereits mit einem Server gekoppelt") from None
+        except OSError:
+            raise HTTPException(503, "Auswahl konnte nicht gespeichert werden") from None
+        return {"mode": "local"}
 
     @app.post("/api/client/pair")
     async def pair(payload: PairInput):

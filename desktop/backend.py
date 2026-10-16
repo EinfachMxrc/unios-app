@@ -259,9 +259,9 @@ def main() -> int:
 
             mcp_main()
             return 0
-        from app.client.service import client_enabled
+        from app.client.service import choose_mode
 
-        if sys.argv[1] == "serve" and (client_enabled(home) or not (home / "local" / "uni_os.sqlite3").exists()):
+        if sys.argv[1] == "serve" and choose_mode(home) == "client":
             import uvicorn
 
             from app.client.api import create_client_app

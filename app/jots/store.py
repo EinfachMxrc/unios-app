@@ -63,7 +63,7 @@ def capture(session: Session, *, jot_id: str, kind: str, body: str,
     if existing is not None:
         if existing.kind != kind or existing.body != body:
             raise JotConflict("Eintrags-ID wurde bereits für anderen Inhalt benutzt")
-        if settings is not None:
+        if settings is not None and existing.deleted_at is None:
             triage(session, existing, settings)
             session.commit()
         return existing

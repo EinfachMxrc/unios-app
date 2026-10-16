@@ -100,3 +100,27 @@ def test_drop_rejects_wrong_section_symlink_and_cross_site(settings, factory, co
         assert client.post("/api/drop/safe.txt/assign", json={"course_id": 999}).status_code == 404
         assert client.post("/api/drop/safe.txt/assign", json={"course_id": course_id},
                            headers={"origin": "https://example.invalid"}).status_code == 403
+
+
+def test_drop_indexes_text_from_the_isolated_parser_and_stores_posix_paths(settings, factory, coordinator, monkeypatch):
+    from app.db.models import ResourceText
+
+    course_id, section_id = _course(factory)
+    folder = settings.data_dir / "drop"
+    folder.mkdir(parents=True)
+    (folder / "Fragen.txt").write_text("Warum gilt die Formel?", encoding="utf-8")
+    parsed = []
+    import app.drop.api as module
+
+    original = module.prepare_pages
+    monkeypatch.setattr(module, "prepare_pages", lambda *args: (parsed.append(True), original(*args))[1])
+    app = create_app(settings, connectors=[], start_scheduler=False, coordinator=coordinator)
+    with TestClient(app) as client:
+        response = client.post("/api/drop/Fragen.txt/assign", json={"course_id": course_id, "section_id": section_id})
+        assert response.status_code == 200, response.text
+    assert parsed == [True]
+    with factory() as session:
+        version = session.scalar(select(ResourceVersion))
+        assert "\\" not in version.relative_path
+        assert [row.text for row in session.scalars(select(ResourceText).where(ResourceText.version_id == version.id))] == [
+            "Warum gilt die Formel?"]

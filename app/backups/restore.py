@@ -85,8 +85,12 @@ def _copy_files(source: Path, target: Path) -> int:
             if origin.is_symlink():
                 continue
             destination = target / origin.relative_to(source)
-            if destination.exists() and destination.stat().st_size == origin.stat().st_size:
-                continue
+            if destination.exists():
+                # Same size is not same content (a flipped flag in a JSON file): compare the
+                # modification time as well, exactly as the backup mirror does.
+                source_stat, target_stat = origin.stat(), destination.stat()
+                if source_stat.st_size == target_stat.st_size and int(source_stat.st_mtime) == int(target_stat.st_mtime):
+                    continue
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(origin, destination)
             copied += 1
@@ -113,6 +117,14 @@ def _swap_database(database: Path, incoming: Path, keep: Path) -> None:
         raise
 
 
+def _rotate_corpus_epoch(database: Path) -> None:
+    """A restored database may reuse event numbers, so AI clients must not keep old sequence numbers."""
+    with closing(sqlite3.connect(database)) as connection:
+        if connection.execute("SELECT 1 FROM sqlite_master WHERE name='corpus_state'").fetchone():
+            connection.execute("UPDATE corpus_state SET value=lower(hex(randomblob(16))) WHERE key='epoch'")
+            connection.commit()
+
+
 def apply_pending_restore(settings: Settings, database: Path) -> dict | None:
     """Runs at start-up before the database opens. Returns what happened, or None."""
     staged = pending_restore(settings)
@@ -132,16 +144,19 @@ def apply_pending_restore(settings: Settings, database: Path) -> dict | None:
         keep = settings.local_dir / f"before-restore-{moment:%Y%m%dT%H%M%S}"
         keep.mkdir(parents=True)
         _swap_database(database, incoming, keep)
+        _rotate_corpus_epoch(database)
         for setting in (snapshot / "local").glob("*.json"):
             shutil.copy2(setting, settings.local_dir / setting.name)
+        # The restored state is the backup's: an older backup without Anki must not keep a
+        # collection created later. The replaced one stays next to the old database.
         saved_anki = snapshot / "local" / "anki"
+        live_anki = settings.local_dir / "anki"
+        if live_anki.exists():
+            os.replace(live_anki, keep / "anki")
         if (saved_anki / "collection.anki2").is_file():
-            live_anki = settings.local_dir / "anki"
-            if live_anki.exists():
-                os.replace(live_anki, keep / "anki")
             shutil.copytree(saved_anki, live_anki)
         result.update(status="success", files=copied, previous=keep.name)
-    except (OSError, KeyError, BackupError) as exc:
+    except (OSError, KeyError, BackupError, sqlite3.Error) as exc:
         result.update(status="error", message=str(exc) if isinstance(exc, BackupError) else type(exc).__name__)
     _result(settings).write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
     return result

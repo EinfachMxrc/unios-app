@@ -29,7 +29,7 @@ import { FirstUseHint } from '@/components/FirstUseHint'
 import { useWorkspaceState } from '@/lib/workspaceState'
 import { focusPath } from '@/lib/learningFocus'
 import { rememberStudySession } from '@/lib/studyResume'
-import { sourceNoteTargetKey, validSourceNoteTarget } from '@/lib/sourceNoteTarget'
+import { useSourceNoteTarget, validSourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { rememberObject } from '@/lib/recentObjects'
 import { useOfflineFileUrl } from '@/lib/courseOffline'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -40,7 +40,12 @@ import { pageBadges } from './material/pdfSearch'
 import { PdfClipTool } from './material/PdfClipTool'
 import { ManualCardDialog } from '@/components/ManualCardDialog'
 import { manualCardContext, type ManualCardContext } from '@/manualCardTypes'
-import { appendReaderBlock, appendReaderExcerpt, ReaderExcerptError } from './material/readerExcerpt'
+import {
+  appendReaderBlock,
+  appendReaderExcerpt,
+  prepareReaderTarget,
+  ReaderExcerptError,
+} from './material/readerExcerpt'
 import { useReaderGestures } from './material/useReaderGestures'
 import { readerWidthForStep } from './material/readerGestures'
 import { useReaderShortcuts } from './material/useReaderShortcuts'
@@ -106,10 +111,10 @@ export function MaterialReader({
   const online = useHostOnline()
   const { pending } = useAnnotationOutbox()
   const { data, error, loading, updatedAt, reload } = useApi<Material>(`/api/material/${versionId}`)
-  const [sourceNoteId] = useWorkspaceState<string | null>(
-    sourceNoteTargetKey(data?.course_id ?? 0, data?.resource_id ?? 0),
-    null,
-    { valid: validSourceNoteTarget },
+  // Restored here, not only inside the notes drawer, so the chosen note is known while it is closed.
+  const { target: sourceNoteId, restoring: restoringSourceNote } = useSourceNoteTarget(
+    data?.course_id ?? 0,
+    data?.resource_id ?? 0,
   )
   const { data: ocr, reload: reloadOcr } = useApi<OCRStatus>(`/api/ocr/material/${versionId}`, {
     enabled: Boolean(data),
@@ -231,13 +236,13 @@ export function MaterialReader({
     if (data && !error && pages > 0) rememberObject(`/material/${versionId}?page=${page}`, data.resource_name)
   }, [data, error, pages, page, versionId])
   useEffect(() => {
-    if (!embedded && data && !error && pages > 0)
+    if (!embedded && data && !error && pages > 0 && !restoringSourceNote)
       rememberStudySession(
         { kind: 'course', id: data.course_id },
         { mode: 'source', version: versionId, page, note: sourceNoteId ?? undefined },
         data.resource_name,
       )
-  }, [embedded, data, error, pages, page, versionId, sourceNoteId])
+  }, [embedded, data, error, pages, page, versionId, sourceNoteId, restoringSourceNote])
   const [width, setWidth] = useWorkspaceState(`pdf:${versionId}:width`, 760, {
     valid: (value): value is number =>
       typeof value === 'number' && Number.isFinite(value) && value >= 180 && value <= 1600,
@@ -553,9 +558,10 @@ export function MaterialReader({
     wide,
     writingOnly,
   ])
-  function collectExcerpt() {
+  async function collectExcerpt() {
     if (!data || !selection) return
     try {
+      await prepareReaderTarget(data)
       appendReaderExcerpt({ material: data, quote: selection.quote, page: selection.page, rects: selection.rects })
       setExcerptRevision((current) => current + 1)
       setStudyTab('notes')
@@ -880,7 +886,8 @@ export function MaterialReader({
                     material={data}
                     page={page}
                     canWrite={canWrite && online}
-                    onApply={(markdown) => {
+                    onApply={async (markdown) => {
+                      await prepareReaderTarget(data)
                       appendReaderBlock(data, markdown)
                       setExcerptRevision((current) => current + 1)
                       setStudyTab('notes')
@@ -943,7 +950,7 @@ export function MaterialReader({
                           >
                             <MessageCircleQuestion size={16} /> {t('questionButton')}
                           </Button>
-                          <Button variant="outline" disabled={saving} onClick={collectExcerpt}>
+                          <Button variant="outline" disabled={saving} onClick={() => void collectExcerpt()}>
                             {t('addExcerpt')}
                           </Button>
                           <Button

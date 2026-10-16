@@ -4,7 +4,7 @@ import { createStore, del, get, keys, set } from 'idb-keyval'
 import i18n from '@/i18n'
 import { isHostOnline, markHostReachable } from '@/hostAvailability'
 import { queryClient } from '@/offlineCache'
-import { verifiedMutationGeneration } from '@/api'
+import { noteStaleHost, verifiedMutationGeneration } from '@/api'
 
 export type PendingAnnotation = {
   id: string
@@ -73,7 +73,10 @@ async function doFlush(): Promise<void> {
           comment: entry.comment,
         }),
       })
-      if (!response.ok) return
+      if (!response.ok) {
+        await noteStaleHost(response)
+        return
+      }
       await del(entry.id, storage!)
       notify()
       await queryClient.invalidateQueries({ queryKey: ['api', `/api/material/${entry.versionId}`] })

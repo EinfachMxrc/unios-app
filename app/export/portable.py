@@ -11,12 +11,13 @@ from collections.abc import Iterator
 from contextlib import closing
 from pathlib import Path
 
+from app.config import Settings
 from app.export.repository import portable_rows
 from app.files.localpath import native_path, resolve_local
 
 
-def readable_files(snapshot: Path, data_dir: Path) -> Iterator[tuple[str, bytes]]:
-    rows, calendar = portable_rows(snapshot)
+def readable_files(snapshot: Path, data_dir: Path, settings: Settings) -> Iterator[tuple[str, bytes]]:
+    rows, calendar = portable_rows(snapshot, settings)
     for name, values in rows.items():
         yield f"portable/{name}.json", (json.dumps(values, default=str, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     yield "portable/calendar.ics", calendar

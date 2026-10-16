@@ -24,9 +24,11 @@ def visible_events(session: Session, settings: Settings | None = None) -> list[C
                                   .order_by(CalendarEvent.starts_at, CalendarEvent.id)).all())
     selection = TimetableSelection(settings) if settings is not None else None
     hidden = selection.hidden() if selection is not None else set()
+    zone = {'timezone': settings.timezone} if settings is not None else {}
     events = effective_events([event for event in events if event.source == ADJUSTMENT or selection is None
                                or event.source != selection.source or selection.visible(
-                                   {'title': event.title, 'starts_at': event.starts_at}, hidden)], CalendarEditRepository.rules(session))
+                                   {'title': event.title, 'starts_at': event.starts_at}, hidden)],
+                              CalendarEditRepository.rules(session), **zone)
     primary = {(event.title.strip().casefold(), _instant(event.starts_at))
                for event in events if not event.source.startswith("mycampus-")}
     seen_campus: set[tuple[str, datetime]] = set()

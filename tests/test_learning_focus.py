@@ -307,3 +307,22 @@ def test_focus_metadata_get_preserves_disabled_fsrs_and_current_deck(settings, f
     with factory() as session:
         assert session.scalar(select(func.count(AnkiCard.id))) == 1
         assert session.scalar(select(AnkiCard.note_id).where(AnkiCard.queue_id == queue_id)) == str(note_id)
+
+
+def test_card_bindings_resolve_resourceless_note_cards_via_topic(settings, factory):
+    from app.learning.focus_repository import FocusRepository
+
+    ids = seed_focus(factory)
+    with factory() as session:
+        note_queue = AnkiCardQueue(resource_id=None, topic_id=ids["topic"], origin="manual",
+                                   payload="{}", status="pushed")
+        orphan = AnkiCardQueue(resource_id=None, topic_id=None, payload="{}", status="pushed")
+        session.add_all([note_queue, orphan])
+        session.flush()
+        session.add(AnkiCard(queue_id=note_queue.id, note_id="note-1"))
+        session.commit()
+        note_id = note_queue.id
+    bindings = {item.queue_id: item for item in FocusRepository(factory, settings).card_bindings()}
+    assert bindings[note_id].course_id == ids["course"]
+    assert bindings[note_id].note_ids == ("note-1",)
+    assert len(bindings) == 1
