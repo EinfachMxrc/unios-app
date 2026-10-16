@@ -61,8 +61,8 @@ test('desktop mail scan imports synthetic messages and preserves explicit deadli
     { portal: 'mail', index: 1, expectedText: 'Erfundene Mail zur Frist' },
   ])
   expect(calls.filter(([command]) => command === 'portal_guard').map(([, args]) => args)).toEqual([
-    { active: true, menuBudget: 0 },
-    { active: false, menuBudget: 0 },
+    { portal: 'mail', active: true, menuBudget: 0 },
+    { portal: 'mail', active: false, menuBudget: 0 },
   ])
   await scan.click()
   await expect(scan).toBeEnabled()
