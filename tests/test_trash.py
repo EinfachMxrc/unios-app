@@ -8,7 +8,7 @@ from uuid import uuid4
 from fastapi.testclient import TestClient
 from sqlalchemy import func, select, text
 
-from app.db.models import Course, Jot, LinkEdge, Note, NoteVersion, Resource
+from app.db.models import AiAccess, Course, Jot, LinkEdge, Note, NoteVersion, Resource
 from app.db.trash import INCLUDE_TRASHED
 from app.main import create_app
 from app.notes.store import create_note
@@ -149,3 +149,36 @@ def test_sync_does_not_bring_back_a_trashed_lecture_note(settings, factory, coor
     with factory() as session:
         assert session.scalar(select(func.count()).select_from(Note).execution_options(**INCLUDE_TRASHED)) == 1
         assert session.scalar(select(func.count()).select_from(Note)) == 0
+
+
+def test_trashed_notes_and_jots_leave_the_offline_index_and_the_ai_corpus(settings, factory, coordinator):
+    from app.corpus.repository import CorpusRepository, readable_sql
+    from app.corpus.worker import CorpusWorker
+
+    course_id = prepare(factory)
+    with factory() as session:
+        note = create_note(session, settings, course_id=course_id, resource_id=None,
+                           title="Eigenwerte", body="Charakteristisches Polynom aufstellen.")
+        note_id = note.id
+        jot = Jot(id=str(uuid4()), kind="thought", body="Eigenvektor nachschlagen", course_id=course_id)
+        session.add(jot)
+        session.commit()
+        jot_id = jot.id
+    CorpusWorker(CorpusRepository(factory, settings), coordinator).drain()
+    with factory() as session:
+        session.add(AiAccess(key='category:notes', allowed=True))
+        session.commit()
+    query = text(f"SELECT count(*) FROM corpus_documents d WHERE d.kind IN ('note','jot') AND d.live=1 AND {readable_sql()}")
+    with factory() as session:
+        assert session.scalar(query) == 2
+    app = create_app(settings, connectors=[], start_scheduler=False, coordinator=coordinator)
+    with TestClient(app) as client:
+        kinds = {item["kind"] for item in client.get("/api/search/offline-index").json()["items"]}
+        assert {"note", "jot"} <= kinds
+        assert client.post(f"/api/notes/{note_id}/trash").status_code == 200
+        assert client.post(f"/api/jots/{jot_id}/trash").status_code == 200
+        kinds = {item["kind"] for item in client.get("/api/search/offline-index").json()["items"]}
+        assert not {"note", "jot"} & kinds
+    # Before the worker has run again, the readable filter alone must already hide them.
+    with factory() as session:
+        assert session.scalar(query) == 0

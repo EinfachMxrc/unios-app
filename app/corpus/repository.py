@@ -97,8 +97,10 @@ def readable_sql(alias='d') -> str:
             extra = ' AND s.removed_upstream=0'
         if kind == 'event':
             extra = " AND s.source NOT IN ('calendar-adjustment','calendar-deleted')"
+        if kind == 'jot':
+            extra = ' AND s.deleted_at IS NULL'
         if kind == 'note':
-            extra = (" AND (s.resource_id IS NULL OR EXISTS(SELECT 1 FROM resources r WHERE "
+            extra = (" AND s.deleted_at IS NULL AND (s.resource_id IS NULL OR EXISTS(SELECT 1 FROM resources r WHERE "
                      "r.id=s.resource_id AND r.group_category!='other_group' AND r.removed_upstream=0 "
                      "AND coalesce((SELECT allowed FROM ai_access WHERE key='course:'||r.course_id),1)=1))")
         if kind == 'project':

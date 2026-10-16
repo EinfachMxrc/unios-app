@@ -56,3 +56,23 @@ def test_smart_capture_task_and_review(settings, factory, coordinator):
         assert session.scalar(select(Deadline).where(Deadline.source_key == jot_id)).assignment_id == task_id
         assert session.scalar(select(LinkEdge).where(LinkEdge.from_id == jot_id)).to_id == str(task_id)
         assert session.scalar(select(IntakeDecision).where(IntakeDecision.source_id == unclear_id)).state == "accepted"
+
+
+def test_retrying_a_trashed_capture_creates_no_task(settings, factory):
+    from app.jots.store import capture
+
+    with factory() as session:
+        session.execute(text("CREATE VIRTUAL TABLE jots_fts USING fts5(jot_id UNINDEXED, body)"))
+        course = Course(source="fixture", source_id="programming", name="Programmieren 1")
+        session.add(course)
+        session.flush()
+        session.add(Resource(source="fixture", source_key="sheet3", course_id=course.id,
+                             kind="file", name="Übungsblatt 3.pdf", url="", group_category="general"))
+        session.commit()
+        arguments = {"jot_id": str(uuid4()), "kind": "thought", "created_at": datetime.now(UTC),
+                     "body": "Übungsblatt 3 Aufgabe 2 nochmal durchgehen bis Freitag"}
+        jot = capture(session, **arguments)
+        jot.deleted_at = datetime.now(UTC)
+        session.commit()
+        capture(session, settings=settings, **arguments)
+        assert session.scalars(select(Assignment).where(Assignment.source == "smart_capture")).all() == []
