@@ -412,6 +412,7 @@ class NoteDetailView(BaseModel):
     note: NoteSummaryView
     selected_revision: int
     body: str
+    document: dict
     versions: list[NoteVersionView]
 
 

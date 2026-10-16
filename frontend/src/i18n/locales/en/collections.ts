@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  viewUnavailable: 'This saved view is no longer available.',
+  localDraftPreview: 'Includes your locally saved draft.',
+  previewTitle: 'Preview: {{title}}',
+  closePreview: 'Close preview',
+  openContent: 'Open full page',
+  openContentTab: 'Open in a new tab',
+  previewPrevious: 'Previous preview page',
+  previewNext: 'Next preview page',
+  previewPage: 'Page {{page}} of {{count}}',
+  previewUnavailable: 'The PDF preview is unavailable. Open the full page to try again.',
+  viewLabel: 'Display',
+
   kindCards: 'Due cards',
   presetOverdue: 'Overdue deadlines',
   presetUnsubmitted: 'Not submitted yet',

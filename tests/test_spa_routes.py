@@ -19,7 +19,7 @@ FRONTEND_ROUTES = [
     "/analytics", "/digest", "/projects", "/projects/5", "/grades", "/mail", "/mensa", "/rooms", "/campus",
     "/rules", "/anki", "/exercises", "/explanations", "/ai", "/assessment", "/coding", "/addons",
     "/addons/demo-addon", "/marketplace", "/jobs", "/system", "/activity", "/trash", "/settings", "/more",
-    "/welcome", "/import", "/setup",
+    "/welcome", "/import", "/setup", "/workspace/new",
 ]
 
 
@@ -41,7 +41,7 @@ def test_reload_returns_index_for_grades_and_focus_workspace(settings, coordinat
     web = settings.model_copy(update={"serve_react": True, "react_dist_dir": built})
     app = create_app(web, connectors=[], start_scheduler=False, coordinator=coordinator)
     with TestClient(app) as client:
-        for path in ("/grades", "/learning/focus/source/34", "/notes"):
+        for path in ("/grades", "/learning/focus/source/34", "/notes", "/workspace/new"):
             response = client.get(path)
             assert response.status_code == 200, path
             assert "UniOS" in response.text

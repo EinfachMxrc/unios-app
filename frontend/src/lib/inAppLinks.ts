@@ -4,7 +4,7 @@ import { matchPath } from 'react-router-dom'
 import { areaRoutes } from '@/components/sidebarCatalog'
 
 /** Screens outside the sidebar areas; they mirror the extra routes in App.tsx. */
-const STANDALONE_SCREENS = ['/welcome', '/import', '/setup']
+const STANDALONE_SCREENS = ['/welcome', '/import', '/setup', '/workspace/new']
 
 /**
  * Only real app screens are routed in the app. Downloads (/files/…), API
@@ -31,7 +31,7 @@ interface ClickInfo {
  * (or the desktop shell) should handle it. Links to this app always stay in
  * the app, even when they were written with target="_blank", as note links
  * are. In a plain browser, modifier clicks still open a new tab on purpose;
- * the desktop app has no tabs, so there they stay in the app too.
+ * the desktop app handles modifier clicks through its workspace tabs.
  */
 export function inAppTarget(
   link: HTMLAnchorElement,

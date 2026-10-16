@@ -6,9 +6,9 @@ import { expect, test } from './fixtures'
 
 test('gespeicherte Sammlung behält Filter und Ansicht', async ({ page }) => {
   await page.goto('/collections')
-  await expect(page.getByRole('heading', { name: 'Eine Frage an deine Studieninhalte.' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Sammlungen', exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Neue Sammlung' }).click()
-  await page.getByLabel('Inhalte').selectOption('materials')
+  await page.getByRole('combobox', { name: /^Inhalte/ }).selectOption('materials')
   await page.getByRole('button', { name: 'Tabelle' }).click()
   await page.getByRole('button', { name: 'Ergebnisse anzeigen' }).click()
   await expect(page.locator('.collection-table')).toBeVisible()
@@ -29,7 +29,7 @@ test('gespeicherte Sammlung behält Filter und Ansicht', async ({ page }) => {
 test('gemischte Ansicht speichert ODER-Filter und Gruppierung', async ({ page }) => {
   await page.goto('/collections')
   await page.getByRole('button', { name: 'Neue Sammlung' }).click()
-  await page.getByLabel('Inhalte').selectOption('all')
+  await page.getByRole('combobox', { name: /^Inhalte/ }).selectOption('all')
   await page.getByLabel('Gruppieren nach').selectOption('kind')
   await page.getByText('ODER-Bedingungen (0)').click()
   await page.getByRole('button', { name: '+ ODER-Bedingung' }).click()
@@ -42,7 +42,7 @@ test('gemischte Ansicht speichert ODER-Filter und Gruppierung', async ({ page })
   await expect(page.locator('.collections-message')).toContainText('Ansicht gespeichert')
   await page.reload()
   await page.getByText('Filter und Ansicht anpassen').click()
-  await expect(page.getByLabel('Inhalte')).toHaveValue('all')
+  await expect(page.getByRole('combobox', { name: /^Inhalte/ })).toHaveValue('all')
   await expect(page.getByLabel('Gruppieren nach')).toHaveValue('kind')
   await expect(page.locator('.collection-or-row')).toHaveCount(2)
 })
@@ -50,7 +50,7 @@ test('gemischte Ansicht speichert ODER-Filter und Gruppierung', async ({ page })
 test('sichtbare Spalten und Reihenfolge bleiben nach Neustart erhalten', async ({ page }) => {
   await page.goto('/collections')
   await page.getByRole('button', { name: 'Neue Sammlung' }).click()
-  await page.getByLabel('Inhalte').selectOption('materials')
+  await page.getByRole('combobox', { name: /^Inhalte/ }).selectOption('materials')
   await page.getByRole('button', { name: 'Tabelle', exact: true }).click()
   await page
     .getByRole('group', { name: 'Sichtbare Felder' })

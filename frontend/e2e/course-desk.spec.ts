@@ -23,7 +23,7 @@ test('course desk resumes its own PDF, page and draft after visiting another cou
   await desk.getByRole('link', { name: 'Arbeitsplatz öffnen', exact: true }).click()
   await expect(
     next.locator('.reader-note-draft').getByRole('textbox', { name: 'Notizinhalt', exact: true }),
-  ).toHaveValue('Meine Mitschrift gehört zu diesem Kurs.')
+  ).toHaveText('Meine Mitschrift gehört zu diesem Kurs.')
   await expect(next.locator('[data-material-page="12"] canvas').first()).toBeInViewport()
   await next.close()
 })
@@ -45,7 +45,7 @@ test('reading, split and writing views keep an unsaved note and the PDF position
     .toBeGreaterThan(before)
   await modes.getByRole('button', { name: 'Schreiben', exact: true }).click()
   await expect(page.locator('.material-reader')).toBeHidden()
-  await expect(body).toHaveValue('Dieser Entwurf bleibt beim Wechsel erhalten.')
+  await expect(body).toHaveText('Dieser Entwurf bleibt beim Wechsel erhalten.')
   await expect
     .poll(() => page.locator('.material-side-inline').evaluate((el) => el.getBoundingClientRect().width))
     .toBeGreaterThan(1000)
@@ -56,9 +56,9 @@ test('reading, split and writing views keep an unsaved note and the PDF position
   await modes.getByRole('button', { name: 'Lesen', exact: true }).click()
   await expect(page.locator('.material-side-inline')).toHaveCount(0)
   await modes.getByRole('button', { name: 'Nebeneinander', exact: true }).click()
-  await expect(body).toHaveValue('Dieser Entwurf bleibt beim Wechsel erhalten.')
+  await expect(body).toHaveText('Dieser Entwurf bleibt beim Wechsel erhalten.')
   await page.reload()
-  await expect(body).toHaveValue('Dieser Entwurf bleibt beim Wechsel erhalten.')
+  await expect(body).toHaveText('Dieser Entwurf bleibt beim Wechsel erhalten.')
   await expect(handle).toHaveAttribute('aria-valuenow', String(initialWidth + 20))
 })
 
@@ -81,7 +81,7 @@ test('saved notes use the same large writing surface and keep their editor while
 }) => {
   const seed = await (await page.request.post('/api/__test__/focus-workspace')).json()
   await page.goto(`/material/${seed.version_id}?workspace=1&note=${seed.note_id}&page=12`)
-  const editor = page.locator('.reader-continuous-note .studio-document')
+  const editor = page.locator('.reader-continuous-note .note-prose')
   await expect(editor).toContainText('Meine eigene Begründung.')
   expect(await editor.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16)
   const saved = page.waitForResponse(

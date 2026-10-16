@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { rememberWorkspace, useWorkspaceState, workspaceGeneration, workspaceValue } from '@/lib/workspaceState'
+import { CollectionPreview } from './collections/CollectionPreview'
 import { useSearchParams } from 'react-router-dom'
 import { CalendarDays, Columns3, LayoutGrid, List, Plus, Table2 } from 'lucide-react'
 import { useT } from '@/i18n/useT'
@@ -21,6 +23,7 @@ import {
   type Collection,
   type Config,
   type GroupBy,
+  type Item,
   type Kind,
   type Result,
   type Sort,
@@ -40,60 +43,106 @@ function viewOptions(t: TypedT<'collections'>): Array<{ id: View; label: string;
   ]
 }
 
+type CollectionEditor = {
+  selected: Collection | null
+  initialized: boolean
+  name: string
+  config: Config
+  appliedConfig: Config
+  filtersOpen: boolean
+}
+function makeEditor(
+  config = emptyConfig,
+  name = '',
+  selected: Collection | null = null,
+  filtersOpen = false,
+): CollectionEditor {
+  return { selected, initialized: true, name, config, appliedConfig: config, filtersOpen }
+}
+function editorKey(params: URLSearchParams) {
+  return `collection-editor:${params.has('id') ? `saved:${Number(params.get('id'))}` : `new:${Number(params.get('course_id')) || 'all'}:${params.get('preset') === 'questions' ? 'questions' : 'blank'}`}`
+}
+
 export function CollectionsPage() {
   const { t } = useT('collections')
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
+  const scope = editorKey(params)
+  const activeScope = useRef(scope)
+  activeScope.current = scope
+  const mounted = useRef(true)
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
+  const [preview, setPreview] = useState<Item | null>(null)
   const labels = kindLabels(t)
   const views = viewOptions(t)
   const presets = presetsFor(t)
   const canWrite = useWritableHost()
   const { data: saved, reload: reloadSaved } = useApi<Collection[]>('/api/collections')
   const { data: courses } = useApi<CoursesResponse>('/api/courses?all_semesters=true')
-  const [selected, setSelected] = useState<Collection | null>(null)
-  const [initialized, setInitialized] = useState(false)
-  const [name, setName] = useState('')
-  const [config, setConfig] = useState<Config>(emptyConfig)
-  const [appliedConfig, setAppliedConfig] = useState<Config>(emptyConfig)
+  const [editor, setEditor] = useWorkspaceState<CollectionEditor>(
+    scope,
+    { ...makeEditor(), initialized: false },
+    { persist: false },
+  )
+  const { selected, initialized, name, config, appliedConfig, filtersOpen } = editor
+  const setName = (value: string) => setEditor((current) => ({ ...current, name: value }))
+  const setConfig = (value: Config) => setEditor((current) => ({ ...current, config: value }))
+  const setAppliedConfig = (value: Config) => setEditor((current) => ({ ...current, appliedConfig: value }))
+  const setFiltersOpen = (value: boolean) => setEditor((current) => ({ ...current, filtersOpen: value }))
   const activePath = previewPath(appliedConfig)
-  const { data: result, error, loading, updatedAt } = useApi<Result>(activePath)
+  const { data: result, error, loading, updatedAt } = useApi<Result>(activePath, { enabled: initialized })
   const { busy, error: actionError, setError: setActionError, run } = useBusyAction()
   const [message, setMessage] = useState('')
-  const [filtersOpen, setFiltersOpen] = useState(false)
-  /** Shows a saved collection, a preset or a blank view in the editor and the results. */
-  function show(next: Config, nextName: string, collection: Collection | null) {
-    setSelected(collection)
-    setName(nextName)
-    setConfig(next)
-    setAppliedConfig(next)
-  }
-
   useEffect(() => {
-    if (saved && !initialized) {
-      setInitialized(true)
-      if (params.get('preset') === 'questions') {
-        const next = presets.find((item) => item.config.kind === 'questions')!
-        show(next.config, next.name, null)
-      } else if (saved.length) {
-        const first = saved[0]
-        show(first.config, first.name, first)
+    setPreview(null)
+  }, [scope])
+  useEffect(() => {
+    if (initialized) {
+      if (selected && params.get('id') !== String(selected.id)) {
+        const next = new URLSearchParams({ id: String(selected.id) })
+        rememberWorkspace(editorKey(next), editor, false)
+        setParams(next, { replace: true })
       }
+      return
     }
-  }, [saved, initialized, params, presets])
+    if (!saved) return
+    const linked = saved.find((item) => item.id === Number(params.get('id')))
+    if (linked) setEditor(makeEditor(linked.config, linked.name, linked))
+    else if (params.has('id')) {
+      setEditor(makeEditor())
+      setMessage(t('viewUnavailable'))
+    } else if (Number(params.get('course_id')) > 0)
+      setEditor(makeEditor({ ...emptyConfig, course_id: Number(params.get('course_id')) }, '', null, true))
+    else if (params.get('preset') === 'questions') {
+      const preset = presets.find((item) => item.config.kind === 'questions')!
+      setEditor(makeEditor(preset.config, preset.name))
+    } else if (saved.length) {
+      const first = saved[0]
+      const next = new URLSearchParams({ id: String(first.id) })
+      rememberWorkspace(editorKey(next), makeEditor(first.config, first.name, first), false)
+      setParams(next, { replace: true })
+    } else setEditor(makeEditor())
+  }, [saved, initialized, params, presets, t, selected, editor, setEditor, setParams])
 
   function choose(item: Collection) {
-    setInitialized(true)
-    show(item.config, item.name, item)
+    const next = new URLSearchParams({ id: String(item.id) })
+    rememberWorkspace(editorKey(next), makeEditor(item.config, item.name, item), false)
+    setParams(next, { replace: true })
     setActionError('')
     setMessage('')
-    setFiltersOpen(false)
   }
   function startNew(preset?: (typeof presets)[number]) {
-    setInitialized(true)
-    const next = preset?.config ?? emptyConfig
-    show(next, preset?.name ?? '', null)
+    const courseId = (selected?.config.course_id ?? Number(params.get('course_id'))) || null
+    const nextParams = new URLSearchParams(courseId ? { course_id: String(courseId) } : {})
+    const next = { ...(preset?.config ?? emptyConfig), course_id: courseId }
+    rememberWorkspace(editorKey(nextParams), makeEditor(next, preset?.name ?? '', null, !preset), false)
+    setParams(nextParams, { replace: true })
     setActionError('')
     setMessage('')
-    setFiltersOpen(!preset)
   }
   function changeKind(kind: Kind) {
     const next: Config = {
@@ -113,6 +162,8 @@ export function CollectionsPage() {
   }
   async function save() {
     if (!name.trim()) return
+    const generation = workspaceGeneration()
+    const startedUrl = window.location.pathname + window.location.search
     setMessage('')
     await run(async () => {
       const path = selected ? `/api/collections/${selected.id}` : '/api/collections'
@@ -124,28 +175,64 @@ export function CollectionsPage() {
           ...(selected ? { expected_revision: selected.revision } : {}),
         }),
       })
-      show(item.config, item.name, item)
-      setMessage(t('viewSavedMessage'))
+      if (generation !== workspaceGeneration()) return
+      const next = new URLSearchParams({ id: String(item.id) })
+      const latest = workspaceValue(scope, editor, { persist: false })
+      const acknowledged = {
+        ...latest,
+        selected: item,
+        initialized: true,
+        name: latest.name === name ? item.name : latest.name,
+        config: latest.config === config ? item.config : latest.config,
+        appliedConfig: latest.appliedConfig === appliedConfig ? item.config : latest.appliedConfig,
+      }
+      rememberWorkspace(scope, acknowledged, false)
+      rememberWorkspace(editorKey(next), acknowledged, false)
+      if (
+        mounted.current &&
+        activeScope.current === scope &&
+        window.location.pathname + window.location.search === startedUrl
+      ) {
+        setParams(next, { replace: true })
+        setMessage(t('viewSavedMessage'))
+      }
       reloadSaved()
     })
   }
   async function archive() {
     if (!selected) return
+    const generation = workspaceGeneration()
+    const startedUrl = window.location.pathname + window.location.search
     await run(async () => {
       await request(`/api/collections/${selected.id}/archive`, { method: 'POST' })
-      show(emptyConfig, '', null)
-      setMessage(t('viewArchivedMessage'))
+      if (generation !== workspaceGeneration()) return
+      rememberWorkspace(scope, makeEditor(), false)
+      if (
+        mounted.current &&
+        activeScope.current === scope &&
+        window.location.pathname + window.location.search === startedUrl
+      ) {
+        const next = new URLSearchParams()
+        rememberWorkspace(editorKey(next), makeEditor(), false)
+        setParams(next, { replace: true })
+      }
+      if (
+        mounted.current &&
+        activeScope.current === scope &&
+        window.location.pathname + window.location.search === startedUrl
+      )
+        setMessage(t('viewArchivedMessage'))
       reloadSaved()
     })
   }
 
   return (
-    <Shell title={t('pageTitle')} cachedAt={updatedAt}>
-      <div className="collections-intro">
-        <p>{t('introKicker')}</p>
-        <h2>{t('introTitle')}</h2>
-        <span>{t('introText')}</span>
-      </div>
+    <Shell
+      title={name.trim() || t('pageTitle')}
+      breadcrumbs={name.trim() ? [{ label: t('pageTitle'), to: '/collections' }, { label: name }] : undefined}
+      cachedAt={updatedAt}
+      description={t('introText')}
+    >
       <div className="collections-layout">
         <aside className="collections-sidebar">
           <div className="collections-sidebar-heading">
@@ -175,7 +262,7 @@ export function CollectionsPage() {
             ))}
           </div>
         </aside>
-        <div className="collections-main">
+        <div className="collections-main" data-workspace-pending={!initialized ? 'true' : undefined}>
           <details
             className="collections-settings"
             open={filtersOpen}
@@ -545,6 +632,7 @@ export function CollectionsPage() {
               result &&
               (filtersOpen || saved?.length || selected || name) && (
                 <CollectionResults
+                  onPreview={setPreview}
                   result={result}
                   view={appliedConfig.view}
                   groupBy={appliedConfig.group_by}
@@ -555,6 +643,9 @@ export function CollectionsPage() {
           </section>
         </div>
       </div>
+      {preview && (
+        <CollectionPreview key={`${preview.kind}:${preview.id}`} item={preview} onClose={() => setPreview(null)} />
+      )}
     </Shell>
   )
 }

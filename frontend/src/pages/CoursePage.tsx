@@ -7,7 +7,7 @@ import { focusPath } from '@/lib/learningFocus'
 import { ListPagination } from '@/components/ListPagination'
 import { ScrollTabs } from '@/components/ScrollTabs'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
 import { ArrowRight, Bell, CheckCircle2, Clock3, FileText, Plus, Settings2 } from 'lucide-react'
@@ -36,6 +36,9 @@ import { CourseDisplayName } from '@/components/CourseDisplayName'
 import { CourseDesk, CourseDeskMaterials } from './course/CourseDesk'
 import './CoursePage.css'
 import './course/ResourceArrival.css'
+const CourseCollections = lazy(() =>
+  import('./course/CourseCollections').then((module) => ({ default: module.CourseCollections })),
+)
 export function CoursePage() {
   const canWrite = useWritableHost()
   const { t } = useT('courses')
@@ -46,7 +49,8 @@ export function CoursePage() {
   const { hash } = location
   const navigate = useNavigate()
   const [view, setView] = useWorkspaceState(`course:${id}:view`, 'overview')
-  const selectedView = hash.startsWith('#resource-') ? 'materials' : hash.startsWith('#assignment-') ? 'tasks' : view
+  const requestedView = hash.startsWith('#resource-') ? 'materials' : hash.startsWith('#assignment-') ? 'tasks' : view
+  const selectedView = requestedView
   const [materialOffset, setMaterialOffset] = useWorkspaceState(`course:${id}:material-offset`, 0)
   const [noteOffset, setNoteOffset] = useWorkspaceState(`course:${id}:note-offset`, 0)
   const [search, setSearch] = useWorkspaceState(`course:${id}:search`, '')
@@ -94,68 +98,70 @@ export function CoursePage() {
         { label: nav('courses'), to: '/courses' },
         { label: data ? courseName(data.course) : t('singular') },
       ]}
-    >
-      <div className="page-actions">
-        <Link className="subtle-link" to="/courses">
-          {t('allCourses')}
-        </Link>
-        {data && (
-          <div className="course-header-actions">
-            {selectedView !== 'overview' && (
-              <Button asChild variant="ghost">
-                <Link to={focusPath({ kind: 'course', id: data.course.id })}>
-                  {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
+      actions={
+        <div className="page-actions">
+          <Link className="subtle-link" to="/courses">
+            {t('allCourses')}
+          </Link>
+          {data && (
+            <div className="course-header-actions">
+              {selectedView !== 'overview' && (
+                <Button asChild variant="ghost">
+                  <Link to={focusPath({ kind: 'course', id: data.course.id })}>
+                    {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                </Button>
+              )}
+              {canWrite && (
+                <Link
+                  className="course-new-note"
+                  to={`/notes?new=1&course_id=${id}`}
+                  onClick={() => beginNewFreeNote(Number(id))}
+                >
+                  <Plus size={16} />
+                  {t('newNote')}
                 </Link>
-              </Button>
-            )}
-            {canWrite && (
-              <Link
-                className="course-new-note"
-                to={`/notes?new=1&course_id=${id}`}
-                onClick={() => beginNewFreeNote(Number(id))}
-              >
-                <Plus size={16} />
-                {t('newNote')}
-              </Link>
-            )}
-            <details className="course-settings">
-              <summary>
-                <Settings2 size={16} />
-                {t('courseSettings')}
-              </summary>
-              <div className="course-settings-popover">
-                <CourseDisplayName key={data.course.id} course={data.course} disabled={!canWrite} reload={reload} />
-                <div className="course-status-actions">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={busy || !canWrite}
-                    onClick={() => void changeActivity()}
-                  >
-                    {data.course.is_active ? t('makeInactive') : t('makeActive')}
-                  </Button>
-                  <select
-                    aria-label={t('assignSemester')}
-                    className="native-select"
-                    value={data.course.semester_id ?? ''}
-                    disabled={busy || !canWrite}
-                    onChange={(event) => changeSemester(event.target.value)}
-                  >
-                    <option value="" disabled>
-                      {t('chooseSemester')}
-                    </option>
-                    {data.semesters.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
+              )}
+              <details className="course-settings">
+                <summary>
+                  <Settings2 size={16} />
+                  {t('courseSettings')}
+                </summary>
+                <div className="course-settings-popover">
+                  <CourseDisplayName key={data.course.id} course={data.course} disabled={!canWrite} reload={reload} />
+                  <div className="course-status-actions">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={busy || !canWrite}
+                      onClick={() => void changeActivity()}
+                    >
+                      {data.course.is_active ? t('makeInactive') : t('makeActive')}
+                    </Button>
+                    <select
+                      aria-label={t('assignSemester')}
+                      className="native-select"
+                      value={data.course.semester_id ?? ''}
+                      disabled={busy || !canWrite}
+                      onChange={(event) => changeSemester(event.target.value)}
+                    >
+                      <option value="" disabled>
+                        {t('chooseSemester')}
                       </option>
-                    ))}
-                  </select>
+                      {data.semesters.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </details>
-          </div>
-        )}
-      </div>
+              </details>
+            </div>
+          )}
+        </div>
+      }
+    >
       {activeAssignment && data && (
         <TaskPeekDrawer
           key={activeAssignment.id}
@@ -247,7 +253,7 @@ export function CoursePage() {
             )}
             {selectedView === 'overview' && <CourseDesk detail={data} notes={courseNotes ?? undefined} />}
             <ScrollTabs className="course-tabs" label={t('courseViews')}>
-              {(['overview', 'materials', 'tasks', 'notes'] as const).map((tab) => (
+              {(['overview', 'materials', 'tasks', 'notes', 'views'] as const).map((tab) => (
                 <Link
                   key={tab}
                   to={`/courses/${id}`}
@@ -267,7 +273,14 @@ export function CoursePage() {
                 </Link>
               ))}
             </ScrollTabs>
-            {selectedView !== 'overview' && <CourseOfflinePanel detail={data} notes={courseNotes} />}
+            {selectedView !== 'overview' && selectedView !== 'views' && (
+              <CourseOfflinePanel detail={data} notes={courseNotes} />
+            )}
+            {selectedView === 'views' && (
+              <Suspense fallback={<Loading variant="rows" />}>
+                <CourseCollections courseId={data.course.id} />
+              </Suspense>
+            )}
             {data.group_assignments.length > 0 && (
               <div className="course-group-settings">
                 <Panel title={t('groupAssignmentTitle')}>

@@ -13,7 +13,7 @@ from app.anki.note_service import selected_note_text
 from app.db.models import AiAccess, AnkiCardQueue, Course, Note
 from app.main import create_app
 
-BODY = "# Synthetische Mitschrift\n\nEine **Bijektion** ist injektiv und surjektiv.\n\n- Eindeutige Zuordnung\n"
+BODY = "# Synthetische Mitschrift\n\nEine **Bijektion** ist injektiv und surjektiv.\n\n- Eindeutige Zuordnung"
 QUOTE = "Eine Bijektion ist injektiv und surjektiv."
 
 

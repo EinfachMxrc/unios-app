@@ -3,6 +3,7 @@
 import { request } from '@/api'
 import { clearNewNoteDraft, type NewNoteDraft } from '@/noteDraft'
 import type { NoteDetail } from '@/types'
+import { documentPayload } from '@/lib/noteBody'
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
 
 export type SourceNoteSnapshot = {
@@ -186,7 +187,7 @@ export function saveSourceNote(snapshot: SourceNoteSnapshot): Promise<SourceNote
           course_id: snapshot.courseId,
           resource_id: snapshot.resourceId,
           title: snapshot.title.trim(),
-          body: snapshot.body,
+          document: documentPayload(snapshot.body),
         }),
       })
       if (epoch !== startedEpoch || entries.get(scope) !== entry) {

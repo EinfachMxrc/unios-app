@@ -9,6 +9,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { queryClient } from '@/offlineCache'
 import { keepNewNoteDraft, newNoteDraftFor } from '@/noteDraft'
 import messages from '@/i18n/locales/de/jots'
+import { docFromApi, docText, parseBody } from '@/editor/doc'
 import type { Jot, JotsResponse, NoteDetail } from '@/types'
 import { JotsPage } from './JotsPage'
 
@@ -55,7 +56,11 @@ function jot(index: number): Jot {
   }
 }
 const items = Array.from({ length: 205 }, (_, index) => jot(index + 1))
-function detail(body = 'Vorhandener Text'): NoteDetail {
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }],
+})
+function detail(body = 'Vorhandener Text', document: unknown = docOf(body)): NoteDetail {
   return {
     note: {
       id: noteId,
@@ -69,6 +74,7 @@ function detail(body = 'Vorhandener Text'): NoteDetail {
     },
     selected_revision: 7,
     body,
+    document: document as NoteDetail['document'],
     versions: [],
   }
 }
@@ -138,7 +144,9 @@ beforeEach(() => {
       return mocks.listFailure ? Promise.reject(new Error('Synthetic refetch error')) : Promise.resolve(response(path))
     if (path === '/api/host') return Promise.resolve({ mode: 'host', generation: 12 })
     if (path.startsWith('/api/notes/'))
-      return Promise.resolve(detail(options?.method === 'PUT' ? JSON.parse(options.body as string).body : undefined))
+      return Promise.resolve(
+        options?.method === 'PUT' ? detail('', JSON.parse(options.body as string).document) : detail(),
+      )
     return Promise.resolve(undefined)
   })
 })
@@ -202,11 +210,10 @@ it('explicit copy appends note text with revision and lease guards while leaving
   const write = mocks.request.mock.calls.find((call) => call[1]?.method === 'PUT')!
   expect(write[0]).toBe(`/api/notes/${noteId}`)
   expect(write[1].headers).toEqual({ 'X-UniOS-Lease-Generation': '12' })
-  expect(JSON.parse(write[1].body)).toEqual({
-    title: 'Mitschrift',
-    expected_revision: 7,
-    body: `Vorhandener Text\n\n${items[0].body}\n\n[Ursprüngliche Schnellnotiz](/jots#jot-${items[0].id})`,
-  })
+  const sent = JSON.parse(write[1].body)
+  expect(sent).toMatchObject({ title: 'Mitschrift', expected_revision: 7 })
+  expect(docText(docFromApi(sent.document))).toBe(`Vorhandener Text\n${items[0].body}\nUrsprüngliche Schnellnotiz`)
+  expect(JSON.stringify(sent.document)).toContain(`"href":"/jots#jot-${items[0].id}"`)
   expect(screen.getByText('Synthetischer Eintrag 1')).toBeTruthy()
   expect(screen.getByRole('link', { name: 'Mitschrift öffnen' }).getAttribute('href')).toBe(`/notes?id=${noteId}`)
   expect(mocks.request.mock.calls.some((call) => call[1]?.method === 'PATCH')).toBe(false)
@@ -228,7 +235,7 @@ it('prepares a new-note form using the existing device draft and navigates only 
   fireEvent.click(screen.getByRole('button', { name: 'Neue Mitschrift mit diesem Eintrag' }))
   expect(screen.getByTestId('location').textContent).toBe('/notes?new=1&course_id=3')
   expect(newNoteDraftFor(3, null)?.title).toBe('Vorheriger Titel')
-  expect(newNoteDraftFor(3, null)?.body).toContain('Vorheriger Entwurf\n\nSynthetischer Eintrag 1')
+  expect(docText(parseBody(newNoteDraftFor(3, null)!.body))).toContain('Vorheriger Entwurf\nSynthetischer Eintrag 1')
   expect(mocks.request.mock.calls.some((call) => call[1]?.method === 'POST')).toBe(false)
 })
 

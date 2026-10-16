@@ -15,7 +15,7 @@ async function editor(page: Page) {
   const id = (await created.json()).note.id
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await expect(page.locator('.studio-document')).toBeVisible()
+  await expect(page.locator('.note-prose')).toBeVisible()
   await page.getByRole('textbox', { name: 'Notizinhalt', exact: true }).press('ControlOrMeta+End')
   return id
 }
@@ -88,7 +88,7 @@ test('named math templates support placeholders and multiline LaTeX editing', as
     .fill('\\begin{aligned}x+1&=3\\\\x&=2\\end{aligned}')
   await dialog.getByRole('textbox', { name: 'LaTeX bearbeiten', exact: true }).press('ControlOrMeta+Enter')
   await expect(dialog).toHaveCount(0)
-  await expect(page.locator('.studio-document .studio-math-block .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .studio-math-block .katex')).toHaveCount(1)
   expect(await saved(page, id)).toContain('aligned')
 })
 
@@ -102,7 +102,7 @@ test('hex numbers and bit widths handle exact wide values, cancellation and inva
   await number.fill('20000000000001')
   await expect(dialog.locator('tbody')).toContainText('9007199254740993')
   await number.press('ControlOrMeta+Enter')
-  await expect(page.locator('.studio-document table')).toContainText('9007199254740993')
+  await expect(page.locator('.note-prose table')).toContainText('9007199254740993')
   await slash(page, 'bin')
   await number.fill('-1')
   await dialog.locator('summary').filter({ hasText: 'Weitere Optionen' }).click()
@@ -135,12 +135,12 @@ test('KV cells work with keyboard, verify groups, and DNF/KNF insert correctly',
   await dialog.getByRole('button', { name: 'Gruppe übernehmen', exact: true }).press('Enter')
   await expect(dialog).toContainText('Alle Einsen abgedeckt')
   await dialog.getByRole('button', { name: 'Tabelle einfügen', exact: true }).press('ControlOrMeta+Enter')
-  await expect(page.locator('.studio-document')).toContainText('A ∨ B')
+  await expect(page.locator('.note-prose')).toContainText('A ∨ B')
   await slash(page, 'dnf')
   await expect(dialog.getByRole('combobox', { name: 'Ansicht', exact: true })).toHaveValue('forms')
   await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(page.locator('.studio-document')).toContainText('DNF')
-  await expect(page.locator('.studio-document')).toContainText('KNF')
+  await expect(page.locator('.note-prose')).toContainText('DNF')
+  await expect(page.locator('.note-prose')).toContainText('KNF')
 })
 
 test('diagram source remains editable and hidden-answer exercises accept nested math without early insertion', async ({
@@ -154,7 +154,7 @@ test('diagram source remains editable and hidden-answer exercises accept nested 
     .getByRole('textbox', { name: 'Verbindungen', exact: true })
     .fill('Problem -> Teilproblem\nTeilproblem -> Lösung : prüfen')
   await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(page.locator('.studio-document svg[role=img]')).toBeVisible()
+  await expect(page.locator('.note-prose svg[role=img]')).toBeVisible()
   await slash(page, 'ueben')
   await dialog.getByRole('textbox', { name: 'Aufgabe oder Frage', exact: true }).fill('Was ist die Hälfte?')
   const answer = dialog.getByRole('textbox', { name: 'Lösung', exact: true })
@@ -172,9 +172,9 @@ test('diagram source remains editable and hidden-answer exercises accept nested 
   await expect(dialog).toBeVisible()
   await expect(answer).toHaveValue('$\\frac12$')
   await answer.press('ControlOrMeta+Enter')
-  await expect(page.locator('.studio-document .study-answer')).toHaveCount(0)
+  await expect(page.locator('.note-prose .study-answer')).toHaveCount(0)
   await page.getByRole('button', { name: 'Lösung zeigen', exact: true }).press('Enter')
-  await expect(page.locator('.studio-document .study-answer .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .study-answer .katex')).toHaveCount(1)
   const markdown = await saved(page, id)
   expect(markdown).toContain('unios-diagram')
   expect(markdown).toContain('unios-recall')
@@ -254,7 +254,7 @@ test('PDF clip retains the existing draft on upload failure, then inserts a real
   )
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(dialog.getByRole('status')).toBeVisible()
-  await expect(note).toHaveValue('Meine bestehende Mitschrift.')
+  await expect(note).toHaveText('Meine bestehende Mitschrift.')
   const retry = page.waitForResponse(
     (response) => response.url().endsWith('/api/note-assets') && response.request().method() === 'POST',
   )
@@ -262,42 +262,23 @@ test('PDF clip retains the existing draft on upload failure, then inserts a real
   const response = await retry
   expect(response.status(), await response.text()).toBe(200)
   await expect(dialog).toHaveCount(0)
-  await expect(note).toHaveValue(/Meine bestehende Mitschrift\.[\s\S]*api\/note-assets\/[0-9a-f-]+\.png/)
-  const markdown = await note.inputValue(),
-    image = /\]\((\/api\/note-assets\/[0-9a-f-]+\.png)\)/.exec(markdown)![1]
-  const png = await page.request.get(image)
+  await expect(note).toContainText('Meine bestehende Mitschrift.')
+  const image = await note.locator('img').getAttribute('src')
+  expect(image).toMatch(/^\/api\/note-assets\/[0-9a-f-]+\.png$/)
+  const png = await page.request.get(image!)
   expect(png.ok()).toBeTruthy()
   expect(png.headers()['content-type']).toContain('image/png')
   expect((await png.body()).subarray(1, 4).toString()).toBe('PNG')
-  expect(markdown).toContain('page=1&clip=0.10000,0.20000,0.40000,0.30000')
+  const clip = await note.locator('a[href*="clip="]').getAttribute('href')
+  expect(clip).toContain('page=1&clip=0.10000,0.20000,0.40000,0.30000')
   await page.reload()
-  await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(markdown)
-  const source = /\]\((\/material\/\d+\?page=1&clip=[^)]+)\)/.exec(markdown)![1]
-  await page.goto(source)
+  await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toContainText(
+    'Meine bestehende Mitschrift.',
+  )
+  await page.goto(clip!)
   const rectangle = page.locator('[data-material-page="1"] .material-mark.pending')
   await expect(rectangle).toHaveAttribute('style', /left: 10%; top: 20%/)
   await expect(rectangle).toHaveAttribute('style', /width: 40%; height: 30%/)
-})
-
-test('Markdown input slash commands preserve cancellation, replace only the command and restore typing position', async ({
-  page,
-}) => {
-  await editor(page)
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await body.fill('Anfang\n/hex')
-  await body.press('ControlOrMeta+End')
-  await body.press('Tab')
-  const dialog = page.getByRole('dialog', { name: 'Lernwerkzeuge', exact: true })
-  await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).press('Escape')
-  await expect(body).toHaveValue('Anfang\n/hex')
-  await body.press('Tab')
-  await dialog.getByRole('textbox', { name: 'Zahl', exact: true }).fill('F')
-  await page.keyboard.press('ControlOrMeta+Enter')
-  await expect(body).toBeFocused()
-  await page.keyboard.type('Nachher')
-  await expect(body).toHaveValue(/^Anfang\n[\s\S]*15[\s\S]*Nachher$/)
-  expect(await body.inputValue()).not.toContain('/hex')
 })
 
 test('practice answers accept keyboard formulas and keep the submitted math in history', async ({ page }) => {

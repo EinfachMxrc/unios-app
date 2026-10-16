@@ -36,6 +36,7 @@ const detail: NoteDetail = {
     updated_at: '2026-10-09T10:00:00Z',
   },
   body: 'Saved baseline',
+  document: { version: 1, blocks: [] },
   selected_revision: 3,
   versions: [],
 }

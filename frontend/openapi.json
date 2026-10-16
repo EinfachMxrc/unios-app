@@ -12326,6 +12326,7 @@
       "NoteCreateInput": {
         "properties": {
           "body": {
+            "default": "",
             "maxLength": 100000,
             "title": "Body",
             "type": "string"
@@ -12334,6 +12335,18 @@
             "exclusiveMinimum": 0.0,
             "title": "Course Id",
             "type": "integer"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document"
           },
           "resource_id": {
             "anyOf": [
@@ -12356,8 +12369,7 @@
         },
         "required": [
           "course_id",
-          "title",
-          "body"
+          "title"
         ],
         "title": "NoteCreateInput",
         "type": "object"
@@ -12367,6 +12379,11 @@
           "body": {
             "title": "Body",
             "type": "string"
+          },
+          "document": {
+            "additionalProperties": true,
+            "title": "Document",
+            "type": "object"
           },
           "note": {
             "$ref": "#/components/schemas/NoteSummaryView"
@@ -12387,6 +12404,7 @@
           "note",
           "selected_revision",
           "body",
+          "document",
           "versions"
         ],
         "title": "NoteDetailView",
@@ -12678,9 +12696,22 @@
       "NoteUpdateInput": {
         "properties": {
           "body": {
+            "default": "",
             "maxLength": 100000,
             "title": "Body",
             "type": "string"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document"
           },
           "expected_revision": {
             "exclusiveMinimum": 0.0,
@@ -12696,8 +12727,7 @@
         },
         "required": [
           "expected_revision",
-          "title",
-          "body"
+          "title"
         ],
         "title": "NoteUpdateInput",
         "type": "object"
@@ -19268,7 +19298,7 @@
   },
   "info": {
     "title": "UniOS",
-    "version": "0.1.29"
+    "version": "0.1.30"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -23289,6 +23319,22 @@
           }
         },
         "summary": "Get Backup"
+      }
+    },
+    "/api/backup/choose-folder": {
+      "post": {
+        "operationId": "choose_folder_api_backup_choose_folder_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Choose Folder"
       }
     },
     "/api/backup/restore": {

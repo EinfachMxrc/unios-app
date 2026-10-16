@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { ApiError, localDate, request, useApi } from '@/api'
+import { ApiError, localDate, request } from '@/api'
 import { LocalActions } from '@/components/LocalActions'
-import { NoteMarkdownDocument } from '@/components/NoteMarkdownDocument'
 import { SaveIndicator } from '@/components/SaveIndicator'
 import { Failure, Loading } from '@/components/State'
-import { NoteStudio } from '@/components/editor/NoteStudio'
+import { NoteEditor } from '@/editor/NoteEditor'
+import { NoteView } from '@/editor/NoteView'
+import { documentPayload, useNoteDetail, withDraftBody } from '@/lib/noteBody'
+import { NotePageParents, NoteSubpages } from './NotePageStructure'
 import { Button } from '@/components/ui/button'
 import { HostContext, useWritableHost } from '@/hooks/host'
 import { useT } from '@/i18n/useT'
+import { newBlockId, parseBody, serializeDoc } from '@/editor/doc'
 import { useWorkspaceState } from '@/lib/workspaceState'
 import { rememberObject } from '@/lib/recentObjects'
 import {
@@ -23,17 +26,27 @@ import {
 } from '@/noteDraft'
 import { mergeNoteText, mergeNoteTitle } from '@/noteMerge'
 import { queryClient } from '@/offlineCache'
-import type { HostStatus, NoteDetail, NotesResponse } from '@/types'
+import type { HostStatus, NoteDetail } from '@/types'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { NoteConflict, NoteHistory, NoteSidePanel, type ArchivedDraft } from './NoteParts'
 import { Link } from 'react-router-dom'
 import { Trash2 } from 'lucide-react'
 import { LectureCoveragePanel, type LectureSource } from '@/components/LectureCoveragePanel'
 import { CourseLectureCoveragePanel } from '@/components/CourseLectureCoveragePanel'
+/** Both versions stay: the other one follows after a divider block. */
+function joinBodies(first: string, second: string): string {
+  return serializeDoc({
+    version: 1,
+    blocks: [
+      ...parseBody(first).blocks,
+      { id: newBlockId(), type: 'divider', props: {}, content: [], children: [] },
+      ...parseBody(second).blocks,
+    ],
+  })
+}
 export function NoteDocument({
   id,
   revision,
-  notes,
   onRevision,
   onEditing,
   onSaved,
@@ -44,7 +57,6 @@ export function NoteDocument({
 }: {
   id: string
   revision: number | null
-  notes: NotesResponse['notes']
   onRevision: (value: number | null) => void
   onEditing: () => void
   onSaved: () => void
@@ -57,13 +69,15 @@ export function NoteDocument({
   const { t } = useT('notes')
   const { t: trash } = useT('trash')
   const path = `/api/notes/${id}${revision ? `?revision=${revision}` : ''}`
-  const { data, loading, error: initialError, refreshError, reload } = useApi<NoteDetail>(path)
+  const { data, loading, error: initialError, refreshError, reload } = useNoteDetail(path)
   const error = initialError ?? refreshError
   useEffect(() => {
     if (data && !error && data.note.id === id) rememberObject(`/notes?id=${id}`, data.note.title)
   }, [data, error, id])
   const host = useContext(HostContext)
   const canWrite = useWritableHost()
+  const [wide, setWide] = useWorkspaceState(`note:${id}:wide`, false)
+  const [serif, setSerif] = useWorkspaceState(`note:${id}:serif`, false)
   const [editing, setEditing] = useWorkspaceState(`note:${id}:editing`, startEditing, { persist: false })
   useEffect(() => {
     if (startEditing) setEditing(true)
@@ -168,7 +182,7 @@ export function NoteDocument({
         setStatus(t('savedLocallyWaitingForHost'))
         return
       }
-      const latest = await request<NoteDetail>(`/api/notes/${id}`, { cache: 'no-store' })
+      const latest = withDraftBody(await request<NoteDetail>(`/api/notes/${id}`, { cache: 'no-store' }))
       baseRef.current = latest
       const current = draftRef.current
       if (!current || current.writeId !== starting.writeId) return
@@ -212,14 +226,16 @@ export function NoteDocument({
       }
       if (draftRef.current?.writeId !== candidate.writeId) return
       setStatus(t('savingOnHost'))
-      const saved = await request<NoteDetail>(`/api/notes/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          expected_revision: candidate.baseRevision,
-          title: candidate.title.trim(),
-          body: candidate.body,
+      const saved = withDraftBody(
+        await request<NoteDetail>(`/api/notes/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            expected_revision: candidate.baseRevision,
+            title: candidate.title.trim(),
+            document: documentPayload(candidate.body),
+          }),
         }),
-      })
+      )
       baseRef.current = saved
       const newer = draftRef.current
       if (newer?.writeId === candidate.writeId) {
@@ -308,7 +324,7 @@ export function NoteDocument({
       reload()
       return
     }
-    const combined = choice === 'both' ? `${remote.body}\n\n---\n\n${local.body}` : local.body
+    const combined = choice === 'both' ? joinBodies(remote.body, local.body) : local.body
     let resolved: NoteDraft
     try {
       resolved = keepDraft({
@@ -352,7 +368,7 @@ export function NoteDocument({
     setStatus(t('changesAutoSavedLocally'))
   }
   return (
-    <article className="note-canvas">
+    <article className={`note-canvas ${wide ? 'note-wide' : ''} ${serif ? 'note-serif' : ''}`}>
       <div className="note-canvas-toolbar">
         <span>{data?.note.course_name ?? t('defaultNoteLabel')}</span>
         {data && !revision && !editing && (
@@ -367,7 +383,7 @@ export function NoteDocument({
             compact
             disabled={!!draftRef.current || syncingRef.current || !!conflict}
             onRestored={async () => {
-              const latest = await request<NoteDetail>(`/api/notes/${id}`)
+              const latest = withDraftBody(await request<NoteDetail>(`/api/notes/${id}`))
               baseRef.current = latest
               setTitle(latest.note.title)
               setBody(latest.body)
@@ -393,7 +409,21 @@ export function NoteDocument({
             <Trash2 size={15} /> {trash('moveToTrash')}
           </Button>
         )}
+        <details className="note-page-display">
+          <summary>{t('pages.appearance')}</summary>
+          <div>
+            <label>
+              <input type="checkbox" checked={wide} onChange={(event) => setWide(event.target.checked)} />
+              {t('pages.wide')}
+            </label>
+            <label>
+              <input type="checkbox" checked={serif} onChange={(event) => setSerif(event.target.checked)} />
+              {t('pages.serif')}
+            </label>
+          </div>
+        </details>
       </div>
+      {data && !revision && <NotePageParents id={id} />}
       {loading && !data ? (
         <Loading />
       ) : error && !data ? (
@@ -405,80 +435,81 @@ export function NoteDocument({
             <div className="note-content-grid">
               <div className="note-main">
                 {editing ? (
-                  <fieldset className="note-form note-canvas-content note-form-fieldset" aria-label={t('editNoteAria')}>
-                    <input
-                      className="note-title-input"
-                      aria-label={t('noteTitleAria')}
-                      maxLength={200}
-                      value={title}
-                      onChange={(event) =>
-                        changeDraft(event.target.value, draftRef.current?.body ?? liveRef.current.body)
-                      }
-                    />
-                    {lectureSource ? (
-                      <LectureCoveragePanel
-                        body={body}
-                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                        source={lectureSource}
-                        disabled={!canWrite || !!conflict}
-                      />
-                    ) : (
-                      <CourseLectureCoveragePanel
-                        courseId={data.note.course_id}
-                        resourceId={data.note.resource_id}
-                        body={body}
-                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                        disabled={!canWrite || !!conflict}
-                      />
-                    )}
-                    <NoteStudio
-                      workspaceKey={`note:${id}`}
-                      id="note-edit-body"
-                      value={body}
-                      onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                      notes={notes}
-                      cardSource={{
-                        noteId: id,
-                        revision: data.selected_revision,
-                        title: data.note.title,
-                        courseId: data.note.course_id,
-                        courseName: data.note.course_name,
-                      }}
-                      canCreateCard={
-                        canWrite && !conflict && !draftRef.current && body === data.body && title === data.note.title
-                      }
-                    />
-                    {status && (
-                      <SaveIndicator
-                        phase={
-                          conflict
-                            ? 'conflict'
-                            : status === t('savedOnHost')
-                              ? 'saved'
-                              : status === t('savingOnHost')
-                                ? 'saving'
-                                : 'local'
+                  <fieldset className="note-form-fieldset" aria-label={t('editNoteAria')}>
+                    <div className="note-form note-canvas-content">
+                      <input
+                        className="note-title-input"
+                        aria-label={t('noteTitleAria')}
+                        maxLength={200}
+                        value={title}
+                        onChange={(event) =>
+                          changeDraft(event.target.value, draftRef.current?.body ?? liveRef.current.body)
                         }
-                        message={status}
                       />
-                    )}
-                    {conflict && (
-                      <NoteConflict local={conflict.local} remote={conflict.remote} onResolve={resolveConflict} />
-                    )}
-                    <div className="note-editor-actions">
-                      {manualResolution && (
-                        <Button
-                          onClick={() => {
-                            setManualResolution(false)
-                            void syncRef.current()
-                          }}
-                        >
-                          {t('applyEditButton')}
-                        </Button>
+                      {lectureSource ? (
+                        <LectureCoveragePanel
+                          body={body}
+                          onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                          source={lectureSource}
+                          disabled={!canWrite || !!conflict}
+                        />
+                      ) : (
+                        <CourseLectureCoveragePanel
+                          courseId={data.note.course_id}
+                          resourceId={data.note.resource_id}
+                          body={body}
+                          onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                          disabled={!canWrite || !!conflict}
+                        />
                       )}
-                      <Button variant="ghost" disabled={!!draftRef.current} onClick={() => setEditing(false)}>
-                        {t('closeButton')}
-                      </Button>
+                      <NoteEditor
+                        workspaceKey={`note:${id}`}
+                        id="note-edit-body"
+                        value={body}
+                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                        cardSource={{
+                          noteId: id,
+                          revision: data.selected_revision,
+                          title: data.note.title,
+                          courseId: data.note.course_id,
+                          courseName: data.note.course_name,
+                        }}
+                        canCreateCard={
+                          canWrite && !conflict && !draftRef.current && body === data.body && title === data.note.title
+                        }
+                      />
+                      {status && (
+                        <SaveIndicator
+                          phase={
+                            conflict
+                              ? 'conflict'
+                              : status === t('savedOnHost')
+                                ? 'saved'
+                                : status === t('savingOnHost')
+                                  ? 'saving'
+                                  : 'local'
+                          }
+                          message={status}
+                        />
+                      )}
+                      {conflict && (
+                        <NoteConflict local={conflict.local} remote={conflict.remote} onResolve={resolveConflict} />
+                      )}
+                      <div className="note-editor-actions">
+                        {manualResolution && (
+                          <Button
+                            onClick={() => {
+                              setManualResolution(false)
+                              void syncRef.current()
+                            }}
+                          >
+                            {t('applyEditButton')}
+                          </Button>
+                        )}
+                        <Button variant="ghost" disabled={!!draftRef.current} onClick={() => setEditing(false)}>
+                          {t('closeButton')}
+                        </Button>
+                      </div>
                     </div>
                   </fieldset>
                 ) : (
@@ -506,10 +537,11 @@ export function NoteDocument({
                     <p className="muted-text note-meta">
                       {t('editedMeta', { date: localDate(data.note.updated_at), revision: data.selected_revision })}
                     </p>
-                    <NoteMarkdownDocument body={data.body} notes={notes} />
+                    <NoteView body={data.body} />
                   </div>
                 )}
                 <NoteHistory data={data} archived={archived} onRevision={onRevision} onRestore={restoreArchivedDraft} />
+                {!revision && <NoteSubpages id={id} courseId={data.note.course_id} />}
               </div>
               <NoteSidePanel data={data} id={id} onSaved={onSaved} />
             </div>

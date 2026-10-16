@@ -1557,6 +1557,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/backup/choose-folder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Choose Folder */
+        post: operations["choose_folder_api_backup_choose_folder_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/backup/restore": {
         parameters: {
             query?: never;
@@ -10569,10 +10586,17 @@ export interface components {
         };
         /** NoteCreateInput */
         NoteCreateInput: {
-            /** Body */
+            /**
+             * Body
+             * @default
+             */
             body: string;
             /** Course Id */
             course_id: number;
+            /** Document */
+            document?: {
+                [key: string]: unknown;
+            } | null;
             /** Resource Id */
             resource_id?: number | null;
             /** Title */
@@ -10582,6 +10606,10 @@ export interface components {
         NoteDetailView: {
             /** Body */
             body: string;
+            /** Document */
+            document: {
+                [key: string]: unknown;
+            };
             note: components["schemas"]["NoteSummaryView"];
             /** Selected Revision */
             selected_revision: number;
@@ -10686,8 +10714,15 @@ export interface components {
         };
         /** NoteUpdateInput */
         NoteUpdateInput: {
-            /** Body */
+            /**
+             * Body
+             * @default
+             */
             body: string;
+            /** Document */
+            document?: {
+                [key: string]: unknown;
+            } | null;
             /** Expected Revision */
             expected_revision: number;
             /** Title */
@@ -15991,6 +16026,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["app__backups__api__BackupView"];
+                };
+            };
+        };
+    };
+    choose_folder_api_backup_choose_folder_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };

@@ -5,6 +5,7 @@ import { screenshotPath } from './artifacts'
 import path from 'node:path'
 import type { Page } from '@playwright/test'
 import { expect, test } from './fixtures'
+import { documentText } from './noteEditor'
 
 const qaDirectory = process.env.UNIOS_QA_DIRECTORY || 'docs/qa/reader-workspace-20261007'
 const qaPrefix = process.env.UNIOS_QA_DIRECTORY ? 'reader-' : ''
@@ -118,20 +119,22 @@ test('PDF excerpts survive reload, append to the same draft and save with a work
   const quote = await selectPassage(page)
   await page.getByRole('button', { name: 'In Mitschrift übernehmen' }).click()
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(body).toHaveValue(new RegExp(quote))
-  const first = await body.inputValue()
-  expect(first).toContain(`/material/${version}?page=1`)
-  await body.fill(first + 'Mein eigener Kerngedanke.')
+  await expect(body).toContainText(quote)
+  await expect(body.locator(`a[href^="/material/${version}?page=1"]`)).toHaveCount(1)
+  await body.click()
+  await page.keyboard.press('ControlOrMeta+End')
+  await page.keyboard.type('Mein eigener Kerngedanke.')
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
   await page.reload()
   await expect(page.locator('[data-material-page="1"] canvas')).toBeVisible()
   await page.getByRole('button', { name: 'Mitschrift', exact: true }).click()
-  await expect(body).toHaveValue(first + 'Mein eigener Kerngedanke.')
+  await expect(body).toContainText('Mein eigener Kerngedanke.')
+  await expect(body).toContainText(quote)
   await page.getByRole('button', { name: 'Nächste Seite', exact: true }).click()
   const secondQuote = await selectPassage(page, 2)
   await page.getByRole('button', { name: 'In Mitschrift übernehmen' }).click()
-  await expect(body).toHaveValue(new RegExp(secondQuote))
-  expect(await body.inputValue()).toContain('Mein eigener Kerngedanke.')
+  await expect(body).toContainText(secondQuote)
+  await expect(body).toContainText('Mein eigener Kerngedanke.')
   const saving = page.waitForResponse(
     (response) => response.url().endsWith('/api/notes') && response.request().method() === 'POST',
   )
@@ -156,37 +159,40 @@ test('PDF excerpts survive reload, append to the same draft and save with a work
   expect(continued.note.current_revision).toBeGreaterThan(detail.note.current_revision)
   expect(continued.body.split(`/material/${version}?page=2`)).toHaveLength(3)
   const canvas = page.locator('.reader-continuous-note .note-canvas')
-  await canvas.getByRole('button', { name: 'Markdown', exact: true }).click()
   const title = 'Schleifen: meine fortlaufende Mitschrift'
   await canvas.getByRole('textbox', { name: 'Notiztitel', exact: true }).fill(title)
-  const further = `${continued.body}\n\nZweiter eigener Abschnitt nach dem ersten Speichern.`
+  const further = 'Zweiter eigener Abschnitt nach dem ersten Speichern.'
   const secondSave = page.waitForResponse(
     (result) =>
       result.url().endsWith(`/api/notes/${created.note.id}`) &&
       result.request().method() === 'PUT' &&
-      result.request().postDataJSON().body === further,
+      documentText(result.request().postDataJSON().document).includes(further),
   )
-  await canvas.getByRole('textbox', { name: 'Notizinhalt', exact: true }).fill(further)
+  const continuedBody = canvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })
+  await continuedBody.click()
+  await page.keyboard.press('ControlOrMeta+End')
+  await page.keyboard.press('Enter')
+  await page.keyboard.type(further)
   const secondResponse = await secondSave
   expect(secondResponse.ok(), await secondResponse.text()).toBeTruthy()
   expect(secondResponse.request().postDataJSON().expected_revision).toBe(continued.note.current_revision)
   const resumed = await secondResponse.json()
   expect(resumed.note.id).toBe(created.note.id)
   expect(resumed.note.title).toBe(title)
-  expect(resumed.body).toBe(further)
+  expect(resumed.body).toContain(further)
   expect(creates).toBe(1)
   await page.reload()
   await expect(page.locator('[data-material-page="2"] canvas')).toBeVisible()
   await page.getByRole('button', { name: 'Mitschrift', exact: true }).click()
   await expect(page.locator('.reader-note-draft')).toHaveCount(0)
   await expect(canvas.getByRole('textbox', { name: 'Notiztitel', exact: true })).toHaveValue(title)
-  await expect(canvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(further)
+  await expect(canvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toContainText(further)
   expect(creates).toBe(1)
   await page.getByRole('link', { name: 'Notiz öffnen', exact: true }).click()
   await expect(page).toHaveURL(/\/notes\?(?:[^#]*&)?id=/)
   // Reader continuation opens in edit mode. Preview makes its retained source
   // links directly operable in the full document.
-  await page.locator('.note-canvas .studio-modes').getByRole('button', { name: 'Lesen', exact: true }).click()
+  await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await page.locator('.note-canvas a').filter({ hasText: '04_Schleifen.pdf' }).last().click()
   await expect(page).toHaveURL(new RegExp(`/material/${version}\\?page=2`))
   await expect(page.locator('.material-pager')).toContainText('Seite 2 von 2')
@@ -250,12 +256,12 @@ test('selection on a late page preserves reading position and opens its source-b
   await page.screenshot({ path: screenshotPath(path.resolve('..', qaDirectory, 'selection-120-pages.png')) })
   await page.getByRole('button', { name: 'In Mitschrift übernehmen' }).click()
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(body).toHaveValue(new RegExp(quote))
-  expect(await body.inputValue()).toContain(`/material/${version}?page=80`)
+  await expect(body).toContainText(quote)
+  await expect(body.locator(`a[href^="/material/${version}?page=80"]`)).toHaveCount(1)
   await expect(page.locator('.material-pager')).toContainText('Seite 80 von 120')
   await recordPosition('before-mobile')
   await page.setViewportSize({ width: 390, height: 844 })
-  await expect(body).toHaveValue(new RegExp(quote))
+  await expect(body).toContainText(quote)
   await recordPosition('mobile-open')
   await page.getByRole('button', { name: 'Markierungen schließen' }).click()
   await recordPosition('mobile-closed')
@@ -582,7 +588,7 @@ for (const theme of ['light', 'dark']) {
       await page.getByRole('tab', { name: 'Mitschrift', exact: true }).click()
       await page
         .getByRole('textbox', { name: 'Notizinhalt', exact: true })
-        .fill('# Kerngedanke\n\nSchleifen wiederholen einen Schritt, bis die Bedingung endet.')
+        .fill('Schleifen wiederholen einen Schritt, bis die Bedingung endet.')
       if (width === 390) {
         await expect(page.locator('.material-side-drawer')).toHaveCSS('bottom', '0px')
         await expect(page.getByRole('dialog')).toHaveAttribute('aria-modal', 'true')
@@ -607,7 +613,7 @@ test('a quote in the note opens the PDF at that passage, marked, without leaving
   await selectPassage(page, 2)
   await page.getByRole('button', { name: 'In Mitschrift übernehmen' }).click()
   const body = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(body).toHaveValue(new RegExp(String.raw`/material/${version}\?page=2&mark=[0-9.,;]+\)`))
+  await expect(body.locator(`a[href^="/material/${version}?page=2&mark="]`)).toHaveCount(1)
   const saving = page.waitForResponse(
     (response) => response.url().endsWith('/api/notes') && response.request().method() === 'POST',
   )

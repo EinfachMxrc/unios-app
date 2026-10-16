@@ -1,5 +1,135 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 16.10.2026 – Notion-Umbau: gemeinsame Abschlussprüfung
+
+Alle vier Pakete sind implementiert und einzeln committed. Die gemeinsame
+Browserprüfung deckt 567 Fälle ab: 566 bestanden im vollständigen Lauf; der einzige
+Fehler lag im bestehenden Moodle-Redirect-Test, der nach vorherigen Uploads die
+begrenzte Kursvorschau statt der vollständigen Unterlagen prüfte. Nach dieser
+Testkorrektur bestand der komplette zusammenhängende Moodle-Block mit 27 Fällen
+auf demselben eingefrorenen Build. Keine App-Änderung nach diesem Gesamtlauf.
+
+1.485 Frontendtests in 186 Dateien und 1.385 Pythonfälle bestanden, acht reguläre
+Python-Skips. Typecheck, ESLint, Übersetzungsabgleich, Ruff, mypy (651 Dateien),
+OpenAPI-/Typenabgleich, Produktionsbuild und Größenbudgets bestanden. Der separate
+lokale macOS-Signaturtest bleibt wegen des nicht vertrauten Wegwerf-Zertifikats
+ausgenommen; keine Änderung am Schlüsselbund. Docker ist lokal nicht verfügbar.
+
+28 Ansichten, Hell/Dunkel und 1.440/390 Pixel, geprüft: Lighthouse Accessibility
+96–100, keine JavaScript-/Audit-Laufzeitfehler. Die gefrorenen Frontend- und
+Backend-Quellbäume stimmen byteweise mit dem Arbeitsstand überein. Isolierte
+Fake-Dienste vermeiden Eingriffe in parallel laufende Instanzen. Vollständige
+Nachweise, Screenshots, Build-Hash und Grenzen unter
+[`qa/notion-final-20261016/README.md`](qa/notion-final-20261016/README.md).
+
+Zusätzlich den Originaldownload bei fehlender Vorschau im kompakten Reader sichtbar
+gehalten, der eingeklappten Marke ihren zugänglichen Namen erhalten und die
+Geometrie der kontextbezogenen Editor-Werkzeuge stabilisiert. Bestehende
+Browserselektoren folgen den gemeinsamen Seitenköpfen und der neuen Kalenderansicht.
+Kein Release, keine Installation, Datenmigration oder Serveränderung. Native
+Geräteabnahme steht weiterhin in `MANUELL_TESTEN.md`.
+
+
+
+## 16.10.2026 – Notion-Umbau, Paket 4: Unterseiten und Vorlagen
+
+Notizen können weitere Seiten enthalten. Die vorhandene `part_of`-Beziehung
+liefert Elternnavigation und Unterseitenliste; bestehende Seiten lassen sich
+hinzufügen oder aus der Struktur lösen. Die vorhandene Kreisprüfung bleibt
+verbindlich. Neue Unterseiten verwenden den normalen, abgesicherten Notizablauf.
+Der beim expliziten Speichern gewählte Elternbezug bleibt an dieser Anfrage;
+ein späterer Tabwechsel kann deren Antwort nicht einem anderen Elternziel zuordnen.
+Scheitert nur die Zuordnung, bleibt die bereits gesicherte Seite erhalten und
+nur diese idempotente Beziehung wird erneut versucht. Verbindungswechsel und
+Standby sperren verspätete oder unzulässige Folgeaktionen.
+
+Freie neue Seiten beginnen leer und bieten drei ausdrücklich auswählbare Vorlagen:
+Vorlesungsmitschrift, Prüfungsvorbereitung und Lernreflexion. Bestehende Entwürfe
+werden nicht ersetzt; quellengebundene und Aufgaben-Vorlagen bleiben erhalten.
+Breite Seite und Serifenschrift sind pro Notiz im jeweiligen Fenster einstellbar.
+Die vorhandenen Bausteine, Überschriften und deren Reihenfolge bleiben bearbeitbar.
+
+Die gemeinsame Prüfung ergänzt Tab-Kennungen für unterschiedliche Kursentwürfe
+und Übungsaufgaben. Explizite Seitenlinks werden auch in bereits offenen Tabs
+beachtet. Sammlungsnamen und Filter bleiben als fensterbezogene Entwürfe erhalten;
+späte Speicherantworten überschreiben weder neuere Eingaben noch die aktive Route.
+Der tatsächliche Browserpfad schützt dabei auch vor noch im Suspense-Hintergrund
+gehaltenen Seiten. Keine Datenmigration oder neue Abhängigkeit.
+
+Sieben neue Unitfälle zu Vorlagen, Zuordnung, StrictMode und Verbindungswechsel
+sowie alle 1.485 Frontendtests bestanden. 30 gezielte Browserfälle bestanden;
+der gezielt verzögerte Seitenwechsel wurde zusätzlich erfolgreich geprüft.
+Acht Seiten-/Vorlagen-Screenshots Hell/Dunkel bei 1.440/390 Pixeln geprüft.
+Die gemeinsame abschließende Browser-Suite läuft mit eingefrorenem, isoliertem
+Build; Nachweise werden anschließend unter `qa/notion-final-20261016` ergänzt.
+
+
+## 16.10.2026 – Notion-Umbau, Paket 3: Kursansichten und Vorschauen
+
+Der Kurs bietet jetzt „Ansichten“ für seine gespeicherten Sammlungen. Auswahl
+und Darstellung bleiben im Fenster erhalten; ein Darstellungswechsel verändert
+die gespeicherte Sammlung nicht. „Ansicht verwalten“ öffnet genau diese Sammlung,
+eine neue Ansicht übernimmt den Kursfilter. Fremde Kursansichten werden nicht
+in den Kurs eingeblendet. Unbekannte Direktlinks melden eine fehlende Ansicht.
+
+Ergebniseinträge erhalten eine eigene Vorschau-Schaltfläche. Das seitliche Blatt
+zeigt eine Notiz einschließlich eines vorhandenen lokalen Entwurfs oder echte,
+lesbare PDF-Seiten. Vollständig öffnen und in neuem Tab öffnen bleiben getrennte
+Aktionen. Die Vorschau schreibt nicht in den Reader-Lesestand. Andere Inhaltstypen
+zeigen ihre gespeicherten Fakten und den direkten Einstieg in die vollständige
+Ansicht. Bestehende Filter und Resultate kommen unverändert aus den vorhandenen
+APIs; keine zweite Datenquelle und keine neue Abhängigkeit.
+
+15 Browserfälle (fünf neue, drei Sammlungen, sieben Kurs-Schreibtisch) bestanden;
+die fünf neuen nach der Korrektur erneut, die beiden Screenshotfälle abschließend
+mit vollständig beendeten Animationen. Acht Screenshots Hell/Dunkel, 1.440/390 px
+geprüft. Typecheck, ESLint, Übersetzungen, Build/Budgets sowie zehn gezielte
+Modell-/Tab-Tests bestanden. Gemeinsame Abschlussprüfung folgt nach Paket 4.
+
+
+## 16.10.2026 – Notion-Umbau, Paket 2: gemeinsame Seitenköpfe
+
+Kurse und Notizen bündeln Titel und zugehörige Aktionen im gemeinsamen Seitenkopf;
+Sammlungen zeigen ihre Erklärung direkt unter der Überschrift. Die doppelte
+Einführung entfällt. Desktop-Formatierung tritt beim Lesen zurück und wird durch
+Hover oder Tastaturfokus wieder vollständig sichtbar. Keine abgeschwächte
+Deckkraft mehr auf Text und Bedienknöpfen. Der Markenlink trägt seinen vollständigen
+sichtbaren Namen auch für assistive Technik.
+
+Typecheck, ESLint und Build bestanden. 21 betroffene Kurs-, Editor- und neue
+Seitenkopf-Abläufe bestanden; die drei Sammlungsfälle bestanden anschließend mit
+präzisen Combobox-Selektoren und dem neuen gemeinsamen Titel (24 insgesamt).
+Zwölf Screenshots für drei Ansichten in Hell/Dunkel bei 1.440/390 Pixeln geprüft,
+kein horizontaler Überlauf. Keine API-, Datenmodell- oder Dependency-Änderung.
+Gemeinsame Abschlussprüfung und nativer Nachweis bleiben wie in Paket 1 offen.
+
+
+## 16.10.2026 – Notion-Umbau, Paket 1: offene Inhalte als Tabs
+
+Eine fensterbezogene Tab-Leiste ergänzt die vorhandene Navigation. Inhalte lassen
+sich per Kontextmenü, im Desktop auch per Cmd/Strg-Klick, als weiterer Tab öffnen.
+Wechseln, Schließen, Wiederöffnen und Sortieren behalten dieselben Dokument-
+Entwürfe, PDF-Seiten, Zoomwerte und Editor-Cursor. Mobil gibt es einen kompakten
+Tab-Wähler. Pro Dokument bleibt ein Editor zuständig; die Tabs führen keine
+zweite Schreibkopie ein. Im Sitzungsspeicher stehen nur begrenzte Inhaltskennungen,
+keine Titel, Zitate oder Formularinhalte. Eine Verbindungsänderung leert die Tabs.
+
+Beim Prüfen einen Layoutfehler des wiederhergestellten Editors im Fieldset-Grid
+behoben: Das Raster liegt jetzt innerhalb der semantischen Feldgruppe. Die neue
+Serverroute `/workspace/new` funktioniert auch nach Neuladen. Deutsche und
+englische Texte, keine neue Abhängigkeit und keine Datenmigration.
+
+1.477 Frontendtests, Typecheck, ESLint, Übersetzungen, Build/Budgets, Ruff, mypy
+und OpenAPI bestanden. 1.385 Pythonfälle bestanden mit acht regulären Skips;
+der separate macOS-Signaturtest scheitert lokal am fehlenden Vertrauen in sein
+Wegwerf-Zertifikat und wurde nicht durch eine Änderung am Schlüsselbund umgangen.
+Acht Tab-Abläufe und zwei vorhandene Desktop-Link-Abläufe bestanden. Acht
+Lighthouse-Snapshots bei 1.440/390 Pixeln in Hell/Dunkel: 96–100 Accessibility.
+Der vollständige Browserlauf und die gemeinsame Übergabe folgen nach den weiteren
+Umbaupaketen; der erste isolierte Lauf deckte außerdem ungenaue Testselektoren
+und eine noch nicht vollständig umgeleitete Fake-Syncthing-Verbindung auf.
+Details und Grenzen: [Tab-QA](qa/notion-tabs-20261016/README.md).
+
 ## 16.10.2026 – Offline-Budget nach Kalender-PR korrigiert
 
 GitHub meldete nach PR #47 einen um 294 gzip-Bytes überschrittenen Offline-Cache.
@@ -3548,3 +3678,21 @@ Einzige Token-Datei mit neutralem Höhenmodell; 427 Zeilen totes CSS, zwei
 überschriebene Token-Blöcke, acht ungenutzte Typen und zwei tote Python-Funktionen
 entfernt. Backend 1.084 Tests, Frontend-Unit- und Leser-E2E grün; native
 MacBook-Trackpad-Messung steht aus.
+
+## 16.10.2026 – Notizeditor als Block-Editor neu aufgebaut
+
+Der frühere Notizeditor (Studio, Markdown-Quelltextmodus, markdownbasierte Entwürfe)
+wurde verworfen und nach Notion-Vorbild neu gebaut. Notizen sind jetzt Blockdokumente
+mit stabilen Block-IDs (`app/notes/document.py`), ältere Markdown-Revisionen bleiben
+unverändert und werden beim Lesen deterministisch umgewandelt (`app/notes/markdown.py`).
+Store, API (`document` + Markdown-Ansicht `body`), Block-Aktionen, Export, Suche,
+Wikilinks und lokales Rückgängig arbeiten auf dem neuen Format; das Frontend hat
+einen neuen Editor (`frontend/src/editor/`) mit Slash-Menü, `[[`-Verlinkung,
+Auswahl-Leiste, Block-Griff, Aufklappbereichen, Gliederung und Fokus, und Entwürfe
+sowie der Dreiwege-Abgleich arbeiten blockweise. Fehlende Funktionen siehe
+`docs/NOTE_STUDIO.md` („Grenzen“). Details: `docs/NOTE_STUDIO.md`.
+
+Prüfung: Backend-pytest, ruff und mypy; Frontend-Typecheck, Lint, Vitest und Build;
+Playwright mit lokalem Fake-Server (`e2e/note-editor.spec.ts` und angepasste
+Fachspecs). Der Bestand echter Daten wurde nicht angefasst; vor dem ersten Speichern
+einer bestehenden Notiz mit dieser Version sollte ein geprüfter Snapshot vorliegen.

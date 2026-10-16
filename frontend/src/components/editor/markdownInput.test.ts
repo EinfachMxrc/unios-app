@@ -2,12 +2,16 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest'
 import { Editor } from '@tiptap/core'
-import { editorExtensions } from './extensions'
-import { noteCardSelection } from './noteCardSelection'
+import { assignMissingIds, editorExtensions } from '@/editor/extensions'
+import { selectionText as noteCardSelection } from '@/editor/selectionText'
 
+/** Block ids are assigned per editor; compare structure only. */
+const noIds = (json: unknown) =>
+  JSON.parse(JSON.stringify(json, (key, value) => (key === 'blockId' ? undefined : value)))
 const instances: Editor[] = []
 function editorFor(body = '') {
   const editor = new Editor({ extensions: editorExtensions(), content: body, contentType: 'markdown' })
+  assignMissingIds(editor)
   instances.push(editor)
   return editor
 }
@@ -31,13 +35,13 @@ describe('direct Markdown input in the shared visual editor', () => {
     expect(editor.isActive('bulletList')).toBe(false)
     editor.commands.setContent('', { contentType: 'markdown' })
     type(editor, `${marker} Gedanke`)
-    expect(editorFor(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(editorFor(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it.each([1, 2, 3, 4, 5, 6])('turns %s hash markers into a heading and preserves it when saved', (level) => {
     const editor = editorFor()
     type(editor, `${'#'.repeat(level)} Thema`)
     expect(editor.getAttributes('heading').level).toBe(level)
-    expect(editorFor(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(editorFor(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it.each([
     ['1. ', 'orderedList'],
@@ -64,8 +68,8 @@ describe('direct Markdown input in the shared visual editor', () => {
   it('converts only the selected middle bullet into a checked task', () => {
     const editor = editorFor('- Vorher\n- \n- Nachher')
     let position = 0
-    editor.state.doc.descendants((node, pos) => {
-      if (node.type.name === 'paragraph' && !node.textContent) position = pos + 1
+    editor.state.doc.descendants((node, pos, parent) => {
+      if (node.type.name === 'paragraph' && !node.textContent && parent?.type.name === 'listItem') position = pos + 1
     })
     editor.commands.setTextSelection(position)
     type(editor, '[x] Wiederholen')
@@ -79,7 +83,7 @@ describe('direct Markdown input in the shared visual editor', () => {
     expect(editor.getMarkdown()).toContain('Vorher')
     expect(editor.getMarkdown()).toContain('- [x] Wiederholen')
     expect(editor.getMarkdown()).toContain('Nachher')
-    expect(editorFor(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(editorFor(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it.each(['Wert $a+b$ bleibt', '$a+b$', '[[Basisfall]]', '$$\nx+y\n$$'])(
     'preserves atom source text in card selection: %s',

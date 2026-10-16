@@ -27,14 +27,14 @@ test('an otherwise empty lecture records exact PDF pages and keeps multiple date
   const version = await openReader(page)
   const draft = page.locator('.reader-note-draft')
   const body = draft.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(body).toHaveValue('')
+  await expect(body).toHaveText('')
   const coverage = draft.locator('.lecture-coverage-panel')
   await coverage.locator('summary').click()
   await coverage.getByLabel('Vorlesungsdatum', { exact: true }).fill('2026-10-14')
   await coverage.getByLabel('Bearbeitete PDF-Seiten', { exact: true }).fill('1-2')
   await coverage.getByRole('button', { name: 'Seiten festhalten', exact: true }).click()
-  await expect(body).toHaveValue(new RegExp(`/material/${version}\\?page=1`))
-  await expect(body).toHaveValue(new RegExp(`/material/${version}\\?page=2`))
+  await expect(body.locator(`a[href="/material/${version}?page=1"]`)).toHaveCount(1)
+  await expect(body.locator(`a[href="/material/${version}?page=2"]`)).toHaveCount(1)
   const saving = page.waitForResponse(
     (response) => response.url().endsWith('/api/notes') && response.request().method() === 'POST',
   )
@@ -71,7 +71,7 @@ test('out-of-range pages do not alter an empty lecture draft', async ({ page }) 
   await coverage.getByLabel('Bearbeitete PDF-Seiten', { exact: true }).fill('0, 3')
   await coverage.getByRole('button', { name: 'Seiten festhalten', exact: true }).click()
   await expect(coverage.getByRole('alert')).toContainText('Die Seiten müssen im geöffneten PDF liegen')
-  await expect(draft.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue('')
+  await expect(draft.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveText('')
 })
 
 test('Enter records lecture pages without creating a note', async ({ page }) => {
@@ -87,9 +87,9 @@ test('Enter records lecture pages without creating a note', async ({ page }) => 
   const pages = coverage.getByLabel('Bearbeitete PDF-Seiten', { exact: true })
   await pages.fill('1-2')
   await pages.press('Enter')
-  await expect(draft.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(
-    new RegExp(`/material/${version}\\?page=2`),
-  )
+  await expect(
+    draft.getByRole('textbox', { name: 'Notizinhalt', exact: true }).locator(`a[href="/material/${version}?page=2"]`),
+  ).toHaveCount(1)
   await expect(coverage.getByRole('status')).toContainText('Seitenangaben in die Mitschrift übernommen')
   expect(creates).toBe(0)
 })

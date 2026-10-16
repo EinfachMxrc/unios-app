@@ -119,3 +119,28 @@ it('writes sizes people can read', () => {
   expect(formatSize(268_400_000, 'de-DE')).toBe('268,4 MB')
   expect(formatSize(1_500_000_000, 'de-DE')).toBe('1,5 GB')
 })
+
+it('lets the person pick the folder in the system dialog and saves it right away', async () => {
+  mocks.state = empty
+  mocks.request.mockImplementation(async (path: string) => {
+    if (path === '/api/backup/choose-folder') return { folder: '/Users/ada/Backups' }
+    return { ...empty, folder: '/Users/ada/Backups' }
+  })
+  render(<BackupPanel />)
+  fireEvent.click(screen.getByRole('button', { name: messages.chooseFolder }))
+  await waitFor(() =>
+    expect(mocks.request).toHaveBeenCalledWith(
+      '/api/backup/settings',
+      expect.objectContaining({ body: expect.stringContaining('/Users/ada/Backups') }),
+    ),
+  )
+})
+
+it('keeps the current folder when the dialog is cancelled', async () => {
+  mocks.state = empty
+  mocks.request.mockResolvedValue({ folder: null })
+  render(<BackupPanel />)
+  fireEvent.click(screen.getByRole('button', { name: messages.chooseFolder }))
+  await waitFor(() => expect(mocks.request).toHaveBeenCalledTimes(1))
+  expect(mocks.request).not.toHaveBeenCalledWith('/api/backup/settings', expect.anything())
+})

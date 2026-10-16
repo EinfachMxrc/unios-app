@@ -2,6 +2,16 @@
 
 # Änderungen
 
+## 0.1.30 – Notizen als Block-Editor (16.10.2026)
+
+- Neu: Der Notizeditor wurde nach dem Vorbild von Notion neu gebaut. Notizen bestehen aus Blöcken: `/` fügt Blöcke ein (Überschriften, Listen, Checklisten, Aufklappbereiche, Zitate, Tabellen, Code, Lernkästen, Formeln, Lernwerkzeuge, Medien, Verknüpfungen), `[[` verlinkt Notizen, eine Leiste über der Auswahl formatiert Text, ein Griff links neben jedem Block verschiebt, dupliziert und entfernt ihn. Dazu Gliederung, Fokus und ein „Einfügen“-Menü für Touch.
+- Neu: Ältere Versionen zeigen Block für Block, was sich seitdem geändert hat.
+- Geändert: Der Markdown-Quelltextmodus und die frühere Studio-Werkzeugleiste entfallen. Markdown bleibt als Tipp-Kürzel, Import und Export. Favoriten und zuletzt benutzte Formelvorlagen der alten Leiste sind entfallen.
+- Geändert (Speicherformat): Neue Notizversionen sind Blockdokumente (JSON, `unios-note-blocks`). Ältere Markdown-Versionen bleiben unverändert und werden beim Lesen umgewandelt; die nächste Speicherung legt eine neue Version an. Die API liefert zusätzlich `document`; `body` bleibt die Markdown-Ansicht. Der Export enthält je Notiz `.md` und `.json`.
+- Geändert: Lokale Entwürfe und das Zusammenführen arbeiten blockweise.
+- Neu: Der Backup-Ordner lässt sich im Systemdialog auswählen statt als Pfad einzutippen.
+- Behoben: Blöcke ließen sich am Griff nicht ziehen; Escape im Slash-Menü schloss das Notiz-Fenster neben dem PDF; nach Menüs ging der Cursor verloren.
+
 ## 0.1.29 – Lokaler Modus ohne Server und viele Korrekturen (16.10.2026)
 
 - Neu: Beim ersten Start der Desktop-App lässt sich „Nur auf diesem Gerät nutzen“ wählen. UniOS läuft dann mit einer lokalen Datenbank, ohne eigenen Server. Bestehende Installationen behalten ihren Modus; ein späterer Wechsel auf einen Server geht nur über die geprüfte Datenübernahme.

@@ -12,13 +12,14 @@ from sqlalchemy import select, text
 from app.config import Settings
 from app.db.models import LinkEdge, Note
 from app.host.lease import HostCoordinator
+from app.notes.document import link_first_mention
 from app.notes.link_repository import title_rows
 from app.notes.link_service import index_titles, title_key
 from app.notes.store import (
     NoteConflict,
     NoteCorrupt,
     NoteMissing,
-    read_note,
+    read_note_document,
     update_note,
 )
 
@@ -120,16 +121,13 @@ def references_router(settings: Settings, factory, coordinator: HostCoordinator)
             if len(same_title) != 1:
                 raise HTTPException(409, "Notiztitel ist nicht eindeutig")
             try:
-                source, _, body, _ = read_note(session, settings, str(source_id))
+                source, _, document, _ = read_note_document(session, settings, str(source_id))
                 if source.current_revision != payload.expected_revision:
                     raise HTTPException(409, "Ausgangsnotiz wurde inzwischen geändert")
-                span = _first_unlinked(body, target.title)
-                if span is None:
+                if not link_first_mention(document, target.title):
                     raise HTTPException(409, "Erwähnung nicht mehr vorhanden")
-                start, end = span
-                updated = body[:start] + f"[[{target.title}]]" + body[end:]
                 update_note(session, settings, source.id, expected_revision=payload.expected_revision,
-                            title=source.title, body=updated)
+                            title=source.title, document=document)
             except NoteMissing:
                 raise HTTPException(404, "Ausgangsnotiz nicht gefunden") from None
             except NoteConflict:

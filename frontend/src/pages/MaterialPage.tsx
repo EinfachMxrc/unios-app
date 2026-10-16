@@ -890,9 +890,9 @@ export function MaterialReader({
                     material={data}
                     page={page}
                     canWrite={canWrite && online}
-                    onApply={async (markdown) => {
+                    onApply={async (blocks) => {
                       await prepareReaderTarget(data)
-                      appendReaderBlock(data, markdown)
+                      appendReaderBlock(data, blocks)
                       setExcerptRevision((current) => current + 1)
                       setStudyTab('notes')
                       setNotesOpen(true)

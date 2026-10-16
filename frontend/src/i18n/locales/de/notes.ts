@@ -1,6 +1,34 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  pages: {
+    templates: 'Seitenvorlagen',
+    templateHint: 'Wähle eine Vorlage oder schreibe direkt los.',
+    lectureTemplate: 'Vorlesungsmitschrift',
+    lectureBody: '## Die Grundidee\n\n\n## Meine Erklärung\n\n\n## Beispiel\n\n\n## Offene Fragen\n\n',
+    examTemplate: 'Prüfungsvorbereitung',
+    examBody:
+      '## Was ich können muss\n\n- [ ] \n\n## Mein Lösungsweg\n\n\n## Fehler und Merksätze\n\n\n## Nächster Schritt\n\n',
+    reflectionTemplate: 'Lernreflexion',
+    reflectionBody: '## Heute verstanden\n\n\n## Noch unklar\n\n\n## Das probiere ich als Nächstes\n\n',
+    parents: 'Übergeordnete Seiten',
+    subpages: 'Unterseiten',
+    createChild: 'Unterseite erstellen',
+    parentPending: 'Die Seite ist gesichert. Ihre Zuordnung als Unterseite ist noch offen.',
+    retryParent: 'Zuordnung erneut versuchen',
+    cancelParent: 'Zuordnung verwerfen',
+    detach: 'Unterseite {{title}} lösen',
+    noChildren: 'Hier können weitere Seiten zu diesem Thema liegen.',
+    attachExisting: 'Bestehende Seite hinzufügen',
+    searchPages: 'Seitentitel suchen',
+    searching: 'Seiten werden gesucht …',
+    noCandidates: 'Keine passende Seite gefunden.',
+    appearance: 'Seitendarstellung',
+    wide: 'Breite Seite',
+    serif: 'Serifenschrift',
+    newChildOf: 'Neue Unterseite von',
+  },
+
   emptyNoteButton: 'Leere Mitschrift',
   emptyNoteHint:
     'Titel und Kurs reichen aus. Du kannst die Mitschrift später ergänzen oder mit Seitenangaben für GPT vorbereiten.',
@@ -377,7 +405,12 @@ export default {
   versionsAndFileSummary: 'Versionen und Datei auf dem Gerät',
   versionsAria: 'Notizversionen',
   versionButton: 'Version {{revision}}',
-  currentFileLabel: 'Aktuelle Markdown-Datei:',
+  currentFileLabel: 'Aktuelle Datei:',
+  diffTitle: 'Änderungen seit Version {{revision}}',
+  diffNone: 'Seitdem hat sich nichts geändert.',
+  diff_added: 'Neu',
+  diff_removed: 'Entfernt',
+  diff_changed: 'Geändert',
   noteDetailsAria: 'Notizdetails',
   contextPropertiesTitle: 'Kontext & Eigenschaften',
   courseLabel: 'Kurs',

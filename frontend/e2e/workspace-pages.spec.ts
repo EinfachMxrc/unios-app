@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { expect, test } from './fixtures'
+import { writeNote } from './noteEditor'
 
 test('preview main workspace surfaces', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 900 })
@@ -15,12 +16,15 @@ test('preview main workspace surfaces', async ({ page }, testInfo) => {
   await page.goto('/notes?new=1')
   await expect(page.getByRole('heading', { name: 'Notizen', exact: true })).toBeVisible()
   await page.getByRole('textbox', { name: 'Notiztitel' }).fill('Vorlesung 04: Schleifen')
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await page
-    .getByRole('textbox', { name: 'Notizinhalt' })
-    .fill(
-      '## Kernkonzepte\n\nMit Schleifen lassen sich wiederkehrende Aufgaben automatisieren.\n\n- for durchläuft eine Folge.\n- while wiederholt bis zur Bedingung.\n\n## Offene Fragen\n\nWann ist eine while-Schleife besser?',
-    )
+  await writeNote(page, [
+    '## Kernkonzepte',
+    'Mit Schleifen lassen sich wiederkehrende Aufgaben automatisieren.',
+    '- for durchläuft eine Folge.',
+    'while wiederholt bis zur Bedingung.',
+    '',
+    '## Offene Fragen',
+    'Wann ist eine while-Schleife besser?',
+  ])
   await page.getByRole('button', { name: 'Notiz anlegen' }).click()
   await expect(
     page.locator('.note-document').getByRole('heading', { name: 'Vorlesung 04: Schleifen', exact: true }),

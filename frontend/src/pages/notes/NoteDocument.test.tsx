@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { clearWorkspace } from '@/lib/workspaceState'
 import { draftFor, keepDraft, workingNoteDraftFor } from '@/noteDraft'
+import { docText, parseBody, serializeDoc } from '@/editor/doc'
 import type { NoteDetail } from '@/types'
 import { NoteDocument } from './NoteDocument'
 
@@ -37,19 +38,32 @@ vi.mock('@/components/EntityProperties', () => ({ EntityProperties: () => null }
 vi.mock('@/components/LinkedItems', () => ({ LinkedItems: () => null }))
 vi.mock('@/components/LocalActions', () => ({ LocalActions: () => null }))
 vi.mock('@/components/NoteReferences', () => ({ NoteReferences: () => null }))
-vi.mock('@/components/NoteMarkdownDocument', () => ({
-  NoteMarkdownDocument: ({ body }: { body: string }) => <p>{body}</p>,
+vi.mock('@/editor/NoteView', () => ({
+  NoteView: ({ body }: { body: string }) => <p>{docText(parseBody(body))}</p>,
 }))
-vi.mock('@/components/editor/NoteStudio', () => ({
-  NoteStudio: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
-    mocks.editorChange = onChange
-    return <textarea aria-label="noteContentAria" value={value} onChange={(event) => onChange(event.target.value)} />
+vi.mock('@/editor/NoteEditor', () => ({
+  NoteEditor: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => {
+    mocks.editorChange = (text) => onChange(bodyOf(text))
+    return (
+      <textarea
+        aria-label="noteContentAria"
+        value={docText(parseBody(value))}
+        onChange={(event) => onChange(bodyOf(event.target.value))}
+      />
+    )
   },
 }))
 vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
   return { useT: () => ({ t }) }
 })
+
+/** One paragraph in the stored block form, with a fixed id so drafts compare exactly. */
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }],
+})
+const bodyOf = (text: string) => serializeDoc(parseBody(serializeDoc(docOf(text) as never)))
 
 const detail: NoteDetail = {
   note: {
@@ -63,6 +77,7 @@ const detail: NoteDetail = {
     updated_at: '2026-10-09T10:00:00Z',
   },
   body: 'Saved lecture section',
+  document: docOf('Saved lecture section'),
   selected_revision: 3,
   versions: [],
 }
@@ -70,6 +85,7 @@ const second = {
   ...detail,
   note: { ...detail.note, id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb' },
   body: 'Other source notes',
+  document: docOf('Other source notes'),
 }
 function open(id = detail.note.id) {
   return render(
@@ -78,7 +94,6 @@ function open(id = detail.note.id) {
         key={id}
         id={id}
         revision={null}
-        notes={[]}
         startEditing
         onRevision={() => undefined}
         onEditing={() => undefined}
@@ -108,7 +123,7 @@ it('retains a renamed title when a delayed editor callback changes the body', ()
   act(() => delayedChange('A later section from the editor'))
   expect(workingNoteDraftFor(detail.note.id)).toMatchObject({
     title: 'My renamed lecture',
-    body: 'A later section from the editor',
+    body: bodyOf('A later section from the editor'),
   })
   expect((screen.getByLabelText('noteTitleAria') as HTMLInputElement).value).toBe('My renamed lecture')
 })
@@ -120,6 +135,7 @@ it('hydrates a clean open editor from a newer refetch and rejects older cache ro
     note: { ...detail.note, current_revision: 4, title: 'Confirmed newer title' },
     selected_revision: 4,
     body: 'Confirmed newer explanation',
+    document: docOf('Confirmed newer explanation'),
   }
   const tree = (
     <MemoryRouter>
@@ -127,7 +143,6 @@ it('hydrates a clean open editor from a newer refetch and rejects older cache ro
         key={detail.note.id}
         id={detail.note.id}
         revision={null}
-        notes={[]}
         startEditing
         onRevision={() => undefined}
         onEditing={() => undefined}
@@ -138,7 +153,7 @@ it('hydrates a clean open editor from a newer refetch and rejects older cache ro
   mocks.details.set(`/api/notes/${detail.note.id}`, next)
   view.rerender(tree)
   expect((screen.getByLabelText('noteTitleAria') as HTMLInputElement).value).toBe(next.note.title)
-  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe(next.body)
+  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe('Confirmed newer explanation')
   mocks.details.set(`/api/notes/${detail.note.id}`, detail)
   view.rerender(
     <MemoryRouter>
@@ -146,7 +161,6 @@ it('hydrates a clean open editor from a newer refetch and rejects older cache ro
         key={detail.note.id}
         id={detail.note.id}
         revision={null}
-        notes={[]}
         startEditing
         onRevision={() => undefined}
         onEditing={() => undefined}
@@ -154,7 +168,7 @@ it('hydrates a clean open editor from a newer refetch and rejects older cache ro
       />
     </MemoryRouter>,
   )
-  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe(next.body)
+  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe('Confirmed newer explanation')
 })
 
 it('preserves its own draft when a newer confirmed revision arrives', () => {
@@ -165,6 +179,7 @@ it('preserves its own draft when a newer confirmed revision arrives', () => {
     note: { ...detail.note, current_revision: 4 },
     selected_revision: 4,
     body: 'Another confirmed explanation',
+    document: docOf('Another confirmed explanation'),
   })
   view.rerender(
     <MemoryRouter>
@@ -172,7 +187,6 @@ it('preserves its own draft when a newer confirmed revision arrives', () => {
         key={detail.note.id}
         id={detail.note.id}
         revision={null}
-        notes={[]}
         startEditing
         onRevision={() => undefined}
         onEditing={() => undefined}
@@ -181,7 +195,10 @@ it('preserves its own draft when a newer confirmed revision arrives', () => {
     </MemoryRouter>,
   )
   expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe('Own unsaved explanation')
-  expect(workingNoteDraftFor(detail.note.id)).toMatchObject({ baseRevision: 3, baseBody: detail.body })
+  expect(workingNoteDraftFor(detail.note.id)).toMatchObject({
+    baseRevision: 3,
+    baseBody: bodyOf('Saved lecture section'),
+  })
 })
 
 it('restores a current RAM-only note after remount without claiming a durable device copy', () => {
@@ -189,7 +206,7 @@ it('restores a current RAM-only note after remount without claiming a durable de
     noteId: detail.note.id,
     baseRevision: 3,
     baseTitle: detail.note.title,
-    baseBody: detail.body,
+    baseBody: bodyOf('Saved lecture section'),
     title: 'Old durable title',
     body: 'Old durable text',
   })
@@ -206,7 +223,7 @@ it('restores a current RAM-only note after remount without claiming a durable de
   )
   expect(screen.getByText('localSaveFailed')).toBeTruthy()
   expect(draftFor(detail.note.id)?.body).toBe('Old durable text')
-  expect(workingNoteDraftFor(detail.note.id)?.baseBody).toBe(detail.body)
+  expect(workingNoteDraftFor(detail.note.id)?.baseBody).toBe(bodyOf('Saved lecture section'))
 })
 
 it('never places a RAM draft into the different saved target and restores it on return', () => {
@@ -217,7 +234,7 @@ it('never places a RAM draft into the different saved target and restores it on 
   fireEvent.change(screen.getByLabelText('noteContentAria'), { target: { value: 'Draft of the first note' } })
   first.unmount()
   const other = open(second.note.id)
-  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe(second.body)
+  expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe('Other source notes')
   other.unmount()
   open()
   expect((screen.getByLabelText('noteContentAria') as HTMLTextAreaElement).value).toBe('Draft of the first note')
@@ -235,7 +252,6 @@ it('keeps the saved editor and its RAM draft visible through an offline cached r
       <NoteDocument
         id={detail.note.id}
         revision={null}
-        notes={[]}
         startEditing
         onRevision={() => undefined}
         onEditing={() => undefined}
@@ -257,7 +273,6 @@ function read(revision: number | null = null) {
         key={detail.note.id}
         id={detail.note.id}
         revision={revision}
-        notes={[]}
         onRevision={() => undefined}
         onEditing={onEditing}
         onSaved={() => undefined}

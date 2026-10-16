@@ -3,6 +3,7 @@
 import { screenshotPath } from './artifacts'
 
 import { expect, test } from './fixtures'
+import { insertFromMenu } from './noteEditor'
 import type { Page } from '@playwright/test'
 import { mkdir } from 'node:fs/promises'
 const expression = '!x1*!x2*!x3 + !x1*x2*!x3 + x1*!x2*!x3'
@@ -13,7 +14,8 @@ async function open(page: Page) {
   const id = (await created.json()).note.id
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await page.getByRole('button', { name: 'Wahrheitstabelle', exact: true }).click()
+  await page.getByRole('textbox', { name: 'Notizinhalt', exact: true }).focus()
+  await insertFromMenu(page, page, 'Wahrheitstabelle')
   const dialog = page.getByRole('dialog', { name: 'Wahrheitstabelle', exact: true })
   await dialog.getByRole('textbox', { name: 'Logischer Ausdruck' }).fill(expression)
   return { dialog, id }

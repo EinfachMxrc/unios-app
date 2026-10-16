@@ -3,11 +3,15 @@
 
 import { afterEach, describe, expect, it } from 'vitest'
 import { Editor } from '@tiptap/core'
-import { editorExtensions } from './extensions'
+import { assignMissingIds, editorExtensions } from '@/editor/extensions'
 
+/** Block ids are assigned per editor; compare structure only. */
+const noIds = (json: unknown) =>
+  JSON.parse(JSON.stringify(json, (key, value) => (key === 'blockId' ? undefined : value)))
 const instances: Editor[] = []
 function parse(body: string) {
   const editor = new Editor({ extensions: editorExtensions(), content: body, contentType: 'markdown' })
+  assignMissingIds(editor)
   instances.push(editor)
   return editor
 }
@@ -48,14 +52,14 @@ describe('note formulas and keyboard roundtrip', () => {
       { type: 'blockMath', latex: '\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}' },
       { type: 'blockMath', latex: '\\sum_{i=1}^{3}i' },
     ])
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it('preserves escaped dollars and code through repeated saves', () => {
     const body = 'Wörtlich: \\$x\\$. Preis: $5 und $10.\n\n`$x$ \\(y\\)`\n\n```latex\n$$x$$\n\\[y\\]\n```'
     const editor = parse(body)
     expect(formulas(editor)).toEqual([])
     expect(editor.getMarkdown()).toContain('\\$x\\$')
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it.each(['$x^2$', '\\(x^2\\)'])('converts keyboard input %s at its own position and supports undo', (source) => {
     const editor = parse('Vorher ')
@@ -97,7 +101,7 @@ describe('note formulas and keyboard roundtrip', () => {
       const editor = parse('')
       type(editor, source)
       expect(formulas(editor)).toEqual([])
-      expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+      expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
     }
   })
   it('supports deleting a literal dollar from the caret without opening a dialog', () => {
@@ -135,7 +139,8 @@ describe('note formulas and keyboard roundtrip', () => {
     expect(formulas(editor)).toEqual([])
     for (const body of ['# Überschrift ', '- Eintrag ']) {
       const nested = parse(body)
-      nested.commands.setTextSelection(nested.state.doc.content.size - (body.startsWith('#') ? 1 : 3))
+      // End of the first block's text; the editor adds its trailing paragraph at creation.
+      nested.commands.setTextSelection(nested.state.doc.firstChild!.nodeSize - (body.startsWith('#') ? 1 : 3))
       type(nested, '$$x$$')
       expect(nested.state.doc.textContent).toContain('x')
       expect(formulas(nested).some((formula) => formula.type === 'blockMath')).toBe(false)
@@ -150,7 +155,7 @@ describe('note formulas and keyboard roundtrip', () => {
     expect(editor.state.doc.textContent).toContain('Vorher')
     expect(editor.state.doc.textContent).toContain('Nachher')
     expect(editor.state.doc.textContent).toContain('Ende')
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it('converts a long typed formula without truncating its LaTeX', () => {
     const latex = 'x+'.repeat(500) + '1'
@@ -162,7 +167,7 @@ describe('note formulas and keyboard roundtrip', () => {
       handler(editor.view, from, to, source, () => editor.state.tr.insertText(source, from, to)),
     )
     expect(formulas(editor)).toEqual([{ type: 'inlineMath', latex }])
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
 })
 
@@ -177,7 +182,7 @@ describe('direct powers, bases and column writing', () => {
       '\\left(-9\\right)_{10}',
       '\\left(10111\\right)_{2}',
     ])
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
   it('formats finished typing, keeps surrounding text and supports undo', () => {
     const editor = parse('Vorher ')
@@ -199,7 +204,7 @@ describe('direct powers, bases and column writing', () => {
     expect(formulas(editor)).toHaveLength(1)
     expect(formulas(editor)[0].type).toBe('blockMath')
     expect(formulas(editor)[0].latex).toContain('\\hline')
-    expect(parse(editor.getMarkdown()).getJSON()).toEqual(editor.getJSON())
+    expect(noIds(parse(editor.getMarkdown()).getJSON())).toEqual(noIds(editor.getJSON()))
   })
 })
 

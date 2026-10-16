@@ -25,7 +25,7 @@ from alembic.config import Config
 from apscheduler.events import EVENT_JOB_EXECUTED
 from fastapi.responses import Response
 from pptx import Presentation
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, text
 
 from alembic import command
 
@@ -53,6 +53,8 @@ from app.db.models import (
     DeadlineProposal,
     Exam,
     ExerciseProposalQueue,
+    Note,
+    NoteVersion,
     Notification,
     Resource,
     ResourceVersion,
@@ -679,10 +681,36 @@ def rename_focus_course(course_id: int):
 
 @app.post("/api/__test__/legacy-note")
 def legacy_note_for_browser_test(course_id: int):
+    """A note stored the way releases before the block format wrote it: one Markdown revision file."""
     with app.state.factory() as session:
-        note = create_note(session, settings, course_id=course_id, resource_id=None,
-                           title="Frühere Frage", body="Historischer Markdown-Text")
-        return {"id": note.id}
+        course = session.get(Course, course_id)
+        if course is None:
+            raise RuntimeError("Synthetischer Kurs fehlt")
+        note_id = str(uuid4())
+        body = "Historischer Markdown-Text"
+        header = ("---\n"
+                  f"unios_note_id: {json.dumps(note_id)}\n"
+                  'title: "Frühere Frage"\n'
+                  f"course: {json.dumps(course.name, ensure_ascii=False)}\n"
+                  f"course_id: {course.id}\n"
+                  "resource_id: null\n"
+                  "revision: 1\n"
+                  "---\n\n")
+        folder = settings.data_dir / "notes" / f"legacy_{course.id}" / note_id
+        folder.mkdir(parents=True)
+        target = folder / "v0001_Fruehere_Frage_legacy01.md"
+        content = (header + body).encode("utf-8")
+        write_once(target, content)
+        now = utc_now()
+        session.add(Note(id=note_id, course_id=course.id, resource_id=None, title="Frühere Frage",
+                         current_revision=1, created_at=now, updated_at=now))
+        session.add(NoteVersion(note_id=note_id, revision=1, title="Frühere Frage",
+                                relative_path=target.relative_to(settings.data_dir).as_posix(),
+                                sha256=hashlib.sha256(content).hexdigest(), created_at=now))
+        session.execute(text("INSERT INTO notes_fts(note_id, title, body) VALUES (:id, :title, :body)"),
+                        {"id": note_id, "title": "Frühere Frage", "body": body})
+        session.commit()
+        return {"id": note_id}
 
 
 @app.post("/api/__test__/document-date-proposal")

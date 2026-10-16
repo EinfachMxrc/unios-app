@@ -5,11 +5,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter, useLocation } from 'react-router-dom'
-import { useState, type ReactNode } from 'react'
-import { NoteMarkdownDocument } from '@/components/editor/RichNoteDocument'
-import { NoteMarkdownEditor } from '@/components/NoteMarkdownEditor'
+import type { ReactNode } from 'react'
+import { markdownToBody } from '@/editor/markdownImport'
+import { NoteView } from '@/editor/NoteView'
 import { noteLinkPaths, requestNoteLinkBatch, type NoteLinkResolution } from './useNoteLinks'
 import { internalNoteHref } from '@/lib/noteLinks'
+
+/** Renders Markdown text through the same read-only note view every page uses. */
+function NoteMarkdownDocument({ body }: { body: string }) {
+  return <NoteView body={markdownToBody(body)} />
+}
 
 afterEach(() => {
   cleanup()
@@ -56,34 +61,18 @@ describe('global note link metadata', () => {
     expect(new URL(noteLinkPaths('[[\uFEFF]]')[0], 'http://localhost').searchParams.get('titles')).toBe('\uFEFF')
   })
 
-  it('keeps a globally resolved link when the visible list changes and retains the editor DOM', async () => {
+  it('keeps a globally resolved link across re-renders and retains the editor DOM', async () => {
     const fetcher = resolverFetch()
     vi.stubGlobal('fetch', fetcher)
     const body = '# Quelle\n\nWeiterlesen: [[  STRASSE  ]]'
-    const view = render(<NoteMarkdownDocument body={body} notes={[]} />, { wrapper: wrapper() })
+    const view = render(<NoteMarkdownDocument body={body} />, { wrapper: wrapper() })
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'STRASSE' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`),
     )
-    const document = view.container.querySelector('.studio-readonly')
+    const document = view.container.querySelector('.note-prose-readonly')
     const html = document?.innerHTML
-    view.rerender(
-      <NoteMarkdownDocument
-        body={body}
-        notes={[
-          {
-            id: 'visible',
-            title: 'Andere Listenseite',
-            course_id: 1,
-            course_name: 'Beispielkurs',
-            resource_id: null,
-            current_revision: 1,
-            created_at: '',
-            updated_at: '',
-          },
-        ]}
-      />,
-    )
-    expect(view.container.querySelector('.studio-readonly')).toBe(document)
+    view.rerender(<NoteMarkdownDocument body={body} />)
+    expect(view.container.querySelector('.note-prose-readonly')).toBe(document)
     expect(document?.innerHTML).toBe(html)
     expect(screen.getByRole('link', { name: 'STRASSE' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`)
     expect(fetcher).toHaveBeenCalledTimes(1)
@@ -91,7 +80,7 @@ describe('global note link metadata', () => {
 
   it('does not pick a duplicate title from an incomplete visible list', async () => {
     vi.stubGlobal('fetch', resolverFetch('ambiguous'))
-    const view = render(<NoteMarkdownDocument body="[[Straße]]" notes={[]} />, { wrapper: wrapper() })
+    const view = render(<NoteMarkdownDocument body="[[Straße]]" />, { wrapper: wrapper() })
     await waitFor(() =>
       expect(view.container.querySelector('.note-unresolved-link')?.getAttribute('title')).toContain('Mehrere Notizen'),
     )
@@ -107,7 +96,7 @@ describe('global note link metadata', () => {
     })
     const fetcher = vi.fn().mockRejectedValue(new Error('offline'))
     vi.stubGlobal('fetch', fetcher)
-    render(<NoteMarkdownDocument body="[[Straße]]" notes={[]} />, { wrapper: wrapper(client) })
+    render(<NoteMarkdownDocument body="[[Straße]]" />, { wrapper: wrapper(client) })
     await waitFor(() => expect(fetcher).toHaveBeenCalled())
     expect(screen.getByRole('link', { name: 'Straße' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`)
   })
@@ -125,7 +114,7 @@ describe('global note link metadata', () => {
       { updatedAt: 2 },
     )
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
-    const view = render(<NoteMarkdownDocument body="[[Straße]] [[Neu]]" notes={[]} />, { wrapper: wrapper(client) })
+    const view = render(<NoteMarkdownDocument body="[[Straße]] [[Neu]]" />, { wrapper: wrapper(client) })
     await waitFor(() =>
       expect(view.container.querySelectorAll('.note-unresolved-link')[1]?.getAttribute('title')).toContain(
         'konnte nicht geprüft',
@@ -135,7 +124,7 @@ describe('global note link metadata', () => {
       'Mehrere Notizen',
     )
     expect(view.container.querySelector('.note-wikilink')).toBeNull()
-    view.rerender(<NoteMarkdownDocument body="[[Straße]]" notes={[]} />)
+    view.rerender(<NoteMarkdownDocument body="[[Straße]]" />)
     await waitFor(() =>
       expect(view.container.querySelector('.note-unresolved-link')?.getAttribute('title')).toContain('Mehrere Notizen'),
     )
@@ -145,7 +134,7 @@ describe('global note link metadata', () => {
       [{ title: 'Straße', status: 'resolved', target: hiddenTarget }],
       { updatedAt: 3 },
     )
-    view.rerender(<NoteMarkdownDocument body="[[Straße]] [[Weitere]]" notes={[]} />)
+    view.rerender(<NoteMarkdownDocument body="[[Straße]] [[Weitere]]" />)
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'Straße' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`),
     )
@@ -190,7 +179,7 @@ describe('global note link metadata', () => {
 
   it('reports an unavailable uncached lookup without dropping the original text', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')))
-    const view = render(<NoteMarkdownDocument body="[[Straße]]" notes={[]} />, { wrapper: wrapper() })
+    const view = render(<NoteMarkdownDocument body="[[Straße]]" />, { wrapper: wrapper() })
     await waitFor(() =>
       expect(view.container.querySelector('.note-unresolved-link')?.getAttribute('title')).toContain(
         'konnte nicht geprüft',
@@ -198,25 +187,6 @@ describe('global note link metadata', () => {
     )
     expect(view.container.textContent).toContain('[[Straße]]')
     expect(view.container.querySelector('.note-wikilink')).toBeNull()
-  })
-
-  it('suggests a note outside the visible list in source mode and inserts its exact title', async () => {
-    const fetcher = vi.fn(async (path: string) => {
-      expect(path).toContain('/api/entities/note?')
-      return new Response(JSON.stringify([{ id: hiddenTarget.id, title: 'Unsichtbare globale Quelle', course_id: 9 }]))
-    })
-    vi.stubGlobal('fetch', fetcher)
-    function SourceNote() {
-      const [body, setBody] = useState('')
-      return <NoteMarkdownEditor id="source" value={body} onChange={setBody} notes={[]} />
-    }
-    render(<SourceNote />, { wrapper: wrapper() })
-    const field = screen.getByRole('textbox') as HTMLTextAreaElement
-    fireEvent.change(field, { target: { value: '[[Unsicht', selectionStart: 9 } })
-    const option = await screen.findByRole('option', { name: 'Unsichtbare globale Quelle' })
-    expect(String(fetcher.mock.calls[0]?.[0])).toContain('/api/entities/note?limit=40&q=Unsicht')
-    fireEvent.click(option)
-    expect(field.value).toBe('[[Unsichtbare globale Quelle]]')
   })
 
   it('opens internal source links in the current workspace and keeps modifier clicks native', () => {
@@ -231,7 +201,7 @@ describe('global note link metadata', () => {
     }
     render(
       <>
-        <NoteMarkdownDocument body="[Quelle](/material/51?page=120)" notes={[]} />
+        <NoteMarkdownDocument body="[Quelle](/material/51?page=120)" />
         <LocationLabel />
       </>,
       { wrapper: wrapper() },
@@ -259,7 +229,7 @@ describe('global note link metadata', () => {
       }
       render(
         <>
-          <NoteMarkdownDocument body={`[Weiterlernen](${href})`} notes={[]} />
+          <NoteMarkdownDocument body={`[Weiterlernen](${href})`} />
           <LocationLabel />
         </>,
         { wrapper: wrapper() },

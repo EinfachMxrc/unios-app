@@ -18,7 +18,7 @@ async function seed(page: import('@playwright/test').Page) {
 async function openSelection(page: import('@playwright/test').Page, noteId: string, recovering = false) {
   await page.goto(`/notes?id=${noteId}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  const passage = page.locator('.studio-document').getByText(quote, { exact: true })
+  const passage = page.locator('.note-prose').getByText(quote, { exact: true })
   await expect(passage).toBeVisible()
   await passage.click()
   await passage.evaluate((element) => {
@@ -119,7 +119,7 @@ test('formula selections preserve their LaTeX and Markdown selection also create
   const noteId = (await created.json()).note.id
   await page.goto(`/notes?id=${noteId}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  const editor = page.locator('.studio-document')
+  const editor = page.locator('.note-prose')
   await editor.click()
   await editor.press('ControlOrMeta+a')
   await page.getByRole('button', { name: 'Lernkarte aus Auswahl', exact: true }).click()
@@ -128,14 +128,8 @@ test('formula selections preserve their LaTeX and Markdown selection also create
     'Der Wert $a+b$ bleibt erhalten.',
   )
   await dialog.locator('.manual-card-header').getByRole('button', { name: 'Schließen', exact: true }).click()
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  const source = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  const formulaStart = (await source.inputValue()).indexOf('$a+b$')
-  expect(formulaStart).toBeGreaterThanOrEqual(0)
-  await source.press('ControlOrMeta+a')
-  await source.press('ArrowLeft')
-  for (let i = 0; i < formulaStart; i++) await source.press('ArrowRight')
-  for (let i = 0; i < '$a+b$'.length; i++) await source.press('Shift+ArrowRight')
+  // A formula is selected as a whole by clicking it.
+  await editor.locator('.studio-math-inline').click()
   await page.getByRole('button', { name: 'Lernkarte aus Auswahl', exact: true }).click()
   dialog = page.getByRole('dialog', { name: 'Lernkarte aus Mitschrift', exact: true })
   await expect(dialog.getByRole('textbox', { name: 'Antwort', exact: true })).toHaveValue('$a+b$')

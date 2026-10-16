@@ -40,7 +40,7 @@ test('quality gallery: main workflows, preview and editor in both themes and siz
         pdf: `/material/${version}`,
       })) {
         await page.goto(route)
-        await expect(page.locator('.content > .page-heading > h1')).toBeVisible()
+        await expect(page.locator('.content > .page-heading h1')).toBeVisible()
         if (name === 'pdf')
           await expect(page.locator('[data-material-page="1"] [data-reader-render-active="true"]')).toHaveAttribute(
             'data-reader-render-complete',
@@ -48,7 +48,7 @@ test('quality gallery: main workflows, preview and editor in both themes and siz
           )
         if (name === 'note') {
           await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-          await expect(page.locator('.studio-document')).toContainText('Basisfall')
+          await expect(page.locator('.note-prose')).toContainText('Basisfall')
         }
         if (name === 'deadlines') {
           await expect(page.getByRole('button', { name: 'Neuer Termin', exact: true })).toBeVisible()

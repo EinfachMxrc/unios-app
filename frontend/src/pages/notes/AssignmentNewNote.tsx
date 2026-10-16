@@ -3,6 +3,7 @@ import { useApi } from '@/api'
 import { Failure, Loading } from '@/components/State'
 import { useT } from '@/i18n/useT'
 import type { CourseDetail, NotesResponse } from '@/types'
+import { heading, linkInline, newBlockId, paragraph, quote, serializeDoc } from '@/editor/doc'
 import { NewNote } from './NewNote'
 
 /** Prepare an editable solution; merely opening it never creates or submits anything. */
@@ -22,16 +23,27 @@ export function AssignmentNewNote({
   const assignment = course?.assignments.find((item) => item.id === assignmentId && !item.removed_upstream)
   if (loading && !course) return <Loading />
   if (error || !assignment) return <Failure message={error ?? t('assignmentMissing')} />
-  // Quote imported prose literally: source text cannot create extra callout directives.
-  const quote = assignment.description
-    .split('\n')
-    .map((line) => `> ${line}`)
-    .join('\n')
-  const initialBody =
-    `[${t('assignmentCurrentSource')}](/courses/${courseId}#assignment-${assignmentId})\n\n` +
-    `## ${t('assignmentTask')}\n\n${quote || t('assignmentReadSource')}\n\n` +
-    `## ${t('assignmentSolution')}\n\n\n## ${t('assignmentCheck')}\n\n\n` +
-    `:::callout {kind="question"}\n\n${t('assignmentQuestions')}\n\n:::\n`
+  // Imported prose becomes literal quote blocks, so source text can never create structure.
+  const quotes = assignment.description.split('\n').map((line) => quote(line))
+  const initialBody = serializeDoc({
+    version: 1,
+    blocks: [
+      paragraph([linkInline(t('assignmentCurrentSource'), `/courses/${courseId}#assignment-${assignmentId}`)]),
+      heading(2, t('assignmentTask')),
+      ...(assignment.description.trim() ? quotes : [paragraph(t('assignmentReadSource'))]),
+      heading(2, t('assignmentSolution')),
+      paragraph(''),
+      heading(2, t('assignmentCheck')),
+      paragraph(''),
+      {
+        id: newBlockId(),
+        type: 'callout',
+        props: { kind: 'question' },
+        content: [],
+        children: [paragraph(t('assignmentQuestions'))],
+      },
+    ],
+  })
   return (
     <div className="assignment-note-workspace">
       <p className="muted-text">{t('assignmentWorkHint')}</p>

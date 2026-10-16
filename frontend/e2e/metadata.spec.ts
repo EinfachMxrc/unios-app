@@ -3,11 +3,11 @@
 import { screenshotPath } from './artifacts'
 
 import { expect, test } from './fixtures'
+import { writeNote } from './noteEditor'
 
 test('Notiz bekommt Tags und erscheint in einer gefilterten Sammlung', async ({ page }) => {
   await page.goto('/notes?new=1&course_id=1&title=Markierte%20Vorlesung')
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await page.getByRole('textbox', { name: 'Notizinhalt' }).fill('## Rekursion\n\nDieses Thema wird geprüft.')
+  await writeNote(page, ['## Rekursion', 'Dieses Thema wird geprüft.'])
   await page.getByRole('button', { name: 'Notiz anlegen' }).click()
   await expect(page.getByRole('heading', { name: 'Markierte Vorlesung' })).toBeVisible()
   await page.locator('.note-context-details > summary').click()

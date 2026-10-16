@@ -2,6 +2,7 @@
 
 """Markdown notes keep every revision and search only the latest text."""
 
+import json
 from pathlib import Path
 
 import pytest
@@ -91,9 +92,10 @@ def test_notes_are_versioned_files_and_search_uses_current_revision(settings, fa
         assert all(item.relative_path.split("/")[0] == "notes" and
                    item.relative_path.split("/")[1].endswith(f"_{course_id}") for item in versions)
         portable = (settings.data_dir / versions[0].relative_path).read_text(encoding="utf-8")
-        assert portable.startswith(f'---\nunios_note_id: "{note_id}"\n')
-        assert f'course_id: {course_id}\n' in portable
-        assert portable.endswith("---\n\nErste Fassung: while und for")
+        envelope = json.loads(portable)
+        assert versions[0].relative_path.endswith(".json")
+        assert envelope["unios_note_id"] == note_id and envelope["course_id"] == course_id
+        assert envelope["document"]["blocks"][0]["content"][0]["text"] == "Erste Fassung: while und for"
 
 
 def test_note_commit_stops_when_lease_changes_during_write(settings, factory):

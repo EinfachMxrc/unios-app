@@ -9,6 +9,8 @@ import { clearWorkspace } from '@/lib/workspaceState'
 import { resetSourceNoteSaves, sourceNoteSaveState } from '@/lib/sourceNoteSave'
 import { draftFor, keepNewNoteDraft, newNoteDraftFor } from '@/noteDraft'
 import { queryClient } from '@/offlineCache'
+import { serializeDoc } from '@/editor/doc'
+import { markdownToBody } from '@/editor/markdownImport'
 import type { NoteDetail, NotesResponse } from '@/types'
 import { NewNote } from './NewNote'
 import { NotesPage } from '../NotesPage'
@@ -32,16 +34,21 @@ vi.mock('@/pages/notes/NoteDocument', () => ({
 vi.mock('@/addons/AddonWidgetSlot', () => ({ AddonWidgetSlot: () => null }))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
 vi.mock('@/components/Shell', () => ({
-  Shell: ({ children }: { children: React.ReactNode }) => <main>{children}</main>,
+  Shell: ({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) => (
+    <main>
+      {actions}
+      {children}
+    </main>
+  ),
 }))
 vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
   return { useT: () => ({ t }) }
 })
-// This adapter preserves NoteStudio's important browser contract: contentEditable
+// This adapter preserves the editor's important browser contract: contentEditable
 // continues emitting input events inside a disabled HTML fieldset.
-vi.mock('@/components/editor/NoteStudio', () => ({
-  NoteStudio: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
+vi.mock('@/editor/NoteEditor', () => ({
+  NoteEditor: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
     <div
       role="textbox"
       aria-label="noteContentAria"
@@ -71,6 +78,13 @@ const notes: NotesResponse = {
     },
   ],
 }
+/** The stored block form of a text; an empty text is an empty note. */
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: text
+    ? [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }]
+    : [],
+})
 function created(id = firstId, body = 'Sent A'): NoteDetail {
   return {
     note: {
@@ -85,6 +99,7 @@ function created(id = firstId, body = 'Sent A'): NoteDetail {
     },
     selected_revision: 1,
     body,
+    document: docOf(body),
     versions: [],
   }
 }
@@ -126,9 +141,8 @@ it('creates a named blank note only after the explicit create action', async () 
   const onCreated = vi.fn()
   open(onCreated)
   expect(request).not.toHaveBeenCalled()
-  fireEvent.click(screen.getByRole('button', { name: 'emptyNoteButton' }))
   expect(screen.getByRole('textbox', { name: 'noteContentAria' }).textContent).toBe('')
-  expect(newNoteDraftFor(2, null)?.body).toBe('')
+  expect(newNoteDraftFor(2, null)).toBeNull()
   expect(request).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))
   await waitFor(() => expect(onCreated).toHaveBeenCalledExactlyOnceWith(firstId))
@@ -136,7 +150,7 @@ it('creates a named blank note only after the explicit create action', async () 
     course_id: 2,
     resource_id: null,
     title: 'Free lecture',
-    body: '',
+    document: { version: 1, blocks: [] },
   })
   expect(request).toHaveBeenCalledTimes(1)
 })
@@ -185,7 +199,7 @@ it('never replaces an existing lecture draft with a newly opened assignment temp
 })
 
 it('keeps blank creation available after the editor persists an untouched template', () => {
-  keepNewNoteDraft(2, null, 'Named lecture', 'lectureTemplate\n\n')
+  keepNewNoteDraft(2, null, 'Named lecture', markdownToBody('lectureTemplate'))
   open()
   fireEvent.click(screen.getByRole('button', { name: 'emptyNoteButton' }))
   expect(screen.getByRole('textbox', { name: 'noteContentAria' }).textContent).toBe('')
@@ -194,7 +208,6 @@ it('keeps blank creation available after the editor persists an untouched templa
 
 it('requires a title even when an explicitly blank note is selected', () => {
   open()
-  fireEvent.click(screen.getByRole('button', { name: 'emptyNoteButton' }))
   fireEvent.change(screen.getByLabelText('noteTitleAria'), { target: { value: '   ' } })
   expect((screen.getByRole('button', { name: 'createNoteButton' }) as HTMLButtonElement).disabled).toBe(true)
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))
@@ -215,7 +228,11 @@ it('transfers B typed in contentEditable during a free-note POST to the acknowle
     await pending.promise
   })
   await waitFor(() => expect(onCreated).toHaveBeenCalledExactlyOnceWith(firstId))
-  expect(draftFor(firstId)).toMatchObject({ body: 'Sent A\n\nNew B while saving', baseRevision: 1, baseBody: 'Sent A' })
+  expect(draftFor(firstId)).toMatchObject({
+    body: 'Sent A\n\nNew B while saving',
+    baseRevision: 1,
+    baseBody: serializeDoc(docOf('Sent A') as never),
+  })
   expect(newNoteDraftFor(2, null)).toBeNull()
   expect(request).toHaveBeenCalledTimes(1)
 })

@@ -1,0 +1,109 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "frontendIndexSha256": "a6bf264d8427ca60d5600d132d6a6d88baa7bf58abb780565dc7bd2ec52be845",
+  "reports": [
+    {
+      "state": "note",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 96,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "new",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "note",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 96,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "new",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "note",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 96,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    },
+    {
+      "state": "new",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "note",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 96,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    },
+    {
+      "state": "new",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    }
+  ]
+}

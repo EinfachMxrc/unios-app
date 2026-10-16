@@ -1,0 +1,38 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.page-heading-copy {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.page-description {
+  max-width: 68ch;
+  margin-top: 8px;
+  color: var(--app-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.page-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+.page-heading-actions .page-actions {
+  justify-content: flex-end;
+  margin: 0;
+}
+@media (max-width: 700px) {
+  .page-heading:has(.page-heading-actions) {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .page-heading-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .page-heading-actions .page-actions {
+    justify-content: flex-start;
+  }
+}

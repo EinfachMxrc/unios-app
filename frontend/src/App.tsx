@@ -38,7 +38,9 @@ import { JotOutboxSync } from '@/hooks/useJotOutbox'
 import { AnnotationOutboxSync } from '@/hooks/useAnnotationOutbox'
 import { StudySync } from '@/components/StudySync'
 import { CampusSyncIndicator } from '@/components/CampusSyncIndicator'
-import { DeadlinesPage } from '@/pages/DeadlinesPage'
+const DeadlinesPage = lazyArea('deadlines', () =>
+  import('@/pages/DeadlinesPage').then((module) => ({ default: module.DeadlinesPage })),
+)
 const MarketplacePage = lazyArea('marketplace', () =>
   import('@/pages/MarketplacePage').then((module) => ({ default: module.MarketplacePage })),
 )
@@ -81,6 +83,8 @@ import { Loading } from '@/components/State'
 import { lazyRoute } from '@/lib/routeLoading'
 import { NavigationIntent } from '@/components/NavigationIntent'
 import { WorkspaceNavigation } from '@/components/WorkspaceNavigation'
+import { WorkspaceTabsController } from '@/components/WorkspaceTabsController'
+import { NewWorkspaceTabPage } from '@/pages/NewWorkspaceTabPage'
 import { RouteBoundary } from '@/components/RouteBoundary'
 import { usePreferences } from '@/preferences'
 import { areaRoutes } from '@/components/sidebarCatalog'
@@ -275,6 +279,7 @@ function RoutedApp() {
       <BrowserRouter>
         <NavigationIntent />
         <InAppLinks />
+        <WorkspaceTabsController />
         <WorkspaceNavigation />
         <RouteBoundary>
           <Suspense fallback={<RouteLoading />}>
@@ -289,6 +294,7 @@ function RoutedApp() {
                   />
                 }
               />
+              <Route path="/workspace/new" element={<NewWorkspaceTabPage />} />
               <Route path="/import" element={<ImportPage />} />
               <Route path="/setup" element={setup ? <SetupPage status={setup} reload={reloadSetup} /> : <Loading />} />
               {areaRoutes.map(({ path, page, module }) => {

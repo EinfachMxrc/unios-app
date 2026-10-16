@@ -12,6 +12,16 @@ import type { Material, NoteDetail } from '@/types'
 import { request } from '@/api'
 import { restoreSourceNoteTarget, sourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { queryClient } from '@/offlineCache'
+import {
+  appendBlocks,
+  docText,
+  linkInline,
+  paragraph,
+  parseBody,
+  quote as quoteBlock,
+  type NoteBlock,
+} from '@/editor/doc'
+import { withDraftBody } from '@/lib/noteBody'
 import { encodeMark, type PassageRects } from './passageLink'
 
 /** Matches the note creation contract in app/web/api.py. */
@@ -34,15 +44,6 @@ export function readerNoteTitle(material: Pick<Material, 'resource_name' | 'reso
     0,
     READER_NOTE_TITLE_LIMIT,
   )
-}
-
-/** Quoted PDF text is literal content, never Markdown supplied by the document. */
-function literalMarkdown(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/[\\`*_{}[\]()#+.!|~$-]/g, '\\$&')
 }
 
 /**
@@ -92,20 +93,19 @@ export function appendReaderExcerpt({
   )
     throw new ReaderExcerptError('invalid')
 
-  const quoted = text
-    .split('\n')
-    .map((line) => `> ${literalMarkdown(line)}`)
-    .join('\n')
+  // Quoted PDF text is literal content: each line becomes a quote block, never markup.
   const mark = encodeMark(rects)
-  const source =
-    `[${literalMarkdown(material.resource_name.replace(/\s+/g, ' ').trim())} · ${page}]` +
-    `(/material/${material.version_id}?page=${page}${mark ? `&mark=${mark}` : ''})`
-  return appendReaderBlock(material, `${quoted}\n\n${source}\n\n`)
+  const label = `${material.resource_name.replace(/\s+/g, ' ').trim()} · ${page}`
+  const href = `/material/${material.version_id}?page=${page}${mark ? `&mark=${mark}` : ''}`
+  return appendReaderBlock(material, [
+    ...text.split('\n').map((line) => quoteBlock(line)),
+    paragraph([linkInline(label, href)]),
+  ])
 }
 
-export function appendReaderBlock(material: Material, block: string): NewNoteDraft | NoteDraft {
+export function appendReaderBlock(material: Material, blocks: NoteBlock[]): NewNoteDraft | NoteDraft {
   if (
-    !block.trim() ||
+    !blocks.length ||
     ![material.course_id, material.resource_id, material.version_id].every((id) => Number.isSafeInteger(id) && id > 0)
   )
     throw new ReaderExcerptError('invalid')
@@ -118,13 +118,13 @@ export function appendReaderBlock(material: Material, block: string): NewNoteDra
   }
   const noteId = sourceNoteTarget(material.course_id, material.resource_id)
   if (noteId) {
-    const baseline = queryClient.getQueryData<NoteDetail>(['api', `/api/notes/${noteId}`])
-    if (!baseline || baseline.note.id !== noteId || baseline.note.course_id !== material.course_id)
+    const cached = queryClient.getQueryData<NoteDetail>(['api', `/api/notes/${noteId}`])
+    if (!cached || cached.note.id !== noteId || cached.note.course_id !== material.course_id)
       throw new ReaderExcerptError('invalid')
+    const baseline = withDraftBody(cached)
     const draft = workingNoteDraftFor(noteId)
-    const before = draft?.body ?? baseline.body
-    const body = `${before}${!before || before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n'}${block}`
-    if (body.length > READER_NOTE_BODY_LIMIT) throw new ReaderExcerptError('tooLong')
+    const body = appendBlocks(draft?.body ?? baseline.body, blocks)
+    if (docText(parseBody(body)).length > READER_NOTE_BODY_LIMIT) throw new ReaderExcerptError('tooLong')
     try {
       return keepDraft({
         noteId,
@@ -139,10 +139,8 @@ export function appendReaderBlock(material: Material, block: string): NewNoteDra
     }
   }
   const existing = newNoteDraftFor(material.course_id, material.resource_id)
-  const previousBody = existing?.body ?? ''
-  const separator = !previousBody || previousBody.endsWith('\n\n') ? '' : previousBody.endsWith('\n') ? '\n' : '\n\n'
-  const body = `${previousBody}${separator}${block}`
-  if (body.length > READER_NOTE_BODY_LIMIT) throw new ReaderExcerptError('tooLong')
+  const body = appendBlocks(existing?.body ?? '', blocks)
+  if (docText(parseBody(body)).length > READER_NOTE_BODY_LIMIT) throw new ReaderExcerptError('tooLong')
 
   try {
     return keepNewNoteDraft(

@@ -23,7 +23,7 @@ async function openEditor(page: Page, body = 'Vorlesung:') {
   const id = await createNote(page, body)
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await expect(page.locator('.studio-document')).toBeVisible()
+  await expect(page.locator('.note-prose')).toBeVisible()
   const editor = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
   await editor.press('ControlOrMeta+End')
   return { id, editor }
@@ -94,128 +94,6 @@ test('inline LaTeX transforms on the last delimiter, keeps surrounding prose and
   await expect(page.locator('.rendered-note')).toContainText('Ende.')
 })
 
-test('single-line block typing and multiline source import agree in editor, preview, portable source and reload', async ({
-  page,
-}) => {
-  const { id, editor } = await openEditor(page)
-  await editor.press('Enter')
-  await editor.pressSequentially(String.raw`$$\sum_{i=1}^{3}i$$`)
-  await expect(editor.locator('.studio-math-block .katex')).toHaveCount(1)
-  await expect(formulaDialog(page)).toHaveCount(0)
-  await editor.press('ControlOrMeta+End')
-  await editor.press('ArrowDown')
-  await editor.press('Enter')
-  await editor.pressSequentially(String.raw`\[x^2+y^2=1\]`)
-  await expect(editor.locator('.studio-math-block .katex')).toHaveCount(2)
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  const source = page.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(source).toBeFocused()
-  const imported = [
-    '## Mitschrift mit mehreren Schreibweisen',
-    String.raw`Im Satz: \(\frac{1}{2}\) und $A\land B$.`,
-    String.raw`$$\sum_{i=1}^{3}i$$`,
-    '$$\n\\int_0^1 x\\,dx\n$$',
-    String.raw`\[x^2+y^2=1\]`,
-    '\\[\n\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}\n\\]',
-    'Nach allen Formeln bleibt dieser Satz erhalten.',
-  ].join('\n\n')
-  await source.fill(imported)
-  const caret = imported.indexOf('Nach allen Formeln')
-  await source.evaluate((field: HTMLTextAreaElement, position) => field.setSelectionRange(position, position), caret)
-  await page.getByRole('button', { name: 'Lesen', exact: true }).click()
-  await expect(page.locator('.note-studio .rendered-note .katex')).toHaveCount(6)
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await expect(source).toBeFocused()
-  await expect
-    .poll(() => source.evaluate((field: HTMLTextAreaElement) => [field.selectionStart, field.selectionEnd]))
-    .toEqual([caret, caret])
-  await source.pressSequentially('Fortsetzung: ')
-  const resumedSource = `${imported.slice(0, caret)}Fortsetzung: ${imported.slice(caret)}`
-  await expect(source).toHaveValue(resumedSource)
-  await page
-    .getByRole('toolbar', { name: 'Markdown formatieren' })
-    .getByRole('button', { name: 'Vorschau', exact: true })
-    .click()
-  await expect(page.locator('.note-writing-preview .katex')).toHaveCount(6)
-  await expect(page.locator('.note-writing-preview')).toContainText('Nach allen Formeln bleibt dieser Satz erhalten.')
-  await page.getByRole('button', { name: 'Editor', exact: true }).click()
-  await expect(editor).toBeFocused()
-  await expect(editor.locator('.studio-math-inline .katex')).toHaveCount(2)
-  await expect(editor.locator('.studio-math-block .katex')).toHaveCount(4)
-  await expect(savedStatus(page)).toBeVisible()
-  expect((await (await page.request.get(`/api/notes/${id}`)).json()).body).toBe(resumedSource)
-  await page.getByRole('button', { name: 'Schließen', exact: true }).click()
-  await expect(page.locator('.rendered-note .katex')).toHaveCount(6)
-  await page.reload()
-  await expect(page.locator('.rendered-note .katex')).toHaveCount(6)
-  await expect(page.locator('.rendered-note .studio-math-button')).toHaveCount(0)
-})
-
-test('unfinished formulas, escaped dollars, prices and code stay literal while invalid TeX stays recoverable without opening writes', async ({
-  page,
-}) => {
-  const original = [
-    'Preis: $5 und $10.',
-    String.raw`Literal: \$x^2\$ und nicht fertig: \(x+1.`,
-    String.raw`Fehler bleibt lesbar: \(\definitelyUnknown{x}\).`,
-    'Inline-Code: `$x$` und `\\(y\\)`.',
-    '```tex\n\\(x+1\\)\n$$\\frac{1}{2}$$\n```',
-    '<script>window.__unexpectedNoteAction=true</script>',
-    'Schutztext.',
-  ].join('\n\n')
-  const { id, editor } = await openEditor(page, original)
-  await expect(editor.locator('.katex')).toHaveCount(0)
-  await expect(editor.locator('.studio-math-error')).toContainText(String.raw`\definitelyUnknown{x}`)
-  await expect(editor.locator('pre code')).toHaveText('\\(x+1\\)\n$$\\frac{1}{2}$$')
-  await expect(editor.locator('script, iframe, img')).toHaveCount(0)
-  expect(await page.evaluate(() => Object.hasOwn(window, '__unexpectedNoteAction'))).toBe(false)
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(original)
-  await page.getByRole('button', { name: 'Editor', exact: true }).click()
-  const unchanged = await (await page.request.get(`/api/notes/${id}`)).json()
-  expect(unchanged.note.current_revision).toBe(1)
-  expect(unchanged.body).toBe(original)
-  await editor.press('ControlOrMeta+End')
-  await editor.pressSequentially(String.raw` Ergänzung: \$z^2\$ und \(noch offen.`)
-  await expect(editor.locator('.katex')).toHaveCount(0)
-  await expect(editor).toContainText('$z^2$')
-  await expect(editor).toContainText(String.raw`\(noch offen.`)
-  await expect(savedStatus(page)).toBeVisible()
-  const saved = (await (await page.request.get(`/api/notes/${id}`)).json()).body as string
-  expect(saved).toContain(String.raw`\$z^2\$`)
-  expect(saved).toContain('Preis: $5 und $10.')
-  expect(saved).toContain(String.raw`\definitelyUnknown{x}`)
-  await page.reload()
-  await expect(page.locator('.rendered-note .katex')).toHaveCount(0)
-  await expect(page.locator('.rendered-note')).toContainText('$z^2$')
-  await expect(page.locator('.rendered-note')).toContainText(String.raw`\(noch offen.`)
-})
-
-test('PDF lecture-note source uses the same LaTeX delimiters in preview and preserves its exact local draft after reload', async ({
-  page,
-}) => {
-  await page.goto('/material/1')
-  await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
-  const tools = page.getByRole('dialog', { name: 'Markierungen & Fragen', exact: true })
-  await tools.getByRole('tab', { name: 'Mitschrift', exact: true }).click()
-  const body = tools.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  const source = [
-    String.raw`Am Rand: \(A\lor B\) und $\frac{1}{2}$.`,
-    String.raw`$$x^2+y^2=1$$`,
-    '\\[\n\\sum_{i=1}^3 i\n\\]',
-    'Dieser Quellenbezug bleibt erhalten.',
-  ].join('\n\n')
-  await body.fill(source)
-  await tools.getByRole('button', { name: 'Vorschau', exact: true }).click()
-  await expect(tools.locator('.reader-note-preview .katex')).toHaveCount(4)
-  await expect(tools.locator('.reader-note-preview')).toContainText('Dieser Quellenbezug bleibt erhalten.')
-  await page.reload()
-  await expect(page.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(source)
-  const restored = page.getByRole('dialog', { name: 'Markierungen & Fragen', exact: true })
-  await restored.getByRole('button', { name: 'Vorschau', exact: true }).click()
-  await expect(restored.locator('.reader-note-preview .katex')).toHaveCount(4)
-})
-
 test('escaped dollar signs behave like normal text with Delete, Backspace and Undo', async ({ page }) => {
   const { editor } = await openEditor(page, String.raw`A\$B`)
   await editor.press('ControlOrMeta+Home')
@@ -225,7 +103,7 @@ test('escaped dollar signs behave like normal text with Delete, Backspace and Un
       const selection = window.getSelection()
       return { node: selection?.anchorNode?.textContent, offset: selection?.anchorOffset }
     }),
-  ).toEqual({ node: 'A', offset: 1 })
+  ).toEqual({ node: 'A$B', offset: 1 })
   await editor.press('Delete')
   await expect(editor).toHaveText('AB')
   await page.getByRole('button', { name: 'Rückgängig (Strg/⌘+Z)', exact: true }).click()
@@ -292,7 +170,7 @@ for (const theme of ['light', 'dark'] as const)
       const id = await createNote(page, visualBody)
       await page.goto(`/notes?id=${id}`)
       if (width === 1280) await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-      const document = page.locator(width === 1280 ? '.studio-document' : '.rendered-note').first()
+      const document = page.locator(width === 1280 ? '.note-prose' : '.rendered-note').first()
       await expect(document.locator('.katex')).toHaveCount(4)
       await expect(document.locator('table th').last()).toHaveText('NICHT B')
       await expect(document.locator('pre code')).toContainText('    total += index;')
@@ -333,17 +211,6 @@ for (const theme of ['light', 'dark'] as const)
         await table.evaluate((element) => {
           element.scrollLeft = 0
         })
-      }
-      if (width === 1280) {
-        await page.evaluate(() => {
-          document.documentElement.style.fontSize = '100%'
-        })
-        await page.getByText('LaTeX direkt tippen', { exact: true }).click()
-        await expect(
-          page
-            .locator('.note-studio details')
-            .filter({ has: page.locator('summary').filter({ hasText: 'LaTeX direkt tippen' }) }),
-        ).toHaveAttribute('open', '')
       }
       await screenshot(page, info, `note-latex-${theme}-${width}${width === 390 ? '-font150-readonly' : '-editor'}`)
       expect((await (await page.request.get(`/api/notes/${id}`)).json()).note.current_revision).toBe(1)

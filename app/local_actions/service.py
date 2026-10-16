@@ -16,7 +16,7 @@ from app.entities.schema import EntityKind, EntityRef, RelationKind, catalog
 from app.intake.repository import INTAKE_WRITE_LOCK
 from app.links import service as links
 from app.local_actions import repository, topic_repository
-from app.notes.store import NoteError, read_note, update_note
+from app.notes.store import NoteError, read_note_document, update_note
 
 
 class ActionView(BaseModel):
@@ -93,9 +93,9 @@ class LocalActions:
             prior = row.before
             if row.kind == "note":
                 try:
-                    _, version, body, _ = read_note(session, self.settings, row.entity_id, prior["revision"])
+                    _, version, document, _ = read_note_document(session, self.settings, row.entity_id, prior["revision"])
                     update_note(session, self.settings, row.entity_id, expected_revision=row.expected_revision,
-                                title=version.title, body=body, before_commit=self.coordinator.assert_writer)
+                                title=version.title, document=document, before_commit=self.coordinator.assert_writer)
                 except NoteError:
                     raise HTTPException(409, "Notiz kann nicht sicher wiederhergestellt werden") from None
             elif row.kind == "intake":

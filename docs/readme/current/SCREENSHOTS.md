@@ -2,7 +2,7 @@
 
 # README-Screenshots
 
-Aufgenommen am 15.10.2026 (Stand 0.1.28, PR #19 und alle 17 Dependency-Updates)
+Aufgenommen am 16.10.2026 (Stand 0.1.30)
 mit `scripts/readme_screenshots.mjs` gegen
 die echte React-Oberfläche und einen frisch erzeugten, getrennten Demo-Dienst. Alle
 Inhalte (vier Kurse, 15 Karten, generierte PDFs, die Notiz „Rekursion verstehen“)

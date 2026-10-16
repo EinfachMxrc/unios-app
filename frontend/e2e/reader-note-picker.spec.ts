@@ -2,6 +2,7 @@
 import type { Page } from '@playwright/test'
 import type { Material, NoteDetail } from '../src/types'
 import { expect, test } from './fixtures'
+import { documentText } from './noteEditor'
 
 async function reader(page: Page) {
   await page.setViewportSize({ width: 1440, height: 1000 })
@@ -57,20 +58,22 @@ test('existing notes open beside the PDF, preserve a draft and resume after a ne
   // React-PDF can retain the previous canvas briefly while resizing beside a note.
   await expect(page.locator('[data-material-page="1"] canvas').first()).toBeVisible()
   await page.getByRole('button', { name: 'Neue Mitschrift', exact: true }).click()
-  await expect(draft).toHaveValue('Meine neue ungespeicherte Mitschrift')
+  await expect(draft).toHaveText('Meine neue ungespeicherte Mitschrift')
   await page.getByRole('button', { name: 'Mitschrift öffnen', exact: true }).click()
   await picker.getByRole('button', { name: /Frühere Vorlesung/ }).click()
   const canvas = page.locator('.reader-continuous-note .note-canvas')
-  await canvas.getByRole('button', { name: 'Markdown', exact: true }).click()
   const content = canvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  const body = `${older.body}\n\nHeute weitergeschrieben.`
+  const addition = 'Heute weitergeschrieben.'
   const saved = page.waitForResponse(
     (response) =>
       response.url().endsWith(`/api/notes/${older.note.id}`) &&
       response.request().method() === 'PUT' &&
-      response.request().postDataJSON().body === body,
+      documentText(response.request().postDataJSON().document).includes(addition),
   )
-  await content.fill(body)
+  await content.click()
+  await page.keyboard.press('ControlOrMeta+End')
+  await page.keyboard.press('Enter')
+  await page.keyboard.type(addition)
   expect((await saved).ok()).toBeTruthy()
   await expect
     .poll(() => page.evaluate(() => localStorage.getItem('unios-source-note-targets-v1')))
@@ -85,11 +88,10 @@ test('existing notes open beside the PDF, preserve a draft and resume after a ne
     await next.getByRole('button', { name: 'Mitschrift', exact: true }).click()
     await expect(next.locator('.reader-continuous-note .note-title-input')).toHaveValue(older.note.title)
     const nextCanvas = next.locator('.reader-continuous-note .note-canvas')
-    await nextCanvas.getByRole('button', { name: 'Markdown', exact: true }).click()
-    await expect(nextCanvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toHaveValue(body)
+    await expect(nextCanvas.getByRole('textbox', { name: 'Notizinhalt', exact: true })).toContainText(addition)
     const detail = (await (await next.request.get(`/api/notes/${older.note.id}`)).json()) as NoteDetail
     expect(detail.note.current_revision).toBeGreaterThan(older.note.current_revision)
-    expect(detail.body).toBe(body)
+    expect(detail.body).toContain(addition)
   } finally {
     await restarted.close()
   }

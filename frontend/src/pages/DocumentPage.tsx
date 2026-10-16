@@ -14,7 +14,7 @@ import { useT } from '@/i18n/useT'
 import type { DocumentView } from '@/types'
 import './DocumentPage.css'
 
-const NoteMarkdownDocument = lazy(() => import('@/components/editor/RichNoteDocument'))
+const MarkdownView = lazy(() => import('@/editor/MarkdownView'))
 
 /**
  * A stored file without a PDF view, read inside UniOS: a Moodle "Seite" as text,
@@ -64,7 +64,7 @@ export function DocumentPage() {
             ) : data.markdown.trim() ? (
               <article className="document-reading">
                 <Suspense fallback={<Loading />}>
-                  <NoteMarkdownDocument body={data.markdown} notes={[]} />
+                  <MarkdownView markdown={data.markdown} />
                 </Suspense>
               </article>
             ) : (

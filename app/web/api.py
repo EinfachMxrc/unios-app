@@ -9,7 +9,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query, Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import select
 
 from app.calendar.dedupe import visible_events
@@ -56,6 +56,7 @@ from app.jots.store import (
     capture,
     search_jots,
 )
+from app.notes.document import to_data
 from app.notes.related import related_notes
 from app.notes.store import (
     NoteConflict,
@@ -64,6 +65,7 @@ from app.notes.store import (
     NoteMissing,
     create_note,
     read_note,
+    read_note_document,
     search_notes,
     update_note,
 )
@@ -144,13 +146,27 @@ class NoteCreateInput(BaseModel):
     course_id: int = Field(gt=0)
     resource_id: int | None = Field(default=None, gt=0)
     title: str = Field(min_length=1, max_length=200)
-    body: str = Field(max_length=100_000)
+    body: str = Field(default="", max_length=100_000)
+    document: dict | None = None
+
+    @model_validator(mode="after")
+    def has_content(self):
+        if "body" not in self.model_fields_set and self.document is None:
+            raise ValueError("Text oder Dokument angeben")
+        return self
 
 
 class NoteUpdateInput(BaseModel):
     expected_revision: int = Field(gt=0)
     title: str = Field(min_length=1, max_length=200)
-    body: str = Field(max_length=100_000)
+    body: str = Field(default="", max_length=100_000)
+    document: dict | None = None
+
+    @model_validator(mode="after")
+    def has_content(self):
+        if "body" not in self.model_fields_set and self.document is None:
+            raise ValueError("Text oder Dokument angeben")
+        return self
 
 
 def make_api_router(settings: Settings, factory, sync_engine, connectors,
@@ -186,6 +202,7 @@ def make_api_router(settings: Settings, factory, sync_engine, connectors,
     def note_detail(session, note_id: str, revision: int | None = None) -> dict:
         try:
             note, selected, body, versions = read_note(session, settings, note_id, revision)
+            document = read_note_document(session, settings, note_id, revision)[2]
         except NoteMissing as exc:
             raise HTTPException(404, str(exc)) from None
         except NoteCorrupt as exc:
@@ -194,7 +211,8 @@ def make_api_router(settings: Settings, factory, sync_engine, connectors,
             log.warning("Notiz konnte nicht gelesen werden: %s", type(exc).__name__)
             raise HTTPException(503, "Notiz konnte nicht gelesen werden") from None
         return {"note": note_summary(session, note), "selected_revision": selected.revision,
-                "body": body, "versions": [record(item) for item in versions]}
+                "body": body, "document": to_data(document),
+                "versions": [record(item) for item in versions]}
 
     def valid_note_id(value: str) -> str:
         try:
@@ -420,6 +438,7 @@ def make_api_router(settings: Settings, factory, sync_engine, connectors,
             try:
                 note = create_note(session, settings, course_id=payload.course_id,
                                    resource_id=payload.resource_id, title=payload.title, body=payload.body,
+                                   document=payload.document,
                                    before_commit=verify_lease)
                 return note_detail(session, note.id)
             except NoteMissing as exc:
@@ -450,6 +469,7 @@ def make_api_router(settings: Settings, factory, sync_engine, connectors,
                 note = update_note(session, settings, valid_note_id(note_id),
                                    expected_revision=payload.expected_revision,
                                    title=payload.title, body=payload.body,
+                                   document=payload.document,
                                    before_commit=verify_lease)
                 return note_detail(session, note.id)
             except NoteMissing as exc:

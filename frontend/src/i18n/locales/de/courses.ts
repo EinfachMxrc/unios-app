@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  tab_views: 'Ansichten',
+  savedViews: 'Gespeicherte Ansichten',
+  manageView: 'Ansicht verwalten',
+  createView: 'Ansicht für diesen Kurs erstellen',
+  chooseSavedView: 'Gespeicherte Ansicht',
+  noSavedViews: 'Speichere eine Sammlung mit diesem Kurs als Filter. Sie erscheint anschließend direkt hier.',
+  viewResults: '{{shown}} von {{total}} Einträgen',
+
   deskTitle: 'Dein Schreibtisch',
   deskResume: 'Dort weitermachen',
   deskDescription: 'PDF und Mitschrift zusammen öffnen.',
