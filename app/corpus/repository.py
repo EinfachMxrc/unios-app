@@ -11,6 +11,7 @@ from tempfile import TemporaryDirectory
 from sqlalchemy import select, text
 
 from app.ai.access import DEFAULT_CATEGORIES
+from app.assessment.timing import is_running
 from app.calendar.edit_repository import (
     ADJUSTMENT,
     DELETED,
@@ -110,7 +111,7 @@ def readable_sql(alias='d') -> str:
         if kind == 'assessment_task':
             extra = " AND s.status='active'"
         if kind == 'assessment_attempt':
-            extra = " AND (s.session_id IS NULL OR EXISTS(SELECT 1 FROM assessment_sessions e WHERE e.id=s.session_id AND e.state!='running')) AND EXISTS(SELECT 1 FROM assessment_tasks t WHERE t.id=s.task_id AND t.status='active' AND t.course_id=s.course_id)"
+            extra = " AND (s.session_id IS NULL OR EXISTS(SELECT 1 FROM assessment_sessions e WHERE e.id=s.session_id AND (e.state!='running' OR e.ends_at<=datetime('now')))) AND EXISTS(SELECT 1 FROM assessment_tasks t WHERE t.id=s.task_id AND t.status='active' AND t.course_id=s.course_id)"
         if kind == 'coding_task':
             extra = " AND s.status='active'"
         if kind == 'coding_attempt':
@@ -191,7 +192,7 @@ def sources(session, settings, entity_ref: str, guard=lambda: None) -> list[Sour
         return []
     if kind == 'assessment_attempt' and row.session_id:
         exam = session.get(AssessmentSession, row.session_id)
-        if exam is None or exam.state == 'running':
+        if exam is None or is_running(exam):
             return []
     course_id = row.id if kind == 'course' else getattr(row, 'course_id', None)
     if kind == 'code':

@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 
 from sqlalchemy import func, select, text, update
 
+from app.assessment.timing import is_running
 from app.coding.repository import Changed
 from app.db.models import (
     AssessmentAttempt,
@@ -152,7 +153,8 @@ class AssessmentRepository:
                 query = query.where(AssessmentAttempt.course_id == course_id)
             if hide_running:
                 query = query.where((AssessmentAttempt.session_id.is_(None)) | ~AssessmentAttempt.session_id.in_(
-                    select(AssessmentSession.id).where(AssessmentSession.state == 'running')))
+                    select(AssessmentSession.id).where(AssessmentSession.state == 'running',
+                                                       AssessmentSession.ends_at > datetime.now(UTC).replace(tzinfo=None))))
             return session.scalars(query.order_by(AssessmentAttempt.id.desc()).limit(1000)).all()
 
     def requests(self):
@@ -169,7 +171,7 @@ class AssessmentRepository:
         with self.factory() as session:
             row = session.get(AssessmentAttempt, attempt_id)
             exam = session.get(AssessmentSession, row.session_id) if row and row.session_id else None
-            if row is None or exam and exam.state == 'running':
+            if row is None or exam and is_running(exam):
                 raise Changed
             row.feedback_requested = True
             guard()
