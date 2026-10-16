@@ -3,6 +3,7 @@
 """Choosing the backup folder with the system dialog instead of typing a path."""
 
 import subprocess
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
@@ -19,7 +20,7 @@ def fake_run(output: str, code: int = 0):
 def test_the_chosen_folder_is_returned_and_cancelling_gives_none(monkeypatch):
     monkeypatch.setattr(picker.sys, "platform", "darwin")
     monkeypatch.setattr(picker.subprocess, "run", fake_run("/Users/ada/Backups/\n"))
-    assert picker.choose_folder() == "/Users/ada/Backups"
+    assert Path(picker.choose_folder() or "") == Path("/Users/ada/Backups")
     monkeypatch.setattr(picker.subprocess, "run", fake_run("", 1))
     assert picker.choose_folder() is None
 
