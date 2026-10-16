@@ -63,7 +63,11 @@ export function useReaderAnnotations({
     const result = readReaderSelection(window.getSelection())
     if (result.kind !== 'selection') {
       setSelection(null)
-      if (result.kind === 'constraint') setActionError(t('selectionConstraint'))
+      // A hint about how to mark, not a failure: it must not look like a connection problem.
+      if (result.kind === 'constraint') {
+        setActionError('')
+        setActionMessage(t('selectionConstraint'))
+      }
       return
     }
     setActionError('')
