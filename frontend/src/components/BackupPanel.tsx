@@ -127,6 +127,7 @@ export function BackupPanel() {
   const [busy, setBusy] = useState<'settings' | 'run' | 'cancel' | null>(null)
   const [feedback, setFeedback] = useState<{ tone: 'success' | 'error'; message: string } | null>(null)
   const [restoring, setRestoring] = useState<Snapshot | null>(null)
+  const [picking, setPicking] = useState(false)
 
   async function act(kind: 'settings' | 'run' | 'cancel', call: () => Promise<BackupState>, success?: string) {
     setBusy(kind)
@@ -158,6 +159,26 @@ export function BackupPanel() {
         }),
       t('saved'),
     )
+
+  /** The system's own folder dialog opens on this computer; it is only offered where that makes sense. */
+  const canPick = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)
+  async function chooseFolder() {
+    setPicking(true)
+    setFeedback(null)
+    try {
+      const { folder: chosen } = await request<{ folder: string | null }>('/api/backup/choose-folder', {
+        method: 'POST',
+      })
+      if (chosen) {
+        setFolder(chosen)
+        await saveSettings({ folder: chosen })
+      }
+    } catch (cause) {
+      setFeedback({ tone: 'error', message: t('failed', { reason: extractApiErrorMessage(cause) }) })
+    } finally {
+      setPicking(false)
+    }
+  }
 
   if (loading && !current)
     return (
@@ -230,11 +251,22 @@ export function BackupPanel() {
               <input
                 className="native-input"
                 value={value}
-                placeholder={t('folderPlaceholder')}
+                placeholder={t(/Windows/i.test(navigator.userAgent) ? 'folderPlaceholder' : 'folderPlaceholderUnix')}
                 spellCheck={false}
                 onChange={(event) => setFolder(event.target.value)}
               />
             </label>
+            {canPick && (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={!canWrite || busy !== null || picking}
+                onClick={() => void chooseFolder()}
+              >
+                <FolderOpen size={14} aria-hidden="true" /> {picking ? t('picking') : t('chooseFolder')}
+              </Button>
+            )}
             {current.suggestions.length > 0 && (
               <div className="backup-suggestions" role="group" aria-label={t('suggestions')}>
                 {current.suggestions.map((suggestion) => (

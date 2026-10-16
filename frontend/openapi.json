@@ -23321,6 +23321,22 @@
         "summary": "Get Backup"
       }
     },
+    "/api/backup/choose-folder": {
+      "post": {
+        "operationId": "choose_folder_api_backup_choose_folder_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Choose Folder"
+      }
+    },
     "/api/backup/restore": {
       "delete": {
         "operationId": "cancel_api_backup_restore_delete",

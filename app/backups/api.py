@@ -7,10 +7,10 @@ from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as package_version
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from app.backups import restore, run, store
+from app.backups import picker, restore, run, store
 from app.backups.store import BackupError, BackupSettings
 from app.config import Settings
 from app.host.lease import HostCoordinator
@@ -90,6 +90,16 @@ def backup_router(settings: Settings, coordinator: HostCoordinator) -> APIRouter
         except BackupError as exc:
             raise HTTPException(400, str(exc)) from None
         return view()
+
+    @router.post("/choose-folder")
+    def choose_folder(request: Request):
+        # The dialog opens on the machine running UniOS, so it only makes sense for the person sitting at it.
+        if request.client is None or request.client.host not in {"127.0.0.1", "::1", "localhost"}:
+            raise HTTPException(409, "Der Ordnerdialog ist nur auf dem Gerät mit UniOS möglich")
+        try:
+            return {"folder": picker.choose_folder()}
+        except picker.PickerUnavailable as exc:
+            raise HTTPException(501, str(exc)) from None
 
     @router.post("/run", response_model=BackupView)
     def run_now():
