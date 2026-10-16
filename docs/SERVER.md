@@ -2,6 +2,8 @@
 
 # UniOS auf dem eigenen Server
 
+> English: [SERVER.en.md](SERVER.en.md)
+
 **Betriebsstand 03.10.2026:** Version 0.1.18, Schema `ff94af768293`.
 Snapshot auf Marcs Wunsch über die gekoppelte App erstellt und geprüft (16:24 Uhr);
 Marc bestätigte dessen Verwendung ausdrücklich vor dem Update.

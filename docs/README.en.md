@@ -34,7 +34,7 @@ Connections are optional. Notes, files and learning work without a university ac
 
 1. Download the matching package from the [latest release](https://github.com/EinfachMxrc/unios-app/releases/latest) and compare it with `SHA256SUMS.txt`.
 2. Install and open UniOS. No Python or Node.js is needed on your device.
-3. Connect the app to your own HTTPS server and confirm the one-time device pairing: [Server guide](SERVER.md) (German).
+3. Connect the app to your own HTTPS server and confirm the one-time device pairing: [Server guide](SERVER.en.md) (English translation of the German [SERVER.md](SERVER.md)).
 4. Pick your university and programme and set up the sources you want.
 
 The release notes list which platforms each release contains. Snapshot and verify your data before updating an existing installation.

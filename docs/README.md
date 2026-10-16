@@ -26,7 +26,7 @@
 
 ## Betreiben und veröffentlichen
 
-- [Server](SERVER.md), [Dienste](SERVICES.md), [Programmier-Runner](RUNNER.md)
+- [Server](SERVER.md) ([English](SERVER.en.md)), [Dienste](SERVICES.md), [Programmier-Runner](RUNNER.md)
 - [Desktop-Pakete](DESKTOP_PACKAGES.md), [Release-Ablauf](RELEASING.md) und [Veröffentlichung](PUBLISHING.md)
 - [Release-Abnahme und offene Grenzen](RELEASE_READINESS.md)
 - [Release-Labor](RELEASE_LAB.md), [Performance-Budgets](PERFORMANCE_BUDGETS.md)
