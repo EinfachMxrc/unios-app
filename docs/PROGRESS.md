@@ -1,5 +1,21 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 16.10.2026 – Offline-Budget nach Kalender-PR korrigiert
+
+GitHub meldete nach PR #47 einen um 294 gzip-Bytes überschrittenen Offline-Cache.
+Der dynamische Übersetzungsimport erzeugte zusätzlich 73 deutsche Fassaden-Chunks,
+obwohl Deutsch bereits vollständig im Startpaket enthalten ist. Der Lazy-Import
+schließt Deutsch jetzt aus und verwendet dafür direkt die vorhandenen Ressourcen;
+andere Sprachen werden unverändert automatisch entdeckt und nachgeladen.
+Keine Sprache, Schrift oder Offline-Funktion entfernt, keine Budgetgrenze erhöht.
+
+296 Übersetzungs-Unitfälle, Typecheck, ESLint und Build bestanden. Sprachwechsel
+und drei PWA-/Offline-Abläufe bestanden (4/4). Lokal 254 statt 327 Cache-Dateien,
+18.535.285 Byte roh und 5.192.711 Byte gzip; beide bestehenden Budgets eingehalten.
+Die CI verwendet eine andere gzip-Version, daher bleibt der erneute Remote-Lauf
+der abschließende Plattformnachweis. Noch keine Tabs-Implementierung in diesem
+Korrekturpaket.
+
 ## 16.10.2026 – Kalender mit Monatsnavigation und ruhigem Zeitraster
 
 Den gewünschten Referenzaufbau als eigene React-/CSS-Oberfläche umgesetzt:

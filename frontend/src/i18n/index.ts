@@ -4,7 +4,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import { getLanguage } from '@/preferences'
-import { defaultNS, deResources, namespaces } from './resources'
+import { defaultNS, deResources, namespaces, type Namespace } from './resources'
 import { fallbackLngMap, localeCodes } from './localeMeta'
 
 /**
@@ -35,8 +35,17 @@ import { fallbackLngMap, localeCodes } from './localeMeta'
  * in that machinery for the plain `t('key')` call shape) and use `useT` from
  * that module in components instead of `useTranslation` directly.
  */
+// German is already eager. Including it in the lazy glob creates a redundant
+// facade chunk per namespace, which also inflates the offline precache.
+const localeModules = import.meta.glob(['./locales/*/*.ts', '!./locales/de/*.ts'])
 void i18n
-  .use(resourcesToBackend((language: string, namespace: string) => import(`./locales/${language}/${namespace}.ts`)))
+  .use(
+    resourcesToBackend((language: string, namespace: string) => {
+      if (language === 'de') return Promise.resolve(deResources[namespace as Namespace])
+      const load = localeModules[`./locales/${language}/${namespace}.ts`]
+      return load ? load() : Promise.reject(new Error('Unknown locale namespace'))
+    }),
+  )
   .use(initReactI18next)
 
 export const i18nReady = i18n.init({
