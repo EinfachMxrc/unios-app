@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 def run(source, filename, mime, output, progress, *, mode='background'):
     from app.extract.process_limits import apply_limits
     apply_limits()
+    from app.extract.limits import MAX_OTHER_BYTES, is_pdf
     from app.extract.service import ExtractedPage, extract
 
     suffix = Path(filename).suffix.lower()
@@ -30,7 +31,7 @@ def run(source, filename, mime, output, progress, *, mode='background'):
                 raise ValueError('PARSER_TEXT_LIMIT')
             stream.write(line)
 
-        if suffix == '.pdf' or mime == 'application/pdf':
+        if is_pdf(suffix, mime):
             import pymupdf
             with pymupdf.open(source) as pdf:
                 if mode == 'outline':
@@ -48,7 +49,7 @@ def run(source, filename, mime, output, progress, *, mode='background'):
                     Path(progress).write_text(f'{index}/{len(pdf)}', encoding='ascii')
         else:
             path = Path(source)
-            if path.stat().st_size > 64 * 1024 * 1024:
+            if path.stat().st_size > MAX_OTHER_BYTES:
                 raise ValueError('PARSER_INPUT_LIMIT')
             pages = extract(path.read_bytes(), filename, mime)
             if len(pages) > 10000:

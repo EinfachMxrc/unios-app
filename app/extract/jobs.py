@@ -16,11 +16,11 @@ from app.config import Settings
 from app.db.models import Resource, ResourceText, ResourceVersion
 from app.deadline_proposals.service import stage_document_date
 from app.extract.isolated import ParserCancelled, parse_path
+from app.extract.limits import input_limit
 from app.extract.service import TEXT_SUFFIXES
 from app.host.lease import HostCoordinator
 from app.material.preview import source_path
 
-MAX_INDEX_BYTES = 512 * 1024 * 1024
 SUPPORTED = TEXT_SUFFIXES | {".pdf", ".docx", ".pptx"}
 log = logging.getLogger(__name__)
 
@@ -44,6 +44,9 @@ class IndexJobs:
     def __init__(self, factory, settings: Settings, coordinator: HostCoordinator) -> None:
         self.factory, self.settings, self.coordinator = factory, settings, coordinator
         self.jobs: dict[int, IndexJob] = {}
+        # Versions whose indexing failed, was cancelled or produced no text. Discovery leaves
+        # them alone for this process; only an explicit submit() tries again.
+        self.settled: set[int] = set()
         self.queue: Queue[int] = Queue(maxsize=64)
         self.lock = threading.RLock()
         self.stop_event = threading.Event()
@@ -87,7 +90,7 @@ class IndexJobs:
         self.coordinator.assert_writer()
         version = self.latest(resource_id)
         path = source_path(self.settings.data_dir, version)
-        if path.suffix.lower() not in SUPPORTED or path.stat().st_size > MAX_INDEX_BYTES:
+        if path.suffix.lower() not in SUPPORTED or path.stat().st_size > input_limit(path.suffix, version.mime_type):
             raise HTTPException(422, "Dateiformat oder Größe wird für den Textindex nicht unterstützt")
         with self.lock:
             current = self.jobs.get(version.id)
@@ -97,6 +100,8 @@ class IndexJobs:
             if len(self.jobs) >= 256:
                 for key in list(self.jobs):
                     if self.jobs[key].state not in {"queued", "running", "cancelling"}:
+                        # Forgetting a failed or empty result would make discovery queue it again.
+                        self.settled.add(key)
                         del self.jobs[key]
                         if len(self.jobs) < 256:
                             break
@@ -109,6 +114,7 @@ class IndexJobs:
             except Full:
                 raise HTTPException(429, "Textindex-Warteschlange ist voll") from None
             self.jobs[version.id] = job
+            self.settled.discard(version.id)
             self.start()
             return job.view()
 
@@ -126,7 +132,7 @@ class IndexJobs:
         if not self.coordinator.is_writer:
             return
         with self.lock:
-            known = list(self.jobs)
+            known = [*self.jobs, *self.settled]
         with self.factory() as session:
             newer = aliased(ResourceVersion)
             rows = session.scalars(select(ResourceVersion).where(
@@ -142,7 +148,11 @@ class IndexJobs:
             if Path(version.relative_path).suffix.lower() in SUPPORTED:
                 try:
                     self.submit(version.resource_id)
-                except (HTTPException, OSError, ValueError):
+                except HTTPException as exc:
+                    if exc.status_code == 422:  # unsupported or too large: will not change by waiting
+                        with self.lock:
+                            self.settled.add(version.id)
+                except (OSError, ValueError):
                     continue
 
     def _run(self) -> None:
@@ -176,7 +186,7 @@ class IndexJobs:
             if version is None:
                 raise LookupError("Version fehlt")
             path = source_path(self.settings.data_dir, version)
-            if path.stat().st_size > MAX_INDEX_BYTES:
+            if path.stat().st_size > input_limit(path.suffix, version.mime_type):
                 raise ValueError("Datei zu groß")
         def progress(done, total):
             job.completed, job.total = done, total
@@ -215,4 +225,8 @@ class IndexJobs:
                 job.state = "cancelled"
                 return
             session.commit()
+        if not pages:
+            # An empty document has no text rows, so discovery would otherwise find it again.
+            with self.lock:
+                self.settled.add(job.version_id)
         job.state = "completed"
