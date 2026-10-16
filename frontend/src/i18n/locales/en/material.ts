@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  workspaceLayout: 'Workspace layout',
+  layout_read: 'Read',
+  layout_split: 'Side by side',
+  layout_write: 'Write',
   clip: {
     open: 'Image clip',
     title: 'Capture PDF clip',

@@ -8,7 +8,7 @@ import { Dialog } from 'radix-ui'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
-import { ArrowDownToLine, ChevronRight, MessageCircleQuestion, PanelsTopLeft, X } from 'lucide-react'
+import { ArrowDownToLine, ChevronLeft, ChevronRight, MessageCircleQuestion, PanelsTopLeft, X } from 'lucide-react'
 import { useT } from '@/i18n/useT'
 import { Button } from '@/components/ui/button'
 import { Shell } from '@/components/Shell'
@@ -29,7 +29,7 @@ import { FirstUseHint } from '@/components/FirstUseHint'
 import { useWorkspaceState } from '@/lib/workspaceState'
 import { focusPath } from '@/lib/learningFocus'
 import { rememberStudySession } from '@/lib/studyResume'
-import { useSourceNoteTarget } from '@/lib/sourceNoteTarget'
+import { useSourceNoteTarget, validSourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { rememberObject } from '@/lib/recentObjects'
 import { useOfflineFileUrl } from '@/lib/courseOffline'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -57,7 +57,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.m
 export function MaterialPage() {
   const { id } = useParams()
   const location = useLocation()
-  return <MaterialReader key={`${id}:${location.key}`} versionId={Number(id)} />
+  const params = new URLSearchParams(location.search)
+  const note = params.get('note')
+  return (
+    <MaterialReader
+      key={`${id}:${location.key}`}
+      versionId={Number(id)}
+      initialWorkspace={params.get('workspace') === '1'}
+      selectedNoteId={note && validSourceNoteTarget(note) ? note : undefined}
+    />
+  )
 }
 function EmbeddedMaterialFrame({ children, title }: ComponentProps<typeof Shell>) {
   return (
@@ -75,6 +84,7 @@ export function MaterialReader({
   savedNoteHref,
   onNoteChange,
   selectedNoteId,
+  initialWorkspace = false,
 }: {
   versionId: number
   embedded?: boolean
@@ -84,6 +94,7 @@ export function MaterialReader({
   savedNoteHref?: (noteId: string) => string
   onNoteChange?: (noteId: string | null) => void
   selectedNoteId?: string
+  initialWorkspace?: boolean
 }) {
   const { t } = useT('material')
   const { t: nav } = useT('nav')
@@ -113,16 +124,32 @@ export function MaterialReader({
   const layoutRef = useRef<HTMLDivElement>(null)
   const [layoutWidth, setLayoutWidth] = useState(() => Math.max(0, window.innerWidth - 280))
   const wide = desktop && layoutWidth >= 652
-  const [notesOpen, storeNotesOpen] = useWorkspaceState(`pdf:${versionId}:notesOpen`, embedded && desktop)
+  const [notesOpen, storeNotesOpen] = useWorkspaceState(
+    `pdf:${versionId}:notesOpen`,
+    (embedded || initialWorkspace) && desktop,
+  )
+  const [workspaceLayout, setWorkspaceLayout] = useWorkspaceState<'split' | 'write'>('reader:layout', 'split', {
+    valid: (value): value is 'split' | 'write' => value === 'split' || value === 'write',
+  })
   const [studyTab, setStudyTab] = useWorkspaceState<'annotations' | 'notes' | 'recall'>(
     `pdf:${versionId}:studyTab`,
-    embedded ? 'notes' : 'annotations',
+    embedded || initialWorkspace ? 'notes' : 'annotations',
     {
       valid: (value): value is 'annotations' | 'notes' | 'recall' =>
         value === 'annotations' || value === 'notes' || value === 'recall',
     },
   )
   const [excerptRevision, setExcerptRevision] = useState(0)
+  const workspaceRequested = useRef(false)
+  useEffect(() => {
+    if (initialWorkspace && desktop && !workspaceRequested.current) {
+      workspaceRequested.current = true
+      storeNotesOpen(true)
+      setStudyTab('notes')
+    }
+  }, [initialWorkspace, desktop, storeNotesOpen, setStudyTab])
+  const writingOnly = wide && notesOpen && studyTab === 'notes' && workspaceLayout === 'write'
+  const writingAnchor = useRef<{ number: number; fraction: number } | null>(null)
   const citations = useReaderCitations(versionId, excerptRevision)
   const pageCitations = useMemo(() => citationsByPage(citations.data?.citations), [citations.data])
   // A citing note opened from the list takes over the split view until the caller picks another.
@@ -135,10 +162,10 @@ export function MaterialReader({
   const cardReturnAnnotation = useRef<string | null>(null)
   const [savedSideWidth, setSideWidth] = useWorkspaceState(`pdf:sideWidth`, 0, {
     valid: (value): value is number =>
-      typeof value === 'number' && Number.isFinite(value) && (value === 0 || (value >= 280 && value <= 760)),
+      typeof value === 'number' && Number.isFinite(value) && (value === 0 || (value >= 280 && value <= 1000)),
   })
-  const maxSideWidth = Math.max(320, Math.min(760, layoutWidth - 332))
-  const sideWidth = Math.max(320, Math.min(maxSideWidth, savedSideWidth || Math.round((layoutWidth - 12) * 0.4)))
+  const maxSideWidth = Math.max(320, Math.min(1000, layoutWidth - 332))
+  const sideWidth = Math.max(320, Math.min(maxSideWidth, savedSideWidth || Math.round((layoutWidth - 12) * 0.5)))
   useLayoutEffect(() => {
     const frame = layoutRef.current
     if (!frame) return
@@ -151,12 +178,24 @@ export function MaterialReader({
     return () => observer.disconnect()
   }, [data?.version_id, expectedCourseId])
   const resizeStart = useRef<{ x: number; width: number } | null>(null)
+  const toolbarRef = useRef<HTMLDivElement>(null)
+  const [toolbarHeight, setToolbarHeight] = useState(48)
+  useLayoutEffect(() => {
+    const bar = toolbarRef.current
+    if (!bar) return
+    const measure = () => setToolbarHeight(bar.getBoundingClientRect().height || 48)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(bar)
+    return () => observer.disconnect()
+  }, [data?.version_id])
   const layoutAnchor = useRef<{ number: number; fraction: number; width: number } | null>(null)
   function preserveReadingPosition(force = false) {
     if (!force && !fitWidth) return
     const slot = document.querySelector<HTMLElement>(`[data-reader-page="${page}"]`)
     if (!slot) return
     const rect = slot.getBoundingClientRect()
+    if (rect.height <= 0) return
     layoutAnchor.current = {
       number: page,
       fraction: Math.max(0, Math.min(1, (readingLine() - rect.top) / rect.height)),
@@ -166,6 +205,21 @@ export function MaterialReader({
   function setNotesOpen(open: boolean) {
     if (wide && open !== notesOpen) preserveReadingPosition()
     storeNotesOpen(open)
+  }
+  function chooseWorkspaceLayout(next: 'read' | 'split' | 'write') {
+    if (next === 'write' && !writingOnly) {
+      const rect = document.querySelector<HTMLElement>(`[data-reader-page="${page}"]`)?.getBoundingClientRect()
+      if (rect && rect.height > 0)
+        writingAnchor.current = {
+          number: page,
+          fraction: Math.max(0, Math.min(1, (readingLine() - rect.top) / rect.height)),
+        }
+    }
+    if (next !== 'read') {
+      setWorkspaceLayout(next)
+      setStudyTab('notes')
+    }
+    setNotesOpen(next !== 'read')
   }
   useAnchorScroll(Boolean(data) && notesOpen && !wide)
   const requestedPage = Number(new URLSearchParams(search).get('page'))
@@ -198,13 +252,12 @@ export function MaterialReader({
   const [fitWidth, setFitWidth] = useWorkspaceState(`pdf:${versionId}:fitWidth`, true)
   const readerRef = useRef<HTMLDivElement>(null)
   const readingLine = useCallback(() => {
-    if (!embedded) return 140
     const controls = readerRef.current?.querySelector<HTMLElement>('.material-controls')
     if (!controls) return 140
     const top = Number.parseFloat(window.getComputedStyle(controls).top)
     // The embedded mode bar adds a measured sticky layer above the PDF.
     return Number.isFinite(top) ? Math.max(140, top + controls.getBoundingClientRect().height + 32) : 140
-  }, [embedded])
+  }, [])
   const viewportRef = useRef<HTMLDivElement>(null)
   const [originalColors, setOriginalColors] = useWorkspaceState(`pdf:${versionId}:originalColors`, true)
   const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null)
@@ -282,6 +335,7 @@ export function MaterialReader({
     const reader = readerRef.current
     if (!reader) return
     const measure = () => {
+      if (reader.clientWidth <= 0) return
       const nextWidth = Math.max(180, reader.clientWidth - 32)
       const previous = readerContext.current
       // Opening/resizing the split can leave a capped fit page at the same
@@ -289,7 +343,12 @@ export function MaterialReader({
       if (previous.fitWidth && layoutAnchor.current?.width === Math.min(760, nextWidth)) layoutAnchor.current = null
       // ResizeObserver runs before committing the new PDF slot geometry. Capture
       // the committed reading position here, including responsive split changes.
-      if (previous.fitWidth && Math.min(760, nextWidth) !== previous.pageWidth && !layoutAnchor.current) {
+      if (
+        previous.fitWidth &&
+        Math.min(760, nextWidth) !== previous.pageWidth &&
+        !layoutAnchor.current &&
+        !writingAnchor.current
+      ) {
         const slot = document.querySelector<HTMLElement>(`[data-reader-page="${previous.page}"]`)
         if (slot) {
           const before = slot.getBoundingClientRect()
@@ -313,6 +372,7 @@ export function MaterialReader({
     return () => observer.disconnect()
   }, [data?.version_id, readingLine])
   useLayoutEffect(() => {
+    if (writingOnly || writingAnchor.current) return
     const anchor = layoutAnchor.current
     if (!anchor || anchor.width === pageWidth) return
     const slot = document.querySelector<HTMLElement>(`[data-reader-page="${anchor.number}"]`)
@@ -321,16 +381,28 @@ export function MaterialReader({
       window.scrollBy({ top: rect.top + anchor.fraction * rect.height - readingLine(), behavior: 'instant' })
     }
     layoutAnchor.current = null
-  }, [pageWidth, readingLine])
+  }, [pageWidth, readingLine, writingOnly])
   useLayoutEffect(() => {
-    if (!positionRestored.current || (notesOpen && !wide) || layoutAnchor.current) return
+    if (writingOnly || !writingAnchor.current) return
+    const anchor = writingAnchor.current
+    const frame = requestAnimationFrame(() => {
+      const rect = document.querySelector<HTMLElement>(`[data-reader-page="${anchor.number}"]`)?.getBoundingClientRect()
+      if (rect && rect.height > 0)
+        window.scrollBy({ top: rect.top + anchor.fraction * rect.height - readingLine(), behavior: 'instant' })
+      layoutAnchor.current = null
+      writingAnchor.current = null
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [writingOnly, pageWidth, readingLine])
+  useLayoutEffect(() => {
+    if (!positionRestored.current || writingOnly || (notesOpen && !wide) || layoutAnchor.current) return
     const rect = document.querySelector<HTMLElement>(`[data-reader-page="${page}"]`)?.getBoundingClientRect()
     if (rect && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight)
       readingPoint.current = {
         number: page,
         fraction: Math.max(0, Math.min(1, (readingLine() - rect.top) / rect.height)),
       }
-  }, [page, pageWidth, notesOpen, wide, readingLine])
+  }, [page, pageWidth, notesOpen, wide, readingLine, writingOnly])
   useReaderGestures({
     viewportRef,
     pageWidth,
@@ -429,7 +501,7 @@ export function MaterialReader({
       if (!positionRestored.current) return
       // A mobile modal owns scrolling. Its focus/reflow must not replace the
       // reading position in the obscured PDF with an incidental window offset.
-      if (notesOpen && !wide) return
+      if (writingOnly || writingAnchor.current || (notesOpen && !wide)) return
       // A no-op resize key may not trigger ResizeObserver. Genuine scrolling
       // supersedes its anchor when measured fit geometry is still unchanged.
       if (
@@ -459,9 +531,9 @@ export function MaterialReader({
     window.addEventListener('scroll', updatePage, { passive: true })
     updatePage()
     return () => window.removeEventListener('scroll', updatePage)
-  }, [pages, pageRatios, setPage, notesOpen, wide, readingLine])
+  }, [pages, pageRatios, setPage, notesOpen, wide, readingLine, writingOnly])
   useEffect(() => {
-    if (!pages || pageRatios.length !== pages || positionRestored.current || (notesOpen && !wide)) return
+    if (!pages || pageRatios.length !== pages || positionRestored.current || writingOnly || (notesOpen && !wide)) return
     const annotation = data?.annotations.find((entry) => hash === `#annotation-${entry.id}`)
     const explicitPage =
       navigation !== 'POP' && Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : null
@@ -473,7 +545,19 @@ export function MaterialReader({
       setPage(target)
     })
     return () => cancelAnimationFrame(frame)
-  }, [pages, pageRatios, data?.annotations, hash, requestedPage, navigation, page, setPage, notesOpen, wide])
+  }, [
+    pages,
+    pageRatios,
+    data?.annotations,
+    hash,
+    requestedPage,
+    navigation,
+    page,
+    setPage,
+    notesOpen,
+    wide,
+    writingOnly,
+  ])
   async function collectExcerpt() {
     if (!data || !selection) return
     try {
@@ -591,6 +675,7 @@ export function MaterialReader({
       title={data?.resource_name ?? t('defaultTitle')}
       eyebrow={t('eyebrow')}
       cachedAt={updatedAt}
+      compactNavigation
       breadcrumbs={[
         { label: nav('courses'), to: '/courses' },
         ...(data ? [{ label: data.course_name, to: `/courses/${data.course_id}` }] : []),
@@ -620,21 +705,31 @@ export function MaterialReader({
       ) : (
         data && (
           <Dialog.Root open={notesOpen && !cardContext} onOpenChange={setNotesOpen} modal={!wide && !cardContext}>
-            <div className="material-toolbar">
+            <div className="material-toolbar" ref={toolbarRef}>
               {!embedded && (
-                <Button asChild size="sm">
-                  <Link
-                    to={focusPath({ kind: 'course', id: data.course_id }, { mode: 'source', version: versionId, page })}
-                    onClick={() => {
-                      storeNotesOpen(true)
-                      setStudyTab('notes')
-                    }}
-                  >
-                    <PanelsTopLeft size={16} aria-hidden="true" />
-                    {studyWorkspace('open')}
-                  </Link>
-                </Button>
+                <Link
+                  className="reader-course-link"
+                  to={`/courses/${data.course_id}`}
+                  aria-label={`${t('backToCourse')}: ${data.course_name}`}
+                  title={data.course_name}
+                >
+                  <ChevronLeft size={15} aria-hidden="true" />
+                  <span>{data.course_name}</span>
+                </Link>
               )}
+              <nav className="reader-layout-modes" aria-label={t('workspaceLayout')}>
+                {(['read', ...(wide ? (['split'] as const) : []), 'write'] as const).map((mode) => (
+                  <Button
+                    key={mode}
+                    size="sm"
+                    variant="ghost"
+                    aria-pressed={mode === (notesOpen ? (writingOnly || !wide ? 'write' : 'split') : 'read')}
+                    onClick={() => chooseWorkspaceLayout(mode)}
+                  >
+                    {t(`layout_${mode}`)}
+                  </Button>
+                ))}
+              </nav>
               {data.versions.length > 1 && (
                 <label>
                   {t('versionLabel')}{' '}
@@ -656,11 +751,16 @@ export function MaterialReader({
                   </select>
                 </label>
               )}
-              <Dialog.Trigger asChild>
-                <Button variant="outline" size="sm">
-                  {t('annotationsButton', { count: data.annotations.length })}
-                </Button>
-              </Dialog.Trigger>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setStudyTab('annotations')
+                  setNotesOpen(true)
+                }}
+              >
+                {t('annotationsButton', { count: data.annotations.length })}
+              </Button>
               {canWrite && ocr && ocr.pending_pages > 0 && (
                 <Button
                   variant="outline"
@@ -676,6 +776,21 @@ export function MaterialReader({
                   {t('moreSummary')} <ChevronRight size={14} />
                 </summary>
                 <div>
+                  {!embedded && (
+                    <Link
+                      to={focusPath(
+                        { kind: 'course', id: data.course_id },
+                        { mode: 'source', version: versionId, page },
+                      )}
+                      onClick={() => {
+                        storeNotesOpen(true)
+                        setStudyTab('notes')
+                      }}
+                    >
+                      <PanelsTopLeft size={15} aria-hidden="true" />
+                      {studyWorkspace('open')}
+                    </Link>
+                  )}
                   {canWrite && (
                     <Link
                       to={`/notes?new=1&course_id=${data.course_id}&resource_id=${data.resource_id}&title=${encodeURIComponent(data.resource_name.replace(/\.[^/.]+$/, ''))}`}
@@ -692,31 +807,41 @@ export function MaterialReader({
                   <a href={`/api/material/${versionId}/export`}>
                     <ArrowDownToLine size={15} /> {t('exportWithAnnotations')}
                   </a>
+                  {!embedded && (
+                    <EntityProperties
+                      rows={[
+                        {
+                          label: t('courseLabel'),
+                          value: <Link to={`/courses/${data.course_id}`}>{data.course_name}</Link>,
+                        },
+                        { label: t('fileLabel'), value: data.resource_name },
+                        { label: t('versionRowLabel'), value: String(data.version) },
+                        {
+                          label: t('questionsLabel'),
+                          value: String(
+                            data.annotations.filter((item) => item.kind === 'question' && !item.resolved).length,
+                          ),
+                        },
+                      ]}
+                      metadata={{ kind: 'material', id: String(data.resource_id) }}
+                      activity={{ kind: 'material', id: String(data.resource_id) }}
+                    />
+                  )}
                 </div>
               </details>
             </div>
-            {!embedded && (
-              <EntityProperties
-                rows={[
-                  { label: t('courseLabel'), value: <Link to={`/courses/${data.course_id}`}>{data.course_name}</Link> },
-                  { label: t('fileLabel'), value: data.resource_name },
-                  { label: t('versionRowLabel'), value: String(data.version) },
-                  {
-                    label: t('questionsLabel'),
-                    value: String(data.annotations.filter((item) => item.kind === 'question' && !item.resolved).length),
-                  },
-                ]}
-                metadata={{ kind: 'material', id: String(data.resource_id) }}
-                activity={{ kind: 'material', id: String(data.resource_id) }}
-              />
-            )}
             {ocr && ocr.pending_pages > 0 && !ocr.available && <p className="muted-text mb-4">{t('ocrUnavailable')}</p>}
-            <FirstUseHint name="reader" message={quality('firstReaderHint')} />
             <div
               className="material-layout"
               ref={layoutRef}
               data-study-open={wide && notesOpen}
-              style={{ '--reader-side-width': `${sideWidth}px` } as CSSProperties}
+              data-reader-layout={writingOnly ? 'write' : notesOpen && wide ? 'split' : 'read'}
+              style={
+                {
+                  '--reader-side-width': `${sideWidth}px`,
+                  '--reader-toolbar-height': `${toolbarHeight}px`,
+                } as CSSProperties
+              }
             >
               <div
                 className="material-reader"
@@ -907,6 +1032,7 @@ export function MaterialReader({
                 <>
                   <div
                     className="reader-split-handle"
+                    hidden={writingOnly}
                     role="separator"
                     tabIndex={0}
                     aria-orientation="vertical"
@@ -970,6 +1096,7 @@ export function MaterialReader({
                 </>
               )}
             </div>
+            <FirstUseHint name="reader" message={quality('firstReaderHint')} />
             {!wide && (
               <Dialog.Portal>
                 <Dialog.Overlay className="material-side-overlay" />

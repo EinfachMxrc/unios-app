@@ -58,6 +58,23 @@ afterEach(() => {
 })
 
 describe('sidebar actions and primary paths', () => {
+  it('keeps named primary paths reachable in the compact rail even when their groups were collapsed', () => {
+    render(
+      <MemoryRouter>
+        <Sidebar
+          compact
+          state={{ ...state, collapsedSections: { workspace: true, library: true, courses: true } }}
+          layout={layout}
+          catalog={catalog}
+          sidebarCourses={courses}
+        />
+      </MemoryRouter>,
+    )
+    for (const id of ids)
+      expect(screen.getByRole('link', { name: id }).getAttribute('href')).toBe(id === 'today' ? '/' : `/${id}`)
+    fireEvent.click(screen.getByRole('button', { name: 'showSidebar' }))
+    expect(state.toggleSidebar).toHaveBeenCalledOnce()
+  })
   it('keeps five named primary links with decorative, unfocusable reserved action slots', () => {
     const { container } = render(
       <MemoryRouter>

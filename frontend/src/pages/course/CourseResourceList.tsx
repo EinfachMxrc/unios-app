@@ -42,6 +42,7 @@ export function CourseResourceList({
   hash,
   canWrite,
   courseId,
+  grouped = false,
 }: {
   resources: Resource[]
   detail: CourseDetail
@@ -49,6 +50,7 @@ export function CourseResourceList({
   hash: string
   canWrite: boolean
   courseId: string | undefined
+  grouped?: boolean
 }) {
   const { t } = useT('courses')
   useCloseMenusOutside()
@@ -86,10 +88,12 @@ export function CourseResourceList({
               ) : (
                 <strong>{resource.name}</strong>
               )}
-              <span>
-                {sections.get(resource.section_id ?? -1)?.name ?? t('otherSection')}
-                {resource.removed_upstream && ` · ${t('removedUpstreamShort')}`}
-              </span>
+              {(!grouped || resource.removed_upstream) && (
+                <span>
+                  {!grouped && (sections.get(resource.section_id ?? -1)?.name ?? t('otherSection'))}
+                  {resource.removed_upstream && ` · ${t('removedUpstreamShort')}`}
+                </span>
+              )}
               <div className="version-links">
                 {resource.kind === 'link' ? (
                   resource.url ? (

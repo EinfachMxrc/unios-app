@@ -16,7 +16,7 @@ Die Ergebnisse werden als `performance.json` im Playwright-Bericht gespeichert.
 | Ctrl+K bis Palette sichtbar | 300 ms |
 
 `node scripts/check-bundle-budget.mjs` prüft nach dem Build feste gzip-Budgets:
-Hauptchunk 220 KiB, PDF-Ansicht 250 KiB, PDF-Worker 450 KiB. Die CI führt diese
+Hauptchunk 222 KiB (um 2 KiB für den Kurs-Schreibtisch angehoben; gemessen +1,1 KiB), PDF-Ansicht 250 KiB, PDF-Worker 450 KiB. Die CI führt diese
 Prüfung und den Browser-Messlauf aus. Grenzen werden nicht automatisch erhöht.
 
 Sekundäre Ansichten laden erst beim Öffnen. Strukturierte Suchanfragen rufen

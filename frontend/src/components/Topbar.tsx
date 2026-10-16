@@ -3,6 +3,7 @@
 import './TopbarLayout.css'
 
 import { Link, useLocation } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import { ChevronRight, MoreHorizontal, PanelLeftOpen } from 'lucide-react'
 import { useT } from '@/i18n/useT'
 import { areaForPath, sidebarCatalog } from '@/components/sidebarCatalog'
@@ -18,11 +19,13 @@ export function Topbar({
   breadcrumbs,
   sidebarHidden,
   toggleSidebar,
+  workspaceAction,
 }: {
   title: string
   breadcrumbs?: Breadcrumb[]
   sidebarHidden: boolean
   toggleSidebar: () => void
+  workspaceAction?: ReactNode
 }) {
   const { t } = useT('shell')
   const { t: nav } = useT('nav')
@@ -67,6 +70,7 @@ export function Topbar({
         <CommandPalette />
       </div>
       <div className="topbar-actions">
+        {workspaceAction && <div className="topbar-workspace-action">{workspaceAction}</div>}
         {preferences.modules.notifications && <NotificationPopover />}
         <Button asChild variant="ghost" size="icon" className="more-top-link" title={t('more')}>
           <Link to="/more" aria-label={t('more')}>

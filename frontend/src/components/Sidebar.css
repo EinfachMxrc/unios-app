@@ -1,6 +1,58 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 @layer theme, base, components, utilities, workspace, interactions, accessibility;
 @layer workspace {
+  @media (min-width: 901px) {
+    .app-shell.sidebar-compact {
+      grid-template-columns: 66px minmax(0, 1fr);
+    }
+    .sidebar-compact .app-sidebar {
+      padding: 16px 7px;
+    }
+    .sidebar-compact .sidebar-workspace {
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 0 12px;
+    }
+    .sidebar-compact .app-brand {
+      padding: 0;
+      justify-content: center;
+    }
+    .sidebar-compact .app-brand > span:last-child,
+    .sidebar-compact .sidebar-tools,
+    .sidebar-compact .sidebar-label,
+    .sidebar-compact .sidebar-courses,
+    .sidebar-compact .sidebar-recents,
+    .sidebar-compact .sidebar-resize-handle,
+    .sidebar-compact .sidebar-bottom > button,
+    .sidebar-compact .nav-item > span,
+    .sidebar-compact .sidebar-bottom a > span {
+      display: none;
+    }
+    .sidebar-compact .sidebar-visibility {
+      opacity: 1;
+    }
+    .sidebar-compact .app-nav {
+      margin-top: 8px;
+    }
+    .sidebar-compact .sidebar-group {
+      padding: 0;
+      border: 0;
+    }
+    .sidebar-compact .nav-item {
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+      min-height: 40px;
+    }
+    .sidebar-compact .sidebar-bottom {
+      margin-inline: 0;
+      padding: 12px 0 0;
+    }
+    .sidebar-compact .sidebar-bottom a {
+      justify-content: center;
+      padding: 10px;
+    }
+  }
   .app-sidebar {
     position: sticky;
     top: 0;

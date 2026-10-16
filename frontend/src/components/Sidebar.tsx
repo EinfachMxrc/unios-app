@@ -13,6 +13,7 @@ import {
   FolderKanban,
   MoreHorizontal,
   PanelLeftClose,
+  PanelLeftOpen,
   PenLine,
   Plus,
   Search,
@@ -36,8 +37,9 @@ type Props = {
   courses?: CoursesResponse['courses']
   sidebarCourses: CoursesResponse['courses']
   activeId?: string
+  compact?: boolean
 }
-export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activeId }: Props) {
+export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activeId, compact = false }: Props) {
   const { sidebarWidth, collapsedSections, openCourse, toggleSidebar, toggleSection, toggleCourse, resizeSidebar } =
     state
   const { t } = useT('shell')
@@ -65,7 +67,7 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
   return (
     <aside className="app-sidebar">
       <div className="sidebar-workspace">
-        <Link to="/" className="app-brand">
+        <Link to="/" className="app-brand" aria-label={t('brandName')}>
           <BrandMark />
           <span>
             {t('brandName')}
@@ -76,10 +78,10 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
           type="button"
           className="sidebar-visibility"
           onClick={toggleSidebar}
-          aria-label={t('hideSidebar')}
-          title={t('hideSidebarTitle')}
+          aria-label={t(compact ? 'showSidebar' : 'hideSidebar')}
+          title={t(compact ? 'showSidebarTitle' : 'hideSidebarTitle')}
         >
-          <PanelLeftClose size={17} />
+          {compact ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
         </button>
       </div>
       <nav {...scroll} aria-label={t('mainNavigation')} className="app-nav" style={{ overflowAnchor: 'none' }}>
@@ -114,11 +116,13 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
               >
                 {t(group)} <ChevronDown size={14} />
               </button>
-              {!collapsedSections[group] &&
+              {(compact || !collapsedSections[group]) &&
                 entriesFor(group).map(({ id, to, label, icon: Icon }) => (
                   <Link
                     key={id}
                     to={to}
+                    aria-label={label}
+                    title={compact ? label : undefined}
                     className={`nav-item ${activeId === id && !(id === 'courses' && layout.showCourses && sidebarCourses.some((course) => location.pathname === `/courses/${course.id}`)) ? 'active' : ''}`}
                     aria-current={
                       activeId === id &&
@@ -246,11 +250,21 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
       </nav>
       <div className="sidebar-bottom">
         <SidebarCustomize courses={courses} />
-        <NavLink to="/more" className={activeId === 'more' ? 'active' : ''}>
-          <MoreHorizontal size={16} /> {t('more')}
+        <NavLink
+          to="/more"
+          aria-label={t('more')}
+          title={compact ? t('more') : undefined}
+          className={activeId === 'more' ? 'active' : ''}
+        >
+          <MoreHorizontal size={16} /> <span>{t('more')}</span>
         </NavLink>
-        <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
-          <Settings2 size={16} /> {t('settings')}
+        <NavLink
+          to="/settings"
+          aria-label={t('settings')}
+          title={compact ? t('settings') : undefined}
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          <Settings2 size={16} /> <span>{t('settings')}</span>
         </NavLink>
       </div>
       <div

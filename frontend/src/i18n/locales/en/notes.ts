@@ -26,6 +26,7 @@ export default {
       'Enter continues a list. Enter on an empty item ends it. Tab indents an item, Shift+Tab outdents it. **Text** becomes bold, *Text* italic.',
   },
   math: {
+    toolsHelp: 'Writing tips',
     entryMode: 'Input mode',
     mathMode: 'Mathematical formula',
     logicMode: 'Type logic directly',

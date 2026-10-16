@@ -27,6 +27,7 @@ export default {
       'Enter setzt eine Liste fort. Enter auf einem leeren Punkt beendet sie. Tab rückt einen Punkt ein, Shift+Tab wieder aus. **Text** wird fett, *Text* kursiv.',
   },
   math: {
+    toolsHelp: 'Tipps zum Mitschreiben',
     entryMode: 'Eingabeart',
     mathMode: 'Mathematische Formel',
     logicMode: 'Logik direkt tippen',

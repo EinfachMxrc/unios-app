@@ -1,0 +1,133 @@
+{
+  "syntheticFixturesOnly": true,
+  "method": "Lighthouse snapshot of the rendered React course and note workspace",
+  "frontendIndexSha256": "ee72a025c389f170ba6633eecb282c19caaf18c2557388cdcb1676e7e6f699ad",
+  "reports": [
+    {
+      "state": "course",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "draft",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "saved-note",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 97,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    },
+    {
+      "state": "course",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "draft",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "saved-note",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 97,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    },
+    {
+      "state": "course",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names."
+        }
+      ]
+    },
+    {
+      "state": "draft",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "saved-note",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 97,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    },
+    {
+      "state": "course",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "draft",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "findings": []
+    },
+    {
+      "state": "saved-note",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 97,
+      "runtimeError": null,
+      "findings": [
+        {
+          "id": "color-contrast",
+          "title": "Background and foreground colors do not have a sufficient contrast ratio."
+        }
+      ]
+    }
+  ]
+}

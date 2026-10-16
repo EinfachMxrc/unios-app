@@ -10,7 +10,7 @@ const assets = new URL('../dist/assets/', import.meta.url)
 const dist = new URL('../dist/', import.meta.url)
 // Baseline plus deliberate headroom; editor/worker costs also affect cold PWA installs.
 const limits = {
-  index: 220 * 1024,
+  index: 222 * 1024, // +2 KiB for the course desk (measured +1.1 KiB, CI compresses ~0.4 KiB larger than local)
   MaterialPage: 250 * 1024,
   NotesPage: 320 * 1024,
   'pdf.worker.min': 450 * 1024,
