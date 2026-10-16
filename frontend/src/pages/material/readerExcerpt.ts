@@ -9,7 +9,8 @@ import {
   type NoteDraft,
 } from '@/noteDraft'
 import type { Material, NoteDetail } from '@/types'
-import { sourceNoteTarget } from '@/lib/sourceNoteTarget'
+import { request } from '@/api'
+import { restoreSourceNoteTarget, sourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { queryClient } from '@/offlineCache'
 import { encodeMark, type PassageRects } from './passageLink'
 
@@ -42,6 +43,32 @@ function literalMarkdown(value: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/[\\`*_{}[\]()#+.!|~$-]/g, '\\$&')
+}
+
+/**
+ * The notes drawer mounts the pieces that restore the saved target note and load it. A quote
+ * or clip taken while the drawer is still closed needs both first, otherwise it lands in a
+ * new draft (target unknown) or fails (target note not loaded).
+ */
+export async function prepareReaderTarget(material: Pick<Material, 'course_id' | 'resource_id'>): Promise<void> {
+  try {
+    await restoreSourceNoteTarget(material.course_id, material.resource_id)
+  } catch {
+    // Do not guess: writing into a new draft would hide the user's chosen note.
+    throw new ReaderExcerptError('storage')
+  }
+  const noteId = sourceNoteTarget(material.course_id, material.resource_id)
+  if (!noteId) return
+  const queryKey = ['api', `/api/notes/${noteId}`]
+  if (queryClient.getQueryData<NoteDetail>(queryKey) !== undefined) return
+  try {
+    await queryClient.fetchQuery({
+      queryKey,
+      queryFn: ({ signal }) => request<NoteDetail>(`/api/notes/${noteId}`, { signal }),
+    })
+  } catch {
+    throw new ReaderExcerptError('storage')
+  }
 }
 
 export function appendReaderExcerpt({

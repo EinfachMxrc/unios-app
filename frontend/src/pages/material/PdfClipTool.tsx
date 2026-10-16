@@ -39,7 +39,7 @@ export function PdfClipTool({
   material: Material
   page: number
   canWrite: boolean
-  onApply: (markdown: string) => void
+  onApply: (markdown: string) => void | Promise<void>
 }) {
   const { t } = useT('material')
   const [open, setOpen] = useState(false)
@@ -54,8 +54,8 @@ export function PdfClipTool({
           material={material}
           page={page}
           onClose={() => setOpen(false)}
-          onApply={(markdown) => {
-            onApply(markdown)
+          onApply={async (markdown) => {
+            await onApply(markdown)
             setOpen(false)
           }}
         />
@@ -73,7 +73,7 @@ function ClipDialog({
   pdf: PDFDocumentProxy
   material: Material
   page: number
-  onApply: (markdown: string) => void
+  onApply: (markdown: string) => void | Promise<void>
   onClose: () => void
 }) {
   const { t } = useT('material')
@@ -164,7 +164,7 @@ function ClipDialog({
       if (abort.signal.aborted) return
       const coordinates = [captured.x, captured.y, captured.width, captured.height].map((n) => n.toFixed(5)).join(',')
       const label = markdownCell(`${material.resource_name} · ${page}`)
-      onApply(
+      await onApply(
         `![${label}](${asset.src})\n\n[${label}](/material/${material.version_id}?page=${page}&clip=${coordinates})\n\n`,
       )
     } catch {

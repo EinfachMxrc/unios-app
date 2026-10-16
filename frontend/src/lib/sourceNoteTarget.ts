@@ -149,26 +149,30 @@ export function useSourceNoteTarget(courseId: number, resourceId: number) {
   const key = sourceNoteTargetKey(courseId, resourceId)
   const [target] = useWorkspaceState<string | null>(key, null, { valid: validSourceNoteTarget })
   const [resumeError] = useWorkspaceState(errorKey(key), false, { persist: false })
-  const [restoring, setRestoring] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) !== null
-    } catch {
-      return false
-    }
-  })
+  // Tracked per key: the material page learns its course and resource only after loading.
+  const [settledKey, setSettledKey] = useState<string | null>(null)
+  const identified = courseId > 0 && resourceId > 0
+  let stored = false
+  try {
+    stored = localStorage.getItem(STORAGE_KEY) !== null
+  } catch {
+    /* unreadable storage: nothing to wait for */
+  }
+  const restoring = identified && stored && settledKey !== key
   useEffect(() => {
+    if (!identified) return
     let alive = true
     void restoreSourceNoteTarget(courseId, resourceId)
       .catch(() => {
         if (alive) rememberWorkspace(errorKey(key), true, false)
       })
       .finally(() => {
-        if (alive) setRestoring(false)
+        if (alive) setSettledKey(key)
       })
     return () => {
       alive = false
     }
-  }, [courseId, resourceId, key])
+  }, [courseId, resourceId, key, identified])
   const choose = useCallback(
     (value: string | null) => chooseSourceNoteTarget(courseId, resourceId, value),
     [courseId, resourceId],
