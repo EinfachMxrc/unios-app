@@ -8,7 +8,7 @@ import messages from '@/i18n/locales/de/learning'
 import { LearningTabs } from './LearningTabs'
 
 vi.mock('@/i18n/useT', () => ({
-  useT: () => ({ t: (key: string) => (messages as Record<string, string>)[key] ?? key }),
+  useT: () => ({ t: (key: string) => String((messages as Record<string, unknown>)[key] ?? key) }),
 }))
 
 beforeAll(() => {

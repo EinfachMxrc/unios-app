@@ -8,7 +8,7 @@ import type { Meal } from '@/lib/mensa'
 import { MealDietBadge } from './MealDietBadge'
 
 vi.mock('@/i18n/useT', () => ({
-  useT: () => ({ t: (key: string) => (messages as Record<string, string>)[key] ?? key }),
+  useT: () => ({ t: (key: string) => String((messages as Record<string, unknown>)[key] ?? key) }),
 }))
 
 afterEach(cleanup)
