@@ -5,7 +5,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.config import Settings
@@ -86,12 +86,16 @@ class FocusRepository:
     def card_bindings(self) -> list[CourseCardBinding]:
         # No global card-window limit: an older course remains discoverable.
         with self._factory() as session:
-            rows = session.execute(select(AnkiCardQueue.id, Resource.course_id, AnkiCardQueue.origin,
+            # Free note cards have no resource; their course comes from the learning topic.
+            owner_course = func.coalesce(Resource.course_id, LearningTopic.course_id)
+            rows = session.execute(select(AnkiCardQueue.id, owner_course, AnkiCardQueue.origin,
                                           AnkiCardQueue.mutation_id, AnkiCard.note_id)
-                                   .join(Resource, Resource.id == AnkiCardQueue.resource_id)
+                                   .outerjoin(Resource, Resource.id == AnkiCardQueue.resource_id)
+                                   .outerjoin(LearningTopic, LearningTopic.id == AnkiCardQueue.topic_id)
                                    .outerjoin(AnkiCard, AnkiCard.queue_id == AnkiCardQueue.id)
                                    .where(AnkiCardQueue.status.in_(["approved", "pushed"]),
-                                          Resource.group_category != "other_group")).all()
+                                          or_(Resource.id.is_(None), Resource.group_category != "other_group"),
+                                          owner_course.is_not(None))).all()
         bindings: dict[int, CourseCardBinding] = {}
         for queue_id, course_id, origin, mutation_id, note_id in rows:
             previous = bindings.get(queue_id)
