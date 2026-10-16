@@ -5,6 +5,7 @@
  * revisions and conflict handling; these only show them and report choices.
  */
 import { docText, parseBody } from '@/editor/doc'
+import { NoteRevisionDiff } from './NoteRevisionDiff'
 import { activeIntlLocale, localDate } from '@/api'
 import { EntityProperties } from '@/components/EntityProperties'
 import { LinkedItems } from '@/components/LinkedItems'
@@ -93,6 +94,7 @@ export function NoteHistory({
           </Button>
         ))}
       </div>
+      {data.selected_revision !== data.note.current_revision && <NoteRevisionDiff older={data} />}
       <p className="muted-text note-file-path">
         {t('currentFileLabel')}{' '}
         {data.versions.find((item) => item.revision === data.note.current_revision)?.relative_path}

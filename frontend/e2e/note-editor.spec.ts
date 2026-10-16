@@ -179,3 +179,24 @@ test('a note written before blocks existed opens, is editable and saves as a blo
   const first = await (await page.request.get(`/api/notes/${id}?revision=1`)).json()
   expect(first.body).toBe('Historischer Markdown-Text')
 })
+
+test('an older version shows block by block what changed since', async ({ page }) => {
+  const created = await page.request.post('/api/notes', {
+    data: { course_id: 1, title: 'Verlauf', body: 'Erster Absatz\n\nZweiter Absatz\n\nDritter Absatz' },
+  })
+  const id = (await created.json()).note.id
+  const saved = await page.request.put(`/api/notes/${id}`, {
+    data: { expected_revision: 1, title: 'Verlauf', body: 'Erster Absatz\n\nZweiter Absatz geändert\n\nNeuer Absatz' },
+  })
+  expect(saved.ok()).toBeTruthy()
+  await page.goto(`/notes?id=${id}`)
+  await page.getByText('Versionen und Datei auf dem Gerät').click()
+  await page.getByRole('button', { name: 'Version 1' }).click()
+  const diff = page.locator('.note-revision-diff')
+  await expect(diff).toContainText('Änderungen seit Version 1')
+  const second = diff.locator('li').filter({ hasText: 'Zweiter Absatz geändert' })
+  await expect(second).toHaveCount(1)
+  await expect(second.locator('del')).toHaveText('Zweiter Absatz')
+  await expect(diff.locator('li').filter({ hasText: 'Neuer Absatz' })).toHaveCount(1)
+  await expect(diff.locator('li').filter({ hasText: 'Erster Absatz' })).toHaveCount(0)
+})
