@@ -2,6 +2,7 @@
 
 """Markdown at the edges: legacy revisions and imports become blocks, blocks export as Markdown."""
 
+import json
 import re
 from collections.abc import Iterator
 
@@ -22,12 +23,15 @@ DIVIDER = re.compile(r"^ {0,3}(?:-{3,}|\*{3,}|_{3,})\s*$")
 ITEM = re.compile(r"^(\s*)([-*+]|\d{1,9}[.)])\s+(?:\[([ xX])\]\s+)?(.*)$")
 TABLE_RULE = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)*\|?\s*$")
 IMAGE = re.compile(r"^\s*!\[([^\]]*)\]\(([^()\s]+)(?:\s+\"[^\"]*\")?\)\s*$")
+KNOWN_DIRECTIVES = {"entity", "media", "callout", "fold"}
 DIRECTIVE = re.compile(r"^:::(\w+)\s*(\{.*?\})?\s*(:::)?\s*$")
 INLINE = re.compile(
-    r"\\(?P<esc>[\\`*_\[\]~|])"
+    r"\\(?P<esc>[\\`*_\[\]~|$])"
     r"|(?P<tick>`+)(?P<code>.+?)(?P=tick)"
     r"|\[\[(?P<wiki>[^\[\]\n]{1,200})\]\]"
     r"|\[(?P<label>[^\[\]]*)\]\((?P<href>[^()\s]*(?:\([^()]*\)[^()\s]*)*)\)"
+    r"|\$(?![\s$])(?P<math>(?:\\.|[^$\n\\])+?)(?<!\s)\$(?![\d$])|\\\((?P<math2>[^\n]+?)\\\)"
+    r"|==(?:\{(?P<hcolor>yellow|green|blue|pink)\})?(?P<hl>(?![\s={])(?:(?!==)[^\n])+?)==(?!=)"
     r"|\*\*(?P<bold>.+?)\*\*|__(?P<bold2>.+?)__|~~(?P<strike>.+?)~~"
     r"|\*(?P<italic>[^*\s](?:.*?[^*\s])?)\*"
     r"|(?<!\w)_(?P<italic2>[^_\s](?:.*?[^_\s])?)_(?!\w)", re.DOTALL)
@@ -37,17 +41,21 @@ def _attrs(raw: str | None) -> dict[str, str]:
     return {key: value.replace("&quot;", '"') for key, value in ATTRIBUTE.findall(raw or "")}
 
 
-def parse_inline(text: str, marks: tuple[str, ...] = (), href: str | None = None) -> list[Inline]:
+def parse_inline(text: str, marks: tuple[str, ...] = (), href: str | None = None,
+                 color: str | None = None) -> list[Inline]:
     nodes: list[Inline] = []
 
     def emit(value: str, extra: tuple[str, ...] = ()) -> None:
         if not value:
             return
         combined = list(dict.fromkeys((*marks, *extra)))
-        if nodes and nodes[-1].type == "text" and nodes[-1].marks == combined and nodes[-1].href == href:
-            nodes[-1].text += value
+        paint = color if "highlight" in combined else None
+        last = nodes[-1] if nodes else None
+        if last and last.type == "text" and last.marks == combined and last.href == href and last.color == paint:
+            last.text += value
         else:
-            nodes.append(Inline(type="text", text=value, marks=combined, href=href))  # type: ignore[arg-type]
+            nodes.append(Inline(type="text", text=value, marks=combined, href=href,  # type: ignore[arg-type]
+                                color=paint))  # type: ignore[arg-type]
 
     position = 0
     for match in INLINE.finditer(text):
@@ -60,13 +68,17 @@ def parse_inline(text: str, marks: tuple[str, ...] = (), href: str | None = None
         elif match["wiki"] is not None:
             nodes.append(Inline(type="wikilink", title=match["wiki"].strip()))
         elif match["label"] is not None:
-            nodes.extend(parse_inline(match["label"] or match["href"], marks, match["href"]))
+            nodes.extend(parse_inline(match["label"] or match["href"], marks, match["href"], color))
+        elif match["math"] is not None or match["math2"] is not None:
+            nodes.append(Inline(type="math", latex=match["math"] or match["math2"]))
+        elif match["hl"] is not None:
+            nodes.extend(parse_inline(match["hl"], (*marks, "highlight"), href, match["hcolor"] or "yellow"))
         elif match["bold"] is not None or match["bold2"] is not None:
-            nodes.extend(parse_inline(match["bold"] or match["bold2"], (*marks, "bold"), href))
+            nodes.extend(parse_inline(match["bold"] or match["bold2"], (*marks, "bold"), href, color))
         elif match["strike"] is not None:
-            nodes.extend(parse_inline(match["strike"], (*marks, "strike"), href))
+            nodes.extend(parse_inline(match["strike"], (*marks, "strike"), href, color))
         else:
-            nodes.extend(parse_inline(match["italic"] or match["italic2"], (*marks, "italic"), href))
+            nodes.extend(parse_inline(match["italic"] or match["italic2"], (*marks, "italic"), href, color))
     emit(text[position:])
     return nodes
 
@@ -79,7 +91,7 @@ def _block(kind: str, ids: Iterator[str], *, props: dict | None = None, content:
 
 def _starts_block(line: str) -> bool:
     return bool(FENCE.match(line) or HEADING.match(line) or DIVIDER.match(line) or ITEM.match(line)
-                or line.lstrip().startswith(">") or line.startswith(":::") or line.strip() == "$$"
+                or line.lstrip().startswith(">") or line.startswith(":::") or line.strip().startswith("$$")
                 or IMAGE.match(line))
 
 
@@ -99,6 +111,13 @@ def _directive(name: str, attrs: dict[str, str], ids: Iterator[str], lines: list
     if name == "media":
         return _block("media", ids, props={"kind": attrs.get("kind", "image"), "src": attrs.get("src", ""),
                                            "alt": attrs.get("alt", "")})
+    if name == "fold":
+        label = attrs.get("label", "")
+        return _block("toggle", ids, content=[Inline(text=label)] if label else [],
+                      children=_parse_lines(lines, ids))
+    if name != "callout":
+        # Unknown extensions stay visible as plain text instead of being guessed at.
+        return _block("paragraph", ids, content=[Inline(text="\n".join(lines))] if lines else [])
     props = {"kind": attrs.get("kind", "note"), "label": attrs.get("label", "")}
     return _block("callout", ids, props=props, children=_parse_lines(lines, ids))
 
@@ -118,9 +137,22 @@ def _parse_lines(lines: list[str], ids: Iterator[str]) -> list[Block]:
                     r"^ {0,3}" + re.escape(marker[0]) + "{" + str(len(marker)) + r",}\s*$", lines[end]):
                 end += 1
             code = "\n".join(lines[index + 1:end])
+            study = re.fullmatch(r"unios-(diagram|recall|grid)", language)
+            if study and end - index == 2:
+                try:
+                    source = json.loads(code).get("source")
+                except (ValueError, AttributeError):
+                    source = None
+                if isinstance(source, str):
+                    blocks.append(_block("study", ids, props={"kind": study[1], "source": source}))
+                    index = end + 1
+                    continue
             blocks.append(_block("code", ids, props={"language": language},
                                  content=[Inline(text=code)] if code else []))
             index = end + 1
+        elif single := re.fullmatch(r"\s*\$\$(?!\$)(.+?)\$\$\s*", line):
+            blocks.append(_block("equation", ids, props={"latex": single[1].strip()}))
+            index += 1
         elif line.strip() == "$$":
             end = index + 1
             while end < len(lines) and lines[end].strip() != "$$":
@@ -131,7 +163,7 @@ def _parse_lines(lines: list[str], ids: Iterator[str]) -> list[Block]:
             name, attrs, closed = directive[1], _attrs(directive[2]), directive[3]
             if name in {"entity", "media"} or closed:
                 index += 1
-                blocks.append(_directive(name, attrs, ids, []))
+                blocks.append(_directive(name, attrs, ids, [] if name in KNOWN_DIRECTIVES else [line]))
                 continue
             depth, end = 1, index + 1
             while end < len(lines):
@@ -142,7 +174,8 @@ def _parse_lines(lines: list[str], ids: Iterator[str]) -> list[Block]:
                 elif re.match(r"^:::\w", lines[end]) and not lines[end].rstrip().endswith(":::"):
                     depth += 1
                 end += 1
-            blocks.append(_directive(name, attrs, ids, lines[index + 1:end]))
+            inner = lines[index + 1:end] if name in KNOWN_DIRECTIVES else lines[index:end + 1]
+            blocks.append(_directive(name, attrs, ids, inner))
             index = end + 1
         elif heading := HEADING.match(line):
             blocks.append(_block("heading", ids, props={"level": len(heading[1])},
@@ -218,7 +251,7 @@ def parse_markdown(body: str, *, previous: Document | None = None, seed: str | N
 
 
 def _escape(text: str) -> str:
-    text = re.sub(r"([\\`*_~|])", r"\\\1", text)
+    text = re.sub(r"([\\`*_~|$])", r"\\\1", text)
     return re.sub(r"\[(?=\[)|\](?=\()", lambda match: "\\" + match[0], text)
 
 
@@ -227,6 +260,9 @@ def render_inline(content: list[Inline]) -> str:
     for node in content:
         if node.type == "wikilink":
             out.append(f"[[{node.title}]]")
+            continue
+        if node.type == "math":
+            out.append(f"${node.latex or ''}$")
             continue
         text = node.text
         if "code" in node.marks:
@@ -237,6 +273,8 @@ def render_inline(content: list[Inline]) -> str:
         for mark, wrap in (("strike", "~~"), ("italic", "*"), ("bold", "**")):
             if mark in node.marks and text.strip():
                 text = f"{wrap}{text}{wrap}"
+        if "highlight" in node.marks and text.strip():
+            text = f"=={{{node.color}}}{text}==" if node.color and node.color != "yellow" else f"=={text}=="
         if node.href:
             text = f"[{text}]({node.href})"
         out.append(text)
@@ -264,8 +302,12 @@ def _render(blocks: list[Block], depth: int = 0) -> list[str]:
         lines: list[str]
         if block.type == "heading":
             lines = [f"{'#' * int(block.props.get('level', 1))} {text}"]
-        elif block.type in {"bullet", "toggle"}:
+        elif block.type == "bullet":
             lines = [f"{pad}- {text}"]
+        elif block.type == "toggle":
+            label = "".join(item.text or item.title or "" for item in block.content)
+            lines = [f":::fold {{{_attr_string(label=label)}}}" if label else ":::fold", "",
+                     *_render(block.children), "", ":::"]
         elif block.type == "numbered":
             lines = [f"{pad}{numbered}. {text}"]
         elif block.type == "todo":
@@ -284,6 +326,9 @@ def _render(blocks: list[Block], depth: int = 0) -> list[str]:
             lines = [f"{fence}{block.props.get('language', '')}", code, fence]
         elif block.type == "divider":
             lines = ["---"]
+        elif block.type == "study":
+            payload = json.dumps({"source": str(block.props.get("source", ""))}, ensure_ascii=False)
+            lines = [f"```unios-{block.props.get('kind', 'recall')}", payload, "```"]
         elif block.type == "equation":
             lines = ["$$", str(block.props.get("latex", "")), "$$"]
         elif block.type == "entity":
@@ -299,11 +344,11 @@ def _render(blocks: list[Block], depth: int = 0) -> list[str]:
                 lines = []
         else:
             lines = [text]
-        listed = block.type in {"bullet", "numbered", "todo", "toggle"}
+        listed = block.type in {"bullet", "numbered", "todo"}
         out.extend(lines)
         if listed:
             out.extend(_render(block.children, depth + 1))
-        elif block.children and block.type not in {"quote", "callout"}:
+        elif block.children and block.type not in {"quote", "callout", "toggle"}:
             out.extend(_render(block.children, depth))
         out.append("" if not listed else "\u0000")
     return out

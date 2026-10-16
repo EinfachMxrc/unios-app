@@ -19,7 +19,7 @@ ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{6,36}$")
 
 BlockType = Literal[
     "paragraph", "heading", "bullet", "numbered", "todo", "toggle", "quote", "callout",
-    "code", "divider", "table", "media", "entity", "equation",
+    "code", "divider", "table", "media", "entity", "equation", "study",
 ]
 Mark = Literal["bold", "italic", "strike", "code", "underline", "highlight"]
 
@@ -32,8 +32,10 @@ class Inline(BaseModel):
     """Either a text run (optionally marked/linked) or a `[[title]]` note link."""
 
     model_config = ConfigDict(extra="forbid")
-    type: Literal["text", "wikilink"] = "text"
+    type: Literal["text", "wikilink", "math"] = "text"
     text: str = ""
+    latex: str | None = Field(default=None, max_length=2000)
+    color: Literal["yellow", "green", "blue", "pink"] | None = None
     marks: list[Mark] = Field(default_factory=list, max_length=6)
     href: str | None = Field(default=None, max_length=2000)
     title: str | None = Field(default=None, max_length=200)
@@ -100,7 +102,10 @@ def _check_shape(blocks: list[Block], depth: int = 1) -> None:
         if block.type == "entity" and (not isinstance(block.props.get("id", 0), int)
                                        or not isinstance(block.props.get("kind", ""), str)):
             raise DocumentError("Ungültiger Verweisbaustein")
-        if block.type in {"divider", "table", "media", "entity", "equation"} and block.children:
+        if block.type == "study" and (block.props.get("kind") not in {"diagram", "recall", "grid"}
+                                      or not isinstance(block.props.get("source", ""), str)):
+            raise DocumentError("Ungültiger Lernbaustein")
+        if block.type in {"divider", "table", "media", "entity", "equation", "study"} and block.children:
             raise DocumentError(f"Baustein {block.type} darf keine Unterblöcke enthalten")
         _check_shape(block.children, depth + 1)
 
@@ -141,6 +146,8 @@ def canonical_json(document: Document) -> str:
 def _inline_piece(item: Inline) -> str:
     if item.type == "wikilink":
         return f"[[{item.title}]]"
+    if item.type == "math":
+        return f"${item.latex or ''}$"
     text = f"`{item.text}`" if "code" in item.marks else item.text
     return f"[{text}]({item.href})" if item.href else text
 
@@ -170,6 +177,8 @@ def block_text(block: Block) -> str:
         return str(block.props.get("alt", ""))
     if block.type == "equation":
         return str(block.props.get("latex", ""))
+    if block.type == "study":
+        return str(block.props.get("source", ""))[:2000]
     if block.type == "code":
         return "```\n" + "".join(item.text for item in block.content) + "\n```"
     prefix = str(block.props.get("label", "")) + "\n" if block.type == "callout" and block.props.get("label") else ""

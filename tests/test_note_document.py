@@ -147,3 +147,20 @@ def test_api_saves_and_returns_documents_and_markdown_view(settings, factory, co
             "expected_revision": 1, "title": "Doc",
             "document": {"version": 1, "blocks": [{"id": "abcdef", "type": "script"}]}})
         assert bad.status_code in {400, 422}
+
+
+def test_legacy_constructs_become_typed_blocks_and_round_trip():
+    body = ('Satz mit ==Markierung== und =={green}Grün== sowie $x^2$ und 5 \\$ Preis.\n\n'
+            ':::fold {label="Beweis"}\n\nSchritt eins\n\n:::\n\n'
+            '```unios-recall\n{"source": "{\\"question\\":\\"?\\"}"}\n```\n\n'
+            '$$a+b$$\n\n:::mystery {x="1"}\n\nbleibt Text\n\n:::')
+    document = parse_markdown(body, seed="fixture")
+    kinds = [block.type for block in document.blocks]
+    assert kinds == ["paragraph", "toggle", "study", "equation", "paragraph"]
+    inline = document.blocks[0].content
+    assert [(item.type, item.color) for item in inline if "highlight" in item.marks] == [("text", "yellow"), ("text", "green")]
+    assert any(item.type == "math" and item.latex == "x^2" for item in inline)
+    assert document.blocks[1].children[0].content[0].text == "Schritt eins"
+    assert document.blocks[2].props["kind"] == "recall"
+    assert ":::mystery" in to_text(document)
+    assert parse_markdown(render_markdown(document), seed="fixture") == document
