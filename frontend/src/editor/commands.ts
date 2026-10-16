@@ -50,14 +50,17 @@ export type BlockCommand = {
 
 const clear = ({ editor, range }: CommandContext) => editor.chain().focus().deleteRange(range)
 
-function insertBlock({ editor, range }: CommandContext, node: object) {
+function insertBlock({ editor, range }: CommandContext, node: object, writeInside = false) {
   // Replace the (now empty) paragraph that held the trigger instead of leaving a blank line above.
+  // A container leaves the caret inside it; a finished block leaves a paragraph to keep writing in.
   editor
     .chain()
     .focus()
     .deleteRange(range)
-    .insertContent([node, { type: 'paragraph' }])
+    .insertContent(writeInside ? [node] : [node, { type: 'paragraph' }])
     .run()
+  // The container took the place of the paragraph that began one step before the typed text.
+  if (writeInside) editor.commands.setTextSelection(range.from + 1)
 }
 
 const calloutKinds: { kind: CalloutKind; label: Keys<'editor'>; keywords: string }[] = [
@@ -135,7 +138,7 @@ export const blockCommands: BlockCommand[] = [
     icon: ChevronRight,
     label: 'cmd_toggle',
     keywords: 'aufklappen toggle details falten',
-    run: (c) => insertBlock(c, { type: 'toggle', content: [{ type: 'paragraph' }] }),
+    run: (c) => insertBlock(c, { type: 'toggle', content: [{ type: 'paragraph' }] }, true),
   },
   {
     id: 'quote',
@@ -175,7 +178,7 @@ export const blockCommands: BlockCommand[] = [
     icon: calloutIcons[kind],
     label,
     keywords: `${keywords} hinweis callout`,
-    run: (c) => insertBlock(c, { type: 'callout', attrs: { kind }, content: [{ type: 'paragraph' }] }),
+    run: (c) => insertBlock(c, { type: 'callout', attrs: { kind }, content: [{ type: 'paragraph' }] }, true),
   })),
   {
     id: 'math',

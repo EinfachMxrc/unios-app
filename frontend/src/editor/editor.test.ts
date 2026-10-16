@@ -92,3 +92,19 @@ describe('note editor', () => {
     expect(editor.getText().length).toBeLessThanOrEqual(100_000)
   })
 })
+
+describe('containers', () => {
+  it('leave the caret inside a new callout or toggle', () => {
+    for (const id of ['callout-definition', 'toggle']) {
+      const editor = create()
+      editor.commands.insertContent('/x')
+      const trigger = triggerAt(editor)!
+      blockCommands
+        .find((command) => command.id === id)!
+        .run({ editor, range: { from: trigger.from, to: trigger.to }, openDialog: () => undefined })
+      const { $from } = editor.state.selection
+      expect($from.parent.type.name).toBe('paragraph')
+      expect($from.node($from.depth - 1).type.name).toBe(id === 'toggle' ? 'toggle' : 'callout')
+    }
+  })
+})

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 export default {
   placeholder: 'Schreib los. Mit / fügst du einen Block ein.',
-  contentLabel: 'Inhalt der Notiz',
+  contentLabel: 'Notizinhalt',
   hint: '/ Blöcke · [[ Notizen · Strg/⌘+B fett',
   wordCount: '{{count}} Wörter',
   tooLong: 'Die Notiz ist zu lang. Pro Notiz sind bis zu 100.000 Zeichen möglich.',
