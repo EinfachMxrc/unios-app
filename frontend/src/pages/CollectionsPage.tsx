@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { CollectionPreview } from './collections/CollectionPreview'
 import { useSearchParams } from 'react-router-dom'
 import { CalendarDays, Columns3, LayoutGrid, List, Plus, Table2 } from 'lucide-react'
 import { useT } from '@/i18n/useT'
@@ -21,6 +22,7 @@ import {
   type Collection,
   type Config,
   type GroupBy,
+  type Item,
   type Kind,
   type Result,
   type Sort,
@@ -42,7 +44,9 @@ function viewOptions(t: TypedT<'collections'>): Array<{ id: View; label: string;
 
 export function CollectionsPage() {
   const { t } = useT('collections')
-  const [params] = useSearchParams()
+  const [params, setParams] = useSearchParams()
+  const selectedRoute = useRef<string | null>(null)
+  const [preview, setPreview] = useState<Item | null>(null)
   const labels = kindLabels(t)
   const views = viewOptions(t)
   const presets = presetsFor(t)
@@ -68,9 +72,23 @@ export function CollectionsPage() {
   }
 
   useEffect(() => {
-    if (saved && !initialized) {
+    const linked = saved?.find((item) => item.id === Number(params.get('id')))
+    if (linked && selectedRoute.current !== params.get('id')) {
+      selectedRoute.current = params.get('id')
       setInitialized(true)
-      if (params.get('preset') === 'questions') {
+      show(linked.config, linked.name, linked)
+    } else if (saved && params.has('id') && !linked && selectedRoute.current !== params.get('id')) {
+      selectedRoute.current = params.get('id')
+      setInitialized(true)
+      show(emptyConfig, '', null)
+      setMessage(t('viewUnavailable'))
+    } else if (saved && !initialized) {
+      setInitialized(true)
+      const courseId = Number(params.get('course_id'))
+      if (Number.isSafeInteger(courseId) && courseId > 0) {
+        show({ ...emptyConfig, course_id: courseId }, '', null)
+        setFiltersOpen(true)
+      } else if (params.get('preset') === 'questions') {
         const next = presets.find((item) => item.config.kind === 'questions')!
         show(next.config, next.name, null)
       } else if (saved.length) {
@@ -78,10 +96,12 @@ export function CollectionsPage() {
         show(first.config, first.name, first)
       }
     }
-  }, [saved, initialized, params, presets])
+  }, [saved, initialized, params, presets, t])
 
   function choose(item: Collection) {
     setInitialized(true)
+    selectedRoute.current = String(item.id)
+    setParams({ id: String(item.id) }, { replace: true })
     show(item.config, item.name, item)
     setActionError('')
     setMessage('')
@@ -89,7 +109,10 @@ export function CollectionsPage() {
   }
   function startNew(preset?: (typeof presets)[number]) {
     setInitialized(true)
-    const next = preset?.config ?? emptyConfig
+    selectedRoute.current = null
+    const courseId = (selected?.config.course_id ?? Number(params.get('course_id'))) || null
+    setParams(courseId ? { course_id: String(courseId) } : {}, { replace: true })
+    const next = { ...(preset?.config ?? emptyConfig), course_id: courseId }
     show(next, preset?.name ?? '', null)
     setActionError('')
     setMessage('')
@@ -124,6 +147,8 @@ export function CollectionsPage() {
           ...(selected ? { expected_revision: selected.revision } : {}),
         }),
       })
+      selectedRoute.current = String(item.id)
+      setParams({ id: String(item.id) }, { replace: true })
       show(item.config, item.name, item)
       setMessage(t('viewSavedMessage'))
       reloadSaved()
@@ -540,6 +565,7 @@ export function CollectionsPage() {
               result &&
               (filtersOpen || saved?.length || selected || name) && (
                 <CollectionResults
+                  onPreview={setPreview}
                   result={result}
                   view={appliedConfig.view}
                   groupBy={appliedConfig.group_by}
@@ -550,6 +576,9 @@ export function CollectionsPage() {
           </section>
         </div>
       </div>
+      {preview && (
+        <CollectionPreview key={`${preview.kind}:${preview.id}`} item={preview} onClose={() => setPreview(null)} />
+      )}
     </Shell>
   )
 }

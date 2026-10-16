@@ -7,7 +7,7 @@ import { focusPath } from '@/lib/learningFocus'
 import { ListPagination } from '@/components/ListPagination'
 import { ScrollTabs } from '@/components/ScrollTabs'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
 import { ArrowRight, Bell, CheckCircle2, Clock3, FileText, Plus, Settings2 } from 'lucide-react'
@@ -36,6 +36,9 @@ import { CourseDisplayName } from '@/components/CourseDisplayName'
 import { CourseDesk, CourseDeskMaterials } from './course/CourseDesk'
 import './CoursePage.css'
 import './course/ResourceArrival.css'
+const CourseCollections = lazy(() =>
+  import('./course/CourseCollections').then((module) => ({ default: module.CourseCollections })),
+)
 export function CoursePage() {
   const canWrite = useWritableHost()
   const { t } = useT('courses')
@@ -46,7 +49,8 @@ export function CoursePage() {
   const { hash } = location
   const navigate = useNavigate()
   const [view, setView] = useWorkspaceState(`course:${id}:view`, 'overview')
-  const selectedView = hash.startsWith('#resource-') ? 'materials' : hash.startsWith('#assignment-') ? 'tasks' : view
+  const requestedView = hash.startsWith('#resource-') ? 'materials' : hash.startsWith('#assignment-') ? 'tasks' : view
+  const selectedView = requestedView
   const [materialOffset, setMaterialOffset] = useWorkspaceState(`course:${id}:material-offset`, 0)
   const [noteOffset, setNoteOffset] = useWorkspaceState(`course:${id}:note-offset`, 0)
   const [search, setSearch] = useWorkspaceState(`course:${id}:search`, '')
@@ -249,7 +253,7 @@ export function CoursePage() {
             )}
             {selectedView === 'overview' && <CourseDesk detail={data} notes={courseNotes ?? undefined} />}
             <ScrollTabs className="course-tabs" label={t('courseViews')}>
-              {(['overview', 'materials', 'tasks', 'notes'] as const).map((tab) => (
+              {(['overview', 'materials', 'tasks', 'notes', 'views'] as const).map((tab) => (
                 <Link
                   key={tab}
                   to={`/courses/${id}`}
@@ -269,7 +273,14 @@ export function CoursePage() {
                 </Link>
               ))}
             </ScrollTabs>
-            {selectedView !== 'overview' && <CourseOfflinePanel detail={data} notes={courseNotes} />}
+            {selectedView !== 'overview' && selectedView !== 'views' && (
+              <CourseOfflinePanel detail={data} notes={courseNotes} />
+            )}
+            {selectedView === 'views' && (
+              <Suspense fallback={<Loading variant="rows" />}>
+                <CourseCollections courseId={data.course.id} />
+              </Suspense>
+            )}
             {data.group_assignments.length > 0 && (
               <div className="course-group-settings">
                 <Panel title={t('groupAssignmentTitle')}>

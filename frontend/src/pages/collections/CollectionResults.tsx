@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { PanelRightOpen } from 'lucide-react'
+import { CollectionPreviewContext } from './previewContext'
+import './CollectionPreview.css'
 import { Link } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
 import type { TypedT } from '@/i18n/useT'
@@ -16,7 +19,24 @@ import {
 } from './collectionModel'
 
 function ItemLink({ item }: { item: Item }) {
-  return <Link to={item.url}>{item.title}</Link>
+  const preview = useContext(CollectionPreviewContext)
+  const { t } = useT('collections')
+  return (
+    <span className="collection-item-title">
+      <Link to={item.url}>{item.title}</Link>
+      {preview && (
+        <button
+          className="collection-preview-button"
+          type="button"
+          aria-label={t('previewTitle', { title: item.title })}
+          title={t('previewTitle', { title: item.title })}
+          onClick={() => preview(item)}
+        >
+          <PanelRightOpen size={15} />
+        </button>
+      )}
+    </span>
+  )
 }
 
 export function fieldLabels(t: TypedT<'collections'>): Record<VisibleField, string> {
@@ -65,7 +85,7 @@ function ItemFields({ item, fields }: { item: Item; fields: VisibleField[] }) {
 }
 
 /** The result in the chosen view: list, table, cards, board or month calendar. */
-export function CollectionResults({
+function ResultView({
   result,
   view,
   groupBy,
@@ -233,5 +253,22 @@ export function CollectionResults({
         </section>
       ))}
     </div>
+  )
+}
+
+export function CollectionResults({
+  onPreview,
+  ...props
+}: {
+  result: Result
+  view: View
+  groupBy: GroupBy
+  fields: VisibleField[]
+  onPreview?: (item: Item) => void
+}) {
+  return (
+    <CollectionPreviewContext.Provider value={onPreview ?? null}>
+      <ResultView {...props} />
+    </CollectionPreviewContext.Provider>
   )
 }

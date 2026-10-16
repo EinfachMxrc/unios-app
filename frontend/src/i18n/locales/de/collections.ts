@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  viewUnavailable: 'Diese gespeicherte Ansicht ist nicht mehr verfügbar.',
+  localDraftPreview: 'Enthält deinen lokal gesicherten Entwurf.',
+  previewTitle: 'Vorschau: {{title}}',
+  closePreview: 'Vorschau schließen',
+  openContent: 'Vollständig öffnen',
+  openContentTab: 'In neuem Tab öffnen',
+  previewPrevious: 'Vorherige Vorschauseite',
+  previewNext: 'Nächste Vorschauseite',
+  previewPage: 'Seite {{page}} von {{count}}',
+  previewUnavailable:
+    'Die PDF-Vorschau ist gerade nicht verfügbar. Öffne den Inhalt vollständig, um es erneut zu versuchen.',
+  viewLabel: 'Darstellung',
+
   kindCards: 'Fällige Karten',
   presetOverdue: 'Überfällige Fristen',
   presetUnsubmitted: 'Noch nicht abgegeben',

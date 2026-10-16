@@ -1,6 +1,29 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 
+## 16.10.2026 – Notion-Umbau, Paket 3: Kursansichten und Vorschauen
+
+Der Kurs bietet jetzt „Ansichten“ für seine gespeicherten Sammlungen. Auswahl
+und Darstellung bleiben im Fenster erhalten; ein Darstellungswechsel verändert
+die gespeicherte Sammlung nicht. „Ansicht verwalten“ öffnet genau diese Sammlung,
+eine neue Ansicht übernimmt den Kursfilter. Fremde Kursansichten werden nicht
+in den Kurs eingeblendet. Unbekannte Direktlinks melden eine fehlende Ansicht.
+
+Ergebniseinträge erhalten eine eigene Vorschau-Schaltfläche. Das seitliche Blatt
+zeigt eine Notiz einschließlich eines vorhandenen lokalen Entwurfs oder echte,
+lesbare PDF-Seiten. Vollständig öffnen und in neuem Tab öffnen bleiben getrennte
+Aktionen. Die Vorschau schreibt nicht in den Reader-Lesestand. Andere Inhaltstypen
+zeigen ihre gespeicherten Fakten und den direkten Einstieg in die vollständige
+Ansicht. Bestehende Filter und Resultate kommen unverändert aus den vorhandenen
+APIs; keine zweite Datenquelle und keine neue Abhängigkeit.
+
+15 Browserfälle (fünf neue, drei Sammlungen, sieben Kurs-Schreibtisch) bestanden;
+die fünf neuen nach der Korrektur erneut, die beiden Screenshotfälle abschließend
+mit vollständig beendeten Animationen. Acht Screenshots Hell/Dunkel, 1.440/390 px
+geprüft. Typecheck, ESLint, Übersetzungen, Build/Budgets sowie zehn gezielte
+Modell-/Tab-Tests bestanden. Gemeinsame Abschlussprüfung folgt nach Paket 4.
+
+
 ## 16.10.2026 – Notion-Umbau, Paket 2: gemeinsame Seitenköpfe
 
 Kurse und Notizen bündeln Titel und zugehörige Aktionen im gemeinsamen Seitenkopf;

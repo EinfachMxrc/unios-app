@@ -1,6 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  tab_views: 'Views',
+  savedViews: 'Saved views',
+  manageView: 'Manage view',
+  createView: 'Create a view for this course',
+  chooseSavedView: 'Saved view',
+  noSavedViews: 'Save a collection filtered to this course to show it here.',
+  viewResults: '{{shown}} of {{total}} entries',
+
   deskTitle: 'Your desk',
   deskResume: 'Pick up where you left off',
   deskDescription: 'Open the PDF alongside your notes.',

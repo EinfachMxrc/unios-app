@@ -1,0 +1,78 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.collection-item-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+.collection-preview-button {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  color: var(--app-muted);
+}
+.collection-preview-button:hover {
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+}
+.collection-peek {
+  width: min(680px, 100vw);
+}
+.collection-peek h2 {
+  margin: 24px 0 8px;
+  font-size: 1.5rem;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.collection-preview-context {
+  color: var(--app-muted);
+  font-size: 0.8rem;
+}
+.collection-preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-block: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--app-border);
+}
+.collection-preview-actions :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  font-size: 0.8rem;
+  color: var(--app-accent);
+}
+.collection-pdf-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+}
+.collection-pdf-controls button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--app-border);
+  border-radius: 5px;
+}
+.collection-pdf-controls button:disabled {
+  opacity: 0.4;
+}
+.collection-pdf-preview .react-pdf__Page {
+  background: white;
+}
+.collection-preview-facts p {
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+@media (pointer: coarse) {
+  .collection-preview-button {
+    width: 44px;
+    height: 44px;
+  }
+}
