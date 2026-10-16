@@ -45,9 +45,11 @@ import { calendarShift, calendarSlot, type CalendarDraft } from '@/lib/calendarE
 import { useCalendarGesture } from '@/hooks/useCalendarGesture'
 import { useCalendarMutation, type CalendarChange } from '@/hooks/useCalendarMutation'
 import { CalendarEventForm } from './CalendarEventForm'
+import { CalendarSidebar } from './CalendarSidebar'
 import { Button } from './ui/button'
 import { Empty, Loading } from './State'
 import './Calendar.css'
+import './CalendarWorkspace.css'
 
 type Props = {
   day: string
@@ -79,6 +81,7 @@ export function TimetableCalendar({
   const { t } = useT('deadlines')
   const { t: workspace } = useT('calendarWorkspace')
   const mobile = useMediaQuery('(max-width: 700px)')
+  const showSidebar = useMediaQuery('(min-width: 1101px)')
   const { scale } = useAccessibility()
   const rootFont = getComputedStyle(document.documentElement).fontSize
   const textScale = rootFont.endsWith('px') ? Number.parseFloat(rootFont) / 16 : scale / 100
@@ -86,6 +89,10 @@ export function TimetableCalendar({
   const [editor, setEditor] = useState<{ event: CalendarAppointment | null; draft: CalendarDraft } | null>(null)
   const [gestureError, setGestureError] = useState('')
   const [expanded, setExpanded] = useState(false)
+  const [hiddenCourses, setHiddenCourses] = useState<Set<string>>(() => new Set())
+  const visibleEvents = showSidebar
+    ? events.filter((event) => !hiddenCourses.has(splitAppointmentTitle(event.title).title))
+    : events
   const { hourPx: manualHourPx, fit, setHourPx, setFit } = useCalendarPreferences()
   const mutation = useCalendarMutation(onChanged)
   const scroll = useRef<HTMLDivElement>(null)
@@ -107,12 +114,12 @@ export function TimetableCalendar({
   const displayDays = useMemo(() => calendarDisplayDays(day, view), [view, day])
   const pickerDays = view === 'workweek' && !mobile ? displayDays : days
   const weekendCount = new Set(
-    days.slice(5).flatMap((date) => calendarSegments(events, date).map((segment) => segment.event.id)),
+    days.slice(5).flatMap((date) => calendarSegments(visibleEvents, date).map((segment) => segment.event.id)),
   ).size
   const weekendSelected = view === 'workweek' && !displayDays.includes(day)
   const shown = mutation.pending
-    ? events.map((event) => (event.id === mutation.pending!.id ? mutation.pending! : event))
-    : events
+    ? visibleEvents.map((event) => (event.id === mutation.pending!.id ? mutation.pending! : event))
+    : visibleEvents
   const layouts = displayDays.map((date) => ({ date, segments: calendarSegments(shown, date) }))
   const hours = calendarHours(layouts.flatMap((layout) => layout.segments))
   const earlier = layouts
@@ -464,312 +471,379 @@ export function TimetableCalendar({
             }}
           >
             <span>{dateLabel(date, { weekday: 'short' })}</span> <b>{Number(date.slice(-2))}</b>
-            <i className={calendarSegments(events, date).length ? 'has-events' : ''} aria-hidden="true" />
+            <i className={calendarSegments(visibleEvents, date).length ? 'has-events' : ''} aria-hidden="true" />
           </button>
         ))}
       </div>
     )
   }
 
+  // A mutation response can precede the refreshed series metadata. Enrich an open
+  // editor only at the same event revision, preserving its draft and conflict guard.
+  const editorEvent = editor?.event
+    ? (events.find((event) => event.id === editor.event!.id && event.revision === editor.event!.revision) ??
+      editor.event)
+    : null
+
   const calendar = (
     <div className="calendar-workspace" aria-busy={loading || mutation.busy}>
-      <div className="calendar-toolbar">
-        <div className="timetable-navigation">
-          <div>
-            <strong aria-live="polite">{label}</strong>
-            <span>{t('calendarTimezone')}</span>
-          </div>
-          <button
-            type="button"
-            aria-label={view === 'day' ? t('previousDay') : t('previousWeek')}
-            onClick={() => onDay(shiftMenuDay(day, -step))}
-          >
-            <ChevronLeft size={17} />
-          </button>
-          <button type="button" onClick={onToday}>
-            {t('timetableToday')}
-          </button>
-          <button
-            type="button"
-            aria-label={view === 'day' ? t('nextDay') : t('nextWeek')}
-            onClick={() => onDay(shiftMenuDay(day, step))}
-          >
-            <ChevronRight size={17} />
-          </button>
-        </div>
-        <div className="calendar-view-switch" role="group" aria-label={t('calendarViewLabel')}>
-          {(['day', 'workweek', 'week', 'list'] as const).map((key) => (
-            <button type="button" key={key} aria-pressed={key === view} onClick={() => onView(key)}>
-              {key === 'workweek'
-                ? workspace('workweek')
-                : t(key === 'day' ? 'calendarDay' : key === 'week' ? 'calendarWeek' : 'calendarList')}
-            </button>
-          ))}
-        </div>
-        {expanded ? (
-          <Dialog.Close asChild>
-            <Button size="sm" variant="outline" disabled={gesture.tracking}>
-              <Minimize2 size={15} />
-              {workspace('closeExpanded')}
-            </Button>
-          </Dialog.Close>
-        ) : (
-          <Dialog.Trigger asChild>
-            <Button size="sm" variant="outline" disabled={gesture.tracking} aria-label={workspace('expandView')}>
-              <Maximize2 size={15} />
-              {workspace('expand')}
-            </Button>
-          </Dialog.Trigger>
-        )}
-        <Button ref={newButton} size="sm" variant="outline" disabled={!editable} onClick={() => openCreate()}>
-          <Plus size={15} />
-          {t('calendarNew')}
-        </Button>
-      </div>
-      {view === 'workweek' && (weekendCount > 0 || (mobile && weekendSelected)) && (
-        <div className="calendar-weekend-notice">
-          <span>{weekendCount ? workspace('weekend', { count: weekendCount }) : workspace('weekendSelected')}</span>
-          <button
-            type="button"
-            onClick={() => {
-              if (mobile) {
-                onDay(
-                  weekendSelected
-                    ? day
-                    : (days.slice(5).find((date) => calendarSegments(events, date).length) ?? days[5]),
-                )
-                onView('day')
-              } else onView('week')
-            }}
-          >
-            {workspace('showWeekend')}
-          </button>
-        </div>
+      {showSidebar && (
+        <CalendarSidebar
+          day={day}
+          today={today}
+          events={events}
+          hidden={hiddenCourses}
+          onDay={(date) => {
+            onDay(date)
+            if (view === 'workweek' && !calendarDisplayDays(date, view).includes(date)) onView('day')
+          }}
+          onToggle={(title) =>
+            setHiddenCourses((previous) => {
+              const next = new Set(previous)
+              if (next.has(title)) next.delete(title)
+              else next.add(title)
+              return next
+            })
+          }
+        />
       )}
-      <div className="calendar-interaction-hint">
-        <span role="status">
-          {mutation.busy && <Loader2 size={14} className="calendar-saving-icon" aria-hidden="true" />}
-          {!mutation.busy && mutation.message && <Check size={14} aria-hidden="true" />}
-          {mutation.busy
-            ? mutation.subject
-              ? workspace('savingEvent', { title: splitAppointmentTitle(mutation.subject.title).title })
-              : t('calendarSaving')
-            : mutation.message || (mobile || view === 'list' ? t('calendarTapHint') : workspace('interactionHint'))}
-        </span>
-        {mutation.undo && (
-          <button type="button" disabled={!editable} onClick={() => void mutation.undoLast()}>
-            <Undo2 size={14} />
-            {t('calendarUndo')}
-          </button>
-        )}
-        {!mobile && view !== 'list' && (
-          <div className="calendar-zoom" role="group" aria-label={workspace('zoomLabel')}>
+      <div className="calendar-main">
+        <div className="calendar-toolbar">
+          <div className="timetable-navigation">
+            <div>
+              <strong aria-live="polite">{dateLabel(day, { month: 'long', year: 'numeric' })}</strong>
+              <span className="calendar-range">{label}</span>
+              <span>{t('calendarTimezone')}</span>
+            </div>
             <button
               type="button"
-              className="calendar-fit"
-              disabled={mutation.busy || gesture.tracking}
-              aria-label={workspace('fitView')}
-              aria-pressed={!!fit}
-              onClick={() => {
-                setFit(true)
-                if (fit && scroll.current) scroll.current.scrollTop = hours.start * hourPx
-              }}
+              aria-label={view === 'day' ? t('previousDay') : t('previousWeek')}
+              onClick={() => onDay(shiftMenuDay(day, -step))}
             >
-              {workspace('fit')}
+              <ChevronLeft size={17} />
+            </button>
+            <button type="button" onClick={onToday}>
+              {t('timetableToday')}
             </button>
             <button
               type="button"
-              disabled={hourPx <= 40 || mutation.busy || gesture.tracking}
-              aria-label={workspace('zoomOut')}
-              onClick={() => resizeHours(hourPx - 8)}
+              aria-label={view === 'day' ? t('nextDay') : t('nextWeek')}
+              onClick={() => onDay(shiftMenuDay(day, step))}
             >
-              <Minus size={14} />
-            </button>
-            <button
-              type="button"
-              disabled={mutation.busy || gesture.tracking}
-              aria-label={workspace('zoomReset')}
-              onClick={() => resizeHours(64)}
-            >
-              {Math.round((hourPx / 64) * 100)}%
-            </button>
-            <button
-              type="button"
-              disabled={hourPx >= 112 || mutation.busy || gesture.tracking}
-              aria-label={workspace('zoomIn')}
-              onClick={() => resizeHours(hourPx + 8)}
-            >
-              <Plus size={14} />
+              <ChevronRight size={17} />
             </button>
           </div>
-        )}
-      </div>
-      {(mutation.failure || gestureError) && (
-        <div className="calendar-edit-error" role="alert">
-          <span>
-            {mutation.failure || gestureError}
-            {mutation.conflict && <small>{workspace('retryConflictHint')}</small>}
-          </span>
-          {mutation.retryable && (
-            <button type="button" disabled={!editable} onClick={() => void mutation.retryLast()}>
-              {workspace('retry')}
-            </button>
-          )}
-          <button
-            type="button"
-            disabled={mutation.busy}
-            aria-label={workspace('dismissError')}
-            onClick={() => {
-              mutation.clearFailure()
-              setGestureError('')
-            }}
-          >
-            <X size={16} />
-          </button>
-        </div>
-      )}
-      {view !== 'list' && dayPicker()}
-      {loading && !events.length ? (
-        <Loading variant="rows" />
-      ) : view === 'list' || mobile ? (
-        <div className="calendar-agenda">
-          {(view === 'list' ? days : [day]).map((date) => {
-            const segments = calendarSegments(events, date)
-            if (view === 'list' && !segments.length) return null
-            return (
-              <section key={date}>
-                <h3>{dateLabel(date, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
-                {segments.length ? (
-                  segments.map((segment) => appointment(segment.event))
-                ) : view !== 'list' ? (
-                  <Empty title={t('noClassesToday')} text={t('calendarChooseDay')} />
-                ) : null}
-              </section>
-            )
-          })}
-          {view === 'list' && !layouts.some((layout) => layout.segments.length) && (
-            <Empty title={t('noClassesWeek')} text={t('timetableEmptyHint')} />
-          )}
-        </div>
-      ) : (
-        <div
-          className={`calendar-time-scroll ${view === 'day' ? 'is-day' : ''}`}
-          style={{ height: `${renderedHeight}px` }}
-          ref={attachScroll}
-          tabIndex={0}
-          role="region"
-          aria-label={t('calendarTimeGrid')}
-        >
-          <div className="calendar-time-head" style={{ '--calendar-days': displayDays.length } as CSSProperties}>
-            <span />
-            {displayDays.map((date) => (
-              <span key={date} className={date === today ? 'is-today' : ''}>
-                {dateLabel(date, { weekday: 'short' })} <b>{Number(date.slice(-2))}</b>
-              </span>
+          <div className="calendar-view-switch" role="group" aria-label={t('calendarViewLabel')}>
+            {(['day', 'workweek', 'week', 'list'] as const).map((key) => (
+              <button type="button" key={key} aria-pressed={key === view} onClick={() => onView(key)}>
+                {key === 'workweek'
+                  ? workspace('workweek')
+                  : t(key === 'day' ? 'calendarDay' : key === 'week' ? 'calendarWeek' : 'calendarList')}
+              </button>
             ))}
           </div>
+          {expanded ? (
+            <Dialog.Close asChild>
+              <Button size="sm" variant="outline" disabled={gesture.tracking}>
+                <Minimize2 size={15} />
+                {workspace('closeExpanded')}
+              </Button>
+            </Dialog.Close>
+          ) : (
+            <Dialog.Trigger asChild>
+              <Button size="sm" variant="outline" disabled={gesture.tracking} aria-label={workspace('expandView')}>
+                <Maximize2 size={15} />
+                {workspace('expand')}
+              </Button>
+            </Dialog.Trigger>
+          )}
+          <Button ref={newButton} size="sm" variant="outline" disabled={!editable} onClick={() => openCreate()}>
+            <Plus size={15} />
+            {t('calendarNew')}
+          </Button>
+        </div>
+        {view === 'workweek' && (weekendCount > 0 || (mobile && weekendSelected)) && (
+          <div className="calendar-weekend-notice">
+            <span>{weekendCount ? workspace('weekend', { count: weekendCount }) : workspace('weekendSelected')}</span>
+            <button
+              type="button"
+              onClick={() => {
+                if (mobile) {
+                  onDay(
+                    weekendSelected
+                      ? day
+                      : (days.slice(5).find((date) => calendarSegments(visibleEvents, date).length) ?? days[5]),
+                  )
+                  onView('day')
+                } else onView('week')
+              }}
+            >
+              {workspace('showWeekend')}
+            </button>
+          </div>
+        )}
+        <div className="calendar-interaction-hint">
+          <span role="status">
+            {mutation.busy && <Loader2 size={14} className="calendar-saving-icon" aria-hidden="true" />}
+            {!mutation.busy && mutation.message && <Check size={14} aria-hidden="true" />}
+            {mutation.busy
+              ? mutation.subject
+                ? workspace('savingEvent', { title: splitAppointmentTitle(mutation.subject.title).title })
+                : t('calendarSaving')
+              : mutation.message || (mobile || view === 'list' ? t('calendarTapHint') : workspace('interactionHint'))}
+          </span>
+          {mutation.undo && (
+            <button type="button" disabled={!editable} onClick={() => void mutation.undoLast()}>
+              <Undo2 size={14} />
+              {t('calendarUndo')}
+            </button>
+          )}
+          {!mobile && view !== 'list' && (
+            <div className="calendar-zoom" role="group" aria-label={workspace('zoomLabel')}>
+              <button
+                type="button"
+                className="calendar-fit"
+                disabled={mutation.busy || gesture.tracking}
+                aria-label={workspace('fitView')}
+                aria-pressed={!!fit}
+                onClick={() => {
+                  setFit(true)
+                  if (fit && scroll.current) scroll.current.scrollTop = hours.start * hourPx
+                }}
+              >
+                {workspace('fit')}
+              </button>
+              <button
+                type="button"
+                disabled={hourPx <= 40 || mutation.busy || gesture.tracking}
+                aria-label={workspace('zoomOut')}
+                onClick={() => resizeHours(hourPx - 8)}
+              >
+                <Minus size={14} />
+              </button>
+              <button
+                type="button"
+                disabled={mutation.busy || gesture.tracking}
+                aria-label={workspace('zoomReset')}
+                onClick={() => resizeHours(64)}
+              >
+                {Math.round((hourPx / 64) * 100)}%
+              </button>
+              <button
+                type="button"
+                disabled={hourPx >= 112 || mutation.busy || gesture.tracking}
+                aria-label={workspace('zoomIn')}
+                onClick={() => resizeHours(hourPx + 8)}
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          )}
+        </div>
+        {(mutation.failure || gestureError) && (
+          <div className="calendar-edit-error" role="alert">
+            <span>
+              {mutation.failure || gestureError}
+              {mutation.conflict && <small>{workspace('retryConflictHint')}</small>}
+            </span>
+            {mutation.retryable && (
+              <button type="button" disabled={!editable} onClick={() => void mutation.retryLast()}>
+                {workspace('retry')}
+              </button>
+            )}
+            <button
+              type="button"
+              disabled={mutation.busy}
+              aria-label={workspace('dismissError')}
+              onClick={() => {
+                mutation.clearFailure()
+                setGestureError('')
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        )}
+        {view !== 'list' && dayPicker()}
+        {loading && !events.length ? (
+          <Loading variant="rows" />
+        ) : view === 'list' || mobile ? (
+          <div className="calendar-agenda">
+            {(view === 'list' ? days : [day]).map((date) => {
+              const segments = calendarSegments(visibleEvents, date)
+              if (view === 'list' && !segments.length) return null
+              return (
+                <section key={date}>
+                  <h3>{dateLabel(date, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
+                  {segments.length ? (
+                    segments.map((segment) => appointment(segment.event))
+                  ) : view !== 'list' ? (
+                    <Empty title={t('noClassesToday')} text={t('calendarChooseDay')} />
+                  ) : null}
+                </section>
+              )
+            })}
+            {view === 'list' && !layouts.some((layout) => layout.segments.length) && (
+              <Empty title={t('noClassesWeek')} text={t('timetableEmptyHint')} />
+            )}
+          </div>
+        ) : (
           <div
-            className="calendar-time-body"
-            ref={body}
-            style={
-              {
-                '--calendar-days': displayDays.length,
-                '--calendar-hour': `${hourPx}px`,
-                height: `${24 * hourPx}px`,
-              } as CSSProperties
-            }
+            className={`calendar-time-scroll ${view === 'day' ? 'is-day' : ''}`}
+            style={{ height: `${renderedHeight}px` }}
+            ref={attachScroll}
+            tabIndex={0}
+            role="region"
+            aria-label={t('calendarTimeGrid')}
           >
-            <div className="calendar-time-axis" aria-hidden="true">
-              {timeRows.map((hour) => (
-                <span key={hour} style={{ top: `${hour * hourPx}px` }}>
-                  {String(hour).padStart(2, '0')}:00
+            <div className="calendar-time-head" style={{ '--calendar-days': displayDays.length } as CSSProperties}>
+              <span />
+              {displayDays.map((date) => (
+                <span key={date} className={date === today ? 'is-today' : ''}>
+                  {dateLabel(date, { weekday: 'short' })} <b>{Number(date.slice(-2))}</b>
                 </span>
               ))}
             </div>
-            {layouts.map(({ date, segments }) => (
-              <div
-                key={date}
-                data-calendar-day={date}
-                className={`calendar-time-column ${date === today ? 'is-today' : ''}`}
-                onPointerDown={(pointer) => {
-                  if (pointer.target === pointer.currentTarget) gesture.begin(pointer, date)
-                }}
-              >
-                {segments.map((segment) =>
-                  appointment(
-                    segment.event,
-                    {
-                      top: `${(segment.start / 60) * hourPx}px`,
-                      height: `${((segment.end - segment.start) / 60) * hourPx}px`,
-                      left: `calc(${(segment.column / segment.columns) * 100}% + 3px)`,
-                      width: `calc(${100 / segment.columns}% - 6px)`,
-                    },
-                    date,
-                    ((segment.end - segment.start) / 60) * hourPx >= 64,
-                  ),
-                )}
-                {gesture.preview?.draft &&
-                  calendarSegments([{ id: -1, ...gesture.preview.draft }], date).map((segment) => (
-                    <div
-                      key={date}
-                      className="calendar-drag-preview"
-                      aria-hidden="true"
-                      style={{
+            <div
+              className="calendar-time-body"
+              ref={body}
+              style={
+                {
+                  '--calendar-days': displayDays.length,
+                  '--calendar-hour': `${hourPx}px`,
+                  height: `${24 * hourPx}px`,
+                } as CSSProperties
+              }
+            >
+              <div className="calendar-time-axis" aria-hidden="true">
+                {timeRows.map((hour) => (
+                  <span key={hour} style={{ top: `${hour * hourPx}px` }}>
+                    {String(hour).padStart(2, '0')}:00
+                  </span>
+                ))}
+              </div>
+              {layouts.map(({ date, segments }) => (
+                <div
+                  key={date}
+                  data-calendar-day={date}
+                  className={`calendar-time-column ${date === today ? 'is-today' : ''}`}
+                  onPointerDown={(pointer) => {
+                    if (pointer.target === pointer.currentTarget) gesture.begin(pointer, date)
+                  }}
+                >
+                  {segments.map((segment) =>
+                    appointment(
+                      segment.event,
+                      {
                         top: `${(segment.start / 60) * hourPx}px`,
                         height: `${((segment.end - segment.start) / 60) * hourPx}px`,
-                      }}
-                    >
-                      <strong>{gesture.preview?.draft?.title || t('calendarNew')}</strong>
-                      <span>
-                        {localDate(segment.event.starts_at, { hour: '2-digit', minute: '2-digit' })}
-                        {segment.event.ends_at &&
-                          ` – ${localDate(segment.event.ends_at, { hour: '2-digit', minute: '2-digit' })}`}
-                      </span>
-                    </div>
-                  ))}
-                {date === clock.day && (
-                  <div
-                    className="calendar-now-line"
-                    aria-hidden="true"
-                    style={{ top: `${(clock.minutes / 60) * hourPx}px` }}
-                  />
-                )}
-              </div>
-            ))}
+                        left: `calc(${(segment.column / segment.columns) * 100}% + 3px)`,
+                        width: `calc(${100 / segment.columns}% - 6px)`,
+                      },
+                      date,
+                      ((segment.end - segment.start) / 60) * hourPx >= 64,
+                    ),
+                  )}
+                  {gesture.preview?.draft &&
+                    calendarSegments([{ id: -1, ...gesture.preview.draft }], date).map((segment) => (
+                      <div
+                        key={date}
+                        className="calendar-drag-preview"
+                        aria-hidden="true"
+                        style={{
+                          top: `${(segment.start / 60) * hourPx}px`,
+                          height: `${((segment.end - segment.start) / 60) * hourPx}px`,
+                        }}
+                      >
+                        <strong>{gesture.preview?.draft?.title || t('calendarNew')}</strong>
+                        <span>
+                          {localDate(segment.event.starts_at, { hour: '2-digit', minute: '2-digit' })}
+                          {segment.event.ends_at &&
+                            ` – ${localDate(segment.event.ends_at, { hour: '2-digit', minute: '2-digit' })}`}
+                        </span>
+                      </div>
+                    ))}
+                  {date === clock.day && (
+                    <div
+                      className="calendar-now-line"
+                      aria-hidden="true"
+                      style={{ top: `${(clock.minutes / 60) * hourPx}px` }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {!mobile && view !== 'list' && (earlier.length > 0 || later.length > 0) && (
-        <div className="calendar-scroll-notice">
-          {earlier.length > 0 && (
-            <button
-              type="button"
-              disabled={gesture.tracking}
-              onClick={() => {
-                if (scroll.current)
-                  scroll.current.scrollTop = Math.max(
-                    0,
-                    (Math.min(...earlier.map((segment) => segment.start)) / 60) * hourPx,
-                  )
-              }}
-            >
-              {workspace('earlierAppointments', { count: new Set(earlier.map((segment) => segment.event.id)).size })}
-            </button>
+        )}
+        {!mobile && view !== 'list' && (earlier.length > 0 || later.length > 0) && (
+          <div className="calendar-scroll-notice">
+            {earlier.length > 0 && (
+              <button
+                type="button"
+                disabled={gesture.tracking}
+                onClick={() => {
+                  if (scroll.current)
+                    scroll.current.scrollTop = Math.max(
+                      0,
+                      (Math.min(...earlier.map((segment) => segment.start)) / 60) * hourPx,
+                    )
+                }}
+              >
+                {workspace('earlierAppointments', { count: new Set(earlier.map((segment) => segment.event.id)).size })}
+              </button>
+            )}
+            {later.length > 0 && (
+              <button
+                type="button"
+                disabled={gesture.tracking}
+                onClick={() => {
+                  if (scroll.current)
+                    scroll.current.scrollTop =
+                      (Math.max(...later.map((segment) => segment.end)) / 60) * hourPx +
+                      20 -
+                      scroll.current.clientHeight
+                }}
+              >
+                {workspace('laterAppointments', { count: new Set(later.map((segment) => segment.event.id)).size })}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+      {!mobile && (
+        <aside className="calendar-day-context" aria-label={workspace('selectedDay')}>
+          <span>{workspace('selectedDay')}</span>
+          <h3>{dateLabel(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
+          {calendarSegments(shown, day).length ? (
+            <div className="calendar-context-events">
+              {calendarSegments(shown, day).map(({ event }) => {
+                const details = splitAppointmentTitle(event.title)
+                return (
+                  <button
+                    key={event.id}
+                    type="button"
+                    className={`calendar-context-event calendar-colour-${calendarColour(event.title)}`}
+                    onClick={(click) => {
+                      opener.current = click.currentTarget
+                      setSelected(event)
+                      setEditor(null)
+                    }}
+                  >
+                    <time>{localDate(event.starts_at, { hour: '2-digit', minute: '2-digit' })}</time>
+                    <strong>{details.title}</strong>
+                    {details.location && <small>{details.location}</small>}
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
+            <p>{t('noClassesToday')}</p>
           )}
-          {later.length > 0 && (
-            <button
-              type="button"
-              disabled={gesture.tracking}
-              onClick={() => {
-                if (scroll.current)
-                  scroll.current.scrollTop =
-                    (Math.max(...later.map((segment) => segment.end)) / 60) * hourPx + 20 - scroll.current.clientHeight
-              }}
-            >
-              {workspace('laterAppointments', { count: new Set(later.map((segment) => segment.event.id)).size })}
-            </button>
-          )}
-        </div>
+          <div className="calendar-context-help">
+            <h4>{workspace('planYourDay')}</h4>
+            <p>{canWrite ? workspace('interactionHint') : t('calendarTapHint')}</p>
+          </div>
+        </aside>
       )}
       <Dialog.Root
         open={!!selected || !!editor}
@@ -804,7 +878,7 @@ export function TimetableCalendar({
             {editor ? (
               <CalendarEventForm
                 key={`${editor.event?.id ?? 'new'}:${editor.draft.starts_at}`}
-                event={editor.event}
+                event={editorEvent}
                 draft={editor.draft}
                 busy={mutation.busy}
                 onCancel={() => {
@@ -812,7 +886,7 @@ export function TimetableCalendar({
                   setSelected(editor.event)
                 }}
                 onSave={async (draft) => {
-                  if (await mutation.save(draft, editor.event ?? undefined)) {
+                  if (await mutation.save(draft, editorEvent ?? undefined)) {
                     setEditor(null)
                     setSelected(null)
                   }

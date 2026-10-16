@@ -2,6 +2,7 @@
 .calendar-workspace,
 .deadline-calendar {
   --calendar-red: #bc3037;
+  --event-stripe: #568bcb;
   --calendar-line: color-mix(in srgb, var(--app-border) 75%, transparent);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--app-text);
@@ -9,6 +10,7 @@
 .dark .calendar-workspace,
 .dark .deadline-calendar {
   --calendar-red: #ff8d92;
+  --event-stripe: #6b9edb;
 }
 .timetable-panel:not(.is-compact) > [data-slot='card'] {
   gap: 0;
@@ -192,17 +194,16 @@
   background-color: color-mix(in srgb, var(--app-surface-alt) 40%, transparent);
 }
 .calendar-appointment {
-  --event-stripe: #568bcb;
   min-width: 0;
-  border-radius: var(--ui-radius-item);
-  border: 1px solid color-mix(in srgb, var(--event-stripe) 24%, transparent);
-  border-inline-start: 3px solid var(--event-stripe);
-  background: color-mix(in srgb, var(--event-stripe) 6%, var(--app-surface));
-  color: var(--app-text);
+  border-radius: 5px;
+  border: 0;
+  border-inline-start: 4px solid var(--event-stripe);
+  background: color-mix(in srgb, var(--event-stripe) 15%, var(--app-surface));
+  color: color-mix(in srgb, var(--event-stripe) 55%, var(--app-text));
   transition: background-color var(--ui-color-duration) var(--ui-color-ease);
 }
 .calendar-appointment:hover {
-  background: color-mix(in srgb, var(--event-stripe) 12%, var(--app-surface));
+  background: color-mix(in srgb, var(--event-stripe) 23%, var(--app-surface));
 }
 .calendar-colour-1 {
   --event-stripe: #3f927e;
@@ -217,7 +218,7 @@
   --event-stripe: #c77596;
 }
 .dark .calendar-appointment {
-  --event-stripe: #6b9edb;
+  color: color-mix(in srgb, var(--event-stripe) 40%, var(--app-text));
 }
 .dark .calendar-colour-1 {
   --event-stripe: #65ad92;

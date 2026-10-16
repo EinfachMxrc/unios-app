@@ -1,0 +1,1981 @@
+{
+  "_spdx": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "method": "Lighthouse snapshots of built calendar views and event dialogs",
+  "measuredAt": "2026-10-16T06:24:47.186Z",
+  "buildIndexSha256": "101f666d13a13b7c4af193738be95796ae2b0d2763cdeafbfba3d5fca1896b4d",
+  "reports": [
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 96,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,0,DIV,0,A",
+                  "selector": "div.app-shell > aside.app-sidebar > div.sidebar-workspace > a.app-brand",
+                  "boundingRect": {
+                    "top": 27,
+                    "bottom": 67,
+                    "left": 25,
+                    "right": 208,
+                    "width": 183,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"app-brand\" aria-label=\"UniOS\" href=\"/\" data-discover=\"true\">",
+                  "nodeLabel": "UniOS\nMein Studienraum",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,1,NAV,0,DIV,0,BUTTON",
+                  "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+                  "boundingRect": {
+                    "top": 95,
+                    "bottom": 131,
+                    "left": 21,
+                    "right": 245,
+                    "width": 224,
+                    "height": 36
+                  },
+                  "snippet": "<button type=\"button\" class=\"sidebar-search\" aria-label=\"Suche in Kursen und Dateien\">",
+                  "nodeLabel": "Suche\n⌘ K",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,0,DIV,2,BUTTON",
+                  "selector": "div.calendar-workspace > div.calendar-main > div.calendar-toolbar > button.group/button",
+                  "boundingRect": {
+                    "top": 473,
+                    "bottom": 501,
+                    "left": 1115,
+                    "right": 1242,
+                    "width": 127,
+                    "height": 28
+                  },
+                  "snippet": "<button data-slot=\"button\" data-variant=\"outline\" data-size=\"sm\" class=\"group/button inline-flex shrink-0 items-center justify-center border bg-cl…\" aria-label=\"Kalender groß anzeigen\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" data-state=\"closed\">",
+                  "nodeLabel": "Große Ansicht",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,1,DIV,1,DIV,2,BUTTON",
+                  "selector": "div.calendar-main > div.calendar-interaction-hint > div.calendar-zoom > button",
+                  "boundingRect": {
+                    "top": 518,
+                    "bottom": 550,
+                    "left": 1306,
+                    "right": 1339,
+                    "width": 33,
+                    "height": 32
+                  },
+                  "snippet": "<button type=\"button\" aria-label=\"Stundenhöhe zurücksetzen\">",
+                  "nodeLabel": "69%",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 632,
+                    "bottom": 698,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 08:00 – 09:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n08:00 – 09:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 10:00 – 11:30 · R203\">",
+                  "nodeLabel": "Programmieren\n10:00 – 11:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 740,
+                    "right": 894,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-7-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 905,
+                    "right": 976,
+                    "width": 72,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 753,
+                    "bottom": 797,
+                    "left": 986,
+                    "right": 1058,
+                    "width": 72,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                  "nodeLabel": "Übungsgruppe\n10:45 – 11:45",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 852,
+                    "bottom": 918,
+                    "left": 905,
+                    "right": 1058,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-10-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 1069,
+                    "right": 1223,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"English Workshop · 10:00 – 11:30 · R301\">",
+                  "nodeLabel": "English Workshop\n10:00 – 11:30\nR301",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 1234,
+                    "right": 1387,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 632,
+                    "bottom": 698,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 08:00 – 09:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n08:00 – 09:30\nR101",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-12-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 632,
+                          "bottom": 656,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                        "nodeLabel": "Beginn von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 674,
+                          "bottom": 698,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                        "nodeLabel": "Ende von Mathematik ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 10:00 – 11:30 · R203\">",
+                  "nodeLabel": "Programmieren\n10:00 – 11:30\nR203",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-14-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                        "nodeLabel": "Beginn von Programmieren ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-15-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                        "nodeLabel": "Ende von Programmieren ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 740,
+                    "right": 894,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 676,
+                          "bottom": 700,
+                          "left": 743,
+                          "right": 891,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                        "nodeLabel": "Beginn von Digitale Systeme ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-17-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 718,
+                          "bottom": 742,
+                          "left": 743,
+                          "right": 891,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                        "nodeLabel": "Ende von Digitale Systeme ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-7-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 905,
+                    "right": 976,
+                    "width": 72,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 71.7px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-18-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 908,
+                          "right": 973,
+                          "width": 66,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                        "nodeLabel": "Beginn von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 908,
+                          "right": 973,
+                          "width": 66,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                        "nodeLabel": "Ende von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-8-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 753,
+                          "bottom": 797,
+                          "left": 986,
+                          "right": 1058,
+                          "width": 72,
+                          "height": 44
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 852,
+                    "bottom": 918,
+                    "left": 905,
+                    "right": 1058,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-20-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 852,
+                          "bottom": 876,
+                          "left": 908,
+                          "right": 1055,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                        "nodeLabel": "Beginn von Programmieren ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-21-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 894,
+                          "bottom": 918,
+                          "left": 908,
+                          "right": 1055,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                        "nodeLabel": "Ende von Programmieren ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-10-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 1069,
+                    "right": 1223,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"English Workshop · 10:00 – 11:30 · R301\">",
+                  "nodeLabel": "English Workshop\n10:00 – 11:30\nR301",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 1072,
+                          "right": 1220,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                        "nodeLabel": "Beginn von English Workshop ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-23-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 1072,
+                          "right": 1220,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                        "nodeLabel": "Ende von English Workshop ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 1234,
+                    "right": 1387,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-24-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 676,
+                          "bottom": 700,
+                          "left": 1237,
+                          "right": 1384,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                        "nodeLabel": "Beginn von Digitale Systeme ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 718,
+                          "bottom": 742,
+                          "left": 1237,
+                          "right": 1384,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                        "nodeLabel": "Ende von Digitale Systeme ändern"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,0,DIV,0,A",
+                  "selector": "div.app-shell > aside.app-sidebar > div.sidebar-workspace > a.app-brand",
+                  "boundingRect": {
+                    "top": 27,
+                    "bottom": 67,
+                    "left": 25,
+                    "right": 208,
+                    "width": 183,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"app-brand\" aria-label=\"UniOS\" href=\"/\" data-discover=\"true\">",
+                  "nodeLabel": "UniOS\nMein Studienraum",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,1,NAV,0,DIV,0,BUTTON",
+                  "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+                  "boundingRect": {
+                    "top": 95,
+                    "bottom": 131,
+                    "left": 21,
+                    "right": 245,
+                    "width": 224,
+                    "height": 36
+                  },
+                  "snippet": "<button type=\"button\" class=\"sidebar-search\" aria-label=\"Suche in Kursen und Dateien\">",
+                  "nodeLabel": "Suche\n⌘ K",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "light",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,2,BUTTON",
+                  "selector": "div.calendar-workspace > div.calendar-main > div.calendar-toolbar > button.group/button",
+                  "boundingRect": {
+                    "top": 641,
+                    "bottom": 685,
+                    "left": 33,
+                    "right": 160,
+                    "width": 127,
+                    "height": 44
+                  },
+                  "snippet": "<button data-slot=\"button\" data-variant=\"outline\" data-size=\"sm\" class=\"group/button inline-flex shrink-0 items-center justify-center border bg-cl…\" aria-label=\"Kalender groß anzeigen\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" data-state=\"closed\">",
+                  "nodeLabel": "Große Ansicht",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 864,
+                    "bottom": 942,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 948,
+                    "bottom": 1026,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                  "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,3,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 1032,
+                    "bottom": 1110,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "light",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 96,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,0,DIV,0,A",
+                  "selector": "div.app-shell > aside.app-sidebar > div.sidebar-workspace > a.app-brand",
+                  "boundingRect": {
+                    "top": 27,
+                    "bottom": 67,
+                    "left": 25,
+                    "right": 208,
+                    "width": 183,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"app-brand\" aria-label=\"UniOS\" href=\"/\" data-discover=\"true\">",
+                  "nodeLabel": "UniOS\nMein Studienraum",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,1,NAV,0,DIV,0,BUTTON",
+                  "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+                  "boundingRect": {
+                    "top": 95,
+                    "bottom": 131,
+                    "left": 21,
+                    "right": 245,
+                    "width": 224,
+                    "height": 36
+                  },
+                  "snippet": "<button type=\"button\" class=\"sidebar-search\" aria-label=\"Suche in Kursen und Dateien\">",
+                  "nodeLabel": "Suche\n⌘ K",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,0,DIV,2,BUTTON",
+                  "selector": "div.calendar-workspace > div.calendar-main > div.calendar-toolbar > button.group/button",
+                  "boundingRect": {
+                    "top": 473,
+                    "bottom": 501,
+                    "left": 1115,
+                    "right": 1242,
+                    "width": 127,
+                    "height": 28
+                  },
+                  "snippet": "<button data-slot=\"button\" data-variant=\"outline\" data-size=\"sm\" class=\"group/button inline-flex shrink-0 items-center justify-center border bg-cl…\" aria-label=\"Kalender groß anzeigen\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" data-state=\"closed\">",
+                  "nodeLabel": "Große Ansicht",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,1,DIV,1,DIV,2,BUTTON",
+                  "selector": "div.calendar-main > div.calendar-interaction-hint > div.calendar-zoom > button",
+                  "boundingRect": {
+                    "top": 518,
+                    "bottom": 550,
+                    "left": 1306,
+                    "right": 1339,
+                    "width": 33,
+                    "height": 32
+                  },
+                  "snippet": "<button type=\"button\" aria-label=\"Stundenhöhe zurücksetzen\">",
+                  "nodeLabel": "69%",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 632,
+                    "bottom": 698,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 08:00 – 09:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n08:00 – 09:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 10:00 – 11:30 · R203\">",
+                  "nodeLabel": "Programmieren\n10:00 – 11:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 740,
+                    "right": 894,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-7-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 905,
+                    "right": 976,
+                    "width": 72,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-8-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 753,
+                    "bottom": 797,
+                    "left": 986,
+                    "right": 1058,
+                    "width": 72,
+                    "height": 44
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                  "nodeLabel": "Übungsgruppe\n10:45 – 11:45",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 852,
+                    "bottom": 918,
+                    "left": 905,
+                    "right": 1058,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-10-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 1069,
+                    "right": 1223,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"English Workshop · 10:00 – 11:30 · R301\">",
+                  "nodeLabel": "English Workshop\n10:00 – 11:30\nR301",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 1234,
+                    "right": 1387,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        },
+        {
+          "id": "target-size",
+          "title": "Touch targets do not have sufficient size or spacing.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-4-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 632,
+                    "bottom": 698,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 08:00 – 09:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n08:00 – 09:30\nR101",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-12-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 632,
+                          "bottom": 656,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                        "nodeLabel": "Beginn von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-13-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 674,
+                          "bottom": 698,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                        "nodeLabel": "Ende von Mathematik ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-5-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 576,
+                    "right": 729,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 10:00 – 11:30 · R203\">",
+                  "nodeLabel": "Programmieren\n10:00 – 11:30\nR203",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-14-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                        "nodeLabel": "Beginn von Programmieren ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-15-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,1,DIV,1,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 579,
+                          "right": 726,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                        "nodeLabel": "Ende von Programmieren ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-6-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 740,
+                    "right": 894,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-16-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 676,
+                          "bottom": 700,
+                          "left": 743,
+                          "right": 891,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                        "nodeLabel": "Beginn von Digitale Systeme ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-17-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,2,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 718,
+                          "bottom": 742,
+                          "left": 743,
+                          "right": 891,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                        "nodeLabel": "Ende von Digitale Systeme ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-7-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 905,
+                    "right": 976,
+                    "width": 72,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 71.7px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-18-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 908,
+                          "right": 973,
+                          "width": 66,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Mathematik ändern\">",
+                        "nodeLabel": "Beginn von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-19-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 908,
+                          "right": 973,
+                          "width": 66,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Mathematik ändern\">",
+                        "nodeLabel": "Ende von Mathematik ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-8-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,1,ARTICLE,0,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                        "boundingRect": {
+                          "top": 753,
+                          "bottom": 797,
+                          "left": 986,
+                          "right": 1058,
+                          "width": 72,
+                          "height": 44
+                        },
+                        "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                        "nodeLabel": "Übungsgruppe\n10:45 – 11:45"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-9-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 852,
+                    "bottom": 918,
+                    "left": 905,
+                    "right": 1058,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-20-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 852,
+                          "bottom": 876,
+                          "left": 908,
+                          "right": 1055,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Programmieren ändern\">",
+                        "nodeLabel": "Beginn von Programmieren ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-21-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,3,DIV,2,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 894,
+                          "bottom": 918,
+                          "left": 908,
+                          "right": 1055,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Programmieren ändern\">",
+                        "nodeLabel": "Ende von Programmieren ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-10-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 720,
+                    "bottom": 786,
+                    "left": 1069,
+                    "right": 1223,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"English Workshop · 10:00 – 11:30 · R301\">",
+                  "nodeLabel": "English Workshop\n10:00 – 11:30\nR301",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-22-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 720,
+                          "bottom": 744,
+                          "left": 1072,
+                          "right": 1220,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von English Workshop ändern\">",
+                        "nodeLabel": "Beginn von English Workshop ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-23-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,4,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 762,
+                          "bottom": 786,
+                          "left": 1072,
+                          "right": 1220,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von English Workshop ändern\">",
+                        "nodeLabel": "Ende von English Workshop ändern"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-11-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 676,
+                    "bottom": 742,
+                    "left": 1234,
+                    "right": 1387,
+                    "width": 153,
+                    "height": 66
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Digitale Systeme · 09:00 – 10:30 · R105\">",
+                  "nodeLabel": "Digitale Systeme\n09:00 – 10:30\nR105",
+                  "explanation": "Fix any of the following:\n  Target has insufficient size because it is partially obscured (smallest space is 153.4px by 18px, should be at least 24px by 24px)\n  Target has insufficient space to its closest neighbors. Safe clickable space has a diameter of 3px instead of at least 24px."
+                },
+                "subItems": {
+                  "type": "subitems",
+                  "items": [
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-24-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,1,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 676,
+                          "bottom": 700,
+                          "left": 1237,
+                          "right": 1384,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-start\" aria-label=\"Beginn von Digitale Systeme ändern\">",
+                        "nodeLabel": "Beginn von Digitale Systeme ändern"
+                      }
+                    },
+                    {
+                      "relatedNode": {
+                        "type": "node",
+                        "lhId": "1-25-BUTTON",
+                        "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,1,DIV,3,DIV,1,DIV,5,DIV,0,ARTICLE,2,BUTTON",
+                        "selector": "div.calendar-time-body > div.calendar-time-column > article.calendar-appointment > button.calendar-resize",
+                        "boundingRect": {
+                          "top": 718,
+                          "bottom": 742,
+                          "left": 1237,
+                          "right": 1384,
+                          "width": 147,
+                          "height": 24
+                        },
+                        "snippet": "<button type=\"button\" class=\"calendar-resize is-end\" aria-label=\"Ende von Digitale Systeme ändern\">",
+                        "nodeLabel": "Ende von Digitale Systeme ändern"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.sensory-and-visual-cues",
+                "wcag22aa",
+                "wcag258"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-A",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,0,DIV,0,A",
+                  "selector": "div.app-shell > aside.app-sidebar > div.sidebar-workspace > a.app-brand",
+                  "boundingRect": {
+                    "top": 27,
+                    "bottom": 67,
+                    "left": 25,
+                    "right": 208,
+                    "width": 183,
+                    "height": 40
+                  },
+                  "snippet": "<a class=\"app-brand\" aria-label=\"UniOS\" href=\"/\" data-discover=\"true\">",
+                  "nodeLabel": "UniOS\nMein Studienraum",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,1,ASIDE,1,NAV,0,DIV,0,BUTTON",
+                  "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+                  "boundingRect": {
+                    "top": 95,
+                    "bottom": 131,
+                    "left": 21,
+                    "right": 245,
+                    "width": 224,
+                    "height": 36
+                  },
+                  "snippet": "<button type=\"button\" class=\"sidebar-search\" aria-label=\"Suche in Kursen und Dateien\">",
+                  "nodeLabel": "Suche\n⌘ K",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "dark",
+      "width": 1440,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "week",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "details": {
+            "type": "table",
+            "headings": [
+              {
+                "key": "node",
+                "valueType": "node",
+                "subItemsHeading": {
+                  "key": "relatedNode",
+                  "valueType": "node"
+                },
+                "label": "Failing Elements"
+              }
+            ],
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-0-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,2,BUTTON",
+                  "selector": "div.calendar-workspace > div.calendar-main > div.calendar-toolbar > button.group/button",
+                  "boundingRect": {
+                    "top": 641,
+                    "bottom": 685,
+                    "left": 33,
+                    "right": 160,
+                    "width": 127,
+                    "height": 44
+                  },
+                  "snippet": "<button data-slot=\"button\" data-variant=\"outline\" data-size=\"sm\" class=\"group/button inline-flex shrink-0 items-center justify-center border bg-cl…\" aria-label=\"Kalender groß anzeigen\" type=\"button\" aria-haspopup=\"dialog\" aria-expanded=\"false\" data-state=\"closed\">",
+                  "nodeLabel": "Große Ansicht",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-1-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,1,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 864,
+                    "bottom": 942,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Mathematik · 10:00 – 11:30 · R101, Fictional Campus\">",
+                  "nodeLabel": "Mathematik\n10:00 – 11:30\nR101",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-2-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,2,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 948,
+                    "bottom": 1026,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Übungsgruppe · 10:45 – 11:45 · R102\">",
+                  "nodeLabel": "Übungsgruppe\n10:45 – 11:45\nR102",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              },
+              {
+                "node": {
+                  "type": "node",
+                  "lhId": "1-3-BUTTON",
+                  "path": "2,HTML,1,BODY,0,DIV,0,DIV,2,DIV,1,MAIN,4,DIV,0,SECTION,0,DIV,1,DIV,0,DIV,0,DIV,3,DIV,0,SECTION,3,ARTICLE,0,BUTTON",
+                  "selector": "div.calendar-agenda > section > article.calendar-appointment > button",
+                  "boundingRect": {
+                    "top": 1032,
+                    "bottom": 1110,
+                    "left": 37,
+                    "right": 357,
+                    "width": 320,
+                    "height": 78
+                  },
+                  "snippet": "<button type=\"button\" data-calendar-trigger=\"true\" aria-label=\"Programmieren · 13:00 – 14:30 · R203\">",
+                  "nodeLabel": "Programmieren\n13:00 – 14:30\nR203",
+                  "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+                }
+              }
+            ],
+            "debugData": {
+              "type": "debugdata",
+              "impact": "serious",
+              "tags": [
+                "cat.semantics",
+                "wcag21a",
+                "wcag253",
+                "EN-301-549",
+                "EN-9.2.5.3",
+                "RGAAv4",
+                "RGAA-6.1.5",
+                "experimental"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "month",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "event",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    },
+    {
+      "kind": "editor",
+      "theme": "dark",
+      "width": 390,
+      "lighthouseVersion": "13.5.0",
+      "accessibilityScore": 100,
+      "runtimeError": null,
+      "belowFullScore": []
+    }
+  ]
+}
