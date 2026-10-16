@@ -8,6 +8,7 @@ from sqlalchemy import URL, create_engine, select
 from sqlalchemy.orm import Session
 
 from app.calendar.feed import build_calendar
+from app.config import Settings
 from app.db.models import Base
 
 TABLES = {
@@ -23,12 +24,12 @@ TABLES = {
 }
 
 
-def portable_rows(snapshot: Path) -> tuple[dict[str, list[dict]], bytes]:
+def portable_rows(snapshot: Path, settings: Settings) -> tuple[dict[str, list[dict]], bytes]:
     engine = create_engine(URL.create("sqlite", database=str(snapshot)))
     try:
         with Session(engine) as session:
             rows = {name: [dict(row) for row in session.execute(select(Base.metadata.tables[table])).mappings()]
                     for name, table in TABLES.items()}
-            return rows, build_calendar(session)
+            return rows, build_calendar(session, settings)
     finally:
         engine.dispose()

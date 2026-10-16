@@ -83,3 +83,14 @@ def test_slots_the_student_hid_stay_hidden_from_the_assistant(settings, factory,
     with factory() as session:
         assert len(timetable_context(session, start, end, settings)) == 1
         assert len(timetable_context(session, start, end)) == 2  # without settings nothing is hidden
+
+
+def test_hidden_slots_do_not_block_study_blocks(settings, factory, coordinator):
+    from app.learning.blocks import _busy_intervals
+
+    service = TimetableService(settings, factory, coordinator)
+    service.repository.replace(service.source, [row('first', 8), row('second', 9, 45)], coordinator)
+    option = next(value for value in service.slots() if value['start_time'] == '11:45')
+    service.select_slot(option['id'], False)
+    with factory() as session:
+        assert len(_busy_intervals(session, settings)) == 1

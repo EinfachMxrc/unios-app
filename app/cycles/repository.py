@@ -45,7 +45,7 @@ class CycleRepository:
             yield session
 
     @staticmethod
-    def exam_plan(session, cycle_id: int, planned_at: datetime) -> ExamPlanState:
+    def exam_plan(session, settings: Settings, cycle_id: int, planned_at: datetime) -> ExamPlanState:
         anchor = session.get(StudyCycle, cycle_id)
         if anchor is None or anchor.status != "accepted":
             raise LookupError("Angenommener Lernzyklus nicht gefunden")
@@ -59,7 +59,7 @@ class CycleRepository:
                 StudyBlockSuggestion.exam_id == exam.id, StudyBlockSuggestion.status == "accepted")
             .order_by(StudyBlockSuggestion.starts_at, StudyBlockSuggestion.id))]
         movable_ids = {block.id for block, _ in blocks if as_utc(block.starts_at) > planned_at}
-        return ExamPlanState(anchor, exam, cycles, blocks, _busy_intervals(session, exclude_block_ids=movable_ids))
+        return ExamPlanState(anchor, exam, cycles, blocks, _busy_intervals(session, settings, exclude_block_ids=movable_ids))
 
     @staticmethod
     def apply_exam_plan(session, preview: ExamImpactView) -> None:

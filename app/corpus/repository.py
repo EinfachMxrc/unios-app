@@ -186,7 +186,7 @@ def sources(session, settings, entity_ref: str, guard=lambda: None) -> list[Sour
         if row.source in {ADJUSTMENT, DELETED}:
             return []
         adjustment = CalendarEditRepository.adjustment(session, adjustment_key(row))
-        row = effective_events([row, adjustment] if adjustment else [row], CalendarEditRepository.rules(session))[0]
+        row = effective_events([row, adjustment] if adjustment else [row], CalendarEditRepository.rules(session), settings.timezone)[0]
     if kind in {'coding_task', 'assessment_task'} and row.status != 'active':
         return []
     if kind == 'assessment_attempt' and row.session_id:

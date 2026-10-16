@@ -48,7 +48,7 @@ class CycleService:
     def exam_impact(self, cycle_id: int) -> ExamImpactView:
         planned_at = datetime.now(UTC)
         with self.repository.read_transaction() as session:
-            state = self.repository.exam_plan(session, cycle_id, planned_at)
+            state = self.repository.exam_plan(session, self.settings, cycle_id, planned_at)
             return build_impact(state, self.settings, planned_at)
 
     def confirm_exam_impact(self, cycle_id: int, planned_at: datetime, revision: str,
@@ -56,7 +56,7 @@ class CycleService:
         with self.repository.transaction() as session:
             assert_writer()
             planned_at = as_utc(planned_at)
-            state = self.repository.exam_plan(session, cycle_id, planned_at)
+            state = self.repository.exam_plan(session, self.settings, cycle_id, planned_at)
             preview = build_impact(state, self.settings, planned_at)
             validate_impact(preview, revision, datetime.now(UTC))
             self.repository.apply_exam_plan(session, preview)

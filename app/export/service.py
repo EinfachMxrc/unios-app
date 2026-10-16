@@ -123,7 +123,7 @@ def build_export(settings: Settings, target: Path, *, include_files: bool) -> Pa
             manifest_files.append({"path": DATABASE_ARCNAME, "sha256": _sha256(db_copy),
                                    "size": db_copy.stat().st_size})
 
-            for arcname, content in readable_files(db_copy, settings.data_dir):
+            for arcname, content in readable_files(db_copy, settings.data_dir, settings):
                 archive.writestr(arcname, content)
                 manifest_files.append({"path": arcname, "sha256": hashlib.sha256(content).hexdigest(), "size": len(content)})
             if has_anki:
