@@ -16,7 +16,9 @@ import { useT } from '@/i18n/useT'
 import { useWorkspaceState } from '@/lib/workspaceState'
 import { moveToTrash } from '@/lib/trash'
 import { beginNewSourceNote, sourceNoteSaveState } from '@/lib/sourceNoteSave'
-import type { NotesResponse } from '@/types'
+import type { NoteDetail, NotesResponse } from '@/types'
+import { queryClient } from '@/offlineCache'
+import { transferPageParentIntent, validPageId } from '@/lib/notePages'
 import { FileText, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -29,6 +31,13 @@ export function NotesPage() {
   const [params, setParams] = useSearchParams()
   const selectedId = params.get('id')
   const newMode = params.has('new')
+  const requestedParent = params.get('parent_id')
+  const parentId = newMode && validPageId(requestedParent) ? requestedParent : undefined
+  const {
+    data: parent,
+    error: parentError,
+    loading: parentLoading,
+  } = useApi<{ title: string }>(`/api/notes/${parentId ?? ''}/peek`, { enabled: !!parentId })
   const courseId = Number(params.get('course_id')) || null
   const resourceId = Number(params.get('resource_id')) || null
   const assignmentId = Number(params.get('assignment_id')) || null
@@ -61,6 +70,7 @@ export function NotesPage() {
     next.delete('title')
     next.delete('resource_id')
     next.delete('assignment_id')
+    next.delete('parent_id')
     setParams(next)
   }
   function chooseRevision(value: number | null) {
@@ -83,11 +93,14 @@ export function NotesPage() {
     next.delete('revision')
     next.delete('resource_id')
     next.delete('assignment_id')
+    next.delete('parent_id')
     next.delete('title')
     next.set('new', '1')
     setParams(next)
   }
   function created(id: string) {
+    const course = queryClient.getQueryData<NoteDetail>(['api', `/api/notes/${id}`])?.note.course_id
+    if (course) transferPageParentIntent(course, id)
     reload()
     choose(id)
     setFeedback(t('noteCreatedMessage'))
@@ -155,6 +168,11 @@ export function NotesPage() {
             choose(item.id)
           }}
         />
+      )}
+      {parentId && parent && (
+        <p className="note-parent-context">
+          {t('pages.newChildOf')} <Link to={`/notes?id=${parentId}`}>{parent.title}</Link>
+        </p>
       )}
       <div className={`notes-layout ${selectedId || newMode ? 'has-document' : ''} ${indexOpen ? 'index-open' : ''}`}>
         <div className="note-index" id="note-document-index">
@@ -228,7 +246,11 @@ export function NotesPage() {
           )}
           <ListPagination page={data?.page} onPage={setOffset} />
         </div>
-        {newMode && data ? (
+        {parentId && parentError ? (
+          <Failure message={parentError} />
+        ) : parentId && parentLoading && !parent ? (
+          <Loading />
+        ) : newMode && data ? (
           assignmentId && courseId ? (
             <AssignmentNewNote
               key={`assignment-${courseId}-${assignmentId}-${newIntent}`}
@@ -244,6 +266,7 @@ export function NotesPage() {
               courseId={courseId}
               resourceId={resourceId}
               suggestedTitle={params.get('title') ?? ''}
+              parentId={parentId}
               onCreated={created}
             />
           )

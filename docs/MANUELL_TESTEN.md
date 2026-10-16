@@ -1,6 +1,37 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 
+## Seiten, Kursansichten und Vorlagen vom 16.10.2026
+
+Nach dem regulären Client-Update mit selbst erstellten, unkritischen Inhalten:
+
+1. Im Kurs unter „Ansichten“ eine gespeicherte Sammlung wählen, Darstellung
+   wechseln und zurückkehren. „Ansicht verwalten“ muss dieselben Filter öffnen.
+   Noch nicht gespeicherte Filter und Namen beim Tabwechsel kontrollieren;
+   eine verzögerte Speicherantwort darf die aktive Seite nicht zurückholen.
+2. Notiz und PDF seitlich ansehen, Escape und Schließen testen. Der Fokus muss
+   zum Auslöser zurückkehren. Vollständig öffnen und in neuem Tab öffnen testen;
+   eine reine Vorschau darf den gespeicherten Reader-Seitenstand nicht ändern.
+3. Eine leere freie Notiz öffnen und eine Vorlage ausdrücklich auswählen.
+   Danach eigenen Text schreiben und erneut öffnen. Der Entwurf muss erhalten
+   bleiben und darf nicht durch die Vorlagenauswahl ersetzt werden.
+4. Eine Unterseite erstellen, zu ihrem Elternteil und zurück navigieren.
+   Eine bestehende Seite hinzufügen; ein Kreis muss sichtbar abgelehnt werden.
+   Lösen muss nur die Zuordnung entfernen, die Notiz bleibt erreichbar.
+5. Bei unterbrochener Zuordnung die bereits gespeicherte Unterseite erneut
+   zuordnen. Dieser Wiederholungsweg darf keine zweite Notiz erzeugen.
+   Im lesenden Betrieb darf er nicht schreiben.
+6. Breite und Schrift nur einer Seite ändern und eine andere Seite besuchen.
+   Einstellungen dürfen nicht auf fremde Seiten übergreifen. Im nativen Reader
+   kompakte Navigation mit Screenreader und echter Bildschirmtastatur prüfen.
+
+Fensterbezogene Sammlungsentwürfe sind keine dauerhafte Speicherung der Sammlung:
+„Änderungen speichern“ schreibt ihre Definition auf den Host. Notizentwürfe nutzen
+weiter ihre bestehenden Sicherungswege. Native Eingabemethoden, Trackpad und
+Gerätewechsel bleiben eine zusätzliche Geräteabnahme; sie werden durch die
+Browser-Simulation nicht ersetzt. Keine persönlichen Inhalte als QA exportieren.
+
+
 ## Inhalt-Tabs vom 16.10.2026
 
 Die Browserprüfung verwendet erfundene Inhalte und eine simulierte Desktop-Brücke.

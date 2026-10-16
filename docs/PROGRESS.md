@@ -1,6 +1,39 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 
+## 16.10.2026 – Notion-Umbau, Paket 4: Unterseiten und Vorlagen
+
+Notizen können weitere Seiten enthalten. Die vorhandene `part_of`-Beziehung
+liefert Elternnavigation und Unterseitenliste; bestehende Seiten lassen sich
+hinzufügen oder aus der Struktur lösen. Die vorhandene Kreisprüfung bleibt
+verbindlich. Neue Unterseiten verwenden den normalen, abgesicherten Notizablauf.
+Der beim expliziten Speichern gewählte Elternbezug bleibt an dieser Anfrage;
+ein späterer Tabwechsel kann deren Antwort nicht einem anderen Elternziel zuordnen.
+Scheitert nur die Zuordnung, bleibt die bereits gesicherte Seite erhalten und
+nur diese idempotente Beziehung wird erneut versucht. Verbindungswechsel und
+Standby sperren verspätete oder unzulässige Folgeaktionen.
+
+Freie neue Seiten beginnen leer und bieten drei ausdrücklich auswählbare Vorlagen:
+Vorlesungsmitschrift, Prüfungsvorbereitung und Lernreflexion. Bestehende Entwürfe
+werden nicht ersetzt; quellengebundene und Aufgaben-Vorlagen bleiben erhalten.
+Breite Seite und Serifenschrift sind pro Notiz im jeweiligen Fenster einstellbar.
+Die vorhandenen Bausteine, Überschriften und deren Reihenfolge bleiben bearbeitbar.
+
+Die gemeinsame Prüfung ergänzt Tab-Kennungen für unterschiedliche Kursentwürfe
+und Übungsaufgaben. Explizite Seitenlinks werden auch in bereits offenen Tabs
+beachtet. Sammlungsnamen und Filter bleiben als fensterbezogene Entwürfe erhalten;
+späte Speicherantworten überschreiben weder neuere Eingaben noch die aktive Route.
+Der tatsächliche Browserpfad schützt dabei auch vor noch im Suspense-Hintergrund
+gehaltenen Seiten. Keine Datenmigration oder neue Abhängigkeit.
+
+Sieben neue Unitfälle zu Vorlagen, Zuordnung, StrictMode und Verbindungswechsel
+sowie alle 1.485 Frontendtests bestanden. 30 gezielte Browserfälle bestanden;
+der gezielt verzögerte Seitenwechsel wurde zusätzlich erfolgreich geprüft.
+Acht Seiten-/Vorlagen-Screenshots Hell/Dunkel bei 1.440/390 Pixeln geprüft.
+Die gemeinsame abschließende Browser-Suite läuft mit eingefrorenem, isoliertem
+Build; Nachweise werden anschließend unter `qa/notion-final-20261016` ergänzt.
+
+
 ## 16.10.2026 – Notion-Umbau, Paket 3: Kursansichten und Vorschauen
 
 Der Kurs bietet jetzt „Ansichten“ für seine gespeicherten Sammlungen. Auswahl

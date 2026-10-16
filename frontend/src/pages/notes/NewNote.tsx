@@ -5,6 +5,8 @@ import { FormField } from '@/components/FormField'
 import { SaveIndicator } from '@/components/SaveIndicator'
 import { Failure } from '@/components/State'
 import { NoteStudio } from '@/components/editor/NoteStudio'
+import { NoteTemplates } from './NoteTemplates'
+import { rememberPageParentIntent } from '@/lib/notePages'
 import { Button } from '@/components/ui/button'
 import { useWritableHost } from '@/hooks/host'
 import { useT } from '@/i18n/useT'
@@ -33,6 +35,7 @@ export function NewNote({
   resourceId,
   suggestedTitle,
   initialBody,
+  parentId,
   onCreated,
 }: {
   data: NotesResponse
@@ -40,6 +43,7 @@ export function NewNote({
   resourceId: number | null
   suggestedTitle: string
   initialBody?: string
+  parentId?: string
   onCreated: (id: string) => void
 }) {
   const [selectedCourse, setSelectedCourse] = useState(courseId ?? data.courses[0]?.id ?? 0)
@@ -52,6 +56,7 @@ export function NewNote({
       resourceId={resourceId}
       suggestedTitle={suggestedTitle}
       initialBody={initialBody}
+      parentId={parentId}
       onCreated={onCreated}
     />
   )
@@ -64,6 +69,7 @@ function NewNoteForm({
   resourceId,
   suggestedTitle,
   initialBody,
+  parentId,
   onCreated,
 }: {
   data: NotesResponse
@@ -72,6 +78,7 @@ function NewNoteForm({
   resourceId: number | null
   suggestedTitle: string
   initialBody?: string
+  parentId?: string
   onCreated: (id: string) => void
 }) {
   const { t } = useT('notes')
@@ -93,7 +100,7 @@ function NewNoteForm({
     }
     return {
       title: persisted?.title ?? suggestedTitle,
-      body: persisted?.body ?? initialBody ?? t('lectureTemplate'),
+      body: persisted?.body ?? initialBody ?? (resourceId === null ? '' : t('lectureTemplate')),
       persisted,
       status: persisted ? 'restored' : 'idle',
     }
@@ -193,6 +200,7 @@ function NewNoteForm({
       return
     setSaveError('')
     rememberSourceWorkingDraft(selectedCourse, resourceId, snapshot)
+    rememberPageParentIntent(selectedCourse, parentId)
     void saveSourceNote({
       courseId: selectedCourse,
       resourceId,
@@ -255,6 +263,7 @@ function NewNoteForm({
             onChange={(next) => changeNewDraft(title, next)}
             disabled={!canWrite || busy}
           />
+          <NoteTemplates title={title} body={body} disabled={!canWrite || busy} onChoose={changeNewDraft} />
           <NoteStudio
             workspaceKey={`new:${selectedCourse}:${resourceId ?? 'none'}`}
             id="new-note-body"

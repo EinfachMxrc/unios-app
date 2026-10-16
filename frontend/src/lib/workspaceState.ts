@@ -10,6 +10,12 @@ type Entry = { value: unknown; persist: boolean }
 const entries = new Map<string, Entry>()
 const listeners = new Map<string, Set<() => void>>()
 let loaded = false
+let generation = 0
+
+/** Fence asynchronous acknowledgements when the connection changes. */
+export function workspaceGeneration() {
+  return generation
+}
 
 function load() {
   if (loaded) return
@@ -84,6 +90,7 @@ export function rememberWorkspace<T>(key: string, value: T, persistent = true) {
 }
 
 export function clearWorkspace() {
+  generation += 1
   clearRecentObjects()
   clearWorkspaceTabs()
   entries.clear()

@@ -31,10 +31,10 @@ test('existing notes remain readable and editable', async ({ page }, testInfo) =
   await page.reload()
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   await page.screenshot({ path: testInfo.outputPath('note-autosaved.png'), fullPage: true })
-  await page.getByRole('button', { name: 'Schließen' }).click()
+  await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await expect(page.getByText('Historischer Markdown-Text mit Ergänzung')).toBeVisible()
   await page.getByRole('button', { name: 'Bearbeiten' }).click()
-  await page.getByRole('button', { name: 'Schließen' }).click()
+  await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await page.goto(`/courses/${courseId}`)
   await expect(
     page.getByRole('navigation', { name: 'Kursansichten' }).getByRole('link', { name: /Notizen/ }),
@@ -44,7 +44,8 @@ test('existing notes remain readable and editable', async ({ page }, testInfo) =
 
 test('a new lecture note uses a template and remains searchable', async ({ page }, testInfo) => {
   await page.goto('/notes?new=1&course_id=1&title=Vorlesung%2004')
-  await expect(page.getByRole('textbox', { name: 'Notizinhalt' })).toContainText('Kernkonzepte')
+  await page.getByRole('button', { name: 'Vorlesungsmitschrift', exact: true }).click()
+  await expect(page.getByRole('textbox', { name: 'Notizinhalt' })).toContainText('Die Grundidee')
   await page.getByRole('button', { name: 'Markdown', exact: true }).click()
   await page.getByRole('textbox', { name: 'Notizinhalt' }).fill('## Kernkonzepte\n\nRekursionsbaum und Terminierung')
   await page.getByRole('button', { name: 'Notiz anlegen' }).click()

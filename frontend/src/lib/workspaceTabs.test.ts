@@ -14,9 +14,27 @@ it('keeps distinct documents open and reuses a PDF tab across page links', async
   tabs.observeWorkspaceTab(pdf.to, 'pdf-key', { readerPageSync: true })
   tabs.openWorkspaceTab('/deadlines')
   expect(tabs.workspaceTabsSnapshot().items).toHaveLength(3)
-  expect(tabs.openWorkspaceTab('/material/7?page=18')?.id).toBe(pdf.id)
+  expect(tabs.openWorkspaceTab('/material/7?page=18')).toMatchObject({ id: pdf.id, to: '/material/7?page=18' })
   expect(tabs.workspaceTabsSnapshot().items).toHaveLength(3)
-  expect(tabs.workspaceTabsSnapshot().items.find((item) => item.id === pdf.id)?.locationKey).toBe('pdf-key')
+  expect(tabs.workspaceTabsSnapshot().items.find((item) => item.id === pdf.id)?.locationKey).toBeUndefined()
+})
+
+it('keeps different new-note courses and exercise documents distinct', async () => {
+  const tabs = await import('./workspaceTabs')
+  for (const to of [
+    '/notes?new=1&course_id=1',
+    '/notes?new=1&course_id=2',
+    '/assessment?task=1',
+    '/assessment?task=2',
+    '/collections?course_id=1',
+    '/collections?course_id=2',
+  ])
+    tabs.openWorkspaceTab(to)
+  expect(tabs.workspaceTabsSnapshot().items).toHaveLength(6)
+  expect(
+    tabs.openWorkspaceTab('/notes?new=1&course_id=1&parent_id=aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')?.to,
+  ).toContain('parent_id=')
+  expect(tabs.workspaceTabsSnapshot().items).toHaveLength(6)
 })
 
 it('replaces the active destination on normal navigation and keeps different notes distinct', async () => {

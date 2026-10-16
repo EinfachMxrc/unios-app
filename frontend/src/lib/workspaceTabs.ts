@@ -39,7 +39,19 @@ export function persistedTabTarget(value: string): string | null {
   if (!safe) return null
   const url = new URL(safe, 'https://unios.invalid')
   const params = new URLSearchParams()
-  for (const key of ['id', 'page', 'note', 'course_id', 'resource_id', 'assignment_id', 'revision']) {
+  for (const key of [
+    'id',
+    'page',
+    'note',
+    'course_id',
+    'resource_id',
+    'assignment_id',
+    'parent_id',
+    'revision',
+    'task',
+    'topic',
+    'version',
+  ]) {
     const value = url.searchParams.get(key)
     if (value && (/^[1-9]\d{0,15}$/.test(value) || /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/i.test(value)))
       params.set(key, value)
@@ -53,8 +65,16 @@ export function persistedTabTarget(value: string): string | null {
 /** One editor per document; PDF page/zoom and note revision are view state. */
 export function tabIdentity(value: string): string {
   const url = new URL(value, 'https://unios.invalid')
-  if (url.pathname === '/notes')
-    return `/notes:${url.searchParams.get('id') ?? (url.searchParams.has('new') ? 'new' : 'index')}`
+  if (url.pathname === '/notes') {
+    const note = url.searchParams.get('id')
+    return note
+      ? `/notes:${note}`
+      : `/notes:${url.searchParams.has('new') ? 'new' : 'index'}:${url.searchParams.get('course_id') ?? 'all'}:${url.searchParams.get('resource_id') ?? 'none'}`
+  }
+  if (['/assessment', '/coding'].includes(url.pathname) && url.searchParams.has('task'))
+    return `${url.pathname}:task:${url.searchParams.get('task')}`
+  if (url.pathname === '/collections' && !url.searchParams.has('id'))
+    return `/collections:new:${url.searchParams.get('course_id') ?? 'all'}`
   return `${url.pathname}${url.searchParams.has('id') ? `:${url.searchParams.get('id')}` : ''}`
 }
 function load() {
@@ -127,8 +147,14 @@ export function openWorkspaceTab(to: string): WorkspaceTab | null {
   if (!target) return null
   const existing = state.items.find((item) => tabIdentity(item.to) === tabIdentity(target))
   if (existing) {
-    publish({ ...state, active: existing.id })
-    return existing
+    const destination =
+      target === existing.to ? existing : { ...existing, to: target, locationKey: undefined, routeState: undefined }
+    publish({
+      ...state,
+      items: state.items.map((item) => (item.id === existing.id ? destination : item)),
+      active: existing.id,
+    })
+    return destination
   }
   if (state.items.length >= MAX_WORKSPACE_TABS) return null
   const item = { id: id(), to: target }

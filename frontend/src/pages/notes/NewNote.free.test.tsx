@@ -131,9 +131,8 @@ it('creates a named blank note only after the explicit create action', async () 
   const onCreated = vi.fn()
   open(onCreated)
   expect(request).not.toHaveBeenCalled()
-  fireEvent.click(screen.getByRole('button', { name: 'emptyNoteButton' }))
   expect(screen.getByRole('textbox', { name: 'noteContentAria' }).textContent).toBe('')
-  expect(newNoteDraftFor(2, null)?.body).toBe('')
+  expect(newNoteDraftFor(2, null)).toBeNull()
   expect(request).not.toHaveBeenCalled()
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))
   await waitFor(() => expect(onCreated).toHaveBeenCalledExactlyOnceWith(firstId))
@@ -199,7 +198,6 @@ it('keeps blank creation available after the editor persists an untouched templa
 
 it('requires a title even when an explicitly blank note is selected', () => {
   open()
-  fireEvent.click(screen.getByRole('button', { name: 'emptyNoteButton' }))
   fireEvent.change(screen.getByLabelText('noteTitleAria'), { target: { value: '   ' } })
   expect((screen.getByRole('button', { name: 'createNoteButton' }) as HTMLButtonElement).disabled).toBe(true)
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))

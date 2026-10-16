@@ -6,6 +6,7 @@ import { NoteMarkdownDocument } from '@/components/NoteMarkdownDocument'
 import { SaveIndicator } from '@/components/SaveIndicator'
 import { Failure, Loading } from '@/components/State'
 import { NoteStudio } from '@/components/editor/NoteStudio'
+import { NotePageParents, NoteSubpages } from './NotePageStructure'
 import { Button } from '@/components/ui/button'
 import { HostContext, useWritableHost } from '@/hooks/host'
 import { useT } from '@/i18n/useT'
@@ -64,6 +65,8 @@ export function NoteDocument({
   }, [data, error, id])
   const host = useContext(HostContext)
   const canWrite = useWritableHost()
+  const [wide, setWide] = useWorkspaceState(`note:${id}:wide`, false)
+  const [serif, setSerif] = useWorkspaceState(`note:${id}:serif`, false)
   const [editing, setEditing] = useWorkspaceState(`note:${id}:editing`, startEditing, { persist: false })
   useEffect(() => {
     if (startEditing) setEditing(true)
@@ -352,7 +355,7 @@ export function NoteDocument({
     setStatus(t('changesAutoSavedLocally'))
   }
   return (
-    <article className="note-canvas">
+    <article className={`note-canvas ${wide ? 'note-wide' : ''} ${serif ? 'note-serif' : ''}`}>
       <div className="note-canvas-toolbar">
         <span>{data?.note.course_name ?? t('defaultNoteLabel')}</span>
         {data && !revision && !editing && (
@@ -393,7 +396,21 @@ export function NoteDocument({
             <Trash2 size={15} /> {trash('moveToTrash')}
           </Button>
         )}
+        <details className="note-page-display">
+          <summary>{t('pages.appearance')}</summary>
+          <div>
+            <label>
+              <input type="checkbox" checked={wide} onChange={(event) => setWide(event.target.checked)} />
+              {t('pages.wide')}
+            </label>
+            <label>
+              <input type="checkbox" checked={serif} onChange={(event) => setSerif(event.target.checked)} />
+              {t('pages.serif')}
+            </label>
+          </div>
+        </details>
       </div>
+      {data && !revision && <NotePageParents id={id} />}
       {loading && !data ? (
         <Loading />
       ) : error && !data ? (
@@ -512,6 +529,7 @@ export function NoteDocument({
                   </div>
                 )}
                 <NoteHistory data={data} archived={archived} onRevision={onRevision} onRestore={restoreArchivedDraft} />
+                {!revision && <NoteSubpages id={id} courseId={data.note.course_id} />}
               </div>
               <NoteSidePanel data={data} id={id} onSaved={onSaved} />
             </div>

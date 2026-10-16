@@ -35,6 +35,71 @@ async function openViews(page: Page) {
   await expect(page.getByRole('heading', { name: 'Gespeicherte Ansichten', exact: true })).toBeVisible()
 }
 
+test('a delayed collection save preserves newer inputs across tabs without changing the active route', async ({
+  page,
+}) => {
+  const { notes } = await seed(page)
+  let release!: () => void
+  const gate = new Promise<void>((resolve) => {
+    release = resolve
+  })
+  let releaseNavigation!: () => void
+  const navigationGate = new Promise<void>((resolve) => {
+    releaseNavigation = resolve
+  })
+  await page.route('**/assets/DeadlinesPage-*.js', async (route) => {
+    await navigationGate
+    await route.continue()
+  })
+  await page.route(`**/api/collections/${notes.id}`, async (route) => {
+    if (route.request().method() !== 'PUT') return route.continue()
+    const response = await route.fetch()
+    await gate
+    await route.fulfill({ response })
+  })
+  try {
+    await page.goto(`/collections?id=${notes.id}`)
+    await page.getByText('Filter und Ansicht anpassen').click()
+    const name = page.getByRole('textbox', { name: 'Name der Ansicht' })
+    await name.fill('Gesendeter Name')
+    const acknowledgement = page.waitForResponse(
+      (response) => response.url().endsWith(`/api/collections/${notes.id}`) && response.request().method() === 'PUT',
+    )
+    await page.getByRole('button', { name: 'Änderungen speichern', exact: true }).click()
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get('/api/collections')).json()).find(
+            (item: { id: number }) => item.id === notes.id,
+          ).name,
+      )
+      .toBe('Gesendeter Name')
+    await name.fill('Mein neuerer Entwurf')
+    await page.getByRole('combobox', { name: /^Inhalte/ }).selectOption('materials')
+    await page.locator('.app-sidebar').getByRole('link', { name: 'Termine', exact: true }).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'In neuem UniOS-Tab öffnen', exact: true }).click()
+    await expect(page).toHaveURL(/\/deadlines$/)
+    release()
+    await acknowledgement
+    await page.evaluate(
+      () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(null)))),
+    )
+    await expect(page).toHaveURL(/\/deadlines$/)
+    releaseNavigation()
+    await expect(page.getByRole('heading', { name: 'Termine', exact: true, level: 1 })).toBeVisible()
+    await page.locator('[data-workspace-tab]').first().click()
+    await expect(name).toHaveValue('Mein neuerer Entwurf')
+    await expect(page.getByRole('combobox', { name: /^Inhalte/ })).toHaveValue('materials')
+    expect(
+      (await (await page.request.get('/api/collections')).json()).find((item: { id: number }) => item.id === notes.id)
+        .config.kind,
+    ).toBe('notes')
+  } finally {
+    release()
+    releaseNavigation()
+  }
+})
+
 test('course views keep shared filters and open notes in a side preview without leaving the course', async ({
   page,
 }) => {

@@ -5,9 +5,16 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { InAppLinks } from './InAppLinks'
+import { WorkspaceTabsController } from './WorkspaceTabsController'
+import { clearWorkspace } from '@/lib/workspaceState'
+import { workspaceTabsSnapshot } from '@/lib/workspaceTabs'
 
 vi.mock('@/lib/desktop', () => ({ isDesktopApp: () => true }))
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  clearWorkspace()
+  sessionStorage.clear()
+})
 function Location() {
   return (
     <output data-testid="location">
@@ -20,6 +27,7 @@ function mount() {
   render(
     <MemoryRouter initialEntries={['/notes']}>
       <InAppLinks />
+      <WorkspaceTabsController />
       <Location />
       <div
         className="studio-document"
@@ -45,6 +53,7 @@ describe('note navigation and native new-window requests', () => {
     mount()
     fireEvent.click(screen.getByRole('link'), { metaKey: true })
     expect(screen.getByTestId('location').textContent).toBe('/notes?id=fictional')
+    expect(workspaceTabsSnapshot().items).toHaveLength(2)
   })
   it('accepts only real screens on the current origin from the native fallback', () => {
     mount()

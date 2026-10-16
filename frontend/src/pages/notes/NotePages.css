@@ -1,0 +1,155 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.note-templates {
+  padding: 12px 0;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+}
+.note-templates > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.note-templates button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+  color: var(--app-text);
+  background: var(--app-surface);
+}
+.note-parent-pages,
+.note-parent-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 14px 24px;
+  font-size: 0.8rem;
+  color: var(--app-accent);
+}
+.note-subpages {
+  margin: 24px;
+  padding-block: 20px;
+  border-top: 1px solid var(--app-border);
+  font-size: 0.8rem;
+}
+.note-subpages-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.note-subpages-heading h3 {
+  font-weight: 600;
+}
+.note-subpages-heading h3 span {
+  margin-inline-start: 6px;
+  color: var(--app-muted);
+  font-weight: 400;
+}
+.note-subpages-heading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--app-accent);
+}
+.note-subpages li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--app-border);
+}
+.note-subpages li a {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--app-accent);
+}
+.note-subpages button {
+  min-height: 36px;
+  padding: 6px;
+  border-radius: 5px;
+}
+.note-subpages :is(button:hover, button:focus-visible),
+.note-templates button:hover {
+  background: var(--app-surface-alt);
+}
+.note-subpages-empty,
+.note-attach-toggle {
+  color: var(--app-muted);
+}
+.note-attach-toggle {
+  margin-top: 8px;
+}
+.note-child-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.note-child-picker input {
+  width: min(100%, 400px);
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 5px;
+}
+.note-child-picker button {
+  text-align: start;
+  color: var(--app-accent);
+}
+.note-parent-pending {
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  margin-bottom: 12px;
+}
+.note-parent-pending button {
+  color: var(--app-accent);
+  margin-inline-end: 10px;
+}
+.note-page-display {
+  position: relative;
+  margin-left: auto;
+}
+.note-page-display summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.75rem;
+  padding: 8px;
+}
+.note-page-display > div {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  min-width: 210px;
+  padding: 10px;
+  background: var(--ui-overlay);
+  border: 1px solid var(--app-border);
+  border-radius: 7px;
+  box-shadow: var(--ui-overlay-shadow);
+}
+.note-page-display label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  font-size: 0.8rem;
+}
+.note-canvas.note-wide :is(.note-document, .note-canvas-content) {
+  width: calc(100% - 48px);
+}
+.note-canvas.note-serif :is(.studio-document, .rendered-note) {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+@media (pointer: coarse) {
+  .note-subpages button,
+  .note-templates button,
+  .note-page-display summary {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
