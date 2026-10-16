@@ -3678,3 +3678,21 @@ Einzige Token-Datei mit neutralem Höhenmodell; 427 Zeilen totes CSS, zwei
 überschriebene Token-Blöcke, acht ungenutzte Typen und zwei tote Python-Funktionen
 entfernt. Backend 1.084 Tests, Frontend-Unit- und Leser-E2E grün; native
 MacBook-Trackpad-Messung steht aus.
+
+## 16.10.2026 – Notizeditor als Block-Editor neu aufgebaut
+
+Der frühere Notizeditor (Studio, Markdown-Quelltextmodus, markdownbasierte Entwürfe)
+wurde verworfen und nach Notion-Vorbild neu gebaut. Notizen sind jetzt Blockdokumente
+mit stabilen Block-IDs (`app/notes/document.py`), ältere Markdown-Revisionen bleiben
+unverändert und werden beim Lesen deterministisch umgewandelt (`app/notes/markdown.py`).
+Store, API (`document` + Markdown-Ansicht `body`), Block-Aktionen, Export, Suche,
+Wikilinks und lokales Rückgängig arbeiten auf dem neuen Format; das Frontend hat
+einen neuen Editor (`frontend/src/editor/`) mit Slash-Menü, `[[`-Verlinkung,
+Auswahl-Leiste, Block-Griff, Aufklappbereichen, Gliederung und Fokus, und Entwürfe
+sowie der Dreiwege-Abgleich arbeiten blockweise. Fehlende Funktionen siehe
+`docs/NOTE_STUDIO.md` („Grenzen“). Details: `docs/NOTE_STUDIO.md`.
+
+Prüfung: Backend-pytest, ruff und mypy; Frontend-Typecheck, Lint, Vitest und Build;
+Playwright mit lokalem Fake-Server (`e2e/note-editor.spec.ts` und angepasste
+Fachspecs). Der Bestand echter Daten wurde nicht angefasst; vor dem ersten Speichern
+einer bestehenden Notiz mit dieser Version sollte ein geprüfter Snapshot vorliegen.

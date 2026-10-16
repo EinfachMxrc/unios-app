@@ -856,3 +856,12 @@ App beenden und erneut öffnen: Daten und Modus bleiben. Es darf dabei keine
 Serveradresse abgefragt werden. Eine bereits mit einem Server gekoppelte oder bereits
 lokal genutzte Installation darf ihren Modus nicht ändern. Der Ablauf des Dienstes ist
 automatisch durch `tests/test_desktop_local_mode.py` abgedeckt.
+
+## Notizeditor als Block-Editor – 16.10.2026
+
+Nur mit eigenen Daten prüfbar: Eine **vorhandene ältere Notiz** (Markdown) öffnen und
+prüfen, ob Überschriften, Listen, Tabellen, Formeln, Lernkästen, Aufklappabschnitte und
+Medien lesbar sind. Beim ersten Speichern entsteht eine neue Revision; die alte Fassung
+muss unter „Versionen“ weiter lesbar sein. Danach Slash-Menü (`/`), `[[`-Verlinkung,
+Block-Griff (ziehen, duplizieren), Diktat/IME und Bild per Zwischenablage ausprobieren.
+Vorher einen geprüften Snapshot des Datenordners anlegen.
