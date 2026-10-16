@@ -121,9 +121,20 @@ export function InsertMenu({
       // Capture phase: the menu must see Enter before the list/paragraph keymaps do.
       dom.addEventListener('keydown', handler, true)
     }
+    // Escape closes only the menu. Dialogs and drawers around the note listen on the document, so this
+    // must run before them, at the window.
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || !dom?.contains(event.target as Node)) return
+      if (keys.current(event)) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    }
+    window.addEventListener('keydown', escape, true)
     if (editor.isInitialized) attach()
     else editor.on('create', attach)
     return () => {
+      window.removeEventListener('keydown', escape, true)
       editor.off('create', attach)
       dom?.removeEventListener('keydown', handler, true)
     }
@@ -136,8 +147,13 @@ export function InsertMenu({
   const coords = editor.view.coordsAtPos(active.to)
   const host = editor.view.dom.parentElement?.getBoundingClientRect()
   if (!host) return null
+  // Near the bottom of the window the list opens above the caret instead of being cut off.
+  const room = window.innerHeight - coords.bottom
+  const above = room < 340 && coords.top > room
   const style = {
-    top: coords.bottom - host.top + 6,
+    ...(above
+      ? { top: coords.top - host.top - 6, transform: 'translateY(-100%)' }
+      : { top: coords.bottom - host.top + 6 }),
     left: Math.max(0, Math.min(coords.left - host.left, host.width - 280)),
   }
   return (

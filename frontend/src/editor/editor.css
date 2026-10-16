@@ -547,6 +547,10 @@
 }
 .note-block-menu [role='menuitem'] {
   width: 100%;
+  justify-content: flex-start;
+}
+.note-block-menu [role='menuitem']:hover {
+  background: var(--app-surface-alt);
 }
 .note-block-menu [role='menuitem'][data-highlighted] {
   background: var(--app-surface-alt);

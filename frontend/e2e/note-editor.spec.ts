@@ -106,6 +106,24 @@ test('blocks move, duplicate and are removed from their handle menu', async ({ p
   expect(blocks.map((block) => block.content[0].text)).toEqual(['Zweiter Absatz', 'Dritter Absatz', 'Dritter Absatz'])
 })
 
+test('a block is dragged by its grip to a new position', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 })
+  const created = await page.request.post('/api/notes', {
+    data: { course_id: 1, title: 'Ziehen', body: 'Eins\n\nZwei\n\nDrei' },
+  })
+  const id = (await created.json()).note.id
+  await page.goto(`/notes?id=${id}`)
+  await page.getByRole('button', { name: 'Bearbeiten' }).click()
+  const editor = noteEditor(page)
+  await editor.getByText('Eins', { exact: true }).hover()
+  await page.waitForTimeout(300)
+  const height = (await editor.boundingBox())!.height
+  await page.locator('.note-editor-page [draggable=true]').dragTo(editor, { targetPosition: { x: 20, y: height - 15 } })
+  await expect(editor.locator('p')).toHaveText(['Zwei', 'Drei', 'Eins'])
+  await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
+  expect((await stored(page, id)).map((block) => block.content[0].text)).toEqual(['Zwei', 'Drei', 'Eins'])
+})
+
 test('a toggle folds its content and to-dos stay checkable', async ({ page }) => {
   await page.goto('/notes?new=1&course_id=1')
   await writeNote(page, ['/aufkl'])

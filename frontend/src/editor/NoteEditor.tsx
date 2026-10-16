@@ -256,7 +256,16 @@ export function NoteEditor({
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content className="note-block-menu note-insert-list" align="start" sideOffset={4}>
+            <DropdownMenu.Content
+              className="note-block-menu note-insert-list"
+              align="start"
+              sideOffset={4}
+              // Keep the caret in the note after a choice; the menu must not take focus back to its button.
+              onCloseAutoFocus={(event) => {
+                event.preventDefault()
+                if (!editor.isDestroyed) editor.commands.focus()
+              }}
+            >
               {blockCommands.map((command) => (
                 <DropdownMenu.Item
                   key={command.id}

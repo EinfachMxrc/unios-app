@@ -3,7 +3,7 @@
 import type { Editor } from '@tiptap/core'
 import { DragHandle } from '@tiptap/extension-drag-handle-react'
 import { ArrowDown, ArrowUp, Copy, GripVertical, Plus, Trash2 } from 'lucide-react'
-import { DropdownMenu } from 'radix-ui'
+import { Popover } from 'radix-ui'
 import { useState } from 'react'
 import { useT } from '@/i18n/useT'
 import { moveBlock, topBlockAt } from './commands'
@@ -12,6 +12,7 @@ import { moveBlock, topBlockAt } from './commands'
 export function BlockHandle({ editor }: { editor: Editor }) {
   const { t } = useT('editor')
   const [position, setPosition] = useState<number | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   function addBelow() {
     if (position === null) return
@@ -45,6 +46,18 @@ export function BlockHandle({ editor }: { editor: Editor }) {
     if (editor.state.doc.childCount === 0) editor.commands.setContent({ type: 'doc', content: [{ type: 'paragraph' }] })
   }
 
+  const actions = [
+    { id: 'up', icon: ArrowUp, label: t('moveUp'), run: () => position !== null && moveBlock(editor, position, -1) },
+    {
+      id: 'down',
+      icon: ArrowDown,
+      label: t('moveDown'),
+      run: () => position !== null && moveBlock(editor, position, 1),
+    },
+    { id: 'copy', icon: Copy, label: t('duplicate'), run: duplicate },
+    { id: 'delete', icon: Trash2, label: t('delete'), run: remove },
+  ]
+
   return (
     <DragHandle editor={editor} nested onNodeChange={({ pos }) => setPosition(pos >= 0 ? pos : null)}>
       <div className="note-block-handle">
@@ -57,33 +70,41 @@ export function BlockHandle({ editor }: { editor: Editor }) {
         >
           <Plus size={16} aria-hidden="true" />
         </button>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
+        {/* A popover opens on click, so pressing and dragging the grip still moves the block. */}
+        <Popover.Root open={menuOpen} onOpenChange={setMenuOpen}>
+          <Popover.Trigger asChild>
             <button type="button" className="note-handle-grip" aria-label={t('blockActions')} title={t('dragBlock')}>
               <GripVertical size={16} aria-hidden="true" />
             </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content className="note-block-menu" align="start" sideOffset={4}>
-              <DropdownMenu.Item onSelect={() => position !== null && moveBlock(editor, position, -1)}>
-                <ArrowUp size={16} aria-hidden="true" />
-                {t('moveUp')}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item onSelect={() => position !== null && moveBlock(editor, position, 1)}>
-                <ArrowDown size={16} aria-hidden="true" />
-                {t('moveDown')}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item onSelect={duplicate}>
-                <Copy size={16} aria-hidden="true" />
-                {t('duplicate')}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item onSelect={remove}>
-                <Trash2 size={16} aria-hidden="true" />
-                {t('delete')}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              className="note-block-menu"
+              role="menu"
+              align="start"
+              sideOffset={4}
+              onCloseAutoFocus={(event) => {
+                event.preventDefault()
+                if (!editor.isDestroyed) editor.commands.focus()
+              }}
+            >
+              {actions.map(({ id, icon: Icon, label, run }) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    run()
+                    setMenuOpen(false)
+                  }}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  {label}
+                </button>
+              ))}
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
       </div>
     </DragHandle>
   )
