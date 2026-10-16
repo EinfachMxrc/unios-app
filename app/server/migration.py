@@ -20,6 +20,7 @@ from hashlib import sha256
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from uuid import uuid4
 
+from app.ai.provider_repository import ProviderRepository
 from app.anki.collection import snapshot_collection
 from app.config import Settings, get_settings
 from app.export.service import _app_version
@@ -34,7 +35,7 @@ from app.server.transfer import EncryptedReader, EncryptedWriter
 
 LOCAL_METADATA = frozenset({"setup.json", "institution-profile.json", "mcp-connection.json",
                             "timetable-connection.json", "timetable-selection-connection.json", "microsoft-mail-connection.json",
-                            "campus.json", "connectors-enabled.json", "connector-grants.jsonl",
+                            "campus.json", "ai-provider.json", "connectors-enabled.json", "connector-grants.jsonl",
                             "addon-catalog.jsonl", "addon-events.jsonl"})
 VAULT_ENTRIES = (("timetable", "feed"), ("microsoft-mail", "tokens"))
 
@@ -93,11 +94,14 @@ def _secret_bundle(settings: Settings) -> dict:
     vaults = {name: Vault(settings.local_dir, settings.institution_slug, name).read(alias)
               for name, alias in VAULT_ENTRIES}
     mcp = Vault(settings.local_dir, "local", "mcp").read("bridge")
+    # The key is loaded lazily on the first AI call, so read it from its store, not from settings.
+    ai_key = settings.ai_adapter_api_key or ProviderRepository(settings).load_key()
     values = {name: getattr(settings, name) for name in (
         "moodle_base_url", "moodle_token", "ntfy_url", "discord_webhook_url", "github_token",
         "anki_agent_token", "ai_adapter_api_key", "mcp_token", "mcp_enabled",
         "institution_slug", "tz", "current_semester_name", "public_periods_enabled", "moodle_enabled",
     )}
+    values["ai_adapter_api_key"] = ai_key
     return {"settings": values, "portals": portals, "vaults": vaults, "mcp": mcp}
 
 
@@ -328,6 +332,11 @@ def _import_credentials(home: Path, bundle: dict, *, storage_home: Path | None =
             Vault(home / "local", institution, name).save(alias, bundle["vaults"][name])
     if bundle.get("mcp"):
         Vault(home / "local", "local", "mcp").save("bridge", bundle["mcp"])
+    if values.get("ai_adapter_api_key"):
+        # Settings is built only to locate local_dir; the key goes through the provider store.
+        target = Settings(_env_file=None, local_dir=(storage_home or home) / "local",  # type: ignore[call-arg]
+                          data_dir=(storage_home or home) / "data")
+        ProviderRepository(target).save_key(values["ai_adapter_api_key"])
     for saved in bundle["portals"].values():
         value = dict(saved)
         base_url = value.pop("base_url")

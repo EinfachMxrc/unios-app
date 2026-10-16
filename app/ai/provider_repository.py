@@ -16,6 +16,7 @@ from app.secrets import (
     delete_connector_secret,
     load_connector_secret,
     save_connector_secret,
+    secure_windows_env,
 )
 
 CONNECTOR_ID = "ai-anthropic"
@@ -40,7 +41,7 @@ class ProviderRepository:
         if save_connector_secret(CONNECTOR_ID, ALIAS, key):
             self._key_file.unlink(missing_ok=True)
             return
-        self._write_private(self._key_file, key)
+        self._write_private(self._key_file, key, secret=True)
 
     def delete_key(self) -> None:
         delete_connector_secret(CONNECTOR_ID, ALIAS)
@@ -57,10 +58,18 @@ class ProviderRepository:
         self._write_private(self._choice_file, json.dumps(choice, ensure_ascii=False))
 
     @staticmethod
-    def _write_private(target: Path, content: str) -> None:
+    def _write_private(target: Path, content: str, *, secret: bool = False) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         temporary = target.with_name(target.name + ".tmp")
         descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        if secret and os.name == "nt":
+            # POSIX mode bits do nothing on Windows: restrict the ACL before the key is written.
+            try:
+                secure_windows_env(temporary)
+            except PermissionError:
+                os.close(descriptor)
+                temporary.unlink(missing_ok=True)
+                raise
         with os.fdopen(descriptor, "w", encoding="utf-8") as output:
             output.write(content)
         replace_atomic(temporary, target)

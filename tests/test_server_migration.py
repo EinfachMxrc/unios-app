@@ -71,6 +71,12 @@ def test_migration_keeps_source_and_preserves_database_and_files(settings, facto
     (settings.local_dir / "timetable-selection-connection.json").write_text(
         '{"version":1,"institution":"generic","hidden":["' + 'a' * 64 + '"]}')
     (settings.local_dir / "sessions.json").write_text('{"must_not_move":"private-device-cookie"}')
+    (settings.local_dir / "ai-provider.json").write_text('{"model":"fictional-model"}')
+    # The key is loaded lazily, so settings still has none before the first AI call.
+    from app.ai.provider_repository import ProviderRepository
+
+    ProviderRepository(settings).save_key("fictional-ai-key")
+    assert settings.ai_adapter_api_key == ""
     from hashlib import sha256
 
     binary = b"fictional-wasm-bytes"
@@ -100,6 +106,9 @@ def test_migration_keeps_source_and_preserves_database_and_files(settings, facto
     assert (target / "local" / "campus.json").read_bytes() == (settings.local_dir / "campus.json").read_bytes()
     assert (target / "local" / "timetable-selection-connection.json").read_bytes() == (
         settings.local_dir / "timetable-selection-connection.json").read_bytes()
+    assert (target / "local" / "ai-provider.json").read_text() == '{"model":"fictional-model"}'
+    imported = Settings(_env_file=None, data_dir=target / "data", local_dir=target / "local")
+    assert ProviderRepository(imported).load_key() == "fictional-ai-key"
     host = HostCoordinator(Settings(data_dir=target / "data", local_dir=target / "local"))
     assert host.current().generation == generation + 1
     original = (target / "local" / "uni_os.sqlite3").read_bytes()
