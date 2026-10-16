@@ -13,6 +13,9 @@ import { MaterialPage, MaterialReader } from './MaterialPage'
 const mocks = vi.hoisted(() => ({ wide: true, useApi: vi.fn() }))
 const originalLocks = Object.getOwnPropertyDescriptor(navigator, 'locks')
 vi.mock('@/api', () => ({ useApi: mocks.useApi, request: vi.fn(), localDate: (value: string) => value }))
+vi.mock('@/editor/NoteEditor', () => ({
+  NoteEditor: ({ value }: { value: string }) => <textarea aria-label="noteContentAria" value={value} readOnly />,
+}))
 vi.mock('@/hooks/useMediaQuery', () => ({ useMediaQuery: () => mocks.wide }))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
 vi.mock('@/hostAvailability', () => ({ useHostOnline: () => true, isHostOnline: () => true }))

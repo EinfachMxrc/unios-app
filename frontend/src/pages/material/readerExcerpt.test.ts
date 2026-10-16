@@ -11,11 +11,22 @@ import {
   rememberVolatileNoteDraft,
   workingNoteDraftFor,
 } from '@/noteDraft'
+import { docText, parseBody, serializeDoc } from '@/editor/doc'
+import { markdownToBody } from '@/editor/markdownImport'
 import type { Material, NoteDetail } from '@/types'
 import { chooseSourceNoteTarget } from '@/lib/sourceNoteTarget'
 import { clearWorkspace } from '@/lib/workspaceState'
 import { queryClient } from '@/offlineCache'
 import { appendReaderExcerpt, ReaderExcerptError, READER_NOTE_BODY_LIMIT, readerNoteTitle } from './readerExcerpt'
+
+/** Readable text of a draft body (one block per line). */
+const readable = (body: string) => docText(parseBody(body))
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }],
+})
+/** The draft form of a stored text, as the editor sees it. */
+const bodyOf = (text: string) => serializeDoc(docOf(text) as never)
 
 const material: Material = {
   version_id: 17,
@@ -50,6 +61,7 @@ describe('source-linked reader excerpts', () => {
         updated_at: '2026-10-09T10:00:00Z',
       },
       body: 'Saved baseline',
+      document: docOf('Saved baseline'),
       selected_revision: 3,
       versions: [],
     }
@@ -61,13 +73,13 @@ describe('source-linked reader excerpts', () => {
       baseTitle: 'Previous title',
       baseBody: 'Earlier baseline',
       title: 'Own title only in RAM',
-      body: 'Newest explanation only in RAM',
+      body: bodyOf('Newest explanation only in RAM'),
     })
     appendReaderExcerpt({ material, quote: 'Related source', page: 80 })
     const appended = workingNoteDraftFor(id)!
-    expect(appended.body).toContain(ram.body)
-    expect(appended.body).toContain('/material/17?page=80')
-    expect(appended.body).not.toContain(detail.body)
+    expect(appended.body.startsWith(ram.body)).toBe(true)
+    expect(appended.body).toContain('"href":"/material/17?page=80"')
+    expect(readable(appended.body)).not.toContain('Saved baseline')
     expect(appended.baseRevision).toBe(ram.baseRevision)
     expect(appended.baseBody).toBe(ram.baseBody)
     expect(appended.title).toBe(ram.title)
@@ -87,6 +99,7 @@ describe('source-linked reader excerpts', () => {
         updated_at: '2026-10-09T10:00:00Z',
       },
       body: 'Already saved lecture section',
+      document: docOf('Already saved lecture section'),
       selected_revision: 3,
       versions: [],
     }
@@ -97,15 +110,16 @@ describe('source-linked reader excerpts', () => {
       ...detail,
       note: { ...detail.note, current_revision: 4 },
       body: 'Foreign newer text',
+      document: docOf('Foreign newer text'),
     })
     appendReaderExcerpt({ material, quote: 'Related concept', page: 13 })
     const draft = draftFor(id)!
     expect(draft.noteId).toBe(id)
     expect(draft.baseRevision).toBe(3)
-    expect(draft.baseBody).toBe(detail.body)
-    expect(draft.body).toContain(detail.body)
-    expect(draft.body).toContain('/material/17?page=12')
-    expect(draft.body).toContain('/material/17?page=13')
+    expect(draft.baseBody).toBe(bodyOf('Already saved lecture section'))
+    expect(readable(draft.body)).toContain('Already saved lecture section')
+    expect(draft.body).toContain('"href":"/material/17?page=12"')
+    expect(draft.body).toContain('"href":"/material/17?page=13"')
     expect(newNoteDraftFor(2, 4)).toBeNull()
   })
 
@@ -117,21 +131,28 @@ describe('source-linked reader excerpts', () => {
   it('creates a recoverable draft with the document title and exact page link', () => {
     const draft = appendReaderExcerpt({ material, quote: 'Ein wichtiger Kerngedanke.', page: 120 })
     expect(draft.title).toBe('Vorlesung 3')
-    expect(draft.body).toBe('> Ein wichtiger Kerngedanke\\.\n\n[Vorlesung 3\\.pdf · 120](/material/17?page=120)\n\n')
+    const [quote, source] = parseBody(draft.body).blocks
+    expect(quote).toMatchObject({ type: 'quote', content: [{ type: 'text', text: 'Ein wichtiger Kerngedanke.' }] })
+    expect(source.content).toEqual([{ type: 'text', text: 'Vorlesung 3.pdf · 120', href: '/material/17?page=120' }])
     expect(newNoteDraftFor(2, 4)).toEqual(draft)
   })
 
   it('remembers exactly where on the page the quote stood', () => {
     const draft = appendReaderExcerpt({ material, quote: 'Genau hier.', page: 3, rects: [[0.1, 0.4, 0.6, 0.42]] })
-    expect(draft.body).toContain('(/material/17?page=3&mark=0.1,0.4,0.6,0.42)')
+    expect(draft.body).toContain('"href":"/material/17?page=3&mark=0.1,0.4,0.6,0.42"')
   })
 
   it('preserves the entire existing body and chosen title when appending another source', () => {
-    const previous = keepNewNoteDraft(2, 4, 'Eigene Zusammenfassung', '## Mein Gedanke\n\nDie Erklärung.  ')
+    const previous = keepNewNoteDraft(
+      2,
+      4,
+      'Eigene Zusammenfassung',
+      markdownToBody('## Mein Gedanke\n\nDie Erklärung.'),
+    )
     const next = appendReaderExcerpt({ material, quote: 'Zweite Quelle', page: 2 })
     expect(next.title).toBe(previous.title)
     expect(next.body.startsWith(previous.body)).toBe(true)
-    expect(next.body).toContain('Die Erklärung.  \n\n> Zweite Quelle')
+    expect(readable(next.body)).toContain('Die Erklärung.\nZweite Quelle')
     expect(next.writeId).not.toBe(previous.writeId)
   })
 
@@ -141,20 +162,26 @@ describe('source-linked reader excerpts', () => {
       quote: '**fett**\n<script>alert(1)</script>\n[x](javascript:alert(1))\n# heading\n$math$ & `code`',
       page: 3,
     })
-    expect(draft.body).toContain('> \\*\\*fett\\*\\*\n> &lt;script&gt;alert\\(1\\)&lt;/script&gt;')
-    expect(draft.body).toContain('> \\[x\\]\\(javascript:alert\\(1\\)\\)')
-    expect(draft.body).toContain('> \\# heading\n> \\$math\\$ &amp; \\`code\\`')
-    expect(draft.body).toContain(
-      '[\\[x\\]\\(https://fake\\.invalid\\) &lt;b&gt;\\$x\\$\\.pdf · 3](/material/17?page=3)',
-    )
-    expect(draft.body).not.toContain('<script>')
+    const blocks = parseBody(draft.body).blocks
+    // Every line is a plain quote block: no marks, links, headings or formulas come out of PDF text.
+    expect(blocks.slice(0, 5).map((block) => block.type)).toEqual(['quote', 'quote', 'quote', 'quote', 'quote'])
+    expect(blocks.slice(0, 5).map((block) => block.content)).toEqual([
+      [{ type: 'text', text: '**fett**' }],
+      [{ type: 'text', text: '<script>alert(1)</script>' }],
+      [{ type: 'text', text: '[x](javascript:alert(1))' }],
+      [{ type: 'text', text: '# heading' }],
+      [{ type: 'text', text: '$math$ & `code`' }],
+    ])
+    expect(blocks[5].content).toEqual([
+      { type: 'text', text: '[x](https://fake.invalid) <b>$x$.pdf · 3', href: '/material/17?page=3' },
+    ])
   })
 
   it('isolates recovery copies by source and course', () => {
     keepNewNoteDraft(2, 9, 'Andere Quelle', 'Unverändert')
     keepNewNoteDraft(3, 4, 'Anderer Kurs', 'Unverändert')
     const draft = appendReaderExcerpt({ material, quote: 'Meine Quelle', page: 1 })
-    expect(draft.body).not.toContain('Unverändert')
+    expect(readable(draft.body)).not.toContain('Unverändert')
     expect(newNoteDraftFor(2, 9)?.body).toBe('Unverändert')
     expect(newNoteDraftFor(3, 4)?.body).toBe('Unverändert')
   })
@@ -186,8 +213,9 @@ describe('source-linked reader excerpts', () => {
       page: 2,
     })
     expect(draft.title).toBe('Datei # neuer Block')
-    expect(draft.body).toContain('[Datei \\# neuer Block\\.pdf · 2](/material/17?page=2)')
-    expect(draft.body).not.toContain('\n# neuer Block')
+    const source = parseBody(draft.body).blocks.at(-1)!
+    expect(source).toMatchObject({ type: 'paragraph', content: [{ text: 'Datei # neuer Block.pdf · 2' }] })
+    expect(parseBody(draft.body).blocks.some((block) => block.type === 'heading')).toBe(false)
   })
 
   it('rejects an overflowing draft before writing, leaving its content and writeId intact', () => {

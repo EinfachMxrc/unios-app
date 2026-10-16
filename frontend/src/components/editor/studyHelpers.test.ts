@@ -18,7 +18,7 @@ import {
 import { mathTemplates, matrixTemplate } from './mathTemplates'
 import { quickStudyCommand } from './studyCommands'
 import { renderFormula } from './math'
-import { editorExtensions } from './extensions'
+import { editorExtensions } from '@/editor/extensions'
 import { insertStudyMarkdown } from './studyInsert'
 import { parseClip, validClip } from '@/pages/material/PdfClipTool'
 

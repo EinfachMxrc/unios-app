@@ -275,7 +275,6 @@ export function NotesPage() {
             key={selectedId}
             id={selectedId}
             revision={revision}
-            notes={data?.notes ?? []}
             onRevision={chooseRevision}
             onEditing={() => setFeedback('')}
             onSaved={saved}

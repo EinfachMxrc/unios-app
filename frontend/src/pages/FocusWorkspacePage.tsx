@@ -392,13 +392,7 @@ function FocusWorkspace({ reference }: { reference: LearningFocusRef }) {
                         {t('focusChangeNote')}
                       </Button>
                     </div>
-                    <FocusNote
-                      key={selectedNote}
-                      id={selectedNote}
-                      courseId={data.course_id}
-                      notes={courseNotes}
-                      onSaved={notes.reload}
-                    />
+                    <FocusNote key={selectedNote} id={selectedNote} courseId={data.course_id} onSaved={notes.reload} />
                   </>
                 ) : (
                   <section aria-labelledby="focus-note-list-title">
@@ -454,17 +448,7 @@ function FocusWorkspace({ reference }: { reference: LearningFocusRef }) {
   )
 }
 
-function FocusNote({
-  id,
-  courseId,
-  notes,
-  onSaved,
-}: {
-  id: string
-  courseId: number
-  notes: NotesResponse['notes']
-  onSaved: () => void
-}) {
+function FocusNote({ id, courseId, onSaved }: { id: string; courseId: number; onSaved: () => void }) {
   const { t } = useT('learning')
   const detail = useApi<NoteDetail>(`/api/notes/${id}`)
   const [revision, setRevision] = useState<number | null>(null)
@@ -478,7 +462,6 @@ function FocusNote({
           key={id}
           id={id}
           revision={revision}
-          notes={notes}
           onRevision={setRevision}
           onEditing={() => setRevision(null)}
           onSaved={onSaved}

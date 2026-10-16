@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { BookOpen, FileCheck2, MessageSquareText } from 'lucide-react'
+import { markdownToBody } from '@/editor/markdownImport'
 import { useT } from '@/i18n/useT'
 import './NotePages.css'
 
@@ -17,12 +18,12 @@ export function NoteTemplates({
   const { t } = useT('notes')
   if (body.trim()) return null
   const templates = [
-    { id: 'lecture', label: t('pages.lectureTemplate'), body: t('pages.lectureBody'), icon: BookOpen },
-    { id: 'exam', label: t('pages.examTemplate'), body: t('pages.examBody'), icon: FileCheck2 },
+    { id: 'lecture', label: t('pages.lectureTemplate'), body: markdownToBody(t('pages.lectureBody')), icon: BookOpen },
+    { id: 'exam', label: t('pages.examTemplate'), body: markdownToBody(t('pages.examBody')), icon: FileCheck2 },
     {
       id: 'reflection',
       label: t('pages.reflectionTemplate'),
-      body: t('pages.reflectionBody'),
+      body: markdownToBody(t('pages.reflectionBody')),
       icon: MessageSquareText,
     },
   ]

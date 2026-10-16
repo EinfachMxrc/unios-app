@@ -45,6 +45,7 @@ const created = (id: string): NoteDetail => ({
   },
   selected_revision: 1,
   body: 'Mein Lernstoff',
+  document: { version: 1, blocks: [] },
   versions: [],
 })
 
@@ -68,7 +69,7 @@ describe('source-scoped reader note saves', () => {
     expect(request).not.toHaveBeenCalled()
     const first = saveSourceNote(blank)
     expect(saveSourceNote(blank)).toBe(first)
-    expect(JSON.parse(vi.mocked(request).mock.calls[0][1]?.body as string).body).toBe('')
+    expect(JSON.parse(vi.mocked(request).mock.calls[0][1]?.body as string).document.blocks).toEqual([])
     const later = keepNewNoteDraft(2, 4, 'Blank lecture', 'Added during the blank create')
     rememberSourceWorkingDraft(2, 4, { title: later.title, body: later.body, persisted: later, status: 'local' })
     pending.resolve({ ...created('synthetic-blank-note'), body: '' })

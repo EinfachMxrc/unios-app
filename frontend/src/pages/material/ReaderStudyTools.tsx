@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { SaveIndicator } from '@/components/SaveIndicator'
-import { StudyInsertTools } from '@/components/editor/StudyInsertTools'
+import { NoteEditor } from '@/editor/NoteEditor'
+import { appendBlocks, docText, parseBody, sameBlocks } from '@/editor/doc'
+import { withDraftBody } from '@/lib/noteBody'
 import { Empty, Failure, Loading } from '@/components/State'
 import { Button } from '@/components/ui/button'
 import { useT } from '@/i18n/useT'
@@ -40,6 +42,9 @@ import {
   type SourceWorkingDraft,
 } from '@/lib/sourceNoteSave'
 import './ReaderStudyTools.css'
+
+/** Limits count readable characters, not the stored block lines. */
+const textLength = (body: string) => docText(parseBody(body)).length
 
 export type ReaderStudyTab = 'annotations' | 'notes' | 'recall'
 
@@ -362,7 +367,6 @@ function SavedReaderNote({
       key={id}
       id={id}
       revision={revision}
-      notes={[]}
       startEditing
       externalDraftRevision={excerptRevision}
       onRevision={setRevision}
@@ -390,9 +394,9 @@ function ReaderNoteDraft({
 }) {
   const { t } = useT('material')
   const { t: notes } = useT('notes')
+  const { t: editorText } = useT('editor')
   const titleId = useId()
   const bodyId = useId()
-  const bodyField = useRef<HTMLTextAreaElement>(null)
   const hintId = useId()
   const [editor, setEditor] = useState<DraftState>(() => {
     const persisted = newNoteDraftFor(material.course_id, material.resource_id)
@@ -462,17 +466,12 @@ function ReaderNoteDraft({
       const baseBody = before.persisted?.body ?? ''
       // An excerpt may arrive after quota recovers. Add only its new suffix to
       // the current in-memory text, preserving edits that failed local storage.
-      if (!incoming.body.startsWith(baseBody)) return
-      const suffix = incoming.body.slice(baseBody.length)
-      const separator =
-        before.body && !suffix.startsWith('\n') && !before.body.endsWith('\n\n')
-          ? before.body.endsWith('\n')
-            ? '\n'
-            : '\n\n'
-          : ''
-      const body = before.body + separator + suffix
-      if (body.length > READER_NOTE_BODY_LIMIT) {
-        setLocalActionError(notes('studio.tooLong'))
+      const baseBlocks = parseBody(baseBody).blocks
+      const incomingBlocks = parseBody(incoming.body).blocks
+      if (!sameBlocks(incomingBlocks.slice(0, baseBlocks.length), baseBlocks)) return
+      const body = appendBlocks(before.body, incomingBlocks.slice(baseBlocks.length))
+      if (textLength(body) > READER_NOTE_BODY_LIMIT) {
+        setLocalActionError(editorText('tooLong'))
         return
       }
       next = { ...before, body }
@@ -491,7 +490,7 @@ function ReaderNoteDraft({
     current.current = next
     rememberSourceWorkingDraft(material.course_id, material.resource_id, next)
     setEditor(next)
-  }, [excerptRevision, material.course_id, material.resource_id, notes])
+  }, [excerptRevision, material.course_id, material.resource_id, editorText])
 
   useEffect(() => {
     if (save.phase !== 'saved' || appliedSave.current === save) return
@@ -510,7 +509,7 @@ function ReaderNoteDraft({
             noteId: save.noteId,
             baseRevision: save.created.note.current_revision,
             baseTitle: save.created.note.title,
-            baseBody: save.created.body,
+            baseBody: withDraftBody(save.created).body,
             title: latest.title,
             body: latest.body,
           })
@@ -540,7 +539,7 @@ function ReaderNoteDraft({
             noteId: saved.noteId,
             baseRevision: saved.created.note.current_revision,
             baseTitle: saved.created.note.title,
-            baseBody: saved.created.body,
+            baseBody: withDraftBody(saved.created).body,
             title: snapshot.title,
             body: snapshot.body,
           })
@@ -559,7 +558,7 @@ function ReaderNoteDraft({
       busy ||
       !snapshot.title.trim() ||
       snapshot.title.length > READER_NOTE_TITLE_LIMIT ||
-      snapshot.body.length > READER_NOTE_BODY_LIMIT
+      textLength(snapshot.body) > READER_NOTE_BODY_LIMIT
     )
       return
     setLocalActionError('')
@@ -595,26 +594,12 @@ function ReaderNoteDraft({
         source={lectureSource}
         disabled={busy}
       />
-      <label htmlFor={bodyId}>{notes('noteContentAria')}</label>
-      <StudyInsertTools
-        field={bodyField}
+      <NoteEditor
+        id={bodyId}
+        workspaceKey={`reader-new:${material.course_id}:${material.resource_id}`}
         value={editor.body}
-        maxLength={READER_NOTE_BODY_LIMIT}
         onChange={(body) => change(editor.title, body)}
-        disabled={busy}
-        compact
-      >
-        <textarea
-          ref={bodyField}
-          id={bodyId}
-          value={editor.body}
-          maxLength={READER_NOTE_BODY_LIMIT}
-          aria-describedby={hintId}
-          placeholder={t('readerNotesPlaceholder')}
-          onChange={(event) => change(editor.title, event.target.value)}
-          rows={15}
-        />
-      </StudyInsertTools>
+      />
       <p className="muted-text reader-study-hint" id={hintId}>
         {t('readerNotesHint')}
       </p>
@@ -622,7 +607,7 @@ function ReaderNoteDraft({
         <SaveIndicator phase={editor.status === 'error' ? 'error' : 'local'} message={statusMessage} />
       )}
       {localActionError && <Failure message={localActionError} />}
-      {editor.body.length > READER_NOTE_BODY_LIMIT && <Failure message={notes('studio.tooLong')} />}
+      {textLength(editor.body) > READER_NOTE_BODY_LIMIT && <Failure message={editorText('tooLong')} />}
       {save.phase === 'error' && <Failure message={save.message} />}
       {saved && (
         <div className="reader-note-saved" role="status">
@@ -644,7 +629,7 @@ function ReaderNoteDraft({
             busy ||
             !editor.title.trim() ||
             editor.title.length > READER_NOTE_TITLE_LIMIT ||
-            editor.body.length > READER_NOTE_BODY_LIMIT
+            textLength(editor.body) > READER_NOTE_BODY_LIMIT
           }
         >
           {busy ? notes('saving') : saved ? t('readerContinueNote') : notes('createNoteButton')}

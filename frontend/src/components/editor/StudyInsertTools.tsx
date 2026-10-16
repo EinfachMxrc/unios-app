@@ -15,7 +15,7 @@ const WritingGridDialog = lazy(() => import('./WritingGridDialog'))
 const MathEntryDialog = lazy(() => import('./MathEntryDialog'))
 const TruthTableDialog = lazy(() => import('./TruthTableDialog'))
 const StudyHelperDialog = lazy(() => import('./StudyHelperDialog'))
-const NoteMarkdownDocument = lazy(() => import('./RichNoteDocument'))
+const MarkdownView = lazy(() => import('@/editor/MarkdownView'))
 
 export function StudyInsertTools({
   field,
@@ -205,7 +205,7 @@ export function StudyInsertTools({
       {preview && (
         <div className="reader-note-preview">
           <Suspense fallback={<p role="status">{t('math.loading')}</p>}>
-            <NoteMarkdownDocument body={value} notes={[]} />
+            <MarkdownView markdown={value} />
           </Suspense>
         </div>
       )}

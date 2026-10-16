@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { request } from '@/api'
+import { appendBlocks, docText, linkInline, paragraph, parseBody } from '@/editor/doc'
+import { documentPayload, withDraftBody } from '@/lib/noteBody'
 import { keepNewNoteDraft, newNoteDraftFor, workingNoteDraftFor } from '@/noteDraft'
 import { beginNewFreeNote, rememberSourceWorkingDraft, sourceWorkingDraft } from '@/lib/sourceNoteSave'
 import type { Jot, NoteDetail } from '@/types'
@@ -23,12 +25,16 @@ export function jotSourceHref(id: string): string {
 
 /** Exact source identity also makes an explicit retry safe after a lost ACK. */
 export function includesJotSource(body: string, id: string): boolean {
-  return body.includes(`](${jotSourceHref(id)})`)
+  return body.includes(`"href":${JSON.stringify(jotSourceHref(id))}`)
 }
 
 function appendJot(body: string, jot: Pick<Jot, 'id' | 'body'>, sourceLabel: string): string {
-  const next = `${body}${body ? '\n\n' : ''}${jot.body}\n\n[${sourceLabel}](${jotSourceHref(jot.id)})`
-  if (next.length > MAX_BODY) throw new JotTransferBlocked('tooLong')
+  const paragraphs = jot.body.split(/\n{2,}/).filter((part) => part.trim())
+  const next = appendBlocks(body, [
+    ...paragraphs.map((part) => paragraph(part.trim())),
+    paragraph([linkInline(sourceLabel, jotSourceHref(jot.id))]),
+  ])
+  if (docText(parseBody(next)).length > MAX_BODY) throw new JotTransferBlocked('tooLong')
   return next
 }
 
@@ -54,7 +60,7 @@ export async function transferJotToNote(
   const host = await request<{ mode: string; generation: number | null }>('/api/host', { cache: 'no-store', signal })
   if (host.mode !== 'host' || !Number.isSafeInteger(host.generation) || host.generation === null || host.generation < 1)
     throw new JotTransferBlocked('hostUnavailable')
-  const detail = await request<NoteDetail>(`/api/notes/${noteId}`, { cache: 'no-store', signal })
+  const detail = withDraftBody(await request<NoteDetail>(`/api/notes/${noteId}`, { cache: 'no-store', signal }))
   if (
     detail.note.id !== noteId ||
     detail.note.course_id !== courseId ||
@@ -71,9 +77,13 @@ export async function transferJotToNote(
     method: 'PUT',
     signal,
     headers: { 'X-UniOS-Lease-Generation': String(host.generation) },
-    body: JSON.stringify({ title: detail.note.title, body, expected_revision: detail.note.current_revision }),
+    body: JSON.stringify({
+      title: detail.note.title,
+      document: documentPayload(body),
+      expected_revision: detail.note.current_revision,
+    }),
   })
-  return { detail: saved, alreadyLinked: false }
+  return { detail: withDraftBody(saved), alreadyLinked: false }
 }
 
 /** Prepare the existing create form, keeping any earlier device draft intact. */

@@ -4,7 +4,10 @@ import { ActionFeedback } from '@/components/ActionFeedback'
 import { FormField } from '@/components/FormField'
 import { SaveIndicator } from '@/components/SaveIndicator'
 import { Failure } from '@/components/State'
-import { NoteStudio } from '@/components/editor/NoteStudio'
+import { NoteEditor } from '@/editor/NoteEditor'
+import { docText, parseBody } from '@/editor/doc'
+import { markdownToBody } from '@/editor/markdownImport'
+import { withDraftBody } from '@/lib/noteBody'
 import { NoteTemplates } from './NoteTemplates'
 import { rememberPageParentIntent } from '@/lib/notePages'
 import { Button } from '@/components/ui/button'
@@ -29,6 +32,11 @@ import { LoaderCircle } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 
 const NOTE_BODY_LIMIT = 100_000
+/** The limit counts readable characters, not the stored block lines. */
+const textLength = (body: string) => docText(parseBody(body)).length
+/** Template blocks get fresh ids each time, so "untouched" is judged by their readable text. */
+const isUntouchedTemplate = (body: string, template: string) =>
+  !!body.trim() && docText(parseBody(body)).trim() === docText(parseBody(markdownToBody(template))).trim()
 export function NewNote({
   data,
   courseId,
@@ -83,6 +91,7 @@ function NewNoteForm({
 }) {
   const { t } = useT('notes')
   const { t: material } = useT('material')
+  const { t: editorText } = useT('editor')
   const canWrite = useWritableHost()
   const [editor, setEditor] = useState<SourceWorkingDraft>(() => {
     const persisted = newNoteDraftFor(selectedCourse, resourceId)
@@ -100,7 +109,7 @@ function NewNoteForm({
     }
     return {
       title: persisted?.title ?? suggestedTitle,
-      body: persisted?.body ?? initialBody ?? (resourceId === null ? '' : t('lectureTemplate')),
+      body: persisted?.body ?? initialBody ?? (resourceId === null ? '' : markdownToBody(t('lectureTemplate'))),
       persisted,
       status: persisted ? 'restored' : 'idle',
     }
@@ -151,7 +160,7 @@ function NewNoteForm({
         noteId: ack.noteId,
         baseRevision: ack.created.note.current_revision,
         baseTitle: ack.created.note.title,
-        baseBody: ack.created.body,
+        baseBody: withDraftBody(ack.created).body,
         title: latest.title,
         body: latest.body,
       })
@@ -195,7 +204,7 @@ function NewNoteForm({
       !selectedCourse ||
       !snapshot.title.trim() ||
       snapshot.title.length > 200 ||
-      snapshot.body.length > NOTE_BODY_LIMIT
+      textLength(snapshot.body) > NOTE_BODY_LIMIT
     )
       return
     setSaveError('')
@@ -244,7 +253,7 @@ function NewNoteForm({
               />
             )}
           </FormField>
-          {body.trim() === t('lectureTemplate').trim() && !saved && (
+          {isUntouchedTemplate(body, t('lectureTemplate')) && !saved && (
             <Button
               type="button"
               variant="ghost"
@@ -264,12 +273,11 @@ function NewNoteForm({
             disabled={!canWrite || busy}
           />
           <NoteTemplates title={title} body={body} disabled={!canWrite || busy} onChoose={changeNewDraft} />
-          <NoteStudio
+          <NoteEditor
             workspaceKey={`new:${selectedCourse}:${resourceId ?? 'none'}`}
             id="new-note-body"
             value={body}
             onChange={(next) => changeNewDraft(title, next)}
-            notes={data.notes}
           />
           {editor.status !== 'idle' && (
             <SaveIndicator
@@ -283,7 +291,7 @@ function NewNoteForm({
               }
             />
           )}
-          {body.length > NOTE_BODY_LIMIT && <Failure message={t('studio.tooLong')} />}
+          {textLength(body) > NOTE_BODY_LIMIT && <Failure message={editorText('tooLong')} />}
           {saveError && <Failure message={saveError} />}
           {save.phase === 'error' && <Failure message={save.message} />}
           {saved && (
@@ -302,7 +310,7 @@ function NewNoteForm({
               !title.trim() ||
               busy ||
               title.length > 200 ||
-              body.length > NOTE_BODY_LIMIT
+              textLength(body) > NOTE_BODY_LIMIT
             }
             onClick={() => void create()}
           >

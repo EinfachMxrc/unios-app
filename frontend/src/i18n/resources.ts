@@ -33,6 +33,7 @@ import assessment from './locales/de/assessment'
 import coding from './locales/de/coding'
 import study from './locales/de/study'
 import noteCards from './locales/de/noteCards'
+import editor from './locales/de/editor'
 import material from './locales/de/material'
 import readerNotePicker from './locales/de/readerNotePicker'
 import inbox from './locales/de/inbox'
@@ -84,6 +85,7 @@ export const deResources = {
   lectureCoverage,
   readerNotePicker,
   noteCards,
+  editor,
   calendarWorkspace,
   mathQuick,
   studyWorkspace,

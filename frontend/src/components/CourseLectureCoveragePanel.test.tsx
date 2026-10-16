@@ -2,6 +2,7 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
+import { linkInline, paragraph, parseBody, serializeDoc } from '@/editor/doc'
 import { recordLectureCoverage, type LectureSource } from '@/lib/lectureCoverage'
 import { CourseLectureCoveragePanel } from './CourseLectureCoveragePanel'
 
@@ -34,8 +35,11 @@ afterEach(cleanup)
 const source: LectureSource = { courseId: 1, resourceId: 5, versionId: 17, version: 2, resourceName: 'Synthetic.pdf' }
 
 it('keeps the recorded old PDF version selected despite an appended personal cross-reference', () => {
-  const body =
-    recordLectureCoverage('', source, '2026-10-14', '5-7').body + '\nEigener Vergleich: [S. 20](/material/18?page=20).'
+  const doc = parseBody(recordLectureCoverage('', source, '2026-10-14', '5-7').body)
+  doc.blocks.push(
+    paragraph([{ type: 'text', text: 'Eigener Vergleich: ' }, linkInline('S. 20', '/material/18?page=20')]),
+  )
+  const body = serializeDoc(doc)
   render(<CourseLectureCoveragePanel courseId={1} resourceId={5} body={body} onChange={vi.fn()} />)
   expect((screen.getByLabelText('source') as HTMLSelectElement).value).toBe('17')
   expect(screen.getByTestId('chosen-source').textContent).toBe('17')
@@ -48,7 +52,10 @@ it('uses the note resource when no lecture source was recorded instead of inferr
     <CourseLectureCoveragePanel
       courseId={1}
       resourceId={5}
-      body="Eigener Vergleich: [S. 20](/material/18?page=20)."
+      body={serializeDoc({
+        version: 1,
+        blocks: [paragraph([linkInline('S. 20', '/material/18?page=20')])],
+      })}
       onChange={vi.fn()}
     />,
   )

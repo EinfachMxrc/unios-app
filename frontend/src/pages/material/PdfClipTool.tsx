@@ -5,7 +5,7 @@ import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { request } from '@/api'
 import { useT } from '@/i18n/useT'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/editor/StudioDialog'
-import { markdownCell } from '@/components/editor/studyModels'
+import { linkInline, newBlockId, paragraph, type NoteBlock } from '@/editor/doc'
 import type { Material } from '@/types'
 import { Button } from '@/components/ui/button'
 import './PdfClipTool.css'
@@ -39,7 +39,7 @@ export function PdfClipTool({
   material: Material
   page: number
   canWrite: boolean
-  onApply: (markdown: string) => void | Promise<void>
+  onApply: (blocks: NoteBlock[]) => void | Promise<void>
 }) {
   const { t } = useT('material')
   const [open, setOpen] = useState(false)
@@ -54,8 +54,8 @@ export function PdfClipTool({
           material={material}
           page={page}
           onClose={() => setOpen(false)}
-          onApply={async (markdown) => {
-            await onApply(markdown)
+          onApply={async (blocks) => {
+            await onApply(blocks)
             setOpen(false)
           }}
         />
@@ -73,7 +73,7 @@ function ClipDialog({
   pdf: PDFDocumentProxy
   material: Material
   page: number
-  onApply: (markdown: string) => void | Promise<void>
+  onApply: (blocks: NoteBlock[]) => void | Promise<void>
   onClose: () => void
 }) {
   const { t } = useT('material')
@@ -163,10 +163,17 @@ function ClipDialog({
       }
       if (abort.signal.aborted) return
       const coordinates = [captured.x, captured.y, captured.width, captured.height].map((n) => n.toFixed(5)).join(',')
-      const label = markdownCell(`${material.resource_name} · ${page}`)
-      await onApply(
-        `![${label}](${asset.src})\n\n[${label}](/material/${material.version_id}?page=${page}&clip=${coordinates})\n\n`,
-      )
+      const label = `${material.resource_name} · ${page}`
+      await onApply([
+        {
+          id: newBlockId(),
+          type: 'media',
+          props: { kind: 'image', src: asset.src, alt: label },
+          content: [],
+          children: [],
+        },
+        paragraph([linkInline(label, `/material/${material.version_id}?page=${page}&clip=${coordinates}`)]),
+      ])
     } catch {
       if (!abort.signal.aborted) setError(t('clip.saveFailed'))
     } finally {

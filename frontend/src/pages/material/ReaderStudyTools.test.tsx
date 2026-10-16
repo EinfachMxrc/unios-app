@@ -44,6 +44,11 @@ vi.mock('@/pages/notes/NoteDocument', () => ({
     </div>
   ),
 }))
+vi.mock('@/editor/NoteEditor', () => ({
+  NoteEditor: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
+    <textarea aria-label="noteContentAria" value={value} onChange={(event) => onChange(event.target.value)} />
+  ),
+}))
 vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
   return { useT: () => ({ t }) }
@@ -72,6 +77,18 @@ const created: NoteDetail = {
   },
   selected_revision: 1,
   body: 'Vorhandener Lernstoff',
+  document: {
+    version: 1,
+    blocks: [
+      {
+        id: 'para0001',
+        type: 'paragraph',
+        props: {},
+        content: [{ type: 'text', text: 'Vorhandener Lernstoff' }],
+        children: [],
+      },
+    ],
+  },
   versions: [],
 }
 
@@ -268,7 +285,9 @@ it('recovers RAM-only request text after remount and a failed server save, so re
   const retried = deferred()
   vi.mocked(request).mockReturnValue(retried.promise)
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))
-  expect(JSON.parse(vi.mocked(request).mock.calls[1][1]?.body as string).body).toBe(unsaved)
+  expect(JSON.parse(vi.mocked(request).mock.calls[1][1]?.body as string).document.blocks[0].content[0].text).toBe(
+    unsaved,
+  )
   await act(async () => {
     retried.resolve(created)
     await retried.promise
@@ -425,9 +444,9 @@ it('allows an explicitly saved empty source note without creating it automatical
   const save = screen.getByRole('button', { name: 'createNoteButton' }) as HTMLButtonElement
   expect(save.disabled).toBe(false)
   fireEvent.click(save)
-  expect(JSON.parse(vi.mocked(request).mock.calls[0][1]?.body as string).body).toBe('')
+  expect(JSON.parse(vi.mocked(request).mock.calls[0][1]?.body as string).document.blocks).toEqual([])
   await act(async () => {
-    pending.resolve({ ...created, body: '' })
+    pending.resolve({ ...created, body: '', document: { version: 1, blocks: [] } })
     await pending.promise
   })
   await waitFor(() => expect(screen.getByTestId('continued-note').textContent).toContain(created.note.id))

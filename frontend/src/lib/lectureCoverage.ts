@@ -1,4 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
+import {
+  docText,
+  linkInline,
+  newBlockId,
+  paragraph,
+  parseBody,
+  serializeDoc,
+  type InlineNode,
+  type NoteBlock,
+  type NoteDoc,
+} from '@/editor/doc'
 import { studyNoteFormat } from './studyNoteFormat'
 
 export type LectureSource = {
@@ -57,40 +68,56 @@ export function formatLecturePages(pages: number[]) {
     .join(', ')
 }
 
-function lectureBlockMetadata(content: string) {
-  const lines = content.split('\n')
-  const source = lines.find((line) => /^\*\*Quelle:\*\*/.test(line))
-  const versionId = Number(source?.match(/(?<!\\)\]\(\/material\/(\d+)\)/)?.[1])
-  const pages = lines.find((line) => /^\*\*Bearbeitete PDF-Seiten:\*\*/.test(line)) ?? ''
-  return { versionId, pages }
+const LABEL = /^Vorlesung · (\d{4}-\d{2}-\d{2})$/
+const META = ['Datum:', 'Quelle:', 'Bearbeitete PDF-Seiten:']
+
+/** Recorded lectures are callout blocks labelled "Vorlesung · date"; bold lead-ins mark our own lines. */
+function lectureBlocks(doc: NoteDoc) {
+  return doc.blocks.flatMap((block) => {
+    const match = block.type === 'callout' ? LABEL.exec(String(block.props.label ?? '')) : null
+    return match ? [{ block, date: match[1] }] : []
+  })
 }
 
-function lectureBlocks(body: string) {
-  return body.matchAll(/^:::callout\s+\{[^\n]*label="Vorlesung · (\d{4}-\d{2}-\d{2})"[^\n]*\}\s*\n([\s\S]*?)^:::\s*$/gm)
+function leadIn(paragraph: NoteBlock): string | null {
+  const first = paragraph.content[0]
+  return paragraph.type === 'paragraph' && first?.type === 'text' && first.marks?.includes('bold') ? first.text : null
+}
+
+function lectureBlockMetadata(block: NoteBlock) {
+  const source = block.children.find((child) => leadIn(child) === 'Quelle:')
+  const pagesLine = block.children.find((child) => leadIn(child) === 'Bearbeitete PDF-Seiten:')
+  const link = source?.content.find((node) => node.type === 'text' && node.href)
+  const versionId = Number(link?.type === 'text' ? /^\/material\/(\d+)$/.exec(link.href ?? '')?.[1] : undefined)
+  const pages = (pagesLine?.content ?? []).flatMap((node) => {
+    const match = node.type === 'text' && node.href ? /^\/material\/(\d+)\?page=(\d+)$/.exec(node.href) : null
+    return match ? [{ versionId: Number(match[1]), page: Number(match[2]) }] : []
+  })
+  return { versionId, pages }
 }
 
 /** Personal references never change the explicitly recorded lecture source. */
 export function lastRecordedLectureSourceVersion(body: string): number | null {
   let version: number | null = null
-  for (const block of lectureBlocks(body)) {
-    const { versionId } = lectureBlockMetadata(block[2])
+  for (const { block } of lectureBlocks(parseBody(body))) {
+    const { versionId } = lectureBlockMetadata(block)
     if (Number.isSafeInteger(versionId) && versionId > 0) version = versionId
   }
   return version
 }
 
 export function lectureCoverage(body: string, source: LectureSource, date: string): LectureCoverage | null {
-  for (const block of lectureBlocks(body)) {
-    if (block[1] !== date) continue
-    const metadata = lectureBlockMetadata(block[2])
+  for (const { block, date: blockDate } of lectureBlocks(parseBody(body))) {
+    if (blockDate !== date) continue
+    const metadata = lectureBlockMetadata(block)
     if (metadata.versionId !== source.versionId) continue
-    const pages = [...metadata.pages.matchAll(/\]\(\/material\/(\d+)\?page=(\d+)\)/g)]
-      .filter((match) => Number(match[1]) === source.versionId)
-      .map((match) => Number(match[2]))
+    const pages = metadata.pages.filter((item) => item.versionId === source.versionId).map((item) => item.page)
     if (pages.length) return { date, pages: [...new Set(pages)].sort((a, b) => a - b) }
   }
   return null
 }
+
+const bold = (text: string): InlineNode => ({ type: 'text', text, marks: ['bold'] })
 
 /** A portable source block is readable through the normal note API and GPT lookup tools. */
 export function recordLectureCoverage(body: string, source: LectureSource, date: string, pageInput: string) {
@@ -108,34 +135,42 @@ export function recordLectureCoverage(body: string, source: LectureSource, date:
     )
   )
     throw new LectureCoverageError('document')
-  const name = source.resourceName.replace(/[\\[\]]/g, '\\$&').replace(/[\r\n]/g, ' ')
+  const name = source.resourceName.replace(/[\r\n]+/g, ' ')
   const lines = [
-    `**Datum:** ${date}`,
-    `**Quelle:** [${name} · Version ${source.version}](/material/${source.versionId})`,
-    `**Bearbeitete PDF-Seiten:** ${pages.map((page) => `[${page}](/material/${source.versionId}?page=${page})`).join(' · ')}`,
+    paragraph([bold('Datum:'), { type: 'text', text: ` ${date}` }]),
+    paragraph([
+      bold('Quelle:'),
+      { type: 'text', text: ' ' },
+      linkInline(`${name} · Version ${source.version}`, `/material/${source.versionId}`),
+    ]),
+    paragraph([
+      bold('Bearbeitete PDF-Seiten:'),
+      { type: 'text', text: ' ' },
+      ...pages.flatMap((page, index): InlineNode[] => [
+        ...(index ? [{ type: 'text' as const, text: ' · ' }] : []),
+        linkInline(String(page), `/material/${source.versionId}?page=${page}`),
+      ]),
+    ]),
   ]
-  const block = `:::callout {kind="note" label="Vorlesung · ${date}"}\n\n${lines.join('\n\n')}\n\n:::`
+  const doc = parseBody(body)
   // Update only our three metadata lines; preserve any personal text added to this block.
-  const pattern = new RegExp(
-    `^:::callout\\s+\\{[^\\n]*label="Vorlesung · ${date}"[^\\n]*\\}\\s*\\n([\\s\\S]*?)^:::\\s*$`,
-    'gm',
+  const existing = lectureBlocks(doc).find(
+    (item) => item.date === date && lectureBlockMetadata(item.block).versionId === source.versionId,
   )
-  let replaced = false
-  const updated = body.replace(pattern, (original, content: string) => {
-    if (replaced || lectureBlockMetadata(content).versionId !== source.versionId) return original
-    const extra = content
-      .split('\n')
-      .filter((line) => !/^\*\*(?:Datum|Quelle|Bearbeitete PDF-Seiten):\*\*/.test(line))
-      .join('\n')
-      .trim()
-    replaced = true
-    return extra ? block.replace('\n\n:::', `\n\n${extra}\n\n:::`) : block
-  })
-  const result = replaced
-    ? updated
-    : `${body}${body && !body.endsWith('\n\n') ? (body.endsWith('\n') ? '\n' : '\n\n') : ''}${block}\n`
-  if (result.length > 100_000) throw new LectureCoverageError('document')
-  return { body: result, coverage: { date, pages } }
+  if (existing) {
+    const personal = existing.block.children.filter((child) => !META.includes(leadIn(child) ?? ''))
+    existing.block.children = [...lines, ...personal]
+  } else {
+    doc.blocks.push({
+      id: newBlockId(),
+      type: 'callout',
+      props: { kind: 'note', label: `Vorlesung · ${date}` },
+      content: [],
+      children: lines,
+    })
+  }
+  if (docText(doc).length > 100_000) throw new LectureCoverageError('document')
+  return { body: serializeDoc(doc), coverage: { date, pages } }
 }
 
 export function lectureDraftPrompt(source: LectureSource, coverage: LectureCoverage) {

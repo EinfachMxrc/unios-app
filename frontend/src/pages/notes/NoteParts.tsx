@@ -4,6 +4,7 @@
  * The presentational parts of a note page. NoteDocument keeps the drafts,
  * revisions and conflict handling; these only show them and report choices.
  */
+import { docText, parseBody } from '@/editor/doc'
 import { activeIntlLocale, localDate } from '@/api'
 import { EntityProperties } from '@/components/EntityProperties'
 import { LinkedItems } from '@/components/LinkedItems'
@@ -15,6 +16,11 @@ import type { NoteDetail } from '@/types'
 
 export type ArchivedDraft = ReturnType<typeof archivedDraftsFor>[number]
 export type ConflictChoice = 'both' | 'local' | 'remote' | 'manual'
+
+/** Conflict and recovery views show readable text, not the stored block lines. */
+function draftText(body: string): string {
+  return docText(parseBody(body))
+}
 
 /** Own draft and the newer host version side by side, with the four ways out. */
 export function NoteConflict({
@@ -34,11 +40,11 @@ export function NoteConflict({
       <div className="note-conflict-versions">
         <section>
           <strong>{t('yourDraftLabel')}</strong>
-          <pre>{local.body}</pre>
+          <pre>{draftText(local.body)}</pre>
         </section>
         <section>
           <strong>{t('currentHostVersionLabel')}</strong>
-          <pre>{remote.body}</pre>
+          <pre>{draftText(remote.body)}</pre>
         </section>
       </div>
       <div className="note-editor-actions">
@@ -99,7 +105,7 @@ export function NoteHistory({
               <strong>
                 {item.title} · {new Date(item.updatedAt).toLocaleString(activeIntlLocale())}
               </strong>
-              <pre>{item.body}</pre>
+              <pre>{draftText(item.body)}</pre>
               <Button size="sm" variant="outline" onClick={() => onRestore(item)}>
                 {t('restoreDraftButton')}
               </Button>

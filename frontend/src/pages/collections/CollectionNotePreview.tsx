@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import { useApi } from '@/api'
-import { NoteMarkdownDocument } from '@/components/NoteMarkdownDocument'
+import { NoteView } from '@/editor/NoteView'
+import { useNoteDetail } from '@/lib/noteBody'
 import { Failure, Loading } from '@/components/State'
-import type { NoteDetail } from '@/types'
 import { workingNoteDraftFor } from '@/noteDraft'
 import { useT } from '@/i18n/useT'
 
 export default function CollectionNotePreview({ id }: { id: string }) {
   const { t } = useT('collections')
-  const { data, error, loading, reload } = useApi<NoteDetail>(`/api/notes/${id}`)
+  const { data, error, loading, reload } = useNoteDetail(`/api/notes/${id}`)
   const draft = workingNoteDraftFor(id)
   const body = draft?.body ?? data?.body
   return body !== undefined ? (
@@ -18,7 +17,7 @@ export default function CollectionNotePreview({ id }: { id: string }) {
           {t('localDraftPreview')}
         </p>
       )}
-      <NoteMarkdownDocument body={body} notes={[]} />
+      <NoteView body={body} />
     </>
   ) : loading && !data ? (
     <Loading variant="rows" />

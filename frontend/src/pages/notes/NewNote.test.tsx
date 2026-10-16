@@ -9,6 +9,7 @@ import { resetSourceNoteSaves, sourceNoteSaveState } from '@/lib/sourceNoteSave'
 import { clearWorkspace } from '@/lib/workspaceState'
 import { draftFor, keepNewNoteDraft, newNoteDraftFor, workingNoteDraftFor } from '@/noteDraft'
 import { queryClient } from '@/offlineCache'
+import { serializeDoc } from '@/editor/doc'
 import type { Material, NoteDetail, NotesResponse } from '@/types'
 import { ReaderStudyTools } from '../material/ReaderStudyTools'
 import { NewNote } from './NewNote'
@@ -38,8 +39,8 @@ vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
   return { useT: () => ({ t }) }
 })
-vi.mock('@/components/editor/NoteStudio', () => ({
-  NoteStudio: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
+vi.mock('@/editor/NoteEditor', () => ({
+  NoteEditor: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
     <textarea aria-label="noteContentAria" value={value} onChange={(event) => onChange(event.target.value)} />
   ),
 }))
@@ -69,6 +70,11 @@ const data: NotesResponse = {
     },
   ],
 }
+/** One paragraph in the stored block form, with a fixed id so drafts compare exactly. */
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }],
+})
 const created = (id: string): NoteDetail => ({
   note: {
     id,
@@ -82,6 +88,7 @@ const created = (id: string): NoteDetail => ({
   },
   selected_revision: 1,
   body: 'Vorhandener Lernstoff',
+  document: docOf('Vorhandener Lernstoff'),
   versions: [],
 })
 
@@ -172,7 +179,7 @@ it('preserves newer source text in the acknowledged UUID when the full editor re
   expect(draftFor('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')).toMatchObject({
     body: newer,
     baseRevision: 1,
-    baseBody: 'Vorhandener Lernstoff',
+    baseBody: serializeDoc(docOf('Vorhandener Lernstoff') as never),
   })
   expect(request).toHaveBeenCalledTimes(1)
 })
@@ -222,7 +229,9 @@ it('recovers RAM-only Reader text and its failed request in the full editor with
   const retry = deferred()
   vi.mocked(request).mockReturnValue(retry.promise)
   fireEvent.click(screen.getByRole('button', { name: 'createNoteButton' }))
-  expect(JSON.parse(vi.mocked(request).mock.calls[1][1]?.body as string).body).toBe(unsaved)
+  expect(JSON.parse(vi.mocked(request).mock.calls[1][1]?.body as string).document.blocks[0].content[0].text).toBe(
+    unsaved,
+  )
   await act(async () => {
     retry.resolve(created('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'))
     await retry.promise

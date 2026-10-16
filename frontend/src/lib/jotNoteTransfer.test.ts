@@ -3,6 +3,7 @@
 
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { keepDraft, keepNewNoteDraft, newNoteDraftFor, rememberVolatileNoteDraft } from '@/noteDraft'
+import { docText, docFromApi, parseBody } from '@/editor/doc'
 import type { NoteDetail } from '@/types'
 import {
   rememberSourceWorkingDraft,
@@ -16,7 +17,19 @@ const mocks = vi.hoisted(() => ({ request: vi.fn() }))
 vi.mock('@/api', () => ({ request: mocks.request }))
 const jot = { id: 'aaaaaaaa-0000-0000-0000-000000000001', body: 'Was ist ein Eigenvektor?\nMeine Frage' }
 const noteId = 'bbbbbbbb-0000-0000-0000-000000000002'
-const source = `[Original](/jots#jot-${jot.id})`
+const href = `/jots#jot-${jot.id}`
+/** Readable text of a stored block document or a draft body. */
+const readable = (body: string) => docText(parseBody(body))
+const docOf = (text: string) => ({
+  version: 1,
+  blocks: [{ id: 'para0001', type: 'paragraph', props: {}, content: [{ type: 'text', text }], children: [] }],
+})
+/** What the host returns for a document it just stored. */
+const stored = (document: unknown, revision = 8): NoteDetail => ({
+  ...detail('', revision),
+  document: document as NoteDetail['document'],
+  body: docText(docFromApi(document)),
+})
 function detail(body = 'Vorhandene Mitschrift', revision = 7): NoteDetail {
   return {
     note: {
@@ -30,6 +43,7 @@ function detail(body = 'Vorhandene Mitschrift', revision = 7): NoteDetail {
       updated_at: '',
     },
     body,
+    document: docOf(body),
     selected_revision: revision,
     versions: [],
   }
@@ -60,7 +74,7 @@ beforeEach(() => {
       path === '/api/host'
         ? { mode: 'host', generation: 12 }
         : options?.method === 'PUT'
-          ? detail(JSON.parse(options.body as string).body, 8)
+          ? stored(JSON.parse(options.body as string).document)
           : detail(),
     ),
   )
@@ -80,11 +94,11 @@ it('appends exact text and the UUID source, preserves the title and binds the li
   const options = mocks.request.mock.calls[2][1]
   expect(options.method).toBe('PUT')
   expect(options.headers).toEqual({ 'X-UniOS-Lease-Generation': '12' })
-  expect(JSON.parse(options.body)).toEqual({
-    title: 'Mein Titel',
-    expected_revision: 7,
-    body: `Vorhandene Mitschrift\n\n${jot.body}\n\n${source}`,
-  })
+  const sent = JSON.parse(options.body)
+  expect(sent).toMatchObject({ title: 'Mein Titel', expected_revision: 7 })
+  expect(sent.body).toBeUndefined()
+  expect(docText(docFromApi(sent.document))).toBe(`Vorhandene Mitschrift\n${jot.body}\nOriginal`)
+  expect(JSON.stringify(sent.document)).toContain(`"href":"${href}"`)
   expect(result.alreadyLinked).toBe(false)
   expect(result.detail.note.current_revision).toBe(8)
   expect(jot.body).toBe('Was ist ein Eigenvektor?\nMeine Frage')
@@ -149,7 +163,7 @@ it('after a lost write ACK explicitly retries the live read and does not append 
     if (path === '/api/host') return Promise.resolve({ mode: 'host', generation: 12 })
     if (options?.method === 'PUT') {
       writes++
-      server = detail(JSON.parse(options.body as string).body, 8)
+      server = stored(JSON.parse(options.body as string).document)
       return Promise.reject(new Error('ACK lost'))
     }
     return Promise.resolve(server)
@@ -158,8 +172,10 @@ it('after a lost write ACK explicitly retries the live read and does not append 
   const retry = await transferJotToNote(jot, noteId, 3, 'Original')
   expect(retry.alreadyLinked).toBe(true)
   expect(writes).toBe(1)
-  expect(server.body.split(source)).toHaveLength(2)
-  expect(includesJotSource(`[Other](/jots#jot-aaaaaaaa-0000-0000-0000-000000000011)`, jot.id)).toBe(false)
+  expect(JSON.stringify(server.document).split(href)).toHaveLength(2)
+  expect(
+    includesJotSource(JSON.stringify({ href: '/jots#jot-aaaaaaaa-0000-0000-0000-000000000011' }).slice(1, -1), jot.id),
+  ).toBe(false)
 })
 
 it('rejects a too-long append without writing', async () => {
@@ -175,7 +191,7 @@ it('prepares the existing create form, preserving earlier title/text and prevent
   expect(prepareJotNoteDraft(jot, 3, 'Neuer Titel', 'Original')).toBe('/notes?new=1&course_id=3')
   const first = newNoteDraftFor(3, null)!
   expect(first.title).toBe('Vorheriger Titel')
-  expect(first.body).toBe(`Vorheriger Entwurf\n\n${jot.body}\n\n${source}`)
+  expect(readable(first.body)).toBe(`Vorheriger Entwurf\n${jot.body}\nOriginal`)
   prepareJotNoteDraft(jot, 3, 'Noch ein Titel', 'Original')
   expect(newNoteDraftFor(3, null)).toEqual(first)
   expect(mocks.request).not.toHaveBeenCalled()
@@ -198,7 +214,8 @@ it('releases a clean completed free-note receipt only after preparing a distinct
   expect(sourceNoteSaveState(3, null)).toMatchObject({ phase: 'saved', noteId })
   expect(prepareJotNoteDraft(jot, 3, 'New jot note', 'Original')).toBe('/notes?new=1&course_id=3')
   expect(sourceNoteSaveState(3, null).phase).toBe('idle')
-  expect(newNoteDraftFor(3, null)).toMatchObject({ title: 'New jot note', body: `${jot.body}\n\n${source}` })
+  expect(newNoteDraftFor(3, null)).toMatchObject({ title: 'New jot note' })
+  expect(readable(newNoteDraftFor(3, null)!.body)).toBe(`${jot.body}\nOriginal`)
 })
 
 it('keeps later RAM-only free-note text and its confirmed UUID when adding a jot', async () => {
@@ -216,11 +233,8 @@ it('keeps later RAM-only free-note text and its confirmed UUID when adding a jot
   await saving
   prepareJotNoteDraft(jot, 3, 'New jot note', 'Original')
   expect(sourceNoteSaveState(3, null)).toMatchObject({ phase: 'saved', noteId })
-  expect(sourceWorkingDraft(3, null)).toMatchObject({
-    title: 'Later title',
-    body: `Newer RAM explanation\n\n${jot.body}\n\n${source}`,
-    status: 'local',
-  })
+  expect(sourceWorkingDraft(3, null)).toMatchObject({ title: 'Later title', status: 'local' })
+  expect(readable(sourceWorkingDraft(3, null)!.body)).toBe(`Newer RAM explanation\n${jot.body}\nOriginal`)
   expect(newNoteDraftFor(3, null)?.body).toBe(sourceWorkingDraft(3, null)?.body)
 })
 
