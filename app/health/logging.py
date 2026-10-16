@@ -3,6 +3,7 @@
 import json
 import logging
 import re
+from collections.abc import Callable
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
@@ -12,10 +13,19 @@ SECRET_PARAMETER = re.compile(
 BEARER = re.compile(r"(?i)\bBearer\s+[^\s,;]+")
 
 
-def redact_sensitive(value: str, known_secrets: tuple[str, ...] = ()) -> str:
+# A tuple is fixed at start-up; a callable is asked for every message, so secrets that are
+# saved while UniOS runs (AI key, Moodle token, notification URL) are redacted at once.
+Secrets = tuple[str, ...] | Callable[[], tuple[str, ...]]
+
+
+def _resolve(known_secrets: Secrets) -> tuple[str, ...]:
+    return known_secrets() if callable(known_secrets) else known_secrets
+
+
+def redact_sensitive(value: str, known_secrets: Secrets = ()) -> str:
     """Remove session URL values, bearer tokens and configured secrets from messages."""
     result = str(value)
-    for secret in known_secrets:
+    for secret in _resolve(known_secrets):
         if secret:
             result = result.replace(secret, "[REDACTED]")
     result = SECRET_PARAMETER.sub(lambda match: f"{match[1]}{match[2]}[REDACTED]", result)
@@ -23,7 +33,7 @@ def redact_sensitive(value: str, known_secrets: tuple[str, ...] = ()) -> str:
 
 
 class JsonFormatter(logging.Formatter):
-    def __init__(self, known_secrets: tuple[str, ...] = ()) -> None:
+    def __init__(self, known_secrets: Secrets = ()) -> None:
         super().__init__()
         self.known_secrets = known_secrets
 
@@ -36,7 +46,7 @@ class JsonFormatter(logging.Formatter):
 class RedactingFormatter(logging.Formatter):
     """Redact rendered console output without changing Uvicorn's structured record."""
 
-    def __init__(self, wrapped: logging.Formatter, known_secrets: tuple[str, ...]) -> None:
+    def __init__(self, wrapped: logging.Formatter, known_secrets: Secrets) -> None:
         super().__init__()
         self.wrapped = wrapped
         self.known_secrets = known_secrets
@@ -45,7 +55,7 @@ class RedactingFormatter(logging.Formatter):
         return redact_sensitive(self.wrapped.format(record), self.known_secrets)
 
 
-def configure_logging(local_dir: Path, known_secrets: tuple[str, ...] = ()) -> None:
+def configure_logging(local_dir: Path, known_secrets: Secrets = ()) -> None:
     log_dir = local_dir / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     handler = RotatingFileHandler(log_dir / "uni_os.log", maxBytes=5_000_000, backupCount=5, encoding="utf-8")

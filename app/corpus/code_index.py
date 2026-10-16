@@ -1,7 +1,15 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Background indexing of immutable saved commits; never execute repository code."""
 
-import astimport iofrom pathlib import PurePosixPathfrom zipfile import ZipFilefrom app.projects.repo_content import archive_snapshotdef code_pages(settings, snapshot, guard):
+import ast
+import io
+from pathlib import PurePosixPath
+from zipfile import ZipFile
+
+from app.projects.repo_content import archive_snapshot
+
+
+def code_pages(settings, snapshot, guard):
     archive = archive_snapshot(settings, snapshot.project_id, snapshot.head)
     pages, outline, total = [], [], 0
     with ZipFile(io.BytesIO(archive)) as bundle:

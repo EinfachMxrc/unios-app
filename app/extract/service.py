@@ -79,10 +79,15 @@ def index_version(session, version: ResourceVersion, data: bytes, filename: str)
     if session.scalar(select(ResourceText.id).where(ResourceText.version_id == version.id).limit(1)):
         return 0
     pages = extract(data, filename, version.mime_type)
+    store_pages(session, version, pages)
+    return len(pages)
+
+
+def store_pages(session, version: ResourceVersion, pages: list[ExtractedPage]) -> None:
+    """Only database writes: parsing happens beforehand, outside the open transaction."""
     for page in pages:
         session.add(ResourceText(version_id=version.id, page_number=page.number, text=page.text,
                                  markdown=page.markdown, no_text_layer=page.no_text_layer))
-    return len(pages)
 
 
 def document_markdown(session, version_id: int) -> str:

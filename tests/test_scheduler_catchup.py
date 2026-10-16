@@ -59,3 +59,18 @@ def test_late_sync_waits_until_quiet_hours_end(settings, coordinator, monkeypatc
         assert next_sync.next_run_time.astimezone(settings.timezone).hour == 6
     finally:
         scheduler.stop()
+
+
+def test_first_source_added_after_start_schedules_the_sync_without_restart(settings, coordinator):
+    engine = FakeEngine()
+    engine.connectors = []
+    scheduler = SyncScheduler(engine, settings, coordinator)
+    scheduler.scheduler.start(paused=True)
+    try:
+        scheduler.ensure_sync_scheduled()
+        assert scheduler.scheduler.get_job("next_sync") is None
+        engine.connectors.append(object())
+        scheduler.ensure_sync_scheduled()
+        assert scheduler.scheduler.get_job("next_sync") is not None
+    finally:
+        scheduler.stop()

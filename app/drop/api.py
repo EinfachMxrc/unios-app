@@ -21,7 +21,8 @@ from app.db.models import (
     Semester,
     utc_now,
 )
-from app.extract.service import index_version
+from app.extract.isolated import prepare_pages
+from app.extract.service import store_pages
 from app.files.localpath import resolve_local
 from app.files.sidecars import (
     metadata_for,
@@ -142,6 +143,13 @@ def drop_router(settings: Settings, factory, coordinator: HostCoordinator) -> AP
         path = folder / name
         data, details = _read_stable_file(path)
         digest = FileStore.digest(data)
+        mime_type = content_type(data, name)
+        try:
+            # Parsed in the isolated parser process before the transaction opens, like in the sync.
+            pages = prepare_pages(data, name, mime_type, coordinator.assert_writer)
+        except (OSError, ValueError) as exc:
+            log.warning("Textextraktion fehlgeschlagen für manuelle Datei: %s", type(exc).__name__)
+            pages = []  # unsupported or unreadable formats remain downloadable
         with factory() as session:
             course = session.get(Course, payload.course_id)
             if course is None:
@@ -183,16 +191,13 @@ def drop_router(settings: Settings, factory, coordinator: HostCoordinator) -> AP
                                        course.name, section.name if section else "Sonstiges", name, number,
                                        digest, utc_now(), "manual", name, existing_path)
             version = ResourceVersion(resource_id=resource.id, version=number, sha256=digest,
-                                      relative_path=str(relative_path), size=len(data),
-                                      mime_type=content_type(data, name))
+                                      relative_path=relative_path.as_posix(), size=len(data),
+                                      mime_type=mime_type)
             session.add(version)
             session.flush()
             write_sidecar(settings.data_dir, metadata_for(session, resource, version))
             write_file_state_sidecar(settings.data_dir, resource_state_for(session, resource))
-            try:
-                index_version(session, version, data, name)
-            except Exception as exc:  # noqa: BLE001 - unsupported formats remain downloadable
-                log.warning("Textextraktion fehlgeschlagen für manuelle Datei: %s", type(exc).__name__)
+            store_pages(session, version, pages)
             session.commit()
             return DropImportView(resource_id=resource.id, version_id=version.id,
                                   version=number, created_version=True)

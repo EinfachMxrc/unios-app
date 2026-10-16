@@ -133,6 +133,13 @@ class SyncScheduler:
             target += timedelta(days=1)
         return target
 
+    def ensure_sync_scheduled(self) -> None:
+        """Start the sync cycle once a first source exists, without restarting UniOS."""
+        if not self.scheduler.running or self.scheduler.get_job("next_sync") is not None:
+            return
+        if getattr(self.engine, "connectors", True) or campus_ready(self.settings) or configured_urls(self.settings):
+            self._schedule_at(self._outside_quiet_hours(datetime.now(self.settings.timezone)))
+
     def _schedule_at(self, moment: datetime) -> None:
         self.scheduler.add_job(self._run_and_reschedule, DateTrigger(run_date=moment), id="next_sync",
                                replace_existing=True, max_instances=1, misfire_grace_time=None)
