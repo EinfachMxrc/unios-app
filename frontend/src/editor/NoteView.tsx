@@ -29,7 +29,7 @@ export function NoteView({ body }: { body: string }) {
     extensions,
     content: docToPm(doc),
     editable: false,
-    editorProps: { attributes: { class: 'note-document note-document-readonly', 'aria-label': t('contentLabel') } },
+    editorProps: { attributes: { class: 'note-prose note-prose-readonly', 'aria-label': t('contentLabel') } },
   })
   useEffect(() => {
     if (editor && !editor.isDestroyed) editor.commands.setContent(docToPm(doc), { emitUpdate: false })

@@ -13,7 +13,7 @@ async function editor(page: Page, body = 'Mitschrift: ') {
   const id = (await created.json()).note.id
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await expect(page.locator('.studio-document')).toBeVisible()
+  await expect(page.locator('.note-prose')).toBeVisible()
   await page.getByRole('textbox', { name: 'Notizinhalt' }).press('ControlOrMeta+End')
   return id
 }
@@ -39,13 +39,13 @@ test('a fraction can be written visually, edited, cancelled and reopened as port
   const id = await editor(page)
   await page.getByRole('button', { name: 'Formel', exact: true }).click()
   await fraction(page)
-  await expect(page.locator('.studio-document .studio-math .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .studio-math .katex')).toHaveCount(1)
   await page.getByRole('button', { name: 'Formel bearbeiten', exact: true }).click()
   await page
     .getByRole('dialog', { name: 'Formel schreiben' })
     .getByRole('button', { name: 'Abbrechen', exact: true })
     .click()
-  await expect(page.locator('.studio-document .studio-math .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .studio-math .katex')).toHaveCount(1)
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   const saved = (await (await page.request.get(`/api/notes/${id}`)).json()).body
   expect(saved).toContain('Mitschrift:')
@@ -75,11 +75,11 @@ test('a slash command inserts a matrix as a block with keyboard navigation and u
   await expect(dialog.getByRole('button', { name: 'Formel einfügen' })).toBeEnabled()
   await page.keyboard.press('ControlOrMeta+Enter')
   await expect(dialog).toHaveCount(0)
-  await expect(page.locator('.studio-document .studio-math-block .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .studio-math-block .katex')).toHaveCount(1)
   await page.getByRole('button', { name: 'Rückgängig (Strg/⌘+Z)', exact: true }).click()
-  await expect(page.locator('.studio-document .studio-math')).toHaveCount(0)
+  await expect(page.locator('.note-prose .studio-math')).toHaveCount(0)
   await page.getByRole('button', { name: 'Wiederholen (Strg/⌘+Shift+Z)', exact: true }).click()
-  await expect(page.locator('.studio-document .studio-math-block .katex')).toHaveCount(1)
+  await expect(page.locator('.note-prose .studio-math-block .katex')).toHaveCount(1)
 })
 
 test('truth tables show all combinations and intermediate steps without damaging a note on invalid input', async ({
@@ -97,8 +97,8 @@ test('truth tables show all combinations and intermediate steps without damaging
   expect((await (await page.request.get(`/api/notes/${id}`)).json()).body).toBe('Vor der Tabelle.')
   await dialog.getByRole('textbox', { name: 'Logischer Ausdruck' }).fill('A XOR B')
   await dialog.getByRole('button', { name: 'Tabelle einfügen' }).click()
-  await expect(page.locator('.studio-document table').last().locator('tbody tr')).toHaveCount(5)
-  await expect(page.locator('.studio-document table').last()).toContainText('(A ⊕ B)')
+  await expect(page.locator('.note-prose table').last().locator('tbody tr')).toHaveCount(5)
+  await expect(page.locator('.note-prose table').last()).toContainText('(A ⊕ B)')
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   await page.getByRole('button', { name: 'Schließen', exact: true }).click()
   await expect(page.locator('.rendered-note table').last()).toContainText('(A ⊕ B)')

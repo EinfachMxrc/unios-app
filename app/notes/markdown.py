@@ -91,7 +91,7 @@ def _block(kind: str, ids: Iterator[str], *, props: dict | None = None, content:
 
 def _starts_block(line: str) -> bool:
     return bool(FENCE.match(line) or HEADING.match(line) or DIVIDER.match(line) or ITEM.match(line)
-                or line.lstrip().startswith(">") or line.startswith(":::") or line.strip().startswith("$$")
+                or line.lstrip().startswith(">") or line.startswith(":::") or line.strip().startswith(("$$", "\\["))
                 or IMAGE.match(line))
 
 
@@ -149,6 +149,15 @@ def _parse_lines(lines: list[str], ids: Iterator[str]) -> list[Block]:
                     continue
             blocks.append(_block("code", ids, props={"language": language},
                                  content=[Inline(text=code)] if code else []))
+            index = end + 1
+        elif bracket := re.fullmatch(r"\s*\\\[(.+?)\\\]\s*", line):
+            blocks.append(_block("equation", ids, props={"latex": bracket[1].strip()}))
+            index += 1
+        elif line.strip() == "\\[":
+            end = index + 1
+            while end < len(lines) and lines[end].strip() != "\\]":
+                end += 1
+            blocks.append(_block("equation", ids, props={"latex": "\n".join(lines[index + 1:end])}))
             index = end + 1
         elif single := re.fullmatch(r"\s*\$\$(?!\$)(.+?)\$\$\s*", line):
             blocks.append(_block("equation", ids, props={"latex": single[1].strip()}))

@@ -8,8 +8,7 @@ export function noteEditor(page: Page): Locator {
 }
 
 /** Replace the note's content by typing it line by line, the way a person would. */
-export async function writeNote(page: Page, lines: string[]): Promise<Locator> {
-  const editor = noteEditor(page)
+export async function writeNote(page: Page, lines: string[], editor: Locator = noteEditor(page)): Promise<Locator> {
   await editor.click()
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.press('Backspace')
@@ -18,4 +17,20 @@ export async function writeNote(page: Page, lines: string[]): Promise<Locator> {
     if (line) await page.keyboard.type(line)
   }
   return editor
+}
+
+type StoredInline = { text?: string; title?: string; latex?: string }
+type StoredBlock = { content?: StoredInline[]; children?: StoredBlock[] }
+
+/** Readable text of a stored block document, one line per block. */
+export function documentText(document: { blocks: StoredBlock[] }): string {
+  const lines: string[] = []
+  const walk = (blocks: StoredBlock[]) => {
+    for (const block of blocks) {
+      lines.push((block.content ?? []).map((item) => item.text ?? (item.title ? `[[${item.title}]]` : '')).join(''))
+      walk(block.children ?? [])
+    }
+  }
+  walk(document.blocks)
+  return lines.join('\n')
 }

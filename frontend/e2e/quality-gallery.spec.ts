@@ -48,7 +48,7 @@ test('quality gallery: main workflows, preview and editor in both themes and siz
           )
         if (name === 'note') {
           await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-          await expect(page.locator('.studio-document')).toContainText('Basisfall')
+          await expect(page.locator('.note-prose')).toContainText('Basisfall')
         }
         if (name === 'deadlines') {
           await expect(page.getByRole('button', { name: 'Neuer Termin', exact: true })).toBeVisible()

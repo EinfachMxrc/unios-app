@@ -28,6 +28,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { calloutIcons, type CalloutKind } from '@/components/editor/callouts'
+import type { MathTemplate } from '@/components/editor/mathTemplates'
+import type { StudyTool } from '@/components/editor/StudyHelperDialog'
 import type { Keys } from '@/i18n/useT'
 
 export type Range = { from: number; to: number }
@@ -36,9 +38,17 @@ export type CommandContext = {
   editor: Editor
   /** The typed trigger text ("/tab") that the command replaces. */
   range: Range
-  openDialog: (dialog: InsertDialog, range: Range) => void
+  openDialog: (dialog: InsertDialog, range: Range, options?: DialogOptions) => void
 }
-export type InsertDialog = 'media' | 'entity' | 'math' | 'recall' | 'diagram' | 'grid' | 'truth' | 'helper'
+/** Presets from a typed study command such as "/hex" or "/grenzwert". */
+export type DialogOptions = {
+  template?: MathTemplate
+  view?: 'table' | 'forms' | 'kv'
+  tool?: StudyTool
+  base?: number
+}
+export type InsertDialog =
+  'media' | 'entity' | 'math' | 'math-inline' | 'recall' | 'diagram' | 'grid' | 'truth' | 'helper'
 export type BlockCommand = {
   id: string
   group: 'basic' | 'learn' | 'media'

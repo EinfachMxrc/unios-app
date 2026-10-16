@@ -157,7 +157,7 @@ test('editor returns in editing mode with its content and cursor intact', async 
   const id = (await response.json()).note.id
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  const editor = page.locator('.studio-document')
+  const editor = page.locator('.note-prose')
   await expect(editor).toContainText('Basisfall beendet die Rekursion.')
   await editor.click()
   await page.keyboard.press('Control+End')

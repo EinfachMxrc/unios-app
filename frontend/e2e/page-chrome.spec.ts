@@ -11,12 +11,12 @@ test('course and note actions share the page heading and preserve the creation f
   await expect(page).toHaveURL(/\/notes\?new=1&course_id=1$/)
   await expect(heading.getByRole('button', { name: 'Neue Notiz', exact: true })).toBeVisible()
   await page.getByRole('textbox', { name: 'Notiztitel', exact: true }).fill('Meine Lernseite')
-  await page.locator('.studio-document').fill('Meine Erklärung bleibt direkt bearbeitbar.')
+  await page.locator('.note-prose').fill('Meine Erklärung bleibt direkt bearbeitbar.')
   await page.locator('[data-workspace-tab]').first().focus()
-  await expect(page.locator('.studio-document')).toHaveText('Meine Erklärung bleibt direkt bearbeitbar.')
+  await expect(page.locator('.note-prose')).toHaveText('Meine Erklärung bleibt direkt bearbeitbar.')
 })
 
-test('quiet formatting controls become available with keyboard focus and keep Markdown output', async ({ page }) => {
+test('formatting appears beside a selection and is stored as bold text', async ({ page }) => {
   const response = await page.request.post('/api/notes', {
     data: { course_id: 1, title: 'Synthetische Formatierung', body: 'Mein Text' },
   })
@@ -24,17 +24,14 @@ test('quiet formatting controls become available with keyboard focus and keep Ma
   const note = await response.json()
   await page.goto(`/notes?id=${note.note.id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await expect(page.locator('.studio-document')).toBeVisible()
-  await page.mouse.move(0, 0)
-  const bold = page.getByRole('button', { name: 'Fett (Strg+B)', exact: true })
-  await expect(bold).toBeHidden()
-  await page.getByRole('combobox', { name: 'Texttyp', exact: true }).focus()
-  await expect(bold).toBeVisible()
-  await page.locator('.studio-document').click()
-  await page.locator('.studio-document').press('ControlOrMeta+a')
-  await bold.click()
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  await expect(page.locator('textarea.note-textarea')).toHaveValue('**Mein Text**')
+  await expect(page.locator('.note-prose')).toBeVisible()
+  await expect(page.getByRole('toolbar', { name: 'Text formatieren' })).toHaveCount(0)
+  await page.locator('.note-prose').getByText('Mein Text').click({ clickCount: 3 })
+  await expect.poll(() => page.getByRole('toolbar', { name: 'Text formatieren' }).count()).toBe(1)
+  await page.getByRole('button', { name: /^Fett/ }).click()
+  await expect
+    .poll(async () => (await (await page.request.get(`/api/notes/${note.note.id}`)).json()).body)
+    .toBe('**Mein Text**')
 })
 
 for (const width of [1440, 390]) {

@@ -86,7 +86,7 @@ test('accepted work opens its course and preserves a 120-page source draft acros
   await page.getByRole('button', { name: 'Kursübungen', exact: true }).click()
   await expect(page.locator(`#practice-${seed.exercise_id}`)).toContainText('δ = ε / 3')
   await page.getByRole('button', { name: 'Quelle & Mitschrift', exact: true }).click()
-  await expect(body).toHaveValue('Mein Kerngedanke zu Seite 12 bleibt beim Wechsel erhalten.')
+  await expect(body).toHaveText('Mein Kerngedanke zu Seite 12 bleibt beim Wechsel erhalten.')
   await expect(page.locator('.material-pager')).toContainText('Seite 12 von 120')
   await expect(page.locator('.material-toolbar select')).toHaveValue(String(seed.version_id))
   await expect(page.getByRole('button', { name: 'Kursnotizen', exact: true })).toBeInViewport()
@@ -211,10 +211,9 @@ test('course membership guards notes and sources before rendering foreign conten
   await page.goto(`${focus()}?mode=notes&note=${seed.note_id}`)
   await expect(page.locator('.note-canvas')).toContainText('Meine eigene Begründung.')
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
   await page
     .getByRole('textbox', { name: 'Notizinhalt', exact: true })
-    .fill('# Mein Beweis\n\nIm echten Kursdokument gespeichert.')
+    .fill('Im echten Kursdokument gespeichert.')
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   expect((await (await page.request.get(`/api/notes/${seed.note_id}`)).json()).body).toContain(
     'Im echten Kursdokument gespeichert.',

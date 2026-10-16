@@ -69,10 +69,10 @@ describe('global note link metadata', () => {
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'STRASSE' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`),
     )
-    const document = view.container.querySelector('.note-document-readonly')
+    const document = view.container.querySelector('.note-prose-readonly')
     const html = document?.innerHTML
     view.rerender(<NoteMarkdownDocument body={body} />)
-    expect(view.container.querySelector('.note-document-readonly')).toBe(document)
+    expect(view.container.querySelector('.note-prose-readonly')).toBe(document)
     expect(document?.innerHTML).toBe(html)
     expect(screen.getByRole('link', { name: 'STRASSE' }).getAttribute('href')).toBe(`/notes?id=${hiddenTarget.id}`)
     expect(fetcher).toHaveBeenCalledTimes(1)

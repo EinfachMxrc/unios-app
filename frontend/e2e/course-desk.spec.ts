@@ -81,7 +81,7 @@ test('saved notes use the same large writing surface and keep their editor while
 }) => {
   const seed = await (await page.request.post('/api/__test__/focus-workspace')).json()
   await page.goto(`/material/${seed.version_id}?workspace=1&note=${seed.note_id}&page=12`)
-  const editor = page.locator('.reader-continuous-note .studio-document')
+  const editor = page.locator('.reader-continuous-note .note-prose')
   await expect(editor).toContainText('Meine eigene Begründung.')
   expect(await editor.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(16)
   const saved = page.waitForResponse(

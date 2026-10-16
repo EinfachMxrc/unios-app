@@ -3,6 +3,7 @@
 import type { Editor } from '@tiptap/core'
 import { Link2, type LucideIcon } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { quickStudyCommand } from '@/components/editor/studyCommands'
 import { useNoteSuggestions } from '@/hooks/useNoteLinks'
 import { useT } from '@/i18n/useT'
 import {
@@ -10,6 +11,7 @@ import {
   insertWikiLink,
   triggerAt,
   type CommandContext,
+  type DialogOptions,
   type InsertDialog,
   type Range,
   type Trigger,
@@ -29,16 +31,17 @@ export function InsertMenu({
   editor: Editor
   /** Bumps on every editor transaction so the trigger is re-read. */
   version: number
-  openDialog: (dialog: InsertDialog, range: Range) => void
+  openDialog: (dialog: InsertDialog, range: Range, options?: DialogOptions) => void
 }) {
   const { t } = useT('editor')
   const listId = useId()
   const [choice, setChoice] = useState(0)
-  const [dismissedAt, setDismissedAt] = useState<number | null>(null)
+  // A trigger the person has closed (or handed to a dialog) stays closed until its text changes.
+  const [dismissed, setDismissed] = useState<{ from: number; query: string } | null>(null)
   const keys = useRef<(event: KeyboardEvent) => boolean>(() => false)
 
   const trigger: Trigger | null = editor.isDestroyed ? null : triggerAt(editor)
-  const hidden = trigger !== null && dismissedAt === trigger.from
+  const hidden = trigger !== null && dismissed?.from === trigger.from && dismissed.query === trigger.query
   const active = trigger && !hidden ? trigger : null
   const suggestions = useNoteSuggestions(active?.query ?? '', active?.kind === 'wiki')
 
@@ -53,7 +56,14 @@ export function InsertMenu({
       }))
     }
     return filterCommands(active.query, t).map((command) => {
-      const context: CommandContext = { editor, range: { from: active.from, to: active.to }, openDialog }
+      const context: CommandContext = {
+        editor,
+        range: { from: active.from, to: active.to },
+        openDialog: (dialog, range, options) => {
+          setDismissed({ from: active.from, query: active.query })
+          openDialog(dialog, range, options)
+        },
+      }
       return {
         id: command.id,
         label: t(command.label),
@@ -70,8 +80,20 @@ export function InsertMenu({
   keys.current = (event) => {
     if (!active) return false
     if (event.key === 'Escape') {
-      setDismissedAt(active.from)
+      setDismissed({ from: active.from, query: active.query })
       return true
+    }
+    if ((event.key === 'Enter' || event.key === 'Tab') && active.kind === 'slash') {
+      // Typed study commands ("/hex", "/matrix", "/kv") open their tool with the preset applied.
+      const quick = quickStudyCommand(active.query)
+      if (quick) {
+        const range = { from: active.from, to: active.to }
+        setDismissed({ from: active.from, query: active.query })
+        if (quick.kind === 'math') openDialog(quick.block ? 'math' : 'math-inline', range, { template: quick.template })
+        else if (quick.kind === 'truth') openDialog('truth', range, { view: quick.view })
+        else openDialog('helper', range, { tool: quick.tool, base: quick.base })
+        return true
+      }
     }
     if (!options.length) return false
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

@@ -164,3 +164,10 @@ def test_legacy_constructs_become_typed_blocks_and_round_trip():
     assert document.blocks[2].props["kind"] == "recall"
     assert ":::mystery" in to_text(document)
     assert parse_markdown(render_markdown(document), seed="fixture") == document
+
+
+def test_bracket_formulas_become_equation_blocks():
+    document = parse_markdown("Text\n\n\\[\\frac{1}{2}\\]\n\n\\[\n\\begin{pmatrix}1&0\\\\0&1\\end{pmatrix}\n\\]", seed="fixture")
+    assert [block.type for block in document.blocks] == ["paragraph", "equation", "equation"]
+    assert document.blocks[1].props["latex"] == "\\frac{1}{2}"
+    assert "pmatrix" in document.blocks[2].props["latex"]

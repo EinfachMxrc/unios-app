@@ -19,7 +19,7 @@ test('a free TipTap composition survives pending remount and quota failure witho
     expect(response.ok(), await response.text()).toBeTruthy()
     const created = await response.json()
     createdId = created.note.id
-    sentBody = route.request().postDataJSON().body
+    sentBody = JSON.stringify(route.request().postDataJSON().document)
     await gate
     await route.fulfill({ response })
   })

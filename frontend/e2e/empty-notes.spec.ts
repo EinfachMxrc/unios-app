@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { expect, test } from './fixtures'
+import { writeNote } from './noteEditor'
 
 test('a named blank lecture note is explicitly created and later filled without losing its empty revision', async ({
   page,
@@ -23,19 +24,17 @@ test('a named blank lecture note is explicitly created and later filled without 
   await page.getByRole('button', { name: 'Notiz anlegen', exact: true }).click()
   const created = await saving
   expect(created.ok(), await created.text()).toBeTruthy()
-  expect(created.request().postDataJSON().body).toBe('')
+  expect(created.request().postDataJSON().document.blocks).toEqual([])
   const detail = await created.json()
   const noteId = detail.note.id
   expect(detail.body).toBe('')
   expect(detail.note.current_revision).toBe(1)
   await expect(page).toHaveURL(new RegExp(`/notes\\?[^#]*id=${noteId}`))
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await page.getByRole('button', { name: 'Markdown', exact: true }).click()
-  const editor = page.locator('.note-canvas').getByRole('textbox', { name: 'Notizinhalt', exact: true })
   const content = '## Spätere eigene Erklärung\n\nEin Basisfall beendet die Rekursion.'
-  await editor.fill(content)
+  await writeNote(page, ['## Spätere eigene Erklärung', 'Ein Basisfall beendet die Rekursion.'])
   await expect.poll(async () => (await (await page.request.get(`/api/notes/${noteId}`)).json()).body).toBe(content)
-  await editor.fill('')
+  await writeNote(page, [])
   await expect
     .poll(async () => {
       const latest = await (await page.request.get(`/api/notes/${noteId}`)).json()
@@ -63,7 +62,7 @@ test('opening an empty PDF composition never creates a note until its create but
   await page.getByRole('button', { name: /Markierungen & Fragen/ }).click()
   await page.getByRole('button', { name: 'Mitschrift', exact: true }).click()
   const composition = page.locator('.reader-note-draft').getByRole('textbox', { name: 'Notizinhalt', exact: true })
-  await expect(composition).toHaveValue('')
+  await expect(composition).toHaveText('')
   expect(creates).toBe(0)
   await page.getByRole('button', { name: 'Notiz anlegen', exact: true }).click()
   await expect(page.locator('.reader-continuous-note .note-canvas')).toBeVisible()

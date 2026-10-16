@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import { TextSelection } from '@tiptap/pm/state'
 import { EditorContent, useEditor, type Editor } from '@tiptap/react'
 import { Focus, ListTree, Redo2, Undo2 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -10,7 +11,7 @@ import { useT } from '@/i18n/useT'
 import { rememberWorkspace, useWorkspaceState, workspaceValue } from '@/lib/workspaceState'
 import type { NoteCardContext } from '@/noteCardTypes'
 import { BlockHandle } from './BlockHandle'
-import { type InsertDialog, type Range } from './commands'
+import { type DialogOptions, type InsertDialog, type Range } from './commands'
 import { docText, parseBody, serializeDoc } from './doc'
 import { editorExtensions } from './extensions'
 import { InsertDialogs, type OpenDialog } from './InsertDialogs'
@@ -78,6 +79,7 @@ export function NoteEditor({
   const restoredEditor = useRef<unknown>(null)
   // Set by real pointer or key input only: focus alone is not a choice of caret position.
   const userPlacedCaret = useRef(false)
+  const shortcuts = useRef<(event: KeyboardEvent) => boolean>(() => false)
   const uploadRef = useRef<((file: File, range?: Range) => void) | null>(null)
   const linkText = useMemo(() => docText(parseBody(value)), [value])
   const targets = useNoteLinkTargets(linkText)
@@ -100,12 +102,12 @@ export function NoteEditor({
         role: 'textbox',
         'aria-label': t('contentLabel'),
         'aria-multiline': 'true',
-        class: 'note-document',
+        class: 'note-prose',
         spellcheck: 'true',
       },
-      handleKeyDown: () => {
+      handleKeyDown: (_view, event) => {
         userPlacedCaret.current = true
-        return false
+        return shortcuts.current(event)
       },
       handleDOMEvents: {
         mousedown: () => {
@@ -195,9 +197,33 @@ export function NoteEditor({
     }
   }, [editor, value, workspaceKey])
 
-  const openDialog = useCallback((kind: InsertDialog, range: Range) => setDialog({ kind, range }), [])
+  const openDialog = useCallback(
+    (kind: InsertDialog, range: Range, options?: DialogOptions) => setDialog({ kind, range, options }),
+    [],
+  )
   const closeDialog = useCallback(() => setDialog(null), [])
 
+  shortcuts.current = (event) => {
+    if (!editor || editor.isDestroyed || dialog || event.isComposing || event.altKey) return false
+    const mod = event.ctrlKey || event.metaKey
+    if (mod && (event.key === 'Home' || event.key === 'End')) {
+      const target =
+        event.key === 'Home' ? TextSelection.atStart(editor.state.doc) : TextSelection.atEnd(editor.state.doc)
+      // Model and browser selection move together; a late native selectionchange must not undo it.
+      editor.view.dispatch(
+        editor.state.tr.setSelection(
+          event.shiftKey ? TextSelection.between(editor.state.selection.$anchor, target.$head) : target,
+        ),
+      )
+      return true
+    }
+    if (mod && event.shiftKey && (event.key.toLowerCase() === 'm' || event.code === 'Space')) {
+      const { from, to } = editor.state.selection
+      setDialog({ kind: event.code === 'Space' ? 'helper' : 'math-inline', range: { from, to } })
+      return true
+    }
+    return false
+  }
   if (!editor) return null
   const canCard = !!cardSource && canCreateCard
   return (

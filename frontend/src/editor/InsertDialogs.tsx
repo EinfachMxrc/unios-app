@@ -8,7 +8,7 @@ import { insertStudyMarkdown } from '@/components/editor/studyInsert'
 import { readStudyFence } from '@/components/editor/studyModels'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/editor/StudioDialog'
 import { useT } from '@/i18n/useT'
-import type { InsertDialog, Range } from './commands'
+import type { DialogOptions, InsertDialog, Range } from './commands'
 import { MAX_MEDIA_BYTES, MEDIA_ACCEPT, uploadNoteAsset } from './media'
 import { entityKinds, type EntityKind } from './nodes'
 
@@ -19,7 +19,7 @@ const TruthTableDialog = lazy(() => import('@/components/editor/TruthTableDialog
 
 type Entity = { id: string | number; name?: string; title?: string; filename?: string }
 
-export type OpenDialog = { kind: InsertDialog; range: Range } | null
+export type OpenDialog = { kind: InsertDialog; range: Range; options?: DialogOptions } | null
 
 /** Insert a finished block after the typed trigger and leave a paragraph to keep writing in. */
 function place(editor: Editor, range: Range, node: object) {
@@ -205,9 +205,23 @@ export function InsertDialogs({
         <Suspense fallback={<p role="status">{notes('math.loading')}</p>}>
           <MathEntryDialog
             displayMode
+            template={open.options?.template}
             onClose={finish}
             onApply={(latex) => {
               place(editor, rangeRef.current, { type: 'blockMath', attrs: { latex } })
+              finish()
+            }}
+          />
+        </Suspense>
+      )}
+      {open?.kind === 'math-inline' && (
+        <Suspense fallback={<p role="status">{notes('math.loading')}</p>}>
+          <MathEntryDialog
+            template={open.options?.template}
+            onClose={finish}
+            onApply={(latex) => {
+              // A formula typed into a sentence stays part of that sentence.
+              editor.chain().focus().insertContentAt(rangeRef.current, { type: 'inlineMath', attrs: { latex } }).run()
               finish()
             }}
           />
@@ -229,6 +243,7 @@ export function InsertDialogs({
       {open?.kind === 'truth' && (
         <Suspense fallback={<p role="status">{notes('math.loading')}</p>}>
           <TruthTableDialog
+            initialView={open.options?.view}
             onClose={finish}
             onApply={(markdown) => {
               insertStudyMarkdown(editor, markdown, rangeRef.current)
@@ -240,6 +255,8 @@ export function InsertDialogs({
       {open?.kind === 'helper' && (
         <Suspense fallback={<p role="status">{notes('math.loading')}</p>}>
           <StudyHelperDialog
+            initialTool={open.options?.tool}
+            initialBase={open.options?.base}
             onClose={finish}
             onApply={(markdown) => {
               insertStudyMarkdown(editor, markdown, rangeRef.current)

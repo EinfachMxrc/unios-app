@@ -100,7 +100,7 @@ test('editing note links and native window requests remain in the app', async ({
   const start = (await created.json()).note.id
   await page.goto(`/notes?id=${start}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
-  await page.locator('.studio-document').getByRole('link', { name: 'Zur Kursübersicht', exact: true }).click()
+  await page.locator('.note-prose').getByRole('link', { name: 'Zur Kursübersicht', exact: true }).click()
   await expect(page).toHaveURL(new RegExp(`notes\\?course_id=1&id=${target}$`))
   await expect(page.getByText('Interner Zieltext.', { exact: true })).toBeVisible()
   expect(context.pages()).toHaveLength(1)
