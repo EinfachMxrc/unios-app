@@ -405,80 +405,82 @@ export function NoteDocument({
             <div className="note-content-grid">
               <div className="note-main">
                 {editing ? (
-                  <fieldset className="note-form note-canvas-content note-form-fieldset" aria-label={t('editNoteAria')}>
-                    <input
-                      className="note-title-input"
-                      aria-label={t('noteTitleAria')}
-                      maxLength={200}
-                      value={title}
-                      onChange={(event) =>
-                        changeDraft(event.target.value, draftRef.current?.body ?? liveRef.current.body)
-                      }
-                    />
-                    {lectureSource ? (
-                      <LectureCoveragePanel
-                        body={body}
-                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                        source={lectureSource}
-                        disabled={!canWrite || !!conflict}
-                      />
-                    ) : (
-                      <CourseLectureCoveragePanel
-                        courseId={data.note.course_id}
-                        resourceId={data.note.resource_id}
-                        body={body}
-                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                        disabled={!canWrite || !!conflict}
-                      />
-                    )}
-                    <NoteStudio
-                      workspaceKey={`note:${id}`}
-                      id="note-edit-body"
-                      value={body}
-                      onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
-                      notes={notes}
-                      cardSource={{
-                        noteId: id,
-                        revision: data.selected_revision,
-                        title: data.note.title,
-                        courseId: data.note.course_id,
-                        courseName: data.note.course_name,
-                      }}
-                      canCreateCard={
-                        canWrite && !conflict && !draftRef.current && body === data.body && title === data.note.title
-                      }
-                    />
-                    {status && (
-                      <SaveIndicator
-                        phase={
-                          conflict
-                            ? 'conflict'
-                            : status === t('savedOnHost')
-                              ? 'saved'
-                              : status === t('savingOnHost')
-                                ? 'saving'
-                                : 'local'
+                  <fieldset className="note-form-fieldset" aria-label={t('editNoteAria')}>
+                    <div className="note-form note-canvas-content">
+                      <input
+                        className="note-title-input"
+                        aria-label={t('noteTitleAria')}
+                        maxLength={200}
+                        value={title}
+                        onChange={(event) =>
+                          changeDraft(event.target.value, draftRef.current?.body ?? liveRef.current.body)
                         }
-                        message={status}
                       />
-                    )}
-                    {conflict && (
-                      <NoteConflict local={conflict.local} remote={conflict.remote} onResolve={resolveConflict} />
-                    )}
-                    <div className="note-editor-actions">
-                      {manualResolution && (
-                        <Button
-                          onClick={() => {
-                            setManualResolution(false)
-                            void syncRef.current()
-                          }}
-                        >
-                          {t('applyEditButton')}
-                        </Button>
+                      {lectureSource ? (
+                        <LectureCoveragePanel
+                          body={body}
+                          onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                          source={lectureSource}
+                          disabled={!canWrite || !!conflict}
+                        />
+                      ) : (
+                        <CourseLectureCoveragePanel
+                          courseId={data.note.course_id}
+                          resourceId={data.note.resource_id}
+                          body={body}
+                          onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                          disabled={!canWrite || !!conflict}
+                        />
                       )}
-                      <Button variant="ghost" disabled={!!draftRef.current} onClick={() => setEditing(false)}>
-                        {t('closeButton')}
-                      </Button>
+                      <NoteStudio
+                        workspaceKey={`note:${id}`}
+                        id="note-edit-body"
+                        value={body}
+                        onChange={(next) => changeDraft(draftRef.current?.title ?? liveRef.current.title, next)}
+                        notes={notes}
+                        cardSource={{
+                          noteId: id,
+                          revision: data.selected_revision,
+                          title: data.note.title,
+                          courseId: data.note.course_id,
+                          courseName: data.note.course_name,
+                        }}
+                        canCreateCard={
+                          canWrite && !conflict && !draftRef.current && body === data.body && title === data.note.title
+                        }
+                      />
+                      {status && (
+                        <SaveIndicator
+                          phase={
+                            conflict
+                              ? 'conflict'
+                              : status === t('savedOnHost')
+                                ? 'saved'
+                                : status === t('savingOnHost')
+                                  ? 'saving'
+                                  : 'local'
+                          }
+                          message={status}
+                        />
+                      )}
+                      {conflict && (
+                        <NoteConflict local={conflict.local} remote={conflict.remote} onResolve={resolveConflict} />
+                      )}
+                      <div className="note-editor-actions">
+                        {manualResolution && (
+                          <Button
+                            onClick={() => {
+                              setManualResolution(false)
+                              void syncRef.current()
+                            }}
+                          >
+                            {t('applyEditButton')}
+                          </Button>
+                        )}
+                        <Button variant="ghost" disabled={!!draftRef.current} onClick={() => setEditing(false)}>
+                          {t('closeButton')}
+                        </Button>
+                      </div>
                     </div>
                   </fieldset>
                 ) : (

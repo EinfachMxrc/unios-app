@@ -11,6 +11,7 @@ import { useNoteSuggestions } from '@/hooks/useNoteLinks'
 import { StudyInsertTools } from '@/components/editor/StudyInsertTools'
 import { insertStudyText, studyTextSelection } from '@/components/editor/studyTextInsertion'
 import { markdownTypingEdit } from '@/components/editor/markdownTyping'
+import { rememberWorkspace, workspaceValue } from '@/lib/workspaceState'
 
 type Notes = NotesResponse['notes']
 type Suggestion = { kind: 'wiki' | 'slash'; start: number; end: number; query: string }
@@ -42,16 +43,54 @@ export function NoteMarkdownEditor({
   onChange,
   notes,
   onSelectedText,
+  workspaceKey,
 }: {
   id: string
   value: string
   onChange: (value: string) => void
   notes: Notes
   onSelectedText?: (text: string) => void
+  workspaceKey?: string
 }) {
   const { t } = useT('notes')
   const commands = commandsFor(t)
   const editor = useRef<HTMLTextAreaElement>(null)
+  const restoredSelection = useRef(false)
+  const interacted = useRef(false)
+  const selectionKey = workspaceKey ? `source-editor:${workspaceKey}:selection` : null
+  function rememberSelection(field: HTMLTextAreaElement) {
+    if (selectionKey)
+      rememberWorkspace(
+        selectionKey,
+        { from: field.selectionStart, to: field.selectionEnd, top: field.scrollTop },
+        false,
+      )
+  }
+  useEffect(() => {
+    if (!selectionKey || restoredSelection.current || interacted.current) return
+    const frame = requestAnimationFrame(() => {
+      const field = editor.current
+      if (!field || interacted.current) return
+      const saved = workspaceValue<{ from: number; to: number; top: number } | null>(selectionKey, null, {
+        persist: false,
+        valid: (value): value is { from: number; to: number; top: number } | null =>
+          value === null ||
+          (!!value &&
+            typeof value === 'object' &&
+            ['from', 'to', 'top'].every(
+              (key) =>
+                Number.isFinite((value as Record<string, unknown>)[key]) &&
+                Number((value as Record<string, unknown>)[key]) >= 0,
+            )),
+      })
+      if (saved) {
+        field.setSelectionRange(Math.min(saved.from, field.value.length), Math.min(saved.to, field.value.length))
+        field.scrollTop = saved.top
+      }
+      restoredSelection.current = true
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [selectionKey, value])
   const [caret, setCaret] = useState(0)
   const [hidden, setHidden] = useState(false)
   const [choice, setChoice] = useState(0)
@@ -367,10 +406,19 @@ export function NoteMarkdownEditor({
               setChoice(0)
             }}
             onSelect={(event) => {
+              rememberSelection(event.currentTarget)
               setCaret(event.currentTarget.selectionStart)
               onSelectedText?.(value.slice(event.currentTarget.selectionStart, event.currentTarget.selectionEnd))
             }}
-            onKeyDown={onKeyDown}
+            onPointerDown={() => {
+              interacted.current = true
+            }}
+            onBlur={(event) => rememberSelection(event.currentTarget)}
+            onScroll={(event) => rememberSelection(event.currentTarget)}
+            onKeyDown={(event) => {
+              interacted.current = true
+              onKeyDown(event)
+            }}
           />
           {suggestion && options.length > 0 && (
             <div

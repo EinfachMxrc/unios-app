@@ -16,6 +16,9 @@ export function InAppLinks() {
   useEffect(() => {
     const follow = (event: MouseEvent) => {
       if (event.defaultPrevented || !(event.target instanceof Element)) return
+      // The tab controller owns desktop modifier clicks, including links inside
+      // the editor whose capture listener runs before ordinary router links.
+      if (isDesktopApp() && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey) return
       const link = event.target.closest('a[href]')
       if (!(link instanceof HTMLAnchorElement)) return
       const target = inAppTarget(link, event, { desktop: isDesktopApp(), origin: window.location.origin })

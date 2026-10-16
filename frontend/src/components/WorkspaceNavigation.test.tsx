@@ -127,6 +127,22 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+it('keeps a tab focused if page restoration finishes after the user enters the tab bar', async () => {
+  render(
+    <MemoryRouter initialEntries={['/courses']}>
+      <WorkspaceNavigation />
+      <div className="workspace-tabs-bar">
+        <button role="tab">Open course</button>
+      </div>
+      <View />
+    </MemoryRouter>,
+  )
+  const tab = screen.getByRole('tab')
+  tab.focus()
+  await waitFor(() => expect(scroll).toHaveBeenCalled())
+  expect(document.activeElement).toBe(tab)
+})
+
 it('preserves scroll and the active control when changing an activity filter', async () => {
   render(
     <MemoryRouter initialEntries={['/activity']}>

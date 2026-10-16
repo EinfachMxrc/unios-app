@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { useCallback, useSyncExternalStore, type Dispatch, type SetStateAction } from 'react'
 import { clearRecentObjects } from '@/lib/recentObjects'
+import { clearWorkspaceTabs } from '@/lib/workspaceTabs'
 
 const KEY = 'unios-workspace-session-v1'
 const MAX_ENTRIES = 160
@@ -84,6 +85,7 @@ export function rememberWorkspace<T>(key: string, value: T, persistent = true) {
 
 export function clearWorkspace() {
   clearRecentObjects()
+  clearWorkspaceTabs()
   entries.clear()
   loaded = true
   try {

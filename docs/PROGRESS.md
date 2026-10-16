@@ -1,5 +1,32 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+
+## 16.10.2026 – Notion-Umbau, Paket 1: offene Inhalte als Tabs
+
+Eine fensterbezogene Tab-Leiste ergänzt die vorhandene Navigation. Inhalte lassen
+sich per Kontextmenü, im Desktop auch per Cmd/Strg-Klick, als weiterer Tab öffnen.
+Wechseln, Schließen, Wiederöffnen und Sortieren behalten dieselben Dokument-
+Entwürfe, PDF-Seiten, Zoomwerte und Editor-Cursor. Mobil gibt es einen kompakten
+Tab-Wähler. Pro Dokument bleibt ein Editor zuständig; die Tabs führen keine
+zweite Schreibkopie ein. Im Sitzungsspeicher stehen nur begrenzte Inhaltskennungen,
+keine Titel, Zitate oder Formularinhalte. Eine Verbindungsänderung leert die Tabs.
+
+Beim Prüfen einen Layoutfehler des wiederhergestellten Editors im Fieldset-Grid
+behoben: Das Raster liegt jetzt innerhalb der semantischen Feldgruppe. Die neue
+Serverroute `/workspace/new` funktioniert auch nach Neuladen. Deutsche und
+englische Texte, keine neue Abhängigkeit und keine Datenmigration.
+
+1.477 Frontendtests, Typecheck, ESLint, Übersetzungen, Build/Budgets, Ruff, mypy
+und OpenAPI bestanden. 1.385 Pythonfälle bestanden mit acht regulären Skips;
+der separate macOS-Signaturtest scheitert lokal am fehlenden Vertrauen in sein
+Wegwerf-Zertifikat und wurde nicht durch eine Änderung am Schlüsselbund umgangen.
+Acht Tab-Abläufe und zwei vorhandene Desktop-Link-Abläufe bestanden. Acht
+Lighthouse-Snapshots bei 1.440/390 Pixeln in Hell/Dunkel: 96–100 Accessibility.
+Der vollständige Browserlauf und die gemeinsame Übergabe folgen nach den weiteren
+Umbaupaketen; der erste isolierte Lauf deckte außerdem ungenaue Testselektoren
+und eine noch nicht vollständig umgeleitete Fake-Syncthing-Verbindung auf.
+Details und Grenzen: [Tab-QA](qa/notion-tabs-20261016/README.md).
+
 ## 16.10.2026 – Offline-Budget nach Kalender-PR korrigiert
 
 GitHub meldete nach PR #47 einen um 294 gzip-Bytes überschrittenen Offline-Cache.

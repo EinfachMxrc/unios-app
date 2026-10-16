@@ -630,7 +630,14 @@ export function NoteStudio({
         </div>
       </div>
       {mode === 'source' ? (
-        <SourceEditor id={id} value={value} onChange={onChange} notes={notes} onSelectedText={setSourceQuote} />
+        <SourceEditor
+          id={id}
+          workspaceKey={workspaceKey}
+          value={value}
+          onChange={onChange}
+          notes={notes}
+          onSelectedText={setSourceQuote}
+        />
       ) : mode === 'preview' ? (
         <NoteMarkdownDocument body={value} notes={notes} />
       ) : (

@@ -13,7 +13,7 @@ STATIC_ROUTES = frozenset({
     "/collections", "/courses", "/deadlines", "/digest", "/drop", "/exercises", "/explanations", "/grades",
     "/import", "/inbox", "/jobs", "/jots", "/journal", "/learning", "/mail", "/marketplace", "/mensa", "/more",
     "/notes", "/notifications", "/projects", "/rooms", "/rules", "/search", "/settings", "/setup", "/study",
-    "/study/cards", "/system", "/trash", "/university-documents", "/voice", "/welcome",
+    "/study/cards", "/system", "/trash", "/university-documents", "/voice", "/welcome", "/workspace/new",
 })
 
 # One segment each, as React Router matches them; numeric ids stay numeric.

@@ -1,6 +1,21 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  workspaceTabs: 'Offene Inhalte',
+  newTab: 'Neuer Tab',
+  closeCurrentTab: 'Aktuellen Tab schließen',
+  switchWorkspaceTab: 'Zwischen {{count}} offenen Tabs wechseln',
+  closeWorkspaceTab: 'Tab {{title}} schließen',
+  reopenWorkspaceTab: 'Zuletzt geschlossenen Tab öffnen',
+  tabLimit: 'Schließe einen Tab, um einen weiteren zu öffnen.',
+  tabLinkActions: 'Link öffnen',
+  openInWorkspaceTab: 'In neuem UniOS-Tab öffnen',
+  tabNote: 'Notiz',
+  tabDocument: 'Dokument',
+  newTabHint:
+    'Öffne einen Kurs, eine Mitschrift oder eine Datei. Dein bisheriger Arbeitsplatz bleibt im anderen Tab erhalten.',
+  tabFindContent: 'Inhalte suchen und öffnen',
+
   previousTabs: 'Vorherige Registerkarten',
   nextTabs: 'Weitere Registerkarten',
   new: 'Neu',

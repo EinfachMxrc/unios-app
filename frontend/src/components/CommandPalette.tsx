@@ -84,10 +84,13 @@ export function CommandPalette() {
       setOpen(true)
       setActionsOpen(true)
     }
+    const openSearch = () => setOpen(true)
+    window.addEventListener('unios:open-search', openSearch)
     window.addEventListener('unios:actions', actions)
     window.addEventListener('keydown', onKeyDown)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('unios:open-search', openSearch)
       window.removeEventListener('unios:actions', actions)
     }
   }, [setOpen])

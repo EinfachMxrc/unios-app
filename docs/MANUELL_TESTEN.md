@@ -1,5 +1,27 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+
+## Inhalt-Tabs vom 16.10.2026
+
+Die Browserprüfung verwendet erfundene Inhalte und eine simulierte Desktop-Brücke.
+Nach einem regulären nativen Update zusätzlich prüfen:
+
+1. PDF und Mitschrift öffnen, schreiben, Seite und Zoom ändern. Kurs oder Termine
+   in einem weiteren Tab öffnen, zurückwechseln, schließen und wiederöffnen.
+   Text und Lesestelle müssen erhalten bleiben. Das Schließen eines Tabs löscht
+   die Mitschrift nicht.
+2. Cmd/Strg+T, Cmd/Strg+W, Cmd/Strg+Shift+T und Ctrl+Tab in der nativen Webview
+   prüfen. Cmd/Strg-Klick und Mittelklick auch auf einen Link im Notizeditor testen.
+   Im normalen Browser behalten dessen eigene Tab-Tastenkürzel ihre Funktion.
+3. Tab-Reihenfolge mit Ziehen sowie Alt+Shift+Pfeil ändern; mit Pfeilen, Pos1 und
+   Ende zwischen fokussierten Tabs wechseln. Screenreader muss aktuelle Inhalte
+   und die getrennten Schließen-Schaltflächen verständlich ansagen.
+4. Bei 390 Pixeln mit Bildschirmtastatur den Tab-Wähler und lang benannte Inhalte
+   prüfen. Nach einer Verbindungsänderung dürfen keine alten Tabs zurückbleiben.
+
+Sitzungs-Tabs sind keine geräteübergreifende Synchronisierung. Native Trackpad-,
+Betriebssystem- und Eingabemethoden wurden mit diesem Paket noch nicht abgenommen.
+
 ## Kurs-Schreibtisch und PDF-Mitschrift vom 16.10.2026
 
 Browserabläufe mit erfundenen Daten sind automatisiert geprüft; eine neue native

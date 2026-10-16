@@ -20,6 +20,8 @@ import { localDate, useApi } from '@/api'
 import { usePreferences } from '@/preferences'
 import type { CoursesResponse } from '@/types'
 import { recordPage } from '@/lib/usageMetrics'
+import { nameWorkspaceTab } from '@/lib/workspaceTabs'
+import { WorkspaceTabs } from './WorkspaceTabs'
 export function Shell({
   children,
   title,
@@ -56,6 +58,9 @@ export function Shell({
   useEffect(() => {
     recordPage(location.pathname)
   }, [location.pathname])
+  useEffect(() => {
+    nameWorkspaceTab(title, `${location.pathname}${location.search}${location.hash}`)
+  }, [title, location.pathname, location.search, location.hash])
   const preferences = usePreferences()
   const { t } = useT('shell')
   const { t: tNav } = useT('nav')
@@ -111,6 +116,7 @@ export function Shell({
           toggleSidebar={toggleNavigation}
           workspaceAction={compactNavigation && !focusMode ? focusControl : undefined}
         />
+        <WorkspaceTabs />
         <main
           id="main-content"
           data-workspace-key={location.key}

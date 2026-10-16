@@ -92,7 +92,11 @@ export function WorkspaceNavigation() {
     const passivePage = passiveFilter || passiveReaderPage(previous, location, action)
     previousLocation.current = location
     const key = `history:${location.pathname}${location.search}${location.hash}:${location.key}`
-    const saved = workspaceValue<View | null>(key, null, {
+    const restoredKey = location.state?.workspaceTabRestoreKey
+    const restoreTab = typeof restoredKey === 'string' && /^[\w-]{1,80}$/.test(restoredKey)
+    const savedKey = restoreTab ? `history:${location.pathname}${location.search}${location.hash}:${restoredKey}` : key
+    const restoreView = action === 'POP' || restoreTab
+    const saved = workspaceValue<View | null>(savedKey, null, {
       valid: (value): value is View | null => value === null || validView(value),
     })
     let focused = saved?.focus ?? -1
@@ -125,10 +129,7 @@ export function WorkspaceNavigation() {
       const waiting =
         !main ||
         main.querySelector('[data-slot="skeleton"], [data-workspace-pending="true"]') ||
-        (action === 'POP' &&
-          saved &&
-          compatibleReaderWidth &&
-          document.documentElement.scrollHeight - innerHeight < saved.y)
+        (restoreView && saved && compatibleReaderWidth && document.documentElement.scrollHeight - innerHeight < saved.y)
       const pendingReader = main?.querySelector('.material-reader[data-workspace-pending="true"]')
       if (pendingReader && document.querySelector('[role="dialog"][aria-modal="true"]')) readerBlockedByModal = true
       // Closing a modal precedes the reader's restoration frame. Once blocked,
@@ -159,17 +160,27 @@ export function WorkspaceNavigation() {
         capture()
         return
       }
-      if (action === 'POP' && saved && compatibleReaderWidth)
+      if (restoreView && saved && compatibleReaderWidth)
         window.scrollTo({ left: saved.x, top: saved.y, behavior: 'instant' })
       // A ready reader has already positioned its requested source page. Only
       // an existing history view takes precedence over that initial position.
       else if (!location.hash && !main.querySelector('[data-reader-position-ready="true"]'))
         window.scrollTo({ left: 0, top: 0, behavior: 'instant' })
+      if (location.state?.workspaceTabFocus === true) {
+        document
+          .querySelector<HTMLButtonElement>('.workspace-tabs-rail [data-workspace-tab][aria-current="page"]')
+          ?.focus({ preventScroll: true })
+        restoring = false
+        return
+      }
       const active = document.activeElement
-      // Let a dialog or an editor's deliberate autofocus keep control.
-      if ((action !== 'POP' || saved) && !active?.closest('[role="dialog"], [contenteditable="true"]')) {
+      // Keep intentional tab, dialog and editor focus while a slow page becomes ready.
+      if (
+        (!restoreView || saved) &&
+        !active?.closest('.workspace-tabs-bar, [role="dialog"], [contenteditable="true"]')
+      ) {
         const target =
-          action === 'POP' && saved && saved.focus >= 0
+          restoreView && saved && saved.focus >= 0
             ? main.querySelectorAll<HTMLElement>(controls)[saved.focus]
             : location.hash
               ? document.getElementById(location.hash.slice(1))
@@ -182,12 +193,14 @@ export function WorkspaceNavigation() {
       restoring = false
     }
     frame = requestAnimationFrame(restore)
+    window.addEventListener('unios:before-tab-switch', capture)
     window.addEventListener('scroll', scroll, { passive: true })
     document.addEventListener('focusin', focus)
     return () => {
       cancelAnimationFrame(frame)
       window.clearTimeout(timer)
       capture()
+      window.removeEventListener('unios:before-tab-switch', capture)
       window.removeEventListener('scroll', scroll)
       document.removeEventListener('focusin', focus)
     }

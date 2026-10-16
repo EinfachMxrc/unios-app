@@ -206,99 +206,102 @@ function NewNoteForm({
       <div className="note-canvas-toolbar">
         <span>{t('newNoteLabel')}</span>
       </div>
-      <fieldset
-        className="note-form note-canvas-content note-form-fieldset"
-        aria-label={t('newNoteAria')}
-        disabled={busy}
-      >
-        <label className="note-course-picker">
-          {t('courseLabel')}
-          <select
-            className="native-select"
-            aria-label={t('courseForNoteAria')}
-            value={selectedCourse}
-            onChange={(event) => onCourseChange(Number(event.target.value))}
-          >
-            {data.courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <FormField label={t('noteTitleAria')} required>
-          {(control) => (
-            <input
-              {...control}
-              className="note-title-input"
-              aria-label={t('noteTitleAria')}
-              maxLength={200}
-              placeholder={t('noTitlePlaceholder')}
-              value={title}
-              onChange={(event) => changeNewDraft(event.target.value, body)}
+      <fieldset className="note-form-fieldset" aria-label={t('newNoteAria')} disabled={busy}>
+        <div className="note-form note-canvas-content">
+          <label className="note-course-picker">
+            {t('courseLabel')}
+            <select
+              className="native-select"
+              aria-label={t('courseForNoteAria')}
+              value={selectedCourse}
+              onChange={(event) => onCourseChange(Number(event.target.value))}
+            >
+              {data.courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <FormField label={t('noteTitleAria')} required>
+            {(control) => (
+              <input
+                {...control}
+                className="note-title-input"
+                aria-label={t('noteTitleAria')}
+                maxLength={200}
+                placeholder={t('noTitlePlaceholder')}
+                value={title}
+                onChange={(event) => changeNewDraft(event.target.value, body)}
+              />
+            )}
+          </FormField>
+          {body.trim() === t('lectureTemplate').trim() && !saved && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              disabled={!canWrite || busy}
+              onClick={() => changeNewDraft(title, '')}
+            >
+              {t('emptyNoteButton')}
+            </Button>
+          )}
+          {!body.trim() && <p className="hint">{t('emptyNoteHint')}</p>}
+          <CourseLectureCoveragePanel
+            courseId={selectedCourse}
+            resourceId={resourceId}
+            body={body}
+            onChange={(next) => changeNewDraft(title, next)}
+            disabled={!canWrite || busy}
+          />
+          <NoteStudio
+            workspaceKey={`new:${selectedCourse}:${resourceId ?? 'none'}`}
+            id="new-note-body"
+            value={body}
+            onChange={(next) => changeNewDraft(title, next)}
+            notes={data.notes}
+          />
+          {editor.status !== 'idle' && (
+            <SaveIndicator
+              phase={editor.status === 'error' ? 'error' : 'local'}
+              message={
+                editor.status === 'error'
+                  ? t('localSaveFailed')
+                  : editor.status === 'restored'
+                    ? t('draftRestoredLocally')
+                    : t('draftSavedLocally')
+              }
             />
           )}
-        </FormField>
-        {body.trim() === t('lectureTemplate').trim() && !saved && (
+          {body.length > NOTE_BODY_LIMIT && <Failure message={t('studio.tooLong')} />}
+          {saveError && <Failure message={saveError} />}
+          {save.phase === 'error' && <Failure message={save.message} />}
+          {saved && (
+            <>
+              <ActionFeedback tone="success" message={t('noteCreatedMessage')} />
+              <Button type="button" variant="ghost" size="sm" onClick={() => void create()}>
+                {material('readerOpenNote')}
+              </Button>
+            </>
+          )}
           <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            disabled={!canWrite || busy}
-            onClick={() => changeNewDraft(title, '')}
-          >
-            {t('emptyNoteButton')}
-          </Button>
-        )}
-        {!body.trim() && <p className="hint">{t('emptyNoteHint')}</p>}
-        <CourseLectureCoveragePanel
-          courseId={selectedCourse}
-          resourceId={resourceId}
-          body={body}
-          onChange={(next) => changeNewDraft(title, next)}
-          disabled={!canWrite || busy}
-        />
-        <NoteStudio
-          workspaceKey={`new:${selectedCourse}:${resourceId ?? 'none'}`}
-          id="new-note-body"
-          value={body}
-          onChange={(next) => changeNewDraft(title, next)}
-          notes={data.notes}
-        />
-        {editor.status !== 'idle' && (
-          <SaveIndicator
-            phase={editor.status === 'error' ? 'error' : 'local'}
-            message={
-              editor.status === 'error'
-                ? t('localSaveFailed')
-                : editor.status === 'restored'
-                  ? t('draftRestoredLocally')
-                  : t('draftSavedLocally')
+            aria-busy={busy}
+            disabled={
+              !canWrite ||
+              !selectedCourse ||
+              !title.trim() ||
+              busy ||
+              title.length > 200 ||
+              body.length > NOTE_BODY_LIMIT
             }
-          />
-        )}
-        {body.length > NOTE_BODY_LIMIT && <Failure message={t('studio.tooLong')} />}
-        {saveError && <Failure message={saveError} />}
-        {save.phase === 'error' && <Failure message={save.message} />}
-        {saved && (
-          <>
-            <ActionFeedback tone="success" message={t('noteCreatedMessage')} />
-            <Button type="button" variant="ghost" size="sm" onClick={() => void create()}>
-              {material('readerOpenNote')}
-            </Button>
-          </>
-        )}
-        <Button
-          aria-busy={busy}
-          disabled={
-            !canWrite || !selectedCourse || !title.trim() || busy || title.length > 200 || body.length > NOTE_BODY_LIMIT
-          }
-          onClick={() => void create()}
-        >
-          {busy && <LoaderCircle className="action-feedback-spinner" aria-hidden="true" />}
-          {busy ? t('saving') : saved ? material('readerContinueNote') : t('createNoteButton')}
-        </Button>
-        {busy && <ActionFeedback tone="pending" message={t('creatingNoteMessage')} />}
+            onClick={() => void create()}
+          >
+            {busy && <LoaderCircle className="action-feedback-spinner" aria-hidden="true" />}
+            {busy ? t('saving') : saved ? material('readerContinueNote') : t('createNoteButton')}
+          </Button>
+          {busy && <ActionFeedback tone="pending" message={t('creatingNoteMessage')} />}
+        </div>
       </fieldset>
     </article>
   )
