@@ -1,4 +1,7 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+.content:has(.calendar-workspace) {
+  max-width: none;
+}
 .deadline-next {
   display: flex;
   align-items: center;

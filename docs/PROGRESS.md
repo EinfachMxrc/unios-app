@@ -1,5 +1,45 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 16.10.2026 – Offline-Budget nach Kalender-PR korrigiert
+
+GitHub meldete nach PR #47 einen um 294 gzip-Bytes überschrittenen Offline-Cache.
+Der dynamische Übersetzungsimport erzeugte zusätzlich 73 deutsche Fassaden-Chunks,
+obwohl Deutsch bereits vollständig im Startpaket enthalten ist. Der Lazy-Import
+schließt Deutsch jetzt aus und verwendet dafür direkt die vorhandenen Ressourcen;
+andere Sprachen werden unverändert automatisch entdeckt und nachgeladen.
+Keine Sprache, Schrift oder Offline-Funktion entfernt, keine Budgetgrenze erhöht.
+
+296 Übersetzungs-Unitfälle, Typecheck, ESLint und Build bestanden. Sprachwechsel
+und drei PWA-/Offline-Abläufe bestanden (4/4). Lokal 254 statt 327 Cache-Dateien,
+18.535.285 Byte roh und 5.192.711 Byte gzip; beide bestehenden Budgets eingehalten.
+Die CI verwendet eine andere gzip-Version, daher bleibt der erneute Remote-Lauf
+der abschließende Plattformnachweis. Noch keine Tabs-Implementierung in diesem
+Korrekturpaket.
+
+## 16.10.2026 – Kalender mit Monatsnavigation und ruhigem Zeitraster
+
+Den gewünschten Referenzaufbau als eigene React-/CSS-Oberfläche umgesetzt:
+Mini-Monat und Veranstaltungsfilter links, Monatsüberschrift und pastellfarbene
+Terminblöcke im größeren Zeitraster, Tagesdetails rechts auf breiten Fenstern.
+Die Terminseite nutzt die verfügbare Breite; auf 390 Pixeln bleibt die lesbare
+Tagesagenda. Die Filter wirken nur in der geöffneten breiten Ansicht, schmal
+sind alle Termine sichtbar. Monats- und Wochenendwechsel sowie Tastaturfokus
+sind geprüft. Bearbeiten, Ziehen, Zeitgriffe, große Ansicht und Rückgängig bleiben
+erhalten; keine API-, Schema- oder Dependency-Änderung.
+
+Im Serienablauf nach Rückgängig eine Lücke zwischen Änderungsantwort und
+nachgeladener Liste gefunden und geschlossen: Ein offener Editor ergänzt
+Serieninformationen nur bei gleicher Terminrevision, ohne seinen Entwurf zu
+ersetzen. Zwei neue Unitfälle sichern Entwurfserhalt und Konfliktgrenze ab.
+
+Abschließende Prüfung: 1.469 Frontendtests, Typecheck, ESLint, i18n-Prüfung und
+Build bestanden. Alle 33 gezielten Playwright-Fälle in einem Lauf bestanden;
+Screenshots bei 1.920/1.440/1.024/390 Pixeln in Hell und Dunkel selbst geprüft.
+16 Lighthouse-Snapshots erreichen 96–100 Accessibility ohne Laufzeitfehler.
+[Verhalten, Grenzen und Nachweise](qa/calendar-workspace-20261016/README.md).
+Frontend-Arbeitspaket; kein Backend-Gesamtlauf, kein neues Release, keine native
+Installation und kein VPS-Deployment.
+
 ## 15.10.2026 – Öffentlicher Release 0.1.28 veröffentlicht
 
 Kandidat `461f567e22ea73dba1b748de02b4e58271ecbd12`,

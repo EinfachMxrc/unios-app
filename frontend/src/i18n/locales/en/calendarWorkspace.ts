@@ -1,5 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 export default {
+  navigation: 'Calendar navigation',
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  monthDates: 'Choose a date in the month',
+  selectDate: 'Select {{date}}',
+  visibleCourses: 'My events',
+  campusTime: 'All times · Europe/Berlin',
+  selectedDay: 'Your day',
+  planYourDay: 'Plan events',
+
   workweek: 'Work week',
   weekend_one: '{{count}} appointment on the weekend',
   weekend_other: '{{count}} appointments on the weekend',
