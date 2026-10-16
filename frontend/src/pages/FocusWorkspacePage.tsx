@@ -180,6 +180,7 @@ function FocusWorkspace({ reference }: { reference: LearningFocusRef }) {
       reference,
       { mode, version: selectedVersion ?? undefined, note: selectedNote ?? undefined, page: selectedPage },
       data.course_name,
+      data.course_id,
     )
   }, [data, validContext, reference, mode, selectedVersion, selectedNote, selectedPage])
   const sourceData = sources.data

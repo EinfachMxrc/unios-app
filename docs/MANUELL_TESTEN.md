@@ -1,5 +1,30 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## Kurs-Schreibtisch und PDF-Mitschrift vom 16.10.2026
+
+Browserabläufe mit erfundenen Daten sind automatisiert geprüft; eine neue native
+App wurde hierfür noch nicht installiert. Nach einem regulären Client-Update:
+
+1. Mit einer selbst erstellten, unkritischen PDF einen Kurs öffnen. Über den
+   Schreibtisch PDF und Mitschrift gemeinsam öffnen, auf einer späteren Seite
+   schreiben und anschließend einen anderen Kurs besuchen. Beim Zurückkehren
+   müssen Quelle, Seite und gewählte Mitschrift zum ursprünglichen Kurs gehören.
+2. Lesen, Nebeneinander und Schreiben wechseln und die Trennlinie per Maus und
+   Tastatur verschieben. Ungespeicherte Eingaben sowie die PDF-Lesestelle müssen
+   erhalten bleiben. Einen neuen Titel und direkt danach Text eingeben; nach
+   Speichern und erneutem Öffnen müssen beide Änderungen vorhanden sein.
+3. In der nativen Webview Trackpad, Pinch-Zoom, Texteingabe und gegebenenfalls
+   Eingabemethode prüfen. Auf einem Handy muss die Mitschrift bis zum unteren
+   Fensterrand reichen; Schließen führt zur PDF zurück. Bildschirmtastatur,
+   Größenänderungen und Betriebssystem-Schriftvergrößerung zusätzlich prüfen.
+4. App neu starten und die kursbezogene Wiederaufnahme prüfen. Offline nur
+   zuvor lokal verfügbare Unterlagen verwenden; lokale Entwürfe müssen erhalten
+   bleiben. Nach Rückkehr zum Kurs die persönlich konfigurierte Navigation prüfen.
+
+Keine echten Inhalte, Zugangsdaten oder persönlichen Screenshots für diese
+Prüfung exportieren. Die lokale QA ist unter
+[Kurs-Schreibtisch](qa/course-desk-20261016/README.md) dokumentiert.
+
 ## Moodle-Aufgabendiagnose vom 15.10.2026
 
 Die Erweiterung muss auf dem aktiven Host/Server installiert sein. Ein Update

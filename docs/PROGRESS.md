@@ -164,6 +164,29 @@ Browser-Ausnahmen. Der öffentliche PR-19-Lauf zeigte außerdem im lokalen
 Docker-Image noch Python 3.12 trotz Mindestversion 3.13. Das Basisimage ist
 angeglichen; der vollständige Docker-Smoke muss am gemeinsamen Stand bestehen.
 
+## 16.10.2026 – Kurs-Schreibtisch und größere PDF-Mitschrift
+
+Die Kursübersicht bietet einen Schreibtisch zum gemeinsamen Öffnen von PDF und
+Mitschrift. Der letzte Arbeitsplatz wird je Kurs mit Quelle, Seite und Notiz-ID
+gemerkt; die Zuordnung wird vor der Wiederaufnahme geprüft. Unterlagen sind nach
+Abschnitten gruppiert, eigene Notizen und die nächsten Aufgaben stehen daneben.
+
+Der PDF-Reader verwendet eine schmale, aufklappbare Navigation und die Ansichten
+Lesen, Nebeneinander und Schreiben. Die anfängliche Teilung ist gleich groß und
+weiter verschiebbar. Entwurf und gespeicherte Mitschrift haben 16-Pixel-Fließtext;
+auf dem Handy nimmt die Mitschrift die volle Fensterhöhe ein. Beim Wechsel bleibt
+derselbe Editor samt Eingabe erhalten, die PDF-Leseposition wird wiederhergestellt.
+Die persönliche Seitenleiste außerhalb des Readers bleibt unabhängig. Ein dabei
+entdeckter veralteter Editor-Rückruf kann einen gerade geänderten Notiztitel nicht
+mehr zurücksetzen.
+
+Prüfung: 1.438 Frontend-Tests, Typecheck, ESLint, Übersetzungsprüfung und Build
+bestanden. 72 gezielte Playwright-Fälle gegen lokale Fake-Dienste bestanden.
+Light/Dark bei 1.440, 1.024 und 390 Pixeln geprüft; zwölf Lighthouse-Snapshots
+erreichen 97–100 Accessibility. Nachweise und Restpunkte:
+[Kurs-Schreibtisch-QA](qa/course-desk-20261016/README.md). Keine API-/Schemaänderung,
+keine neue Abhängigkeit, kein Server-Deployment und keine native Installation.
+
 ## 15.10.2026 – 0.1.28: KI-Schlüssel, Backup mit Anki, Prüfung der Fremdbefunde, Öffentlichkeit
 
 API-Schlüssel einfügen und Modell aus der Anbieterliste wählen (Schlüsselbund, keine

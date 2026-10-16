@@ -93,6 +93,7 @@ export function clearWorkspace() {
   }
   try {
     localStorage.removeItem('unios-last-study-v1')
+    localStorage.removeItem('unios-course-study-v1')
     localStorage.removeItem('unios-activity-preferences-v1')
   } catch {
     /* A connection switch must clear the durable resource handle too. */

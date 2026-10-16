@@ -1,4 +1,51 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+.course-shell .content {
+  max-width: 1440px;
+}
+.course-desk {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-panel);
+}
+.course-desk-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 62px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-accent);
+  background: var(--app-blue-soft);
+}
+.course-desk-copy {
+  min-width: 0;
+  flex: 1;
+}
+.course-desk-copy .course-desk-kicker {
+  margin: 0 0 6px;
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+.course-desk-copy h2 {
+  margin: 0 0 7px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.course-desk-copy p {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.course-desk > a {
+  flex: none;
+}
 .course-page .page-heading h1 {
   font-size: clamp(1.45rem, 2.3vw, 2rem);
   max-width: 35ch;
@@ -78,8 +125,8 @@
 }
 .course-page .course-workspace .course-content {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
-  gap: 2.4rem;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 280px);
+  gap: 2rem;
   align-items: start;
 }
 .course-side {
@@ -87,6 +134,15 @@
   flex-direction: column;
   gap: 1.8rem;
   min-width: 0;
+  padding-left: 24px;
+  border-left: 1px solid var(--app-border);
+}
+.view-overview .course-notes {
+  order: -1;
+}
+.course-workspace:not(.view-overview) .course-side {
+  padding-left: 0;
+  border-left: 0;
 }
 .course-tabs {
   display: flex;
@@ -173,6 +229,30 @@
   font-size: 0.8rem;
   color: var(--app-muted);
   margin-bottom: 0.5rem;
+}
+@media (max-width: 1000px) {
+  .course-desk {
+    gap: 14px;
+    padding: 20px;
+  }
+  .course-desk-icon {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .course-desk {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .course-desk > a {
+    width: 100%;
+  }
+  .course-side {
+    padding: 22px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--app-border);
+  }
 }
 .course-material-search {
   width: 100%;

@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  deskTitle: 'Dein Schreibtisch',
+  deskResume: 'Dort weitermachen',
+  deskDescription: 'PDF und Mitschrift zusammen öffnen.',
+  deskPage: 'Zuletzt gelesen auf Seite {{page}}',
+  deskOpen: 'Arbeitsplatz öffnen',
+  allTasks: 'Alle Aufgaben',
   displayName: 'Anzeigename',
   originalName: 'Originalname: {{name}}',
   displayNameHint: 'Nur die Anzeige ändert sich. Leer lassen, um den Originalnamen zu verwenden.',

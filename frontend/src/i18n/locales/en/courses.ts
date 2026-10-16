@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  deskTitle: 'Your desk',
+  deskResume: 'Pick up where you left off',
+  deskDescription: 'Open the PDF alongside your notes.',
+  deskPage: 'Last read on page {{page}}',
+  deskOpen: 'Open desk',
+  allTasks: 'All assignments',
   displayName: 'Display name',
   originalName: 'Original name: {{name}}',
   displayNameHint: 'Only the display changes. Leave blank to use the original name.',

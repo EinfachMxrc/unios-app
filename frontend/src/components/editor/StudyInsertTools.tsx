@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { lazy, Suspense, useCallback, useEffect, useRef, useState, type RefObject } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type RefObject, type ReactNode } from 'react'
 import { flushSync } from 'react-dom'
 import { Sigma, Table2 } from 'lucide-react'
 import { useT } from '@/i18n/useT'
@@ -24,6 +24,8 @@ export function StudyInsertTools({
   onChange,
   disabled = false,
   mathOnly = false,
+  compact = false,
+  children,
 }: {
   field: RefObject<HTMLTextAreaElement | null>
   value: string
@@ -31,6 +33,8 @@ export function StudyInsertTools({
   onChange: (value: string) => void
   disabled?: boolean
   mathOnly?: boolean
+  compact?: boolean
+  children?: ReactNode
 }) {
   const { t } = useT('notes')
   const { t: tq } = useT('mathQuick')
@@ -180,9 +184,18 @@ export function StudyInsertTools({
           {t('math.preview')}
         </button>
       </div>
-      <p className="study-command-hint muted-text">{tq(mathOnly ? 'mathCommandHint' : 'commandHint')}</p>
+      {children}
+      {compact ? (
+        <details className="study-insert-help">
+          <summary>{t('math.toolsHelp')}</summary>
+          <p className="study-command-hint muted-text">{tq(mathOnly ? 'mathCommandHint' : 'commandHint')}</p>
+          <p className="study-command-hint muted-text">{t('grid.tabHint')}</p>
+        </details>
+      ) : (
+        <p className="study-command-hint muted-text">{tq(mathOnly ? 'mathCommandHint' : 'commandHint')}</p>
+      )}
       <MathTypingGuide />
-      <p className="study-command-hint muted-text">{t('grid.tabHint')}</p>
+      {!compact && <p className="study-command-hint muted-text">{t('grid.tabHint')}</p>}
       {gridRows && (
         <Suspense fallback={<p role="status">{t('math.loading')}</p>}>
           <WritingGridDialog initialRows={gridRows} onApply={insert} onClose={close} />
