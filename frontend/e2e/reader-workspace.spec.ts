@@ -449,7 +449,8 @@ test('an invalid new cross-page selection clears the previous actionable passage
     document.querySelector('[data-material-page="80"]')!.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }))
   })
   await expect(page.getByRole('region', { name: 'Textauswahl' })).toHaveCount(0)
-  await expect(page.getByRole('alert')).toContainText('innerhalb einer PDF-Seite')
+  // The constraint is a hint about how to mark, not an error, so it is announced as a status.
+  await expect(page.getByRole('status').filter({ hasText: 'innerhalb einer PDF-Seite' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'In Mitschrift übernehmen' })).toHaveCount(0)
 })
 
