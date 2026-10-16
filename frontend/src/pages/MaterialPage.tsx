@@ -688,13 +688,17 @@ export function MaterialReader({
           <Link className="subtle-link" to={data ? `/courses/${data.course_id}` : '/courses'}>
             {t('backToCourse')}
           </Link>
-          {!data && Number.isInteger(versionId) && versionId > 0 && (
-            <a className="subtle-link" href={offlineDownloadUrl} download>
-              {t('downloadOriginal')}
-            </a>
-          )}
           {data && <span className="muted-text">{data.course_name}</span>}
         </div>
+      )}
+      {!data && Number.isInteger(versionId) && versionId > 0 && (
+        // Not part of the actions bar, which the workspace layout hides: a document that cannot
+        // be shown must stay downloadable everywhere.
+        <p className="material-download-fallback">
+          <a className="subtle-link" href={offlineDownloadUrl} download>
+            {t('downloadOriginal')}
+          </a>
+        </p>
       )}
       {loading && !data ? (
         <Loading />
