@@ -14,6 +14,8 @@ from pathlib import Path
 from app.config import Settings
 from app.export.repository import portable_rows
 from app.files.localpath import native_path, resolve_local
+from app.notes.document import validate
+from app.notes.markdown import render_markdown
 
 
 def readable_files(snapshot: Path, data_dir: Path, settings: Settings) -> Iterator[tuple[str, bytes]]:
@@ -33,9 +35,22 @@ def readable_files(snapshot: Path, data_dir: Path, settings: Settings) -> Iterat
         raw = native_path(path).read_bytes()
         if hashlib.sha256(raw).hexdigest() != version["sha256"]:
             raise ValueError("Notizversion stimmt nicht mit dem Index überein")
-        # Preserve front matter and the complete original Markdown content.
-        raw.decode("utf-8")
-        yield f"portable/notes/{note['id']}.md", raw
+        text = raw.decode("utf-8")
+        if not version["relative_path"].endswith(".json"):
+            # Legacy revisions are already Markdown with front matter; keep them byte for byte.
+            yield f"portable/notes/{note['id']}.md", raw
+            continue
+        envelope = json.loads(text)
+        header = ("---\n"
+                  f"unios_note_id: {json.dumps(envelope['unios_note_id'])}\n"
+                  f"title: {json.dumps(envelope['title'], ensure_ascii=False)}\n"
+                  f"course: {json.dumps(envelope['course'], ensure_ascii=False)}\n"
+                  f"course_id: {envelope['course_id']}\n"
+                  f"resource_id: {envelope['resource_id'] if envelope['resource_id'] is not None else 'null'}\n"
+                  f"revision: {envelope['revision']}\n"
+                  "---\n\n")
+        yield f"portable/notes/{note['id']}.md", (header + render_markdown(validate(envelope["document"]))).encode()
+        yield f"portable/notes/{note['id']}.json", raw
     csv_file = io.StringIO(newline="")
     writer = csv.writer(csv_file)
     writer.writerow(["proposal_id", "status", "topic_id", "front", "back", "payload_json"])
@@ -47,10 +62,13 @@ def readable_files(snapshot: Path, data_dir: Path, settings: Settings) -> Iterat
     yield "portable/README.md", """# UniOS-Datenexport
 
 Die JSON-Dateien enthalten Studienobjekte mit stabilen IDs. `relationships.json`
-verbindet Objekte; `notes/` enthält die jeweils aktuelle Markdown-Notiz.
-Strukturierte Notizbausteine verwenden `:::callout`, `:::entity` und `:::media`
-mit Attributen in geschweiften Klammern. Private Medien liegen unter
-`data/note-media/`; `/api/note-assets/<Dateiname>` verweist auf diese Dateien.
+verbindet Objekte; `notes/` enthält je Notiz die aktuelle Fassung als lesbares
+Markdown (`.md`) und, bei Notizen im Blockformat, das vollständige Blockdokument
+(`.json`, Schema `unios-note-blocks`). Das Markdown ist eine Ansicht: Unterstreichung,
+Hervorhebung und Aufklappblöcke besitzen darin keine Entsprechung. Strukturierte
+Bausteine verwenden `:::callout`, `:::entity` und `:::media` mit Attributen in
+geschweiften Klammern. Private Medien liegen unter `data/note-media/`;
+`/api/note-assets/<Dateiname>` verweist auf diese Dateien.
 Details zum offenen Blockformat stehen in `docs/NOTE_STUDIO.md` im UniOS-Repo.
 `flashcards.csv` enthält Vorschläge samt Freigabestatus. Falls vorhanden enthält
 `anki-notes.csv` die tatsächlichen Anki-Notizen und `anki/collection.anki2` den
