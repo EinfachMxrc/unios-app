@@ -26,8 +26,10 @@
   border-bottom: 1px solid var(--app-border);
   transition: opacity var(--ui-color-duration) var(--ui-color-ease);
 }
-.note-studio:not(:hover, :focus-within) .studio-bar {
-  opacity: 0.55;
+@media (hover: hover) {
+  .note-studio:not(:hover, :focus-within) .studio-toolbar > button:not(.studio-add) {
+    display: none;
+  }
 }
 .studio-bar-end {
   display: flex;

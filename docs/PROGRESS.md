@@ -1,6 +1,23 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
 
+## 16.10.2026 – Notion-Umbau, Paket 2: gemeinsame Seitenköpfe
+
+Kurse und Notizen bündeln Titel und zugehörige Aktionen im gemeinsamen Seitenkopf;
+Sammlungen zeigen ihre Erklärung direkt unter der Überschrift. Die doppelte
+Einführung entfällt. Desktop-Formatierung tritt beim Lesen zurück und wird durch
+Hover oder Tastaturfokus wieder vollständig sichtbar. Keine abgeschwächte
+Deckkraft mehr auf Text und Bedienknöpfen. Der Markenlink trägt seinen vollständigen
+sichtbaren Namen auch für assistive Technik.
+
+Typecheck, ESLint und Build bestanden. 21 betroffene Kurs-, Editor- und neue
+Seitenkopf-Abläufe bestanden; die drei Sammlungsfälle bestanden anschließend mit
+präzisen Combobox-Selektoren und dem neuen gemeinsamen Titel (24 insgesamt).
+Zwölf Screenshots für drei Ansichten in Hell/Dunkel bei 1.440/390 Pixeln geprüft,
+kein horizontaler Überlauf. Keine API-, Datenmodell- oder Dependency-Änderung.
+Gemeinsame Abschlussprüfung und nativer Nachweis bleiben wie in Paket 1 offen.
+
+
 ## 16.10.2026 – Notion-Umbau, Paket 1: offene Inhalte als Tabs
 
 Eine fensterbezogene Tab-Leiste ergänzt die vorhandene Navigation. Inhalte lassen

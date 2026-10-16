@@ -9,8 +9,8 @@ Implementierung; kein übernommener Notion-Code oder fremde Assets.
 | Paket | Ergebnis | Stand |
 | --- | --- | --- |
 | 1 | Offene Inhalte als Tabs, gemeinsame Entwürfe und Wiederaufnahme | Implementiert, gezielt geprüft |
-| 2 | Gemeinsame Seitenköpfe und kontextbezogene Editor-Werkzeuge | In Arbeit |
-| 3 | Gespeicherte Ansichten direkt im Kurs und seitliche Vorschauen | Anschließend |
+| 2 | Gemeinsame Seitenköpfe und kontextbezogene Editor-Werkzeuge | Implementiert, gezielt geprüft |
+| 3 | Gespeicherte Ansichten direkt im Kurs und seitliche Vorschauen | In Arbeit |
 | 4 | Unterseiten, Vorlagen und persönliche Seitendarstellung | Anschließend |
 
 Jedes Paket erhält einen eigenen funktionierenden Commit. Die gemeinsame

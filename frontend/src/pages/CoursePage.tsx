@@ -94,68 +94,70 @@ export function CoursePage() {
         { label: nav('courses'), to: '/courses' },
         { label: data ? courseName(data.course) : t('singular') },
       ]}
-    >
-      <div className="page-actions">
-        <Link className="subtle-link" to="/courses">
-          {t('allCourses')}
-        </Link>
-        {data && (
-          <div className="course-header-actions">
-            {selectedView !== 'overview' && (
-              <Button asChild variant="ghost">
-                <Link to={focusPath({ kind: 'course', id: data.course.id })}>
-                  {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
+      actions={
+        <div className="page-actions">
+          <Link className="subtle-link" to="/courses">
+            {t('allCourses')}
+          </Link>
+          {data && (
+            <div className="course-header-actions">
+              {selectedView !== 'overview' && (
+                <Button asChild variant="ghost">
+                  <Link to={focusPath({ kind: 'course', id: data.course.id })}>
+                    {workspace('open')} <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                </Button>
+              )}
+              {canWrite && (
+                <Link
+                  className="course-new-note"
+                  to={`/notes?new=1&course_id=${id}`}
+                  onClick={() => beginNewFreeNote(Number(id))}
+                >
+                  <Plus size={16} />
+                  {t('newNote')}
                 </Link>
-              </Button>
-            )}
-            {canWrite && (
-              <Link
-                className="course-new-note"
-                to={`/notes?new=1&course_id=${id}`}
-                onClick={() => beginNewFreeNote(Number(id))}
-              >
-                <Plus size={16} />
-                {t('newNote')}
-              </Link>
-            )}
-            <details className="course-settings">
-              <summary>
-                <Settings2 size={16} />
-                {t('courseSettings')}
-              </summary>
-              <div className="course-settings-popover">
-                <CourseDisplayName key={data.course.id} course={data.course} disabled={!canWrite} reload={reload} />
-                <div className="course-status-actions">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={busy || !canWrite}
-                    onClick={() => void changeActivity()}
-                  >
-                    {data.course.is_active ? t('makeInactive') : t('makeActive')}
-                  </Button>
-                  <select
-                    aria-label={t('assignSemester')}
-                    className="native-select"
-                    value={data.course.semester_id ?? ''}
-                    disabled={busy || !canWrite}
-                    onChange={(event) => changeSemester(event.target.value)}
-                  >
-                    <option value="" disabled>
-                      {t('chooseSemester')}
-                    </option>
-                    {data.semesters.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
+              )}
+              <details className="course-settings">
+                <summary>
+                  <Settings2 size={16} />
+                  {t('courseSettings')}
+                </summary>
+                <div className="course-settings-popover">
+                  <CourseDisplayName key={data.course.id} course={data.course} disabled={!canWrite} reload={reload} />
+                  <div className="course-status-actions">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={busy || !canWrite}
+                      onClick={() => void changeActivity()}
+                    >
+                      {data.course.is_active ? t('makeInactive') : t('makeActive')}
+                    </Button>
+                    <select
+                      aria-label={t('assignSemester')}
+                      className="native-select"
+                      value={data.course.semester_id ?? ''}
+                      disabled={busy || !canWrite}
+                      onChange={(event) => changeSemester(event.target.value)}
+                    >
+                      <option value="" disabled>
+                        {t('chooseSemester')}
                       </option>
-                    ))}
-                  </select>
+                      {data.semesters.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </details>
-          </div>
-        )}
-      </div>
+              </details>
+            </div>
+          )}
+        </div>
+      }
+    >
       {activeAssignment && data && (
         <TaskPeekDrawer
           key={activeAssignment.id}

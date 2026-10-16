@@ -6,7 +6,7 @@ import { expect, test } from './fixtures'
 
 test('gespeicherte Sammlung behält Filter und Ansicht', async ({ page }) => {
   await page.goto('/collections')
-  await expect(page.getByRole('heading', { name: 'Eine Frage an deine Studieninhalte.' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Sammlungen', exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Neue Sammlung' }).click()
   await page.getByRole('combobox', { name: /^Inhalte/ }).selectOption('materials')
   await page.getByRole('button', { name: 'Tabelle' }).click()

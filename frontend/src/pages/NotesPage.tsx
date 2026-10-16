@@ -112,31 +112,37 @@ export function NotesPage() {
     reload()
   }
   return (
-    <Shell title={t('pageTitle')} eyebrow={t('pageEyebrow')} cachedAt={updatedAt}>
-      <div className="page-actions">
-        <Link className="subtle-link" to={courseId ? `/courses/${courseId}` : '/courses'}>
-          {t('backToCourses')}
-        </Link>
-        {(selectedId || newMode) && (
-          <Button
-            size="sm"
-            variant="outline"
-            aria-expanded={indexOpen}
-            aria-controls="note-document-index"
-            onClick={() => setIndexOpen((value) => !value)}
-          >
-            {t('switchNote')}
-          </Button>
-        )}
-        <Link className="subtle-link" to="/inbox">
-          {t('captureInbox')}
-        </Link>
-        {canWrite && (
-          <Button size="sm" onClick={openNew}>
-            <Plus size={16} /> {t('newNoteButton')}
-          </Button>
-        )}
-      </div>
+    <Shell
+      title={t('pageTitle')}
+      eyebrow={t('pageEyebrow')}
+      cachedAt={updatedAt}
+      actions={
+        <div className="page-actions">
+          <Link className="subtle-link" to={courseId ? `/courses/${courseId}` : '/courses'}>
+            {t('backToCourses')}
+          </Link>
+          {(selectedId || newMode) && (
+            <Button
+              size="sm"
+              variant="outline"
+              aria-expanded={indexOpen}
+              aria-controls="note-document-index"
+              onClick={() => setIndexOpen((value) => !value)}
+            >
+              {t('switchNote')}
+            </Button>
+          )}
+          <Link className="subtle-link" to="/inbox">
+            {t('captureInbox')}
+          </Link>
+          {canWrite && (
+            <Button size="sm" onClick={openNew}>
+              <Plus size={16} /> {t('newNoteButton')}
+            </Button>
+          )}
+        </div>
+      }
+    >
       {feedback && <ActionFeedback tone="success" message={feedback} />}
       {trashError && <ActionFeedback tone="error" message={trashError} />}
       {trashed && (

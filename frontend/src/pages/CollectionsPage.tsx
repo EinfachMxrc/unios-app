@@ -140,12 +140,7 @@ export function CollectionsPage() {
   }
 
   return (
-    <Shell title={t('pageTitle')} cachedAt={updatedAt}>
-      <div className="collections-intro">
-        <p>{t('introKicker')}</p>
-        <h2>{t('introTitle')}</h2>
-        <span>{t('introText')}</span>
-      </div>
+    <Shell title={t('pageTitle')} cachedAt={updatedAt} description={t('introText')}>
       <div className="collections-layout">
         <aside className="collections-sidebar">
           <div className="collections-sidebar-heading">

@@ -22,12 +22,15 @@ import type { CoursesResponse } from '@/types'
 import { recordPage } from '@/lib/usageMetrics'
 import { nameWorkspaceTab } from '@/lib/workspaceTabs'
 import { WorkspaceTabs } from './WorkspaceTabs'
+import './PageHeader.css'
 export function Shell({
   children,
   title,
   cachedAt = 0,
   breadcrumbs,
   compactNavigation = false,
+  actions,
+  description,
 }: {
   children: ReactNode
   title: string
@@ -35,6 +38,8 @@ export function Shell({
   cachedAt?: number
   breadcrumbs?: Breadcrumb[]
   compactNavigation?: boolean
+  actions?: ReactNode
+  description?: string
 }) {
   useStudyKeyboard()
   const sidebar = useSidebarState()
@@ -123,10 +128,18 @@ export function Shell({
           tabIndex={-1}
           className={`content ${location.pathname.startsWith('/courses/') ? 'course-page' : ''}`}
         >
-          <div className={`page-heading ${compactNavigation && !focusMode ? 'reader-workspace-heading' : ''}`}>
-            <h1 className={compactNavigation && !focusMode ? 'sr-only' : undefined}>{title}</h1>
-            {(!compactNavigation || focusMode) && focusControl}
-          </div>
+          <header className={`page-heading ${compactNavigation && !focusMode ? 'reader-workspace-heading' : ''}`}>
+            <div className="page-heading-copy">
+              <h1 className={compactNavigation && !focusMode ? 'sr-only' : undefined}>{title}</h1>
+              {description && <p className="page-description">{description}</p>}
+            </div>
+            {(actions || ((!compactNavigation || focusMode) && focusControl)) && (
+              <div className="page-heading-actions">
+                {actions}
+                {(!compactNavigation || focusMode) && focusControl}
+              </div>
+            )}
+          </header>
           {!online && (
             <Alert role="status" className="notice mb-5">
               <AlertTitle>

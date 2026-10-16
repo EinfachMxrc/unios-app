@@ -32,7 +32,12 @@ vi.mock('@/pages/notes/NoteDocument', () => ({
 vi.mock('@/addons/AddonWidgetSlot', () => ({ AddonWidgetSlot: () => null }))
 vi.mock('@/hooks/host', () => ({ useWritableHost: () => true }))
 vi.mock('@/components/Shell', () => ({
-  Shell: ({ children }: { children: React.ReactNode }) => <main>{children}</main>,
+  Shell: ({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) => (
+    <main>
+      {actions}
+      {children}
+    </main>
+  ),
 }))
 vi.mock('@/i18n/useT', () => {
   const t = (key: string) => key
