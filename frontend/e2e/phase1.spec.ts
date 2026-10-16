@@ -835,6 +835,8 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
       .getByRole('link', { name: /Programmieren 1/ })
       .first()
       .click()
+    // The course overview shows only a selection of the files; the full list has this one.
+    await page.getByRole('link', { name: 'Alle Unterlagen' }).click()
     const row = page.locator('.resource-row').filter({ hasText: 'Umgeleitete_Vorlesung.pdf' })
     await expect(row).toBeVisible()
     const downloadEvent = page.waitForEvent('download')
