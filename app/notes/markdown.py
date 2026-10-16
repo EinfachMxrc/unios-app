@@ -202,10 +202,10 @@ def _parse_lines(lines: list[str], ids: Iterator[str]) -> list[Block]:
             while index < len(lines) and lines[index].lstrip().startswith(">"):
                 quoted.append(re.sub(r"^\s*>\s?", "", lines[index]))
                 index += 1
-            inner = _parse_lines(quoted, ids)
-            first = inner[0] if inner and inner[0].type == "paragraph" else None
+            parsed = _parse_lines(quoted, ids)
+            first = parsed[0] if parsed and parsed[0].type == "paragraph" else None
             blocks.append(_block("quote", ids, content=first.content if first else [],
-                                 children=inner[1:] if first else inner))
+                                 children=parsed[1:] if first else parsed))
         elif ITEM.match(line):
             index = _consume_list(lines, index, ids, blocks)
         else:
