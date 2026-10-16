@@ -65,7 +65,10 @@ export function searchOffline(
     total += 1
     if (hits.length >= 100) continue
     const body = item.body.replace(/\s+/g, ' ').trim()
-    const first = normalized(body).indexOf(terms[0])
+    // The first term may only occur in the title, or a later term may be the one that matched.
+    const lowered = normalized(body)
+    const positions = terms.map((term) => lowered.indexOf(term)).filter((position) => position >= 0)
+    const first = positions.length ? Math.min(...positions) : -1
     const start = Math.max(0, first < 0 ? 0 : first - 60)
     const excerpt = `${start ? '…' : ''}${body.slice(start, start + 180)}${body.length > start + 180 ? '…' : ''}`
     hits.push({ ...item, excerpt })

@@ -72,6 +72,26 @@ export async function verifiedMutationGeneration(): Promise<number> {
 }
 
 /**
+ * Offline outbox replays call fetch directly. A stale lease (423, or 409 STALE_HOST) must drop
+ * the cached generation there too, otherwise it is reused until its 30 s lifetime ends.
+ */
+export async function noteStaleHost(response: Response): Promise<void> {
+  if (response.ok) return
+  let stale = response.status === 423
+  if (!stale && response.status === 409) {
+    try {
+      const payload = (await response.clone().json()) as { detail?: unknown }
+      stale = typeof payload.detail === 'string' && payload.detail.startsWith('STALE_HOST')
+    } catch {
+      /* response without JSON */
+    }
+  }
+  if (!stale) return
+  markHostUnverified()
+  void queryClient.invalidateQueries({ queryKey: ['api', '/api/host'] })
+}
+
+/**
  * Every API call goes through here: host lease header, offline write lock,
  * reachability tracking, readable errors and post-write invalidation. Returns
  * the successful response unread, for bodies that are not JSON (files, text).

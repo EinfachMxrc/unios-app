@@ -54,3 +54,27 @@ it('finds a new query in cached pages and applies course and semester filters', 
   expect(searchOffline(index, 'Schleifen', '', '', 'annotation').total).toBe(1)
   expect(searchOffline(index, 'Schleifen', '', '', 'document').total).toBe(0)
 })
+
+it('centres the excerpt on a later term when the first one only occurs in the title', () => {
+  const padding = 'x '.repeat(200)
+  const long: OfflineSearchIndex = {
+    items: [
+      {
+        kind: 'document',
+        id: 'long',
+        title: 'Skript Rekursion',
+        body: `${padding}Hier steht der Induktionsbeweis im Detail.`,
+        course_id: 1,
+        course_name: 'Programmieren',
+        semester_id: 2,
+        semester_name: 'Winter',
+        page_number: 1,
+        href: '/material/9',
+      },
+    ],
+  }
+  // "rekursion" only occurs in the title, so the body position of the second term decides.
+  expect(searchOffline(long, 'Rekursion Induktionsbeweis').hits[0].excerpt).toContain('Induktionsbeweis')
+  // More than three words: any relevant term matches, here only a later one is in the body.
+  expect(searchOffline(long, 'Welche Rekursion Induktionsbeweis Detail').hits[0].excerpt).toContain('Induktionsbeweis')
+})

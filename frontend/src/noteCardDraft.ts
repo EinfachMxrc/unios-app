@@ -137,7 +137,9 @@ export function openNoteCardDraft(context: NoteCardContext): Promise<void> {
       entries.set(key, { ...previous, phase: 'blocked', localSaved: false, error: i18n.t('noteCards:storageFailure') })
       notify()
     }
-  })().finally(() => loading.delete(key))
+  })().finally(() => {
+    if (loading.get(key) === work) loading.delete(key)
+  })
   loading.set(key, work)
   return work
 }
@@ -308,6 +310,9 @@ if (typeof window !== 'undefined') {
     epoch += 1
     entries.clear()
     sessions.clear()
+    // A pending open from the old workspace must not be handed to the re-rendered dialog.
+    loading.clear()
+    writes.clear()
     notify()
   }
   window.addEventListener('unios:workspace-cleared', clear)
