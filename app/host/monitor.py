@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import threading
+from collections.abc import Callable
 from datetime import UTC, datetime
 
 from sqlalchemy.engine import Engine
@@ -21,12 +22,15 @@ log = logging.getLogger(__name__)
 
 class StandbyMonitor:
     def __init__(self, settings: Settings, coordinator: HostCoordinator, engine: Engine,
-                 scheduler: SyncScheduler, request_gate: WriteGate):
+                 scheduler: SyncScheduler, request_gate: WriteGate,
+                 on_takeover: Callable[[], None] | None = None):
         self.settings = settings
         self.coordinator = coordinator
         self.engine = engine
         self.scheduler = scheduler
         self.request_gate = request_gate
+        # Writer-only workers beyond the scheduler (job queue, corpus indexing, recovery).
+        self.on_takeover = on_takeover
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
 
@@ -86,6 +90,8 @@ class StandbyMonitor:
             if not self.coordinator.start():
                 raise HostLeaseError("Übernommener Staffelstab konnte nicht gestartet werden")
             self.scheduler.start()
+            if self.on_takeover is not None:
+                self.on_takeover()
             log.info("Ausfallübernahme abgeschlossen; Synchronisation gestartet")
             return True
         finally:

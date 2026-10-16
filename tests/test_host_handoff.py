@@ -159,11 +159,18 @@ def test_running_standby_switches_to_host_after_checked_takeover(tmp_path, monke
     app = create_app(pc, connectors=[], start_scheduler=False)
     scheduler_starts = []
     monkeypatch.setattr(app.state.standby_monitor.scheduler, "start", lambda: scheduler_starts.append(True))
+    workers = []
+    monkeypatch.setattr(app.state.background_jobs, "start", lambda: workers.append("jobs"))
+    monkeypatch.setattr(app.state.corpus_worker, "start", lambda: workers.append("corpus"))
+    monkeypatch.setattr(app.state.coding_service.repository, "recover", lambda _guard: workers.append("coding"))
     with TestClient(app) as client:
         assert client.get("/api/host").json()["mode"] == "standby"
+        assert workers == []
         assert app.state.standby_monitor.run_once() is True
         assert client.get("/api/host").json()["mode"] == "host"
         assert scheduler_starts == [True]
+        # The writer-only workers must start after a takeover, not only at process start.
+        assert workers == ["coding", "jobs", "corpus"]
 
 
 def test_standby_startup_claims_stale_host_before_serving(tmp_path, monkeypatch):
@@ -415,3 +422,18 @@ def test_restore_preserves_old_database_and_wal_but_refuses_archive_symlink(tmp_
     archive = next((local / "handoff-archives").iterdir())
     assert (archive / target.name).read_bytes() == b"old database"
     assert (archive / wal.name).read_bytes() == b"old write-ahead log"
+
+
+def test_restarted_scheduler_keeps_jobs_registered_by_other_services(tmp_path, monkeypatch):
+    _mac, pc = stale_host_fixture(tmp_path, monkeypatch)
+    app = create_app(pc, connectors=[], start_scheduler=False)
+    scheduler = app.state.standby_monitor.scheduler
+    scheduler.add_recurring(lambda: None, job_id="notification-center", minutes=15)
+    scheduler.start()
+    try:
+        assert scheduler.scheduler.get_job("notification-center") is not None
+        scheduler.stop()
+        scheduler.start()
+        assert scheduler.scheduler.get_job("notification-center") is not None
+    finally:
+        scheduler.stop()

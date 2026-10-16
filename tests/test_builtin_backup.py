@@ -202,3 +202,31 @@ def test_the_ai_model_choice_is_part_of_the_backup(settings, factory, coordinato
     name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
     folder = next((tmp_path / "usb").rglob(name))
     assert (folder / "local" / "ai-provider.json").is_file()
+
+
+def test_restore_replaces_same_size_files_and_rotates_the_corpus_epoch(settings, factory, coordinator, tmp_path):
+    import os
+    import sqlite3
+    from contextlib import closing
+
+    seed(settings, factory)
+    with closing(sqlite3.connect(settings.local_dir / "uni_os.sqlite3")) as database:
+        database.execute("CREATE TABLE IF NOT EXISTS corpus_state(key TEXT PRIMARY KEY, value TEXT)")
+        database.execute("INSERT OR REPLACE INTO corpus_state VALUES ('epoch', 'alt')")
+        database.commit()
+    flag = settings.data_dir / "uni" / "flag.json"
+    flag.parent.mkdir(parents=True, exist_ok=True)
+    flag.write_text('{"done": true}', encoding="utf-8")
+    configure(settings, tmp_path)
+    name = run.run_backup(settings, coordinator, now=datetime(2026, 10, 13, 9, 30, tzinfo=UTC))["name"]
+    flag.write_text('{"done": fals}', encoding="utf-8")  # same byte count
+    os.utime(flag, (1_000_000_000, 1_000_000_000))
+
+    restore.stage_restore(settings, name, "WIEDERHERSTELLEN")
+    factory.kw["bind"].dispose()
+    result = restore.apply_pending_restore(settings, settings.local_dir / "uni_os.sqlite3")
+
+    assert result is not None and result["status"] == "success"
+    assert flag.read_text(encoding="utf-8") == '{"done": true}'
+    with closing(sqlite3.connect(settings.local_dir / "uni_os.sqlite3")) as database:
+        assert database.execute("SELECT value FROM corpus_state WHERE key='epoch'").fetchone()[0] != "alt"
