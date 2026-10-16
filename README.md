@@ -65,7 +65,7 @@ Das responsive Layout ist kein Nachweis einer veröffentlichten iOS-/Android-App
 1. Lade auf der [Release-Seite](https://github.com/EinfachMxrc/unios-app/releases/latest) das passende Paket herunter und vergleiche es bei Bedarf mit `SHA256SUMS.txt`.
 2. Installiere und öffne UniOS. Der Installer enthält Oberfläche und Hintergrunddienst; Python und Node.js brauchst du nicht.
 3. Verbinde die App mit deinem eigenen HTTPS-Server und bestätige die einmalige Gerätekopplung: [Server-Anleitung](docs/SERVER.md).
-   **Aktuell braucht die installierte Desktop-App dafür einen eigenen Server.** Ein Modus „nur auf diesem Gerät“ ist geplant ([#26](https://github.com/EinfachMxrc/unios-app/issues/26)). Bis dahin geht UniOS ohne Server nur aus dem Quellcode (siehe Demo unten; dort laufen auch Moodle und lokale Daten ohne Server) oder als Demo.
+   Beim ersten Start wählst du **„Nur auf diesem Gerät nutzen“** (lokale Datenbank, kein Server nötig) oder koppelst die App mit deinem eigenen Server. Ein späterer Wechsel auf einen Server geht nur über die geprüfte Datenübernahme ([Server](docs/SERVER.md)).
 4. Wähle Hochschule und Studiengang und richte die gewünschten Quellen ein.
 
 Welche Plattformen ein Release enthält, steht in dessen Beschreibung; der Stand je Plattform in [DESKTOP_PACKAGES](docs/DESKTOP_PACKAGES.md). **Vor einem Update eines vorhandenen Datenbestands** einen Snapshot erstellen und prüfen: [Migration und Wiederherstellung](docs/SERVER.md).

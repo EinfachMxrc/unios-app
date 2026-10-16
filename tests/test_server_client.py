@@ -263,3 +263,62 @@ def test_server_pairing_rejects_plain_remote_http(settings, factory, coordinator
         code = SessionStore(settings.local_dir).create_pairing_code()
         result = client.post("/api/session/pair-token", json={"pairing_secret": code, "label": "Test"})
         assert result.status_code == 403
+
+
+def test_choose_mode_keeps_existing_installations_and_opens_the_choice_on_first_start(tmp_path):
+    from app.client.service import choose_mode, client_enabled
+    from app.integrations.storage import ConnectionStore
+
+    fresh = tmp_path / "fresh"
+    assert choose_mode(fresh) == "client"  # nothing yet: the screen offers both ways
+    assert client_enabled(fresh) is False  # but a source checkout is not a paired client
+
+    legacy = tmp_path / "legacy"
+    (legacy / "local").mkdir(parents=True)
+    (legacy / "local" / "uni_os.sqlite3").write_bytes(b"")
+    assert choose_mode(legacy) == "local"  # database from before the choice existed
+
+    for mode, with_database in (("client", True), ("local", False)):
+        home = tmp_path / mode
+        (home / "local").mkdir(parents=True)
+        if with_database:
+            (home / "local" / "uni_os.sqlite3").write_bytes(b"")
+        ConnectionStore(home / "local", "server").save({"version": 1, "mode": mode})
+        assert choose_mode(home) == mode  # an explicit marker always wins
+
+
+def test_use_local_endpoint_records_the_choice_without_credentials(tmp_path):
+    from app.client.service import choose_mode
+
+    async def scenario():
+        home = tmp_path / "client"
+        app = create_client_app(home, tmp_path / "ui")
+        async with app.router.lifespan_context(app), httpx.AsyncClient(
+            transport=httpx.ASGITransport(app), base_url="http://127.0.0.1:8000",
+            headers={"Sec-Fetch-Site": "same-origin", "Origin": "http://127.0.0.1:8000"},
+        ) as client:
+            response = await client.post("/api/client/use-local")
+            assert response.status_code == 200, response.text
+            assert response.json() == {"mode": "local"}
+        assert choose_mode(home) == "local"
+        stored = json.loads((home / "local" / "server-connection.json").read_text())
+        assert stored == {"version": 1, "mode": "local"}
+
+    asyncio.run(scenario())
+
+
+def test_use_local_is_refused_on_a_paired_device(tmp_path, monkeypatch):
+    from app.client.service import choose_mode
+
+    async def scenario():
+        home = tmp_path / "client"
+        monkeypatch.setattr(ServerConnection, "state", lambda self: {"configured": True})
+        app = create_client_app(home, tmp_path / "ui")
+        async with app.router.lifespan_context(app), httpx.AsyncClient(
+            transport=httpx.ASGITransport(app), base_url="http://127.0.0.1:8000",
+            headers={"Sec-Fetch-Site": "same-origin", "Origin": "http://127.0.0.1:8000"},
+        ) as client:
+            assert (await client.post("/api/client/use-local")).status_code == 409
+        assert choose_mode(home) == "client"
+
+    asyncio.run(scenario())

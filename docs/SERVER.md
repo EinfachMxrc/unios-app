@@ -28,7 +28,7 @@ Seit 0.1.13 kann der eigene VPS dauerhaft Hochschulquellen lesen und den Datenbe
 | Gerät | Installierte App, Geräteschlüssel im OS-Schlüsselbund, lokale Notizentwürfe und vorhandener Offline-Cache |
 | Getrennte Serverdatei | Privater Hauptschlüssel für den verschlüsselten Server-Schlüsselbund |
 
-Offline-Notizen behalten ihre Ausgangsversion. Beim Wiederverbinden bleibt der vorhandene Drei-Wege-Abgleich aktiv. Ein Serverwechsel kann nicht still denselben Cache übernehmen; dafür ist eine getrennte Datenübernahme erforderlich. Bestehende lokale Installationen behalten ihren Altbetrieb bis zur ausdrücklichen Übernahme. Neue Installationen beginnen mit der Serverkopplung.
+Offline-Notizen behalten ihre Ausgangsversion. Beim Wiederverbinden bleibt der vorhandene Drei-Wege-Abgleich aktiv. Ein Serverwechsel kann nicht still denselben Cache übernehmen; dafür ist eine getrennte Datenübernahme erforderlich. Bestehende lokale Installationen behalten ihren Altbetrieb bis zur ausdrücklichen Übernahme. Neue Installationen wählen beim ersten Start zwischen „Nur auf diesem Gerät nutzen“ (lokale Datenbank ohne Server) und der Serverkopplung. Der Wechsel von lokal auf einen Server geschieht nie automatisch, sondern nur über die hier beschriebene Datenübernahme.
 
 Ein Server bedeutet keine Ende-zu-Ende-Verschlüsselung der gesamten Datenbank gegenüber dem Serverbetreiber: der eigene Server kann die Studiendaten verarbeiten. Der HTTPS-Verkehr läuft im beschriebenen Aufbau über den bereits vorhandenen Cloudflare-Tunnel. Die Zugangsdaten werden zusätzlich im Server-Schlüsselbund verschlüsselt gespeichert; der vollständige Material-/Datenbankbestand wird nicht dadurch automatisch verschlüsselt.
 

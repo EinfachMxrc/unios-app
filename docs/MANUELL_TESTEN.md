@@ -766,3 +766,15 @@ prüfen den echten Supervisor-/Arbeiter-Lebenszyklus; der installierte frische
 Start und seine Prozesszuordnung wurden geprüft. Der reale GUI-Beenden-Pfad
 bleibt offen, weil die Mac-Steuerung mit „native pipe startup failed“ ausfällt.
 Keine Systemfreigaben oder Vertrauensregeln dafür ändern.
+
+## Lokaler Modus ohne Server – 16.10.2026
+
+Nur mit der installierten Desktop-App prüfbar (der Neustart läuft über das Tauri-Kommando
+`restart_backend`). Frisch installiert, ohne vorhandenen UniOS-Ordner starten: Auf dem
+Startbildschirm erscheinen „Demo ausprobieren“, „Nur auf diesem Gerät nutzen“ und
+„Meine Hochschule verbinden“. „Nur auf diesem Gerät nutzen“ wählen. Die App startet neu
+und zeigt die Hochschulwahl; Hochschule wählen, Moodle einrichten, eine Notiz anlegen.
+App beenden und erneut öffnen: Daten und Modus bleiben. Es darf dabei keine
+Serveradresse abgefragt werden. Eine bereits mit einem Server gekoppelte oder bereits
+lokal genutzte Installation darf ihren Modus nicht ändern. Der Ablauf des Dienstes ist
+automatisch durch `tests/test_desktop_local_mode.py` abgedeckt.

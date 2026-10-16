@@ -29,7 +29,7 @@ Since 0.1.13 your own VPS can read university sources around the clock and manag
 | Device | Installed app, device key in the OS keychain, local note drafts and the existing offline cache |
 | Separate server file | Private master key for the encrypted server keychain |
 
-Offline notes keep their base version. When the device reconnects, the existing three-way merge stays active. A change of server cannot silently reuse the same cache; a separate data transfer is required for that. Existing local installations keep their legacy mode until you explicitly migrate. New installations begin with server pairing.
+Offline notes keep their base version. When the device reconnects, the existing three-way merge stays active. A change of server cannot silently reuse the same cache; a separate data transfer is required for that. Existing local installations keep their legacy mode until you explicitly migrate. New installations choose on first start between “Use on this device only” (local database, no server) and server pairing. Moving from local to a server never happens automatically, only through the data transfer described here.
 
 A server does not mean end-to-end encryption of the whole database against the server operator: your own server can process your study data. In the described setup, HTTPS traffic runs through the already existing Cloudflare tunnel. Credentials are additionally stored encrypted in the server keychain; this does not automatically encrypt the complete material and database store.
 

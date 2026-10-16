@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { useState } from 'react'
-import { ArrowRight, BookOpen, Sparkles } from 'lucide-react'
+import { ArrowRight, BookOpen, Laptop, Sparkles } from 'lucide-react'
 import { useT } from '@/i18n/useT'
 import { Button } from '@/components/ui/button'
 import { BrandMark } from '@/components/BrandMark'
@@ -10,20 +10,23 @@ import './OnboardingPage.css'
 export function OnboardingPage({
   onStartDemo,
   onConnect,
+  onUseLocal,
   demoAvailable = true,
 }: {
   onStartDemo: () => Promise<void>
   onConnect: () => void
+  /** Only offered where the native shell can restart the service into local mode. */
+  onUseLocal?: () => Promise<void>
   demoAvailable?: boolean
 }) {
   const { t } = useT('releaseOnboarding')
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
-  async function demo() {
+  async function start(action: () => Promise<void>) {
     setBusy(true)
     setFailed(false)
     try {
-      await onStartDemo()
+      await action()
     } catch {
       setFailed(true)
     } finally {
@@ -42,11 +45,22 @@ export function OnboardingPage({
           <Sparkles aria-hidden="true" />
           <h2>{t('demo')}</h2>
           <p>{t('demoHint')}</p>
-          <Button disabled={busy || !demoAvailable} onClick={() => void demo()}>
+          <Button disabled={busy || !demoAvailable} onClick={() => void start(onStartDemo)}>
             {busy ? t('starting') : t('demo')}
             <ArrowRight size={16} aria-hidden="true" />
           </Button>
         </section>
+        {onUseLocal && (
+          <section>
+            <Laptop aria-hidden="true" />
+            <h2>{t('local')}</h2>
+            <p>{t('localHint')}</p>
+            <Button disabled={busy} onClick={() => void start(onUseLocal)}>
+              {t('local')}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Button>
+          </section>
+        )}
         <section>
           <BookOpen aria-hidden="true" />
           <h2>{t('connect')}</h2>

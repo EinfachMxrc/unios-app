@@ -6,6 +6,9 @@ export default {
   demoHint: 'A separate example semester with PDFs, assignments and cards. Your university data stays separate.',
   connect: 'Connect my university',
   connectHint: 'Choose your university and degree programme, then set up your personal connections.',
+  local: 'Use on this device only',
+  localHint:
+    'UniOS runs without a server of its own, with a local database. You can move your data to a server later through a checked transfer.',
   starting: 'Preparing the demo …',
   failed: 'That did not work. Please try again.',
   demoActive: 'Demo semester · all contents are invented',
