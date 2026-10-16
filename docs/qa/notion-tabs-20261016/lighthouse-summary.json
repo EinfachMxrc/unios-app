@@ -1,4 +1,5 @@
 {
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
   "syntheticFixturesOnly": true,
   "frontendIndexSha256": "a6bf264d8427ca60d5600d132d6a6d88baa7bf58abb780565dc7bd2ec52be845",
   "reports": [

@@ -49,6 +49,7 @@ test('favorite templates persist, keyboard search resumes writing, and cancelled
   await expect(page.getByRole('status').filter({ hasText: 'Auf dem Hauptgerät gespeichert' })).toBeVisible()
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
+  await body.focus()
   await page.getByRole('button', { name: 'Formel', exact: true }).click()
   dialog = formula(page)
   await dialog.getByRole('button', { name: 'Zuletzt benutzt', exact: true }).click()

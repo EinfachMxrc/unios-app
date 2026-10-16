@@ -835,6 +835,9 @@ test.describe.serial('Phase 1 dashboard with isolated fake Moodle', () => {
       .getByRole('link', { name: /Programmieren 1/ })
       .first()
       .click()
+    // Earlier cases add enough files to exceed the overview's short list.
+    // Exercise the full materials view instead of depending on its row limit.
+    await openMaterials(page)
     const row = page.locator('.resource-row').filter({ hasText: 'Umgeleitete_Vorlesung.pdf' })
     await expect(row).toBeVisible()
     const downloadEvent = page.waitForEvent('download')

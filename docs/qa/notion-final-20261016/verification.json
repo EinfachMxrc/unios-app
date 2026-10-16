@@ -1,0 +1,66 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "date": "2026-10-16",
+  "syntheticFixturesOnly": true,
+  "packageCommits": [
+    "22fab51",
+    "c0dca9d",
+    "96c5832",
+    "8c18193"
+  ],
+  "sourceTreeHashAlgorithm": "SHA-256 of sorted relative UTF-8 paths, NUL, binary SHA-256 of each file; excludes __pycache__",
+  "sourceTrees": {
+    "frontend/src": {
+      "fileCount": 798,
+      "sha256": "a52a73efe4c2f95c87f4b0d2e8d58aa5d429cc1bc1d6058b734120655610d27d"
+    },
+    "app": {
+      "fileCount": 434,
+      "sha256": "48e3656d61923c090655bcb35d9179f1fb975fe9f38a0e4fefa71559b8c9e03d"
+    }
+  },
+  "frontendIndexSha256": "a62bbae7936f36c44098fd24e02fe98ca69c89a17495b21d12a11edd45dfe53b",
+  "vitest": {
+    "passed": 1485,
+    "files": 186
+  },
+  "pytest": {
+    "passed": 1385,
+    "skipped": 8,
+    "excludedFile": "tests/test_macos_signing.py",
+    "exclusionReason": "macOS disposable certificate verification fails with CSSMERR_TP_NOT_TRUSTED"
+  },
+  "playwright": {
+    "distinctCasesCovered": 567,
+    "fullRun": {
+      "passed": 566,
+      "failed": 1,
+      "minutes": 16.2
+    },
+    "correctedSpec": "phase1.spec.ts",
+    "correction": "Open the full materials view before looking for the redirected file; earlier cases exceed the overview row limit. Test-only change; frozen app build unchanged.",
+    "correctedWholeSpecRun": {
+      "passed": 27,
+      "failed": 0,
+      "minutes": 1.3
+    },
+    "otherFullRunCases": 540,
+    "workers": 1
+  },
+  "lighthouse": {
+    "views": 28,
+    "minimum": 96,
+    "maximum": 100,
+    "runtimeErrors": 0,
+    "scriptErrors": 0
+  },
+  "pwaPrecache": {
+    "uniqueFiles": 277,
+    "rawBytes": 18591367,
+    "rawBudgetBytes": 18874368,
+    "gzipBytes": 5219722,
+    "gzipBudgetBytes": 5242880
+  },
+  "dockerSmoke": "not run: Docker unavailable locally",
+  "nativeAcceptance": "See docs/MANUELL_TESTEN.md; no native installation or release performed"
+}

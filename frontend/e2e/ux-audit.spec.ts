@@ -272,7 +272,9 @@ for (const theme of ['light', 'dark'] as const) {
         await page.goto(route)
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
         await expect(page.locator('[data-slot="skeleton"]:visible')).toHaveCount(0)
-        if (name === 'today' || name === 'calendar')
+        if (name === 'calendar' && size === 'desktop')
+          await expect(page.locator('#timetable').getByRole('button', { name: /^Programmieren ·/ })).toBeVisible()
+        else if (name === 'today' || name === 'calendar')
           await expect(page.locator('#timetable').getByText('Programmieren', { exact: true })).toBeVisible()
         if (name === 'mensa') await expect(page.getByRole('heading', { name: 'Gemüsepfanne mit Reis' })).toBeVisible()
         if (name === 'study') {

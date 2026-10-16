@@ -67,7 +67,7 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
   return (
     <aside className="app-sidebar">
       <div className="sidebar-workspace">
-        <Link to="/" className="app-brand">
+        <Link to="/" className="app-brand" aria-label={compact ? t('brandName') : undefined}>
           <BrandMark />
           <span>
             {t('brandName')}

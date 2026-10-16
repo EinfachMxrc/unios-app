@@ -1,0 +1,453 @@
+{
+  "_license": "SPDX-License-Identifier: AGPL-3.0-or-later",
+  "syntheticFixturesOnly": true,
+  "frontendIndexSha256": "a62bbae7936f36c44098fd24e02fe98ca69c89a17495b21d12a11edd45dfe53b",
+  "reports": [
+    {
+      "state": "page",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 96,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "aria-input-field-name",
+          "title": "ARIA input fields do not have accessible names",
+          "nodes": [
+            {
+              "selector": "div.note-document > div.rendered-note > div > div.tiptap",
+              "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "editor",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "templates",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "course",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 98,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "nodes": [
+            {
+              "selector": "section.course-collections > div > section.collection-group > h4",
+              "explanation": "Fix any of the following:\n  Heading order invalid"
+            }
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "preview",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "new",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "reader",
+      "theme": "light",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "page",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 96,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "aria-input-field-name",
+          "title": "ARIA input fields do not have accessible names",
+          "nodes": [
+            {
+              "selector": "div.note-document > div.rendered-note > div > div.tiptap",
+              "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "editor",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "templates",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "course",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 98,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "nodes": [
+            {
+              "selector": "section.course-collections > div > section.collection-group > h4",
+              "explanation": "Fix any of the following:\n  Heading order invalid"
+            }
+          ]
+        },
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "preview",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "new",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "label-content-name-mismatch",
+          "title": "Elements with visible text labels do not have matching accessible names.",
+          "nodes": [
+            {
+              "selector": "aside.app-sidebar > nav.app-nav > div.sidebar-tools > button.sidebar-search",
+              "explanation": "Fix any of the following:\n  Text inside the element is not included in the accessible name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "reader",
+      "theme": "dark",
+      "width": 1440,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "page",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 96,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "aria-input-field-name",
+          "title": "ARIA input fields do not have accessible names",
+          "nodes": [
+            {
+              "selector": "div.note-document > div.rendered-note > div > div.tiptap",
+              "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "editor",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "templates",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "course",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 98,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "nodes": [
+            {
+              "selector": "section.course-collections > div > section.collection-group > h4",
+              "explanation": "Fix any of the following:\n  Heading order invalid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "preview",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "new",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "reader",
+      "theme": "light",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "page",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 96,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "aria-input-field-name",
+          "title": "ARIA input fields do not have accessible names",
+          "nodes": [
+            {
+              "selector": "div.note-document > div.rendered-note > div > div.tiptap",
+              "explanation": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "editor",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "templates",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "course",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 98,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": [
+        {
+          "id": "heading-order",
+          "title": "Heading elements are not in a sequentially-descending order",
+          "nodes": [
+            {
+              "selector": "section.course-collections > div > section.collection-group > h4",
+              "explanation": "Fix any of the following:\n  Heading order invalid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "state": "preview",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "new",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    },
+    {
+      "state": "reader",
+      "theme": "dark",
+      "width": 390,
+      "accessibility": 100,
+      "runtimeError": null,
+      "scriptErrors": [],
+      "findings": []
+    }
+  ]
+}

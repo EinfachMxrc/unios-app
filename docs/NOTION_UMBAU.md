@@ -8,13 +8,15 @@ Implementierung; kein übernommener Notion-Code oder fremde Assets.
 
 | Paket | Ergebnis | Stand |
 | --- | --- | --- |
-| 1 | Offene Inhalte als Tabs, gemeinsame Entwürfe und Wiederaufnahme | Implementiert, gezielt geprüft |
-| 2 | Gemeinsame Seitenköpfe und kontextbezogene Editor-Werkzeuge | Implementiert, gezielt geprüft |
-| 3 | Gespeicherte Ansichten direkt im Kurs und seitliche Vorschauen | Implementiert, gezielt geprüft |
-| 4 | Unterseiten, Vorlagen und persönliche Seitendarstellung | Implementiert, gezielt geprüft |
+| 1 | Offene Inhalte als Tabs, gemeinsame Entwürfe und Wiederaufnahme | Implementiert, gemeinsam geprüft |
+| 2 | Gemeinsame Seitenköpfe und kontextbezogene Editor-Werkzeuge | Implementiert, gemeinsam geprüft |
+| 3 | Gespeicherte Ansichten direkt im Kurs und seitliche Vorschauen | Implementiert, gemeinsam geprüft |
+| 4 | Unterseiten, Vorlagen und persönliche Seitendarstellung | Implementiert, gemeinsam geprüft |
 
 Jedes Paket erhält einen eigenen funktionierenden Commit. Die gemeinsame
-Integrationsprüfung und der Pull Request erfolgen nach dem vollständigen Umbau.
+Integrationsprüfung ist abgeschlossen; Nachweise und Prüfgrenzen stehen in
+[`qa/notion-final-20261016/README.md`](qa/notion-final-20261016/README.md). Der
+Pull Request bündelt die vier Pakete und ihre Integrationskorrekturen.
 Offene native Abnahmen stehen in `MANUELL_TESTEN.md`; kein Release oder Server-
 Deployment gehört zu diesem Auftrag.
 

@@ -28,7 +28,8 @@
 }
 @media (hover: hover) {
   .note-studio:not(:hover, :focus-within) .studio-toolbar > button:not(.studio-add) {
-    display: none;
+    /* Keep the writing position steady when the tools appear. */
+    visibility: hidden;
   }
 }
 .studio-bar-end {

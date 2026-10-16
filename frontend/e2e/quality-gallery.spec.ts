@@ -40,7 +40,7 @@ test('quality gallery: main workflows, preview and editor in both themes and siz
         pdf: `/material/${version}`,
       })) {
         await page.goto(route)
-        await expect(page.locator('.content > .page-heading > h1')).toBeVisible()
+        await expect(page.locator('.content > .page-heading h1')).toBeVisible()
         if (name === 'pdf')
           await expect(page.locator('[data-material-page="1"] [data-reader-render-active="true"]')).toHaveAttribute(
             'data-reader-render-complete',

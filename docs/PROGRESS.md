@@ -1,5 +1,35 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 16.10.2026 – Notion-Umbau: gemeinsame Abschlussprüfung
+
+Alle vier Pakete sind implementiert und einzeln committed. Die gemeinsame
+Browserprüfung deckt 567 Fälle ab: 566 bestanden im vollständigen Lauf; der einzige
+Fehler lag im bestehenden Moodle-Redirect-Test, der nach vorherigen Uploads die
+begrenzte Kursvorschau statt der vollständigen Unterlagen prüfte. Nach dieser
+Testkorrektur bestand der komplette zusammenhängende Moodle-Block mit 27 Fällen
+auf demselben eingefrorenen Build. Keine App-Änderung nach diesem Gesamtlauf.
+
+1.485 Frontendtests in 186 Dateien und 1.385 Pythonfälle bestanden, acht reguläre
+Python-Skips. Typecheck, ESLint, Übersetzungsabgleich, Ruff, mypy (651 Dateien),
+OpenAPI-/Typenabgleich, Produktionsbuild und Größenbudgets bestanden. Der separate
+lokale macOS-Signaturtest bleibt wegen des nicht vertrauten Wegwerf-Zertifikats
+ausgenommen; keine Änderung am Schlüsselbund. Docker ist lokal nicht verfügbar.
+
+28 Ansichten, Hell/Dunkel und 1.440/390 Pixel, geprüft: Lighthouse Accessibility
+96–100, keine JavaScript-/Audit-Laufzeitfehler. Die gefrorenen Frontend- und
+Backend-Quellbäume stimmen byteweise mit dem Arbeitsstand überein. Isolierte
+Fake-Dienste vermeiden Eingriffe in parallel laufende Instanzen. Vollständige
+Nachweise, Screenshots, Build-Hash und Grenzen unter
+[`qa/notion-final-20261016/README.md`](qa/notion-final-20261016/README.md).
+
+Zusätzlich den Originaldownload bei fehlender Vorschau im kompakten Reader sichtbar
+gehalten, der eingeklappten Marke ihren zugänglichen Namen erhalten und die
+Geometrie der kontextbezogenen Editor-Werkzeuge stabilisiert. Bestehende
+Browserselektoren folgen den gemeinsamen Seitenköpfen und der neuen Kalenderansicht.
+Kein Release, keine Installation, Datenmigration oder Serveränderung. Native
+Geräteabnahme steht weiterhin in `MANUELL_TESTEN.md`.
+
+
 
 ## 16.10.2026 – Notion-Umbau, Paket 4: Unterseiten und Vorlagen
 

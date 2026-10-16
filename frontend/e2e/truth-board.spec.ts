@@ -13,6 +13,7 @@ async function open(page: Page) {
   const id = (await created.json()).note.id
   await page.goto(`/notes?id=${id}`)
   await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
+  await page.getByRole('textbox', { name: 'Notizinhalt', exact: true }).focus()
   await page.getByRole('button', { name: 'Wahrheitstabelle', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Wahrheitstabelle', exact: true })
   await dialog.getByRole('textbox', { name: 'Logischer Ausdruck' }).fill(expression)
