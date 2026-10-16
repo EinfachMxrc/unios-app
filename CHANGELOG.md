@@ -9,6 +9,7 @@
 - Geändert: Der Markdown-Quelltextmodus und die frühere Studio-Werkzeugleiste entfallen. Markdown bleibt als Tipp-Kürzel, Import und Export. Favoriten und zuletzt benutzte Formelvorlagen der alten Leiste sind entfallen.
 - Geändert (Speicherformat): Neue Notizversionen sind Blockdokumente (JSON, `unios-note-blocks`). Ältere Markdown-Versionen bleiben unverändert und werden beim Lesen umgewandelt; die nächste Speicherung legt eine neue Version an. Die API liefert zusätzlich `document`; `body` bleibt die Markdown-Ansicht. Der Export enthält je Notiz `.md` und `.json`.
 - Geändert: Lokale Entwürfe und das Zusammenführen arbeiten blockweise.
+- Neu: Der Backup-Ordner lässt sich im Systemdialog auswählen statt als Pfad einzutippen.
 - Behoben: Blöcke ließen sich am Griff nicht ziehen; Escape im Slash-Menü schloss das Notiz-Fenster neben dem PDF; nach Menüs ging der Cursor verloren.
 
 ## 0.1.29 – Lokaler Modus ohne Server und viele Korrekturen (16.10.2026)
