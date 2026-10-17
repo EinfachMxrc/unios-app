@@ -46,7 +46,7 @@ describe('direct Markdown input in the shared visual editor', () => {
   it.each([
     ['1. ', 'orderedList'],
     ['- [ ] ', 'taskList'],
-    ['> ', 'blockquote'],
+    ['" ', 'blockquote'],
   ])('types %s without using the toolbar', (prefix, node) => {
     const editor = editorFor()
     type(editor, `${prefix} Gedanke`)
@@ -54,6 +54,12 @@ describe('direct Markdown input in the shared visual editor', () => {
     const restored = editorFor(editor.getMarkdown())
     expect(restored.isActive(node)).toBe(true)
     expect(restored.state.doc.textContent.trim()).toBe(editor.state.doc.textContent.trim())
+  })
+  it('turns "> " into a toggle, as Notion does', () => {
+    const editor = editorFor()
+    type(editor, '> Gedanke')
+    expect(editor.isActive('toggle')).toBe(true)
+    expect(editor.isActive('blockquote')).toBe(false)
   })
   it('keeps code and mid-sentence markers as literal text', () => {
     const editor = editorFor('```text\n\n```')

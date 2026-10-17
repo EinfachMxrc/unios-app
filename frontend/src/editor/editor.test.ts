@@ -107,4 +107,45 @@ describe('containers', () => {
       expect($from.node($from.depth - 1).type.name).toBe(id === 'toggle' ? 'toggle' : 'callout')
     }
   })
+
+  describe('block keyboard', () => {
+    const key = (editor: Editor, name: string, init: KeyboardEventInit = {}) =>
+      editor.view.dom.dispatchEvent(
+        new KeyboardEvent('keydown', { key: name, bubbles: true, cancelable: true, ...init }),
+      )
+    const three = () =>
+      create([para('aaaaaaaa', 'Erstens'), para('bbbbbbbb', 'Zweitens'), para('cccccccc', 'Drittens')].join('\n'))
+    const indents = (editor: Editor) => (editor.getJSON().content ?? []).map((node) => Number(node.attrs?.indent ?? 0))
+
+    it('nests a block with the blocks below it under the one above', () => {
+      const editor = three()
+      editor.commands.setTextSelection(editor.state.doc.child(0).nodeSize + 2)
+      key(editor, 'Tab')
+      expect(indents(editor)).toEqual([0, 1, 0])
+      editor.commands.setTextSelection(editor.state.doc.child(0).nodeSize + 2)
+      key(editor, 'Tab')
+      expect(indents(editor)).toEqual([0, 1, 0])
+      editor.commands.setTextSelection(editor.state.doc.content.size - 2)
+      key(editor, 'Tab')
+      expect(indents(editor)).toEqual([0, 1, 1])
+      editor.commands.setTextSelection(editor.state.doc.child(0).nodeSize + 2)
+      key(editor, 'Shift-Tab')
+      expect(indents(editor)).toEqual([0, 0, 1])
+      key(editor, 'Tab')
+      expect(indents(editor)).toEqual([0, 1, 2])
+    })
+
+    it('steps out of a nested level on Enter in an empty block and on Backspace at its start', () => {
+      const editor = three()
+      editor.commands.setTextSelection(editor.state.doc.content.size - 1)
+      key(editor, 'Tab')
+      editor.commands.splitBlock()
+      expect(indents(editor)).toEqual([0, 0, 1, 1])
+      key(editor, 'Enter')
+      expect(indents(editor)).toEqual([0, 0, 1, 0])
+      editor.commands.setTextSelection(editor.state.doc.child(0).nodeSize + editor.state.doc.child(1).nodeSize + 1)
+      key(editor, 'Backspace')
+      expect(indents(editor)).toEqual([0, 0, 0, 0])
+    })
+  })
 })

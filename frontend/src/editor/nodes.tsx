@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { Node, mergeAttributes } from '@tiptap/core'
+import { Node, mergeAttributes, wrappingInputRule } from '@tiptap/core'
 import { NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer, type NodeViewProps } from '@tiptap/react'
 import { ArrowUpRight, ChevronRight, FileText, ImageOff } from 'lucide-react'
 import { useContext } from 'react'
@@ -91,6 +91,9 @@ export const Toggle = Node.create({
   addAttributes: () => ({ open: { default: true, rendered: false } }),
   parseHTML: () => [{ tag: 'div[data-note-toggle]' }],
   renderHTML: () => ['div', { 'data-note-toggle': '' }, 0],
+  addInputRules() {
+    return [wrappingInputRule({ find: /^\s*>\s$/, type: this.type })]
+  },
   addNodeView: () => ReactNodeViewRenderer(ToggleView),
 })
 

@@ -6,7 +6,8 @@ import { ArrowDown, ArrowUp, Copy, GripVertical, Plus, Trash2 } from 'lucide-rea
 import { Popover } from 'radix-ui'
 import { useState } from 'react'
 import { useT } from '@/i18n/useT'
-import { moveBlock, topBlockAt } from './commands'
+import { deleteBlockAt, duplicateBlockAt, moveBlockAt, turnBlockInto, turnIntoKinds } from './blockKeys'
+import { topBlockAt } from './commands'
 
 /** Grip to drag a top-level block, "+" to start a new one, and the block actions menu. */
 export function BlockHandle({ editor }: { editor: Editor }) {
@@ -25,37 +26,21 @@ export function BlockHandle({ editor }: { editor: Editor }) {
       .insertContentAt(end, { type: 'paragraph', content: [{ type: 'text', text: '/' }] })
       .run()
   }
-  function duplicate() {
-    if (position === null) return
-    const block = topBlockAt(editor, position)
-    if (!block) return
-    // A copy repeats the ids; the block-id plugin gives the copy fresh ones in the same step.
-    editor
-      .chain()
-      .focus()
-      .insertContentAt(block.pos + block.node.nodeSize, block.node.toJSON())
-      .run()
-  }
-  function remove() {
-    if (position === null) return
-    const block = topBlockAt(editor, position)
-    if (!block) return
-    const tr = editor.state.tr.delete(block.pos, block.pos + block.node.nodeSize)
-    editor.view.dispatch(tr)
-    // A document must keep one paragraph to write in.
-    if (editor.state.doc.childCount === 0) editor.commands.setContent({ type: 'doc', content: [{ type: 'paragraph' }] })
-  }
-
   const actions = [
-    { id: 'up', icon: ArrowUp, label: t('moveUp'), run: () => position !== null && moveBlock(editor, position, -1) },
+    { id: 'up', icon: ArrowUp, label: t('moveUp'), run: () => position !== null && moveBlockAt(editor, position, -1) },
     {
       id: 'down',
       icon: ArrowDown,
       label: t('moveDown'),
-      run: () => position !== null && moveBlock(editor, position, 1),
+      run: () => position !== null && moveBlockAt(editor, position, 1),
     },
-    { id: 'copy', icon: Copy, label: t('duplicate'), run: duplicate },
-    { id: 'delete', icon: Trash2, label: t('delete'), run: remove },
+    {
+      id: 'copy',
+      icon: Copy,
+      label: t('duplicate'),
+      run: () => position !== null && duplicateBlockAt(editor, position),
+    },
+    { id: 'delete', icon: Trash2, label: t('delete'), run: () => position !== null && deleteBlockAt(editor, position) },
   ]
 
   return (
@@ -83,6 +68,7 @@ export function BlockHandle({ editor }: { editor: Editor }) {
               role="menu"
               align="start"
               sideOffset={4}
+              collisionPadding={{ top: 72, bottom: 12 }}
               onCloseAutoFocus={(event) => {
                 event.preventDefault()
                 if (!editor.isDestroyed) editor.commands.focus()
@@ -102,6 +88,24 @@ export function BlockHandle({ editor }: { editor: Editor }) {
                   {label}
                 </button>
               ))}
+              <div className="note-menu-label" role="presentation">
+                {t('turnInto')}
+              </div>
+              <div className="note-menu-grid" role="presentation">
+                {turnIntoKinds.map((kind) => (
+                  <button
+                    key={kind}
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      if (position !== null) turnBlockInto(editor, position, kind)
+                      setMenuOpen(false)
+                    }}
+                  >
+                    {t(`cmd_${kind === 'text' ? 'text' : kind}` as 'cmd_text')}
+                  </button>
+                ))}
+              </div>
             </Popover.Content>
           </Popover.Portal>
         </Popover.Root>

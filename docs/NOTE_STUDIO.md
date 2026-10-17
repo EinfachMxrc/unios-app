@@ -15,14 +15,27 @@ eine Seite besteht aus **Blöcken**. Der frühere Markdown-Quelltextmodus
   Frage, Wichtig, Zusammenfassung), Formel, Abruffrage, Ablaufdiagramm,
   Schreibraster, Wahrheitstabelle, Rechenhilfe, Bild/Audio/Video und
   UniOS-Verknüpfung.
-- **Kürzel** wie in Notion: `#`/`##`/`###` + Leerzeichen, `-`, `1.`, `[ ]`, `>`,
-  ```` ``` ````, `---`, `$x^2$`, `$$…$$`, `==Markierung==`.
+- **Kürzel** wie in Notion: `#`/`##`/`###` + Leerzeichen, `-`, `1.`, `[]`,
+  `>` (Aufklappbereich), `"` (Zitat), ```` ``` ````, `---`, `$x^2$`, `$$…$$`,
+  `==Markierung==`.
+- **Verschachteln wie in Notion:** Tab rückt jeden Block unter den darüber ein
+  (Absatz, Überschrift, Tabelle, Medien, auch Listen; unter Aufklappbereiche,
+  Hinweise und Zitate wandert er hinein), Umschalt+Tab holt ihn zurück.
+  Unterblöcke wandern beim Verschieben und Duplizieren mit; Rücktaste am
+  Blockanfang und Enter in einem leeren eingerückten Block rücken ebenfalls
+  zurück. Gespeichert werden echte Unterblöcke (`children`), bis zu sechs Ebenen.
+  In Code rückt Tab um zwei Leerzeichen ein.
+- **Block-Kürzel:** ⌘/Strg+Umschalt+↑/↓ verschiebt den Block samt Unterblöcken,
+  ⌘/Strg+D dupliziert ihn, ⌘/Strg+Alt+0 Text, 1–3 Überschrift 1–3, 4 Checkliste,
+  5 Aufzählung, 6 Nummerierung, 7 Aufklappbereich, 8 Code; ⌘/Strg+Enter hakt
+  eine Aufgabe ab beziehungsweise klappt einen Aufklappbereich auf oder zu.
 - **`[[`** schlägt Notizen zum Verlinken vor.
 - **Auswahl-Leiste** über markiertem Text: fett, kursiv, unterstrichen,
   durchgestrichen, Code, Markierung, Link und – bei gespeicherter Notiz –
   „Lernkarte aus Auswahl“.
 - **Block-Griff** links neben jedem Block: ziehen zum Umordnen, „+“ fügt darunter
-  einen Block ein, das Menü verschiebt, dupliziert und entfernt ihn.
+  einen Block ein, das Menü verschiebt, dupliziert und entfernt ihn oder
+  wandelt ihn in einen anderen Texttyp um („Umwandeln in“).
 - Typisierte Lernkürzel wie `/hex`, `/bin`, `/matrix`, `/grenzwert`, `/kv`,
   `/diagramm`, `/ueben` öffnen das jeweilige Werkzeug mit Voreinstellung;
   ⌘/Strg+Umschalt+M öffnet die Formeleingabe im Satz, ⌘/Strg+Umschalt+Leertaste
@@ -100,6 +113,9 @@ noch dazu, die Markdown-Ausgabe der Lernwerkzeuge in Blöcke zu übersetzen.
 ## Grenzen / noch nicht umgesetzt
 
 - Zellen von Tabellen enthalten Text, keine Blöcke; keine Spaltenlayouts.
+- Der Griff zieht nur den einzelnen Block; Unterblöcke bleiben beim Ziehen mit der
+  Maus stehen (Tastatur und Menü nehmen sie mit). Mehrfachauswahl von Blöcken,
+  Text-/Hintergrundfarben und Erwähnungen mit `@` fehlen noch.
 - Kommentare, Datenbank-Ansichten, Seiten-Icons/Cover und Versionsvergleich auf
   Blockebene sind nicht Teil dieses Umbaus.
 - Favoriten und zuletzt benutzte Formelvorlagen der früheren Werkzeugleiste

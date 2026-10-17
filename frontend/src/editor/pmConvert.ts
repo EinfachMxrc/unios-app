@@ -52,16 +52,23 @@ function inlineToPm(content: InlineNode[]): PmNode[] {
   return out
 }
 
-function paragraphNode(content: InlineNode[], blockId = newBlockId()): PmNode {
+function paragraphNode(content: InlineNode[], blockId = newBlockId(), indent = 0): PmNode {
   const inline = inlineToPm(content)
-  return { type: 'paragraph', attrs: { blockId }, ...(inline.length ? { content: inline } : {}) }
+  return {
+    type: 'paragraph',
+    attrs: { blockId, ...(indent ? { indent } : {}) },
+    ...(inline.length ? { content: inline } : {}),
+  }
 }
 
 function cellNode(type: string, content: InlineNode[]): PmNode {
   return { type, content: [paragraphNode(content, '')] }
 }
 
-function blocksToPm(blocks: NoteBlock[]): PmNode[] {
+/** Blocks that keep their children inside themselves; every other block nests by indentation. */
+const HOLDS_CHILDREN = ['bullet', 'numbered', 'todo', 'quote', 'callout', 'toggle']
+
+function blocksToPm(blocks: NoteBlock[], depth = 0): PmNode[] {
   const out: PmNode[] = []
   for (let index = 0; index < blocks.length; index++) {
     const block = blocks[index]
@@ -77,11 +84,11 @@ function blocksToPm(blocks: NoteBlock[]): PmNode[] {
         })
         cursor++
       }
-      out.push({ type: listKinds[block.type], content: items })
+      out.push({ type: listKinds[block.type], attrs: { indent: depth }, content: items })
       index = cursor - 1
       continue
     }
-    const attrs = { blockId: block.id }
+    const attrs = { blockId: block.id, indent: depth }
     switch (block.type) {
       case 'heading':
         out.push({
@@ -162,8 +169,9 @@ function blocksToPm(blocks: NoteBlock[]): PmNode[] {
         })
         break
       default:
-        out.push(paragraphNode(block.content, block.id))
+        out.push(paragraphNode(block.content, block.id, depth))
     }
+    if (!HOLDS_CHILDREN.includes(block.type)) out.push(...blocksToPm(block.children, depth + 1))
   }
   return out
 }
@@ -220,6 +228,9 @@ function idOf(node: PmNode): string {
   return typeof value === 'string' && value ? value : newBlockId()
 }
 
+/** Indentation of each block as the editor shows it; folded into real children by `fold`. */
+const levels = new WeakMap<NoteBlock, number>()
+
 function make(
   node: PmNode,
   type: BlockType,
@@ -227,7 +238,22 @@ function make(
   content: InlineNode[],
   children: NoteBlock[],
 ): NoteBlock {
-  return { id: idOf(node), type, props, content, children }
+  const block = { id: idOf(node), type, props, content, children }
+  levels.set(block, Math.max(0, Number(node.attrs?.indent) || 0))
+  return block
+}
+
+/** A block indented under the one above becomes that block's child. */
+function fold(blocks: NoteBlock[]): NoteBlock[] {
+  const root: NoteBlock[] = []
+  const path: NoteBlock[] = []
+  for (const block of blocks) {
+    const level = Math.min(levels.get(block) ?? 0, path.length)
+    path.length = level
+    ;(level ? path[level - 1].children : root).push(block)
+    path.push(block)
+  }
+  return root
 }
 
 function pmBlocks(nodes: PmNode[] | undefined): NoteBlock[] {
@@ -247,15 +273,15 @@ function pmBlocks(nodes: PmNode[] | undefined): NoteBlock[] {
           node.type === 'bulletList' ? 'bullet' : node.type === 'orderedList' ? 'numbered' : 'todo'
         for (const item of node.content ?? []) {
           const [first, ...rest] = item.content ?? []
-          out.push(
-            make(
-              item,
-              type,
-              type === 'todo' ? { checked: item.attrs?.checked === true } : {},
-              first?.type === 'paragraph' ? pmInline(first.content) : [],
-              pmBlocks(first?.type === 'paragraph' ? rest : item.content),
-            ),
+          const block = make(
+            item,
+            type,
+            type === 'todo' ? { checked: item.attrs?.checked === true } : {},
+            first?.type === 'paragraph' ? pmInline(first.content) : [],
+            pmBlocks(first?.type === 'paragraph' ? rest : item.content),
           )
+          levels.set(block, Math.max(0, Number(node.attrs?.indent) || 0))
+          out.push(block)
         }
         break
       }
@@ -363,7 +389,7 @@ function pmBlocks(nodes: PmNode[] | undefined): NoteBlock[] {
         break
     }
   }
-  return out
+  return fold(out)
 }
 
 /** Ids stay unique even when a split block briefly carries its parent's id. */

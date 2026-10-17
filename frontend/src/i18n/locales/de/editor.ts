@@ -20,6 +20,7 @@ export default {
   addBlock: 'Block darunter einfügen',
   blockActions: 'Blockaktionen',
   dragBlock: 'Block ziehen oder Aktionen öffnen',
+  turnInto: 'Umwandeln in',
   moveUp: 'Nach oben',
   moveDown: 'Nach unten',
   duplicate: 'Duplizieren',

@@ -15,6 +15,22 @@ async function stored(page: import('@playwright/test').Page, id: string) {
   if (!detail.document) throw new Error(`Notiz ${id} ohne Dokument: ${JSON.stringify(detail).slice(0, 300)}`)
   return detail.document.blocks as StoredBlock[]
 }
+/** Click a line and wait until the editor's own selection has caught up, before any key is sent. */
+async function placeCaret(page: import('@playwright/test').Page, text: string) {
+  await noteEditor(page).getByText(text, { exact: true }).click()
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (
+            document.querySelector('.ProseMirror') as unknown as {
+              editor: { state: { selection: { $from: { parent: { textContent: string } } } } }
+            }
+          ).editor.state.selection.$from.parent.textContent,
+      ),
+    )
+    .toBe(text)
+}
 async function createViaUi(page: import('@playwright/test').Page, title: string): Promise<string> {
   await page.getByRole('textbox', { name: 'Notiztitel' }).fill(title)
   await page.getByRole('button', { name: 'Notiz anlegen' }).click()
@@ -199,4 +215,80 @@ test('an older version shows block by block what changed since', async ({ page }
   await expect(second.locator('del')).toHaveText('Zweiter Absatz')
   await expect(diff.locator('li').filter({ hasText: 'Neuer Absatz' })).toHaveCount(1)
   await expect(diff.locator('li').filter({ hasText: 'Erster Absatz' })).toHaveCount(0)
+})
+
+test('Tab nests any block under the one above, Shift+Tab undoes it, and blocks move and copy with their children', async ({
+  page,
+}) => {
+  await page.goto('/notes?new=1&course_id=1')
+  await writeNote(page, ['Erstens', 'Zweitens', 'Drittens'])
+  const editor = noteEditor(page)
+  // Tab on a plain paragraph nests it, as in Notion.
+  await page.keyboard.press('Tab')
+  await expect(editor.locator('p[data-indent="1"]')).toHaveText('Drittens')
+  await placeCaret(page, 'Zweitens')
+  await page.keyboard.press('Tab')
+  await expect(editor.locator('p[data-indent="2"]')).toHaveText('Drittens')
+  // The first block has nothing above it: Tab keeps the caret in the editor.
+  await placeCaret(page, 'Erstens')
+  await page.keyboard.press('Tab')
+  await expect(editor).toBeFocused()
+  await expect(editor.locator('p[data-indent]')).toHaveCount(2)
+  // Moving the parent carries its children.
+  await page.keyboard.press('ControlOrMeta+Shift+ArrowDown')
+  await expect(editor.locator('p').first()).toHaveText('Erstens')
+  const id = await createViaUi(page, 'Verschachtelt')
+  let blocks = await stored(page, id)
+  expect(blocks).toHaveLength(1)
+  expect(blocks[0].content[0].text).toBe('Erstens')
+  expect(blocks[0].children[0].content[0].text).toBe('Zweitens')
+  expect(blocks[0].children[0].children[0].content[0].text).toBe('Drittens')
+  await page.reload()
+  await expect(page.locator('.rendered-note [data-indent="2"]')).toHaveText('Drittens')
+  // Shift+Tab brings the block back out.
+  await page.getByRole('button', { name: 'Bearbeiten', exact: true }).click()
+  await placeCaret(page, 'Zweitens')
+  await page.keyboard.press('Shift+Tab')
+  await expect(editor.locator('p[data-indent]')).toHaveCount(1)
+  await page.keyboard.press('ControlOrMeta+D')
+  await expect(editor.getByText('Zweitens')).toHaveCount(2)
+  blocks = await stored(page, id)
+  expect(blocks[0].content[0].text).toBe('Erstens')
+})
+
+test('Notion shortcuts turn the block into another type and check a to-do', async ({ page }) => {
+  await page.goto('/notes?new=1&course_id=1')
+  await writeNote(page, ['Aufgabe'])
+  const editor = noteEditor(page)
+  await page.keyboard.press('ControlOrMeta+Alt+4')
+  await expect(editor.locator('li[data-type="taskItem"]')).toHaveCount(1)
+  await page.keyboard.press('ControlOrMeta+Enter')
+  await expect(editor.locator('li[data-checked="true"]')).toHaveCount(1)
+  await page.keyboard.press('ControlOrMeta+Alt+1')
+  await expect(editor.locator('h1')).toHaveText('Aufgabe')
+  await page.keyboard.press('Enter')
+  await page.keyboard.type('> Titel')
+  await page.keyboard.press('Enter')
+  await expect(editor.locator('.note-toggle')).toHaveCount(1)
+})
+
+test('Backspace and Enter step a nested block back out, and the block menu turns it into another type', async ({
+  page,
+}) => {
+  await page.goto('/notes?new=1&course_id=1')
+  await writeNote(page, ['Oben', 'Unten'])
+  const editor = noteEditor(page)
+  await page.keyboard.press('Tab')
+  await expect(editor.locator('p[data-indent="1"]')).toHaveText('Unten')
+  await page.keyboard.press('Enter')
+  await expect(editor.locator('p[data-indent="1"]')).toHaveCount(2)
+  await page.keyboard.press('Enter')
+  await expect(editor.locator('p[data-indent]')).toHaveCount(1)
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Backspace')
+  await expect(editor.locator('p[data-indent]')).toHaveCount(1)
+  await editor.getByText('Oben').hover()
+  await page.getByRole('button', { name: 'Blockaktionen' }).click()
+  await page.getByRole('menuitem', { name: 'Überschrift 2', exact: true }).click()
+  await expect(editor.locator('h2')).toHaveText('Oben')
 })

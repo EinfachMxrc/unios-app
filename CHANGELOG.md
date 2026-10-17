@@ -2,6 +2,13 @@
 
 # Änderungen
 
+## Unveröffentlicht
+
+- Neu: Tab/Umschalt+Tab verschachtelt jeden Block wie in Notion (Absatz, Überschrift, Tabelle, Medien, Listen; unter Aufklappbereiche, Hinweise und Zitate hinein). Unterblöcke werden als echte `children` gespeichert, wandern beim Verschieben und Duplizieren mit, und Rücktaste/Enter am Anfang zurückrücken.
+- Neu: Notion-Tastenkürzel: ⌘/Strg+Umschalt+↑/↓ verschiebt, ⌘/Strg+D dupliziert, ⌘/Strg+Alt+0–8 wandelt den Block um, ⌘/Strg+Enter hakt Aufgaben ab oder klappt auf. Das Blockmenü bietet „Umwandeln in“.
+- Geändert: `>` + Leerzeichen erzeugt wie in Notion einen Aufklappbereich, `"` + Leerzeichen ein Zitat.
+- Geändert: Der Markdown-Export trennt verschachtelte Blöcke mit Leerzeilen; jeder Blocktyp darf Unterblöcke enthalten.
+
 ## 0.1.30 – Notizen als Block-Editor (16.10.2026)
 
 - Neu: Der Notizeditor wurde nach dem Vorbild von Notion neu gebaut. Notizen bestehen aus Blöcken: `/` fügt Blöcke ein (Überschriften, Listen, Checklisten, Aufklappbereiche, Zitate, Tabellen, Code, Lernkästen, Formeln, Lernwerkzeuge, Medien, Verknüpfungen), `[[` verlinkt Notizen, eine Leiste über der Auswahl formatiert Text, ein Griff links neben jedem Block verschiebt, dupliziert und entfernt ihn. Dazu Gliederung, Fokus und ein „Einfügen“-Menü für Touch.
