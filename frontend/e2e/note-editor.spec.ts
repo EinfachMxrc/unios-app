@@ -292,3 +292,65 @@ test('Backspace and Enter step a nested block back out, and the block menu turns
   await page.getByRole('menuitem', { name: 'Überschrift 2', exact: true }).click()
   await expect(editor.locator('h2')).toHaveText('Oben')
 })
+
+const SHEET = `# Übungsblatt 1: Schaltalgebra – vollständige Lösungen
+
+Quelle: [Blatt01.pdf – Original mit Schaltungsbild](/material/186?page=1).
+
+## Schreibweise
+
+Ein Überstrich bedeutet NOT. $\\cdot$ oder $\\land$ bedeutet AND; $+$ oder $\\lor$ bedeutet OR. $\\uparrow$ ist NAND.
+
+## Aufgabe 1
+
+Die Originalfunktion lautet:
+
+$$Y=\\big((A\\land B)\\lor(\\overline C\\land D)\\big)\\land E.$$
+
+Denn $U=AB$, $V=\\overline C D$ und $R=\\overline{U+V}$.
+
+1. De Morgan auf die Summe anwenden:
+
+$$Y=A\\cdot\\overline{A\\overline B}\\cdot\\overline{AC}\\cdot(C+A).$$
+
+| A | B | C | Y |
+| --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 1 |
+
+![Schaltnetz aus dem Originalblatt](/api/note-assets/ab9b8813-6c2d-4282-a0f4-9dd0dc697ff1.png)
+
+**Wichtig:** Der lange Negationsstrich.
+`
+
+test('a Markdown sheet with formulas, a table and an image shows as blocks, stored or pasted', async ({ page }) => {
+  const created = await page.request.post('/api/notes', { data: { course_id: 1, title: 'Blatt 1', body: SHEET } })
+  expect(created.ok()).toBeTruthy()
+  const id = (await created.json()).note.id
+  await page.goto(`/notes?id=${id}`)
+  const view = page.locator('.rendered-note')
+  await expect(view.locator('h1')).toContainText('Übungsblatt 1')
+  await expect(view.locator('.katex').first()).toBeVisible()
+  await expect(view.locator('.studio-math-block .katex')).toHaveCount(2)
+  await expect(view.locator('table')).toBeVisible()
+  await expect(view.locator('img')).toHaveCount(1)
+  await expect(view.getByText('$$')).toHaveCount(0)
+  await expect(view.getByRole('link', { name: /Blatt01.pdf/ })).toBeVisible()
+
+  // The same text pasted into an empty note becomes the same blocks, not literal Markdown.
+  await page.goto('/notes?new=1&course_id=1')
+  const editor = noteEditor(page)
+  await editor.click()
+  await page.evaluate((text) => {
+    const data = new DataTransfer()
+    data.setData('text/plain', text)
+    document
+      .querySelector('.ProseMirror')!
+      .dispatchEvent(new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true }))
+  }, SHEET)
+  await expect(editor.locator('h1')).toContainText('Übungsblatt 1')
+  await expect(editor.locator('.studio-math-block .katex')).toHaveCount(2)
+  await expect(editor.locator('table')).toBeVisible()
+  await expect(editor.locator('img')).toHaveCount(1)
+  await expect(editor.getByText('$$')).toHaveCount(0)
+})

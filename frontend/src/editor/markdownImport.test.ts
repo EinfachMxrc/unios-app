@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest'
 import { docText, parseBody } from './doc'
-import { markdownToBlocks, markdownToBody } from './markdownImport'
+import { looksLikeMarkdown, markdownToBlocks, markdownToBody } from './markdownImport'
 
 describe('markdown snippets', () => {
   it('reads formulas and tables as their own parts', () => {
@@ -35,5 +35,23 @@ describe('markdown snippets', () => {
     const blocks = markdownToBlocks('> Zitat\n\n```python\nprint(1)\n```')
     expect(blocks.map((block) => block.type)).toEqual(['quote', 'code'])
     expect(blocks[1].props.language).toBe('python')
+  })
+
+  it('nests indented list items and reads stored images', () => {
+    const blocks = markdownToBlocks(
+      '- a\n  - b\n    - c\n- d\n\n![Schaltung](/api/note-assets/ab9b8813-6c2d-4282-a0f4-9dd0dc697ff1.png)\n\n![fremd](https://example.org/x.png)',
+    )
+    expect(blocks.map((block) => block.type)).toEqual(['bullet', 'bullet', 'media', 'paragraph'])
+    expect(blocks[0].children[0].children[0].content[0]).toMatchObject({ text: 'c' })
+    expect(blocks[2].props).toMatchObject({ kind: 'image', alt: 'Schaltung' })
+    expect(blocks[3].content[0]).toMatchObject({ href: 'https://example.org/x.png' })
+  })
+
+  it('recognises pasted Markdown but leaves plain sentences alone', () => {
+    expect(looksLikeMarkdown('# Titel\n\nText mit $x$')).toBe(true)
+    expect(looksLikeMarkdown('$$\\frac{a}{b}$$')).toBe(true)
+    expect(looksLikeMarkdown('| A | B |\n| --- | --- |\n| 1 | 2 |')).toBe(true)
+    expect(looksLikeMarkdown('Ein einfacher Satz.')).toBe(false)
+    expect(looksLikeMarkdown('Zeile eins\nZeile zwei')).toBe(false)
   })
 })

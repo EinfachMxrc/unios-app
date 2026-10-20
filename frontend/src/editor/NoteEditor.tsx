@@ -17,6 +17,7 @@ import { docText, parseBody, serializeDoc } from './doc'
 import { editorExtensions } from './extensions'
 import { InsertDialogs, type OpenDialog } from './InsertDialogs'
 import { InsertMenu } from './InsertMenu'
+import { looksLikeMarkdown, markdownToBlocks } from './markdownImport'
 import { Outline } from './Outline'
 import { docToPm, pmToDoc, type PmNode } from './pmConvert'
 import { selectionText } from './selectionText'
@@ -82,6 +83,7 @@ export function NoteEditor({
   const userPlacedCaret = useRef(false)
   const shortcuts = useRef<(event: KeyboardEvent) => boolean>(() => false)
   const uploadRef = useRef<((file: File, range?: Range) => void) | null>(null)
+  const editorRef = useRef<Editor | null>(null)
   const linkText = useMemo(() => docText(parseBody(value)), [value])
   const targets = useNoteLinkTargets(linkText)
 
@@ -120,9 +122,20 @@ export function NoteEditor({
           return false
         },
       },
-      handlePaste: (_view, event) => {
+      handlePaste: (view, event) => {
         const file = event.clipboardData?.files[0]
-        if (!file) return false
+        if (!file) {
+          const text = event.clipboardData?.getData('text/plain') ?? ''
+          const html = event.clipboardData?.getData('text/html') ?? ''
+          // Text copied inside UniOS keeps its structure; Markdown from anywhere else becomes blocks.
+          if (html.includes('data-pm-slice') || view.state.selection.$from.parent.type.name === 'codeBlock')
+            return false
+          if (!looksLikeMarkdown(text)) return false
+          event.preventDefault()
+          const content = docToPm({ version: 1, blocks: markdownToBlocks(text) }).content
+          if (content?.length) editorRef.current?.chain().focus().insertContent(content).run()
+          return true
+        }
         event.preventDefault()
         uploadRef.current?.(file)
         return true
@@ -198,6 +211,7 @@ export function NoteEditor({
     }
   }, [editor, value, workspaceKey])
 
+  editorRef.current = editor
   const openDialog = useCallback(
     (kind: InsertDialog, range: Range, options?: DialogOptions) => setDialog({ kind, range, options }),
     [],

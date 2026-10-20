@@ -4,6 +4,7 @@
 
 ## Unveröffentlicht
 
+- Behoben: Eingefügter Markdown-Text (Überschriften, Formeln `$…$`/`$$…$$`, Tabellen, Bilder, Listen) wird beim Einfügen in Blöcke umgewandelt statt mit den Zeichen angezeigt; verschachtelte Listen und gespeicherte Bilder werden dabei erkannt.
 - Neu: Tab/Umschalt+Tab verschachtelt jeden Block wie in Notion (Absatz, Überschrift, Tabelle, Medien, Listen; unter Aufklappbereiche, Hinweise und Zitate hinein). Unterblöcke werden als echte `children` gespeichert, wandern beim Verschieben und Duplizieren mit, und Rücktaste/Enter am Anfang zurückrücken.
 - Neu: Notion-Tastenkürzel: ⌘/Strg+Umschalt+↑/↓ verschiebt, ⌘/Strg+D dupliziert, ⌘/Strg+Alt+0–8 wandelt den Block um, ⌘/Strg+Enter hakt Aufgaben ab oder klappt auf. Das Blockmenü bietet „Umwandeln in“.
 - Geändert: `>` + Leerzeichen erzeugt wie in Notion einen Aufklappbereich, `"` + Leerzeichen ein Zitat.
