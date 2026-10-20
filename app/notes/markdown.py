@@ -358,6 +358,7 @@ def _render(blocks: list[Block], depth: int = 0) -> list[str]:
         if listed:
             out.extend(_render(block.children, depth + 1))
         elif block.children and block.type not in {"quote", "callout", "toggle"}:
+            out.append("")
             out.extend(_render(block.children, depth))
         out.append("" if not listed else "\u0000")
     return out

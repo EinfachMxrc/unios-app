@@ -112,3 +112,44 @@ describe('block document <-> editor document', () => {
     expect(serializeDoc(local)).toBe(bodyFromApi(fromHost))
   })
 })
+
+describe('nesting by indentation', () => {
+  const nested: NoteDoc = {
+    version: 1,
+    blocks: [
+      block('a1aaaaaa', 'paragraph', {
+        content: [text('Eltern')],
+        children: [
+          block('a2aaaaaa', 'heading', {
+            props: { level: 2 },
+            content: [text('Kind')],
+            children: [block('a3aaaaaa', 'paragraph', { content: [text('Enkel')] })],
+          }),
+          block('a4aaaaaa', 'divider'),
+        ],
+      }),
+      block('a5aaaaaa', 'paragraph', { content: [text('Nachbar')] }),
+    ],
+  }
+
+  it('turns child blocks into indented editor blocks and back', () => {
+    const pm = docToPm(nested)
+    expect(pm.content?.map((node) => Number(node.attrs?.indent ?? 0))).toEqual([0, 1, 2, 1, 0])
+    expect(pmToDoc(pm).blocks).toEqual(nested.blocks)
+  })
+
+  it('never lets a block skip a level', () => {
+    const pm = docToPm({
+      version: 1,
+      blocks: [
+        block('b1aaaaaa', 'paragraph', { content: [text('x')] }),
+        block('b2aaaaaa', 'paragraph', { content: [text('y')] }),
+      ],
+    })
+    pm.content![0].attrs!.indent = 3
+    pm.content![1].attrs!.indent = 5
+    const doc = pmToDoc(pm)
+    expect(doc.blocks).toHaveLength(1)
+    expect(doc.blocks[0].children).toHaveLength(1)
+  })
+})

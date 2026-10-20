@@ -719,3 +719,27 @@
     display: none;
   }
 }
+
+/* Nested blocks: Tab raises the indent level; stored documents keep them as child blocks. */
+:is(.note-prose) [data-indent] {
+  margin-left: calc(var(--note-indent, 0) * 1.6em);
+}
+.note-menu-label {
+  padding: 6px 9px 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-muted);
+}
+.note-block-menu {
+  max-height: var(--radix-popover-content-available-height, 80vh);
+  overflow-y: auto;
+}
+.note-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.note-menu-grid [role='menuitem'] {
+  min-height: 30px;
+  white-space: nowrap;
+}

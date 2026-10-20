@@ -90,7 +90,6 @@ def test_legacy_conversion_is_deterministic_and_ids_survive_edits():
     {"version": 1, "blocks": [{"id": "abc", "type": "paragraph"}]},
     {"version": 1, "blocks": [{"id": "abcdef", "type": "script"}]},
     {"version": 1, "blocks": [{"id": "abcdef", "type": "heading", "props": {"level": 9}}]},
-    {"version": 1, "blocks": [{"id": "abcdef", "type": "divider", "children": [{"id": "ghijkl", "type": "paragraph"}]}]},
     {"version": 1, "blocks": [{"id": "abcdef", "type": "paragraph"}, {"id": "abcdef", "type": "paragraph"}]},
     {"version": 1, "blocks": [{"id": "abcdef", "type": "media", "props": {"kind": "image", "src": "javascript:x"}}]},
     {"version": 1, "blocks": [{"id": "abcdef", "type": "paragraph",
@@ -171,3 +170,14 @@ def test_bracket_formulas_become_equation_blocks():
     assert [block.type for block in document.blocks] == ["paragraph", "equation", "equation"]
     assert document.blocks[1].props["latex"] == "\\frac{1}{2}"
     assert "pmatrix" in document.blocks[2].props["latex"]
+
+
+def test_any_block_can_hold_nested_blocks_and_exports_them_separated():
+    from app.notes.markdown import render_markdown
+
+    document = validate({"version": 1, "blocks": [
+        {"id": "abcdef", "type": "paragraph", "content": [{"type": "text", "text": "Eltern"}],
+         "children": [{"id": "ghijkl", "type": "divider",
+                       "children": [{"id": "mnopqr", "type": "paragraph",
+                                     "content": [{"type": "text", "text": "Kind"}]}]}]}]})
+    assert render_markdown(document) == "Eltern\n\n---\n\nKind"

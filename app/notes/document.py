@@ -105,8 +105,6 @@ def _check_shape(blocks: list[Block], depth: int = 1) -> None:
         if block.type == "study" and (block.props.get("kind") not in {"diagram", "recall", "grid"}
                                       or not isinstance(block.props.get("source", ""), str)):
             raise DocumentError("Ungültiger Lernbaustein")
-        if block.type in {"divider", "table", "media", "entity", "equation", "study"} and block.children:
-            raise DocumentError(f"Baustein {block.type} darf keine Unterblöcke enthalten")
         _check_shape(block.children, depth + 1)
 
 

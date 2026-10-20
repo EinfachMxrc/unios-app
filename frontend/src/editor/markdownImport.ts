@@ -49,6 +49,8 @@ function block(type: NoteBlock['type'], content: InlineNode[] = [], props: Recor
 export function markdownToBlocks(markdown: string): NoteBlock[] {
   const lines = markdown.replace(/\r\n?/g, '\n').split('\n')
   const blocks: NoteBlock[] = []
+  // Open list items by indentation; a deeper item becomes the child of the item above it.
+  const open: { indent: number; item: NoteBlock }[] = []
   let paragraph: string[] = []
   const flush = () => {
     if (paragraph.length) blocks.push(block('paragraph', parseInline(paragraph.join('\n'))))
@@ -59,6 +61,8 @@ export function markdownToBlocks(markdown: string): NoteBlock[] {
     const fence = /^ {0,3}(`{3,}|~{3,})\s*([\w+#.-]*)/.exec(line)
     const heading = /^ {0,3}(#{1,6})\s+(.*?)\s*#*\s*$/.exec(line)
     const item = /^(\s*)([-*+]|\d{1,9}[.)])\s+(?:\[([ xX])\]\s+)?(.*)$/.exec(line)
+    const image = /^\s*!\[([^\]]*)\]\(([^()\s]+)\)\s*$/.exec(line)
+    if (line.trim() && !item) open.length = 0
     if (!line.trim()) {
       flush()
     } else if (fence) {
@@ -94,6 +98,12 @@ export function markdownToBlocks(markdown: string): NoteBlock[] {
       while (index < lines.length && lines[index].trim() && lines[index].includes('|')) rows.push(cells(lines[index++]))
       index -= 1
       blocks.push(block('table', [], { header: true, rows }))
+    } else if (image) {
+      flush()
+      // Only files the host stored are shown; anything else stays a visible link.
+      if (/^\/api\/note-assets\//.test(image[2]))
+        blocks.push(block('media', [], { kind: 'image', src: image[2], alt: image[1] }))
+      else blocks.push(block('paragraph', parseInline(`[${image[1] || image[2]}](${image[2]})`)))
     } else if (heading) {
       flush()
       blocks.push(block('heading', parseInline(heading[2]), { level: heading[1].length }))
@@ -106,7 +116,15 @@ export function markdownToBlocks(markdown: string): NoteBlock[] {
     } else if (item) {
       flush()
       const kind = /^\d/.test(item[2]) ? 'numbered' : item[3] !== undefined ? 'todo' : 'bullet'
-      blocks.push(block(kind, parseInline(item[4]), kind === 'todo' ? { checked: item[3].toLowerCase() === 'x' } : {}))
+      const created = block(
+        kind,
+        parseInline(item[4]),
+        kind === 'todo' ? { checked: item[3].toLowerCase() === 'x' } : {},
+      )
+      const indent = item[1].replace(/\t/g, '    ').length
+      while (open.length && open[open.length - 1].indent >= indent) open.pop()
+      ;(open.length ? open[open.length - 1].item.children : blocks).push(created)
+      open.push({ indent, item: created })
     } else {
       paragraph.push(line.trim())
     }
@@ -118,4 +136,18 @@ export function markdownToBlocks(markdown: string): NoteBlock[] {
 /** A Markdown snippet in the draft form every note body uses. */
 export function markdownToBody(markdown: string): string {
   return serializeDoc({ version: 1, blocks: markdownToBlocks(markdown) })
+}
+
+/** Plain text that was written as Markdown: pasting it builds blocks instead of showing the markers. */
+export function looksLikeMarkdown(text: string): boolean {
+  if (!text.includes('\n') && !/^\s*(?:#{1,6}\s|[-*+]\s|\d+[.)]\s|>\s|```|\$\$)/.test(text)) return false
+  return (
+    /^ {0,3}#{1,6}\s+\S/m.test(text) ||
+    /^ {0,3}(?:```|~~~)/m.test(text) ||
+    /^\s*\$\$/m.test(text) ||
+    /^\s*\|?\s*:?-{3,}:?\s*\|/m.test(text) ||
+    /^\s*!\[[^\]]*\]\(/m.test(text) ||
+    /^\s*(?:[-*+]|\d{1,9}[.)])\s+\S/m.test(text) ||
+    /^\s*>\s+\S/m.test(text)
+  )
 }

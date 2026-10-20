@@ -5,7 +5,7 @@ services:
     build:
       context: ${UNIOS_SOURCE_ROOT:-../..}
       dockerfile: deploy/server/Dockerfile
-    image: unios-server:${UNIOS_VERSION:-0.1.30}
+    image: unios-server:${UNIOS_VERSION:-0.1.31}
     container_name: unios-server
     extra_hosts:
       - 'judge0:host-gateway'

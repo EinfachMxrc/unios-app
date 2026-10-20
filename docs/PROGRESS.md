@@ -1,5 +1,14 @@
 <!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
 
+## 20.10.2026 – 0.1.31: Notion-Tastatur und Markdown einfügen
+
+Block-Verschachtelung mit Tab/Umschalt+Tab (gespeichert als `children`), Verschieben und
+Duplizieren samt Unterblöcken, Notion-Kürzel zum Umwandeln, „Umwandeln in“ im Blockmenü
+und Markdown-Einfügen als Blöcke. Geprüft: 1.486 Frontendtests, 1.403 Pythonfälle
+(ohne den Mac-Schlüsselbundtest), Ruff, mypy, ESLint und die Notiz-, Lern- und
+Workspace-Abläufe im Browser. Offen: Ziehen mit Unterblöcken, Mehrfachauswahl,
+Farben, `@`-Erwähnungen, Spalten.
+
 ## 16.10.2026 – Notion-Umbau: gemeinsame Abschlussprüfung
 
 Alle vier Pakete sind implementiert und einzeln committed. Die gemeinsame

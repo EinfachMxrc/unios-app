@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { Extension, InputRule, mergeAttributes, type Editor } from '@tiptap/core'
+import { Blockquote } from '@tiptap/extension-blockquote'
+import { Extension, InputRule, mergeAttributes, wrappingInputRule, type Editor } from '@tiptap/core'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import TiptapLink from '@tiptap/extension-link'
 import { ListItem, TaskItem, TaskList } from '@tiptap/extension-list'
@@ -16,6 +17,7 @@ import { BlockMath, InlineMath, LiteralDollar } from '@/components/editor/mathEx
 import { StudyBlock } from '@/components/editor/studyExtensions'
 import { internalNoteHref } from '@/lib/noteLinks'
 import { MAX_NOTE_LENGTH, newBlockId } from './doc'
+import { BlockKeys, indentEnclosingList } from './blockKeys'
 import { Callout, Entity, Media, Toggle, WikiLink } from './nodes'
 
 const lowlight = createLowlight(common)
@@ -125,8 +127,15 @@ function keepFocus(editor: Editor, name: string, run: () => boolean): boolean {
 
 const listKeys = (name: string, editor: () => Editor) => ({
   Enter: () => editor().commands.splitListItem(name),
-  Tab: () => keepFocus(editor(), name, () => editor().commands.sinkListItem(name)),
+  Tab: () => keepFocus(editor(), name, () => editor().commands.sinkListItem(name) || indentEnclosingList(editor())),
   'Shift-Tab': () => keepFocus(editor(), name, () => editor().commands.liftListItem(name)),
+})
+
+// Notion types "> " for a toggle and a quotation mark for a quote.
+const NoteBlockquote = Blockquote.extend({
+  addInputRules() {
+    return [wrappingInputRule({ find: /^\s*["„“”]\s$/, type: this.type })]
+  },
 })
 
 const NoteListItem = ListItem.extend({
@@ -235,8 +244,11 @@ export function editorExtensions(
       heading: { levels: [1, 2, 3, 4, 5, 6] },
       link: false,
       listItem: false,
+      blockquote: false,
     }),
     BlockIds,
+    BlockKeys,
+    NoteBlockquote,
     NoteLink.configure({
       openOnClick: false,
       autolink: true,
