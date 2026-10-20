@@ -731,7 +731,7 @@
   text-transform: uppercase;
   color: var(--app-muted);
 }
-.note-block-menu {
+.note-handle-menu {
   max-height: var(--radix-popover-content-available-height, 80vh);
   overflow-y: auto;
 }

@@ -64,7 +64,7 @@ export function BlockHandle({ editor }: { editor: Editor }) {
           </Popover.Trigger>
           <Popover.Portal>
             <Popover.Content
-              className="note-block-menu"
+              className="note-block-menu note-handle-menu"
               role="menu"
               align="start"
               sideOffset={4}
