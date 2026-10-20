@@ -2,7 +2,7 @@
 
 # Änderungen
 
-## Unveröffentlicht
+## 0.1.31 – Notion-Tastatur und Markdown einfügen (20.10.2026)
 
 - Behoben: Eingefügter Markdown-Text (Überschriften, Formeln `$…$`/`$$…$$`, Tabellen, Bilder, Listen) wird beim Einfügen in Blöcke umgewandelt statt mit den Zeichen angezeigt; verschachtelte Listen und gespeicherte Bilder werden dabei erkannt.
 - Neu: Tab/Umschalt+Tab verschachtelt jeden Block wie in Notion (Absatz, Überschrift, Tabelle, Medien, Listen; unter Aufklappbereiche, Hinweise und Zitate hinein). Unterblöcke werden als echte `children` gespeichert, wandern beim Verschieben und Duplizieren mit, und Rücktaste/Enter am Anfang zurückrücken.

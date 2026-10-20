@@ -4,7 +4,7 @@ set -euo pipefail
 umask 077
 root=/opt/unios
 source_root=${1:?Release-Verzeichnis fehlt}
-image="unios-server:${UNIOS_VERSION:-0.1.30}"
+image="unios-server:${UNIOS_VERSION:-0.1.31}"
 public_url=${2:?HTTPS-Adresse fehlt}
 [[ "$source_root" == "$root/releases/"* && -f "$source_root/deploy/server/compose.yaml" ]]
 [[ $(id -u) == 0 ]]

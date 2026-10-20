@@ -6,7 +6,7 @@ services:
     ports:
       - '127.0.0.1:8009:8001'
   mcp:
-    image: unios-server:${UNIOS_VERSION:-0.1.30}
+    image: unios-server:${UNIOS_VERSION:-0.1.31}
     user: '10001:10001'
     command: ['python', '-m', 'clients.uni_mcp.remote']
     network_mode: service:api
