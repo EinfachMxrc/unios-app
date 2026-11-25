@@ -50,7 +50,7 @@ def structured(session, query: SearchQuery, course_id=None, semester_id=None) ->
     kind = query.kind
     if kind is not None:
         kind = {"material": "document", "resource": "document", "question": "annotation"}.get(kind, kind)
-    expression = search_expression(query.text)
+    expression = search_expression(query.text, prefix=True)
     for name, spec in SPECS.items():
         if kind and kind != name or query.questions and name not in {"document", "annotation"}:
             continue

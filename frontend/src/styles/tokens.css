@@ -1,0 +1,162 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+/*
+ * The only colour source for UniOS. Calm like a good desk tool, in Uli's
+ * colours: petrol for actions and selection, the beak's orange for "now".
+ * The window is a petrol-tinted grey, the page one panel inside it; course
+ * labels and status are the only other colours, always next to text or icon.
+ */
+:root {
+  color-scheme: light;
+  --app-chrome: #edf1f2;
+  --app-bg: #ffffff;
+  --app-surface: #ffffff;
+  --app-surface-strong: #ffffff;
+  --app-surface-alt: #f4f7f8;
+  --app-sidebar: transparent;
+  --app-border: #e0e7e9;
+  --app-border-strong: #ccd7da;
+  --app-text: #13211f;
+  --app-muted: #5b6b70;
+  --app-faint: #8d9ca0;
+  --app-accent: #1d6b78;
+  --app-blue: #1d6b78;
+  --app-blue-soft: #e4f1f2;
+  --positive: #15803d;
+  --caution: #a16207;
+  --destructive: #dc2626;
+  --app-danger: var(--destructive);
+  /* Course labels: four stable colours for chips, cards and the agenda. */
+  --hue-0: #2f8f9d;
+  --hue-1: #3f9b62;
+  --hue-2: #7c63d4;
+  --hue-3: #cc8526;
+  /* Uli's beak: warm accent for "now" and small highlights. */
+  --warm: #e8902a;
+  --warm-soft: #fdf0dd;
+  --nav-active-shadow: 0 0 0 1px #dfe6e8, 0 1px 2px rgb(19 33 31 / 0.06);
+
+  --background: var(--app-bg);
+  --foreground: var(--app-text);
+  --card: var(--app-surface);
+  --card-foreground: var(--app-text);
+  --popover: #ffffff;
+  --popover-foreground: var(--app-text);
+  --primary: var(--app-accent);
+  --primary-foreground: #ffffff;
+  --secondary: #eef3f4;
+  --secondary-foreground: var(--app-text);
+  --muted: #eef3f4;
+  --muted-foreground: var(--app-muted);
+  --accent: #e9f0f1;
+  --accent-foreground: var(--app-text);
+  --border: var(--app-border);
+  --input: #d3dde0;
+  --ring: #2f8f9d;
+  --radius: 0.5rem;
+  --sidebar: var(--app-chrome);
+  --sidebar-foreground: var(--app-text);
+  --sidebar-accent: #e3eaec;
+  --sidebar-accent-foreground: var(--app-text);
+  --sidebar-border: var(--app-border);
+  --nav-foreground: #1d2b2e;
+  --nav-muted: #64767b;
+  --nav-hover: #e2e9eb;
+  --nav-active: #ffffff;
+
+  --ui-row-height: 34px;
+  --ui-radius-control: 6px;
+  --ui-radius-item: 7px;
+  --ui-radius-panel: 10px;
+  --ui-radius-overlay: 12px;
+  --ui-overlay: var(--popover);
+  --ui-overlay-shadow: 0 0 0 1px rgb(24 24 27 / 0.06), 0 12px 32px -8px rgb(24 24 27 / 0.18);
+  --ui-panel-shadow: 0 1px 2px rgb(24 24 27 / 0.04);
+  --ui-color-duration: 120ms;
+  --ui-color-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ui-enter-duration: 160ms;
+  --ui-enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ui-scrollbar: color-mix(in srgb, var(--app-text) 16%, transparent);
+  --ui-scrollbar-hover: color-mix(in srgb, var(--app-text) 32%, transparent);
+  --topbar-height: 48px;
+}
+.dark {
+  color-scheme: dark;
+  --app-chrome: #0b1113;
+  --app-bg: #131a1d;
+  --app-surface: #172024;
+  --app-surface-strong: #1c272b;
+  --app-surface-alt: #162024;
+  --app-border: #233034;
+  --app-border-strong: #2f3f44;
+  --app-text: #e5eef0;
+  --app-muted: #92a5aa;
+  --app-faint: #62767b;
+  --app-accent: #6cc4d1;
+  --app-blue: #6cc4d1;
+  --app-blue-soft: #12282d;
+  --positive: #4ade80;
+  --caution: #facc15;
+  --destructive: #f87171;
+  --hue-0: #5ab8c6;
+  --hue-1: #5cc489;
+  --hue-2: #a594f0;
+  --hue-3: #f0b057;
+  --warm: #f2a541;
+  --warm-soft: #2c2214;
+  --nav-active-shadow: inset 0 0 0 1px #26353a;
+
+  --app-danger: var(--destructive);
+  --background: var(--app-bg);
+  --foreground: var(--app-text);
+  --card: var(--app-surface);
+  --card-foreground: var(--app-text);
+  --popover: #1a2427;
+  --popover-foreground: var(--app-text);
+  /* Filled actions keep a darker blue so white text stays readable. */
+  --primary: #1b7c8b;
+  --primary-foreground: #ffffff;
+  --secondary: #1d2a2e;
+  --secondary-foreground: var(--app-text);
+  --muted: #1d2a2e;
+  --muted-foreground: var(--app-muted);
+  --accent: #203034;
+  --accent-foreground: var(--app-text);
+  --border: var(--app-border);
+  --input: #33454a;
+  --ring: #5ab8c6;
+  --sidebar: var(--app-chrome);
+  --sidebar-foreground: var(--app-text);
+  --sidebar-accent: #1a2528;
+  --sidebar-accent-foreground: var(--app-text);
+  --sidebar-border: var(--app-border);
+  --nav-foreground: #dbe6e8;
+  --nav-muted: #82979c;
+  --nav-hover: #141d20;
+  --nav-active: #1c282c;
+  --ui-overlay: var(--popover);
+  --ui-overlay-shadow: 0 0 0 1px rgb(255 255 255 / 0.06), 0 16px 40px -8px rgb(0 0 0 / 0.6);
+  --ui-panel-shadow: none;
+  --ui-scrollbar: color-mix(in srgb, var(--app-text) 16%, transparent);
+  --ui-scrollbar-hover: color-mix(in srgb, var(--app-text) 32%, transparent);
+}
+.app-shell.focus-layout {
+  --topbar-height: 0px;
+}
+
+/* Course labels read their colour from the hue index. */
+[data-hue='0'],
+[data-palette='0'] {
+  --course-hue: var(--hue-0);
+}
+[data-hue='1'],
+[data-palette='1'] {
+  --course-hue: var(--hue-1);
+}
+[data-hue='2'],
+[data-palette='2'] {
+  --course-hue: var(--hue-2);
+}
+[data-hue='3'],
+[data-palette='3'] {
+  --course-hue: var(--hue-3);
+}

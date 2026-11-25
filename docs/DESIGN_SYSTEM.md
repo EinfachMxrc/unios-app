@@ -2,7 +2,7 @@
 
 # UniOS Oberflächensystem
 
-UniOS zeigt Studierenden zuerst ihre nächste Handlung. Verwaltungs- und Infrastrukturinformationen folgen erst im passenden Detailbereich. Die Variablen in `frontend/src/styles/theme-tokens.css`, die CSS-Schichten in `frontend/src/styles/application.css`, die gemeinsamen Layoutregeln in `frontend/src/styles/workspace-layout.css` und die Komponenten `Shell`, `Panel`, `Empty`, `Loading`, `Failure` und die Radix-Dialoge bilden die Implementierung.
+UniOS zeigt Studierenden zuerst ihre nächste Handlung. Verwaltungs- und Infrastrukturinformationen folgen erst im passenden Detailbereich. Die Variablen in `frontend/src/styles/tokens.css`, die CSS-Schichten in `frontend/src/styles/application.css`, Rahmen und Bausteine in `shell.css`, `components.css` und `polish.css` und die Komponenten `Shell`, `Panel`, `Empty`, `Loading`, `Failure` und die Radix-Dialoge bilden die Implementierung.
 
 ## Hierarchie
 
@@ -16,11 +16,11 @@ UniOS zeigt Studierenden zuerst ihre nächste Handlung. Verwaltungs- und Infrast
 
 | Zweck | Wert und Einsatz |
 | --- | --- |
-| Schrift | Geist Variable; normale Zeile ca. 0,84 rem, Metadaten 0,72–0,78 rem, Seitentitel 2,05–2,55 rem am Desktop und 1,9–2,1 rem mobil. |
+| Schrift | Inter Variable; Fließtext 0,875 rem, Metadaten 0,7–0,78 rem, Seitentitel 1,375 rem, Begrüßung 1,35–1,65 rem. |
 | Abstand | 4/8/12/16/24/32 px. Zeilen erhalten mindestens 40 px Höhe, mobile Aktionen mindestens 44 px. |
-| Flächen | `--app-bg` für die Arbeitsfläche, `--app-surface` für Dialoge/Formulare, `--app-surface-alt` für dezente Hervorhebung. Keine Schatten ohne Grund. |
-| Trennung | `--app-border` für ruhige Linien; Karten meist 7–9 px Radius, Eingaben 6–8 px. |
-| Farbe | `--app-text`, `--app-muted`, `--app-blue` für Aktionen. Statusfarben nur bei echter Warnung/Fehler, nicht als Dekor. Alle Farben haben Hell/Dunkel-Varianten. |
+| Flächen | `--app-chrome` für das Fenster (Titelleiste und Seitenleiste), `--app-bg` für das eine Seitenpanel mit Tabs, `--app-surface`/`--app-surface-alt` für Karten und Zeilen-Hover. Auswahl ist eine abgehobene Kachel (`--nav-active` + `--nav-active-shadow`). |
+| Trennung | `--app-border` als Haarlinie; Radien 6/7/10/12 px (Steuerelement, Zeile, Karte, Panel). |
+| Farbe | Petrol aus Uli (`--app-accent`, `--primary`) für Aktionen und Auswahl, Uli-Orange (`--warm`) nur für „jetzt“, vier Kursfarben `--hue-0…3`, Status nur mit Icon oder Text. Alle Farben haben Hell/Dunkel-Varianten. |
 | Fokus | Sichtbarer `--ring`-Umriss. Icons brauchen Text oder einen zugänglichen Namen. |
 
 ## Muster

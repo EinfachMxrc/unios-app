@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 import { courseName } from '@/lib/courseNames'
+import { courseHue } from '@/lib/courseHue'
 
 import { useWorkspaceState } from '@/lib/workspaceState'
 import { beginNewFreeNote } from '@/lib/sourceNoteSave'
@@ -10,7 +11,19 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
-import { ArrowRight, Bell, CheckCircle2, Clock3, FileText, Plus, Settings2 } from 'lucide-react'
+import {
+  ArrowRight,
+  Bell,
+  CheckCircle2,
+  ClipboardList,
+  Clock3,
+  FileText,
+  Layers,
+  LayoutGrid,
+  NotebookPen,
+  Plus,
+  Settings2,
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { localDate, useApi } from '@/api'
@@ -39,6 +52,15 @@ import './course/ResourceArrival.css'
 const CourseCollections = lazy(() =>
   import('./course/CourseCollections').then((module) => ({ default: module.CourseCollections })),
 )
+
+const TAB_ICONS = {
+  overview: LayoutGrid,
+  materials: FileText,
+  tasks: ClipboardList,
+  notes: NotebookPen,
+  views: Layers,
+} as const
+
 export function CoursePage() {
   const canWrite = useWritableHost()
   const { t } = useT('courses')
@@ -93,6 +115,16 @@ export function CoursePage() {
     <Shell
       title={data ? courseName(data.course) : t('singular')}
       eyebrow={t('eyebrowDetail')}
+      headingHue={data ? courseHue(data.course.id) : undefined}
+      description={
+        data
+          ? [
+              data.semesters.find((item) => item.id === data.course.semester_id)?.name ?? t('withoutSemester'),
+              t('heroMaterials', { count: data.page?.total ?? materials.length }),
+              t('heroTasks', { count: data.assignments.length }),
+            ].join(' · ')
+          : undefined
+      }
       cachedAt={updatedAt}
       breadcrumbs={[
         { label: nav('courses'), to: '/courses' },
@@ -260,6 +292,10 @@ export function CoursePage() {
                   aria-current={selectedView === tab ? 'page' : undefined}
                   onClick={() => setView(tab)}
                 >
+                  {(() => {
+                    const Icon = TAB_ICONS[tab]
+                    return <Icon size={15} aria-hidden="true" />
+                  })()}
                   {t(`tab_${tab}`)}
                   <span>
                     {tab === 'materials'

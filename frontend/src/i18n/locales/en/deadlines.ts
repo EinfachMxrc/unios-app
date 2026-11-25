@@ -158,6 +158,7 @@ export default {
   pageViewLabel: 'Schedule section',
   pageCalendar: 'Calendar',
   pageAssignments: 'Assignments',
+  pageTasks: 'My tasks',
   nextDeadlineHeading: 'Next deadline',
   noUpcomingDeadline: 'No upcoming deadline in the current data.',
   allAssignments: 'All assignments & deadlines',

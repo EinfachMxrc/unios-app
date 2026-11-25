@@ -176,6 +176,6 @@ test('Uli reacts expressively to clicks and respects reduced motion', async ({ p
   await expect(page.locator('.uli-buddy')).toHaveClass(/is-celebrate/)
   await page.screenshot({ path: testInfo.outputPath('uli-celebrating.png') })
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await expect(page.locator('.mascot-figure')).toHaveCSS('animation-name', 'none')
-  await expect(page.locator('.mascot-eyes')).toHaveCSS('animation-name', 'none')
+  await expect(page.locator('.uli-buddy .mascot-figure')).toHaveCSS('animation-name', 'none')
+  await expect(page.locator('.uli-buddy .mascot-eyes')).toHaveCSS('animation-name', 'none')
 })

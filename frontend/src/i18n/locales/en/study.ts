@@ -92,7 +92,7 @@ export default {
   sessionBrand: 'UniOS · Flashcards',
   integratedNotEnabledTitle: "Built-in study mode isn't enabled",
   openFlashcardsLink: 'Open flashcards',
-  sessionEyebrow: 'STUDY SESSION',
+  sessionEyebrow: 'Study session',
   sessionProgressText_one: '{{completed}} of {{total}} card done',
   sessionProgressText_other: '{{completed}} of {{total}} cards done',
   noCardsDueText: 'No cards due',

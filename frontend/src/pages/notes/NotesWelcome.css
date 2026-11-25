@@ -1,0 +1,100 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.note-welcome > header {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+}
+.note-welcome.has-recent {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 22px;
+}
+.note-welcome.has-recent > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.note-welcome.has-recent > header > div {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.note-welcome.has-recent > header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.note-welcome.has-recent > header p {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+}
+.note-welcome h3 {
+  margin-bottom: 10px;
+  color: var(--app-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+.note-welcome ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.note-welcome li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 116px;
+  padding: 14px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-panel);
+  background: var(--app-surface-alt);
+  transition:
+    border-color var(--ui-color-duration) var(--ui-color-ease),
+    transform var(--ui-enter-duration) var(--ui-enter-ease);
+}
+.note-welcome li:hover {
+  border-color: color-mix(in srgb, var(--app-accent) 55%, var(--app-border));
+  transform: translateY(-1px);
+}
+.note-welcome li:focus-within {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.note-card {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 4px;
+  width: 100%;
+  text-align: start;
+}
+/* The whole card opens the note; the course chip below stays purely informative. */
+.note-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.note-card:focus-visible {
+  outline: none;
+}
+.note-card strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--app-text);
+  font-size: 0.88rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+.note-card time {
+  color: var(--app-muted);
+  font-size: 0.7rem;
+}

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-"""Putting notes and quick captures in the trash, bringing them back, erasing them.
+"""Putting notes, quick captures and tasks in the trash, bringing them back, erasing them.
 
 Trashing keeps everything (revisions, files, links) and only takes the item out
 of sight: ``deleted_at`` hides it from ORM queries (app.db.trash) and its
@@ -17,13 +17,22 @@ from sqlalchemy import delete, select, text, update
 from sqlalchemy.orm import Session
 
 from app.config import Settings
-from app.db.models import Course, Jot, LinkEdge, Note, NoteVersion, VoiceMemo, utc_now
+from app.db.models import (
+    Course,
+    Jot,
+    LinkEdge,
+    Note,
+    NoteVersion,
+    Task,
+    VoiceMemo,
+    utc_now,
+)
 from app.db.trash import INCLUDE_TRASHED
 from app.files.localpath import resolve_local
 from app.notes.store import NoteMissing, read_note
 from app.notes.wikilinks import refresh_incoming_wikilinks, sync_wikilinks
 
-TrashKind = Literal["note", "jot"]
+TrashKind = Literal["note", "jot", "task"]
 
 
 class TrashMissing(LookupError):
@@ -124,6 +133,36 @@ def erase_jot(session: Session, jot_id: str) -> None:
     session.commit()
 
 
+def trash_task(session: Session, task_id: str) -> Task:
+    task = session.get(Task, task_id)
+    if task is None:
+        raise TrashMissing("Aufgabe nicht gefunden")
+    task.deleted_at = utc_now()
+    task.revision += 1
+    session.commit()
+    return task
+
+
+def _trashed_task(session: Session, task_id: str) -> Task:
+    task = session.get(Task, task_id, execution_options=INCLUDE_TRASHED)
+    if task is None or task.deleted_at is None:
+        raise TrashMissing("Aufgabe liegt nicht im Papierkorb")
+    return task
+
+
+def restore_task(session: Session, task_id: str) -> Task:
+    task = _trashed_task(session, task_id)
+    task.deleted_at = None
+    task.revision += 1
+    session.commit()
+    return task
+
+
+def erase_task(session: Session, task_id: str) -> None:
+    session.delete(_trashed_task(session, task_id))
+    session.commit()
+
+
 def trash_items(session: Session) -> list[dict]:
     """Everything in the trash, most recently deleted first."""
     courses = {course.id: course.name for course in session.scalars(select(Course)).all()}
@@ -141,6 +180,13 @@ def trash_items(session: Session) -> list[dict]:
                                        "course_id": jot.course_id,
                                        "course_name": courses.get(jot.course_id) if jot.course_id else None,
                                        "deleted_at": jot.deleted_at}))
+    for task in session.scalars(select(Task).where(Task.deleted_at.is_not(None))
+                                .execution_options(**INCLUDE_TRASHED)):
+        assert task.deleted_at is not None  # the query selects trashed tasks only
+        items.append((task.deleted_at, {"kind": "task", "id": task.id, "title": task.title,
+                                        "course_id": task.course_id,
+                                        "course_name": courses.get(task.course_id) if task.course_id else None,
+                                        "deleted_at": task.deleted_at}))
     return [item for _, item in sorted(items, key=lambda pair: pair[0], reverse=True)]
 
 
@@ -149,6 +195,8 @@ def empty_trash(session: Session, settings: Settings) -> int:
     for item in trash_items(session):
         if item["kind"] == "note":
             erase_note(session, settings, item["id"])
+        elif item["kind"] == "task":
+            erase_task(session, item["id"])
         else:
             erase_jot(session, item["id"])
         erased += 1

@@ -460,6 +460,7 @@ export default {
   noNotesTitle: 'No notes yet',
   noNotesText: 'Create a note or open a material from your courses.',
   welcomeTitle: 'A thought deserves a page.',
+  continueWriting: 'Continue writing',
   welcomeText: 'Choose a note or start a new one.',
   switchNote: 'Switch note',
   captureInbox: 'Inbox',

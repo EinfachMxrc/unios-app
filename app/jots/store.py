@@ -102,7 +102,7 @@ def search_jots(session: Session, query: str, *, course_id: int | None = None,
                 semester_id: int | None = None, limit: int = 50) -> list[dict]:
     from app.extract.search import search_expression
 
-    expression = search_expression(query)
+    expression = search_expression(query, prefix=True)
     if not expression:
         return []
     rows = session.execute(text("""

@@ -2,7 +2,7 @@
 
 export default {
   pageTitle: 'Rules',
-  introKicker: 'AUTOMATIONS',
+  introKicker: 'Automations',
   introTitle: "When something happens, you'll know.",
   introText: 'Build small rules from your own study data. Preview and dry run show matches before you run an action.',
   myRulesTitle: 'My rules',

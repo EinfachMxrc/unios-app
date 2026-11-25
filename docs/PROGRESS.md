@@ -3705,3 +3705,14 @@ Prüfung: Backend-pytest, ruff und mypy; Frontend-Typecheck, Lint, Vitest und Bu
 Playwright mit lokalem Fake-Server (`e2e/note-editor.spec.ts` und angepasste
 Fachspecs). Der Bestand echter Daten wurde nicht angefasst; vor dem ersten Speichern
 einer bestehenden Notiz mit dieser Version sollte ein geprüfter Snapshot vorliegen.
+
+### Startseite, eigene Aufgaben und Rahmen · 25.11.2026
+
+Eigene Aufgaben als Domäne `app/tasks/` (API, Service, Repository, Migration
+`ffa1b7c3d9e4`, Papierkorb, Export). Startseite aus kleinen Bausteinen unter
+`frontend/src/pages/today/`. Neues Design: `styles/tokens.css` (einzige Farbquelle),
+`shell.css`, `components.css`, `polish.css`; das alte `workspace-layout.css` ist gelöscht,
+nur Seitenraster stehen ohne alte Optik in `page-layouts.css`. Vor der ersten Nutzung mit echtem
+Bestand ist wegen der Migration ein geprüfter Snapshot nötig. Nicht umgesetzt:
+Handy-App, Konto mit Cloud-Abgleich, Suchen und Ersetzen im Block-Editor.
+

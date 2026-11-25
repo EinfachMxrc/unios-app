@@ -465,6 +465,7 @@ export default {
   noNotesTitle: 'Noch keine Notizen',
   noNotesText: 'Lege eine Notiz an oder öffne ein Material aus deinen Kursen.',
   welcomeTitle: 'Ein Gedanke verdient eine Seite.',
+  continueWriting: 'Weiterschreiben',
   welcomeText: 'Wähle eine Notiz oder beginne mit einer neuen.',
   switchNote: 'Notiz wechseln',
   captureInbox: 'Eingang',

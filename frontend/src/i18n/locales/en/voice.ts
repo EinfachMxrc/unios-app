@@ -23,7 +23,7 @@ export default {
   openCaptureLink: 'Open Smart Capture',
   openDetectedTaskLink: 'Open detected task',
   pageTitle: 'Voice memos',
-  introKicker: 'CAPTURE BY VOICE',
+  introKicker: 'Capture by voice',
   introTitle: "A thought, before it's gone.",
   introText: 'Record a short memo of your own. Audio stays with UniOS; review and edit the text before saving.',
   newMemoTitle: 'New voice memo',

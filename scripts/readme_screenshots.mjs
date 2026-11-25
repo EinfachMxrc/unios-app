@@ -34,11 +34,11 @@ async function capture(name) {
 }
 try {
   await page.goto('/')
-  await expect(page.getByRole('heading', { name: /Guten|Hier geht/ }).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Guten/ }).first()).toBeVisible()
   await capture('heute-dark')
   await page.evaluate(() => { sessionStorage.setItem('shots-theme', '1'); localStorage.setItem('unios-theme', 'light') })
   await page.reload()
-  await expect(page.getByRole('heading', { name: /Guten|Hier geht/ }).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Guten/ }).first()).toBeVisible()
   await capture('heute-light')
   await page.evaluate(() => { localStorage.setItem('unios-theme', 'dark') })
   await page.reload()
@@ -66,7 +66,7 @@ try {
   await capture('karteikarten')
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/')
-  await expect(page.getByRole('heading', { name: /Guten|Hier geht/ }).first()).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Guten/ }).first()).toBeVisible()
   await capture('heute-mobile')
   await page.goto('/study')
   await expect(page.getByRole('heading', { name: /Karteikarten/ }).first()).toBeVisible()

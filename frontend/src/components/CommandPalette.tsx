@@ -5,7 +5,7 @@ import './CommandPalette.css'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
-import { ArrowRight, Clock3, RefreshCw, Search as SearchIcon, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Clock3, FilePlus2, ListPlus, RefreshCw, Search as SearchIcon, type LucideIcon } from 'lucide-react'
 import { Dialog } from 'radix-ui'
 import { Button } from '@/components/ui/button'
 import { activeIntlLocale, request, useApi } from '@/api'
@@ -35,6 +35,8 @@ import {
   type HitFilter,
 } from './CommandPaletteParts'
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
+const NEW_TASK = '/deadlines?new=task#tasks'
+
 /**
  * Cmd/Ctrl+K: one field to open any page, find a PDF passage or note, run an
  * action, or capture a thought without leaving the current page.
@@ -54,6 +56,7 @@ export function CommandPalette() {
   const { t: tNav } = useT('nav')
   const triggerText = t(preferences.modules.search ? 'triggerText' : 'navigationText')
   const shortcutHint = t(/Mac|iPhone|iPad/i.test(navigator.platform) ? 'shortcutHintMac' : 'shortcutHintOther')
+  const captureShortcut = t(/Mac|iPhone|iPad/i.test(navigator.platform) ? 'captureShortcutMac' : 'captureShortcutOther')
   const [open, setOpen] = useWorkspaceState('palette:open', false, { persist: false })
   const inputRef = useRef<HTMLInputElement>(null)
   const returnFocus = useRef<HTMLElement | null>(null)
@@ -73,11 +76,25 @@ export function CommandPalette() {
         course: courseFilter || null,
       })
     : []
+  // Ctrl/Cmd+Alt+N opens the palette straight in the capture field and leaves the current page as it is.
+  const [captureFirst, setCaptureFirst] = useState(false)
+  useEffect(() => {
+    // Also covers closing through the shortcut or a command, which bypasses onOpenChange.
+    if (!open) setCaptureFirst(false)
+  }, [open])
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
         setOpen((value) => !value)
+      }
+      // event.code, because Option+N on a Mac types a dead key instead of "n".
+      // Windows reports AltGr as Ctrl+Alt; a layout that types another character there keeps it.
+      const typesN = event.metaKey || event.key.toLowerCase() === 'n'
+      if ((event.metaKey || event.ctrlKey) && event.altKey && !event.shiftKey && event.code === 'KeyN' && typesN) {
+        event.preventDefault()
+        setCaptureFirst(true)
+        setOpen(true)
       }
     }
     const actions = () => {
@@ -120,7 +137,6 @@ export function CommandPalette() {
       to: item.to,
       icon: item.icon,
     })),
-    { label: t('newNote'), to: '/notes?new=1' },
     ...(preferences.modules.courses ? [{ label: t('dueCards'), to: '/study' }] : []),
     { label: t('openQuestions'), to: '/collections?preset=questions' },
     { label: t('entityActions'), to: 'actions' },
@@ -131,12 +147,21 @@ export function CommandPalette() {
     })),
     { label: t('syncData'), to: 'sync' },
   ]
-  const visible = commands.filter(
+  const create: typeof commands = [
+    { label: t('newNote'), to: '/notes?new=1', icon: FilePlus2 },
+    ...(preferences.modules.deadlines ? [{ label: t('newTask'), to: NEW_TASK, icon: ListPlus }] : []),
+  ]
+  const matching = (label: string) =>
+    label.toLocaleLowerCase(activeIntlLocale()).includes(query.toLocaleLowerCase(activeIntlLocale()))
+  const creating = create.filter((item) => matching(item.label))
+  const destinations = commands.filter(
     (item) =>
       (item.to === '/mensa' && matchesMensa(query)) ||
       (item.to === '/rooms' && matchesRooms(query)) ||
-      item.label.toLocaleLowerCase(activeIntlLocale()).includes(query.toLocaleLowerCase(activeIntlLocale())),
+      matching(item.label),
   )
+  // Keyboard order and Enter follow what is on screen: creating comes first.
+  const visible = [...creating, ...destinations]
   const sync = useMoodleRefresh()
   const [syncRequested, setSyncRequested] = useState(false)
   useEffect(() => {
@@ -197,6 +222,8 @@ export function CommandPalette() {
           onOpenAutoFocus={(event) => {
             returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
             event.preventDefault()
+            // The capture field takes over once it is ready; on a read-only device it
+            // never is, so the search field holds the focus until then.
             inputRef.current?.focus()
           }}
           onCloseAutoFocus={(event) => {
@@ -261,7 +288,7 @@ export function CommandPalette() {
                     {t('clearRecent')}
                   </button>
                 </div>
-                {recent.slice(0, 6).map((item) => (
+                {recent.slice(0, 5).map((item) => (
                   <button type="button" key={item.to} className="command-item" onClick={() => runCommand(item.to)}>
                     <Clock3 size={16} aria-hidden="true" />
                     <span className="command-label">{item.title}</span>
@@ -323,29 +350,40 @@ export function CommandPalette() {
                 {enterTarget === 'search' && <EnterHint />}
               </button>
             )}
-            {visible.length > 0 && <p className="command-section-label">{t('commandsLabel')}</p>}
-            {visible.map((item) => {
-              const Icon = item.to === 'sync' ? RefreshCw : (item.icon ?? ArrowRight)
-              return (
-                <button
-                  type="button"
-                  key={item.to}
-                  className="command-item"
-                  disabled={item.to === 'sync' && !canSync}
-                  onClick={() => void runCommand(item.to)}
-                >
-                  <Icon
-                    size={16}
-                    aria-hidden="true"
-                    className={item.to === 'sync' && sync.busy ? 'animate-spin' : ''}
-                  />
-                  <span className="command-label">
-                    <Highlighted text={item.label} query={typed} />
-                  </span>
-                  {enterTarget === item.to && <EnterHint />}
-                </button>
-              )
-            })}
+            {(
+              [
+                [t('createLabel'), creating],
+                [t('commandsLabel'), destinations],
+              ] as const
+            ).map(([heading, items]) =>
+              items.length ? (
+                <section key={heading} aria-label={heading}>
+                  <p className="command-section-label">{heading}</p>
+                  {items.map((item) => {
+                    const Icon = item.to === 'sync' ? RefreshCw : (item.icon ?? ArrowRight)
+                    return (
+                      <button
+                        type="button"
+                        key={item.to}
+                        className="command-item"
+                        disabled={item.to === 'sync' && !canSync}
+                        onClick={() => void runCommand(item.to)}
+                      >
+                        <Icon
+                          size={16}
+                          aria-hidden="true"
+                          className={item.to === 'sync' && sync.busy ? 'animate-spin' : ''}
+                        />
+                        <span className="command-label">
+                          <Highlighted text={item.label} query={typed} />
+                        </span>
+                        {enterTarget === item.to && <EnterHint />}
+                      </button>
+                    )
+                  })}
+                </section>
+              ) : null,
+            )}
             {!visible.length && !hits.length && <p className="command-empty">{t('noMatchingCommand')}</p>}
           </div>
           {actionsOpen && (
@@ -379,8 +417,10 @@ export function CommandPalette() {
             </section>
           )}
           <div className="command-capture">
-            <p className="command-section-label">{t('quickCapture')}</p>
-            <JotCapture compact />
+            <p className="command-section-label">
+              {t('quickCapture')} <kbd>{captureShortcut}</kbd>
+            </p>
+            <JotCapture compact autoFocus={captureFirst} />
           </div>
           <PaletteFooter status={status} />
         </Dialog.Content>

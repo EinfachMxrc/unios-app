@@ -15,7 +15,6 @@ import {
 import { useRecentObjects } from '@/lib/recentObjects'
 import { areaForPath, sidebarCatalog } from './sidebarCatalog'
 import { usePreferences } from '@/preferences'
-import './WorkspaceTabs.css'
 
 export function WorkspaceTabs() {
   const { t } = useT('shell')

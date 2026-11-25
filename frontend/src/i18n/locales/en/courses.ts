@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  heroMaterials_one: '{{count}} material',
+  heroMaterials_other: '{{count}} materials',
+  heroTasks_one: '{{count}} task',
+  heroTasks_other: '{{count}} tasks',
   tab_views: 'Views',
   savedViews: 'Saved views',
   manageView: 'Manage view',
@@ -58,7 +62,7 @@ export default {
   makeActive: 'Activate course',
   showInactive: 'Show inactive',
   inactiveHint: 'This course is finished or paused. Its materials remain available.',
-  nextTask: 'UP NEXT',
+  nextTask: 'Up next',
   courseViews: 'Course views',
   tab_overview: 'Overview',
   tab_materials: 'Materials',

@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { MensaToday } from '@/components/MensaToday'
-import { TimetablePanel } from '@/components/TimetablePanel'
 import { useState } from 'react'
 import { markMaterialsSeen, useSeenMaterials } from '@/hooks/useSeenMaterials'
 import { useNotifications } from '@/hooks/useNotifications'
 import { Link } from 'react-router-dom'
 import { useT } from '@/i18n/useT'
 import type { TypedT } from '@/i18n/useT'
-import { ArrowRight, Bell, CalendarDays, CalendarRange, FileClock, Plus } from 'lucide-react'
+import { ArrowRight, Bell, CalendarRange, FileClock, Plus } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { activeIntlLocale, localDate, useApi } from '@/api'
@@ -25,10 +24,18 @@ import { TaskPeekDrawer, type PeekTarget } from '@/components/TaskPeekDrawer'
 import { MoodleRefresh } from '@/components/MoodleRefresh'
 import { mascotMoodFor } from '@/components/Mascot'
 import { UliBuddy } from '@/components/UliBuddy'
+import { useCampusDay } from '@/hooks/useCampusDay'
+import { nextDeadline } from '@/lib/deadlineOverview'
+import { groupTasks, TASKS_PATH, type TasksResponse } from '@/lib/tasks'
+import { DayAgenda } from './today/DayAgenda'
+import { TodayBriefing, TodaySession } from './today/TodayBriefing'
+import { TodayDeadlines } from './today/TodayDeadlines'
+import { TodayDecks } from './today/TodayDecks'
+import { TodayJots } from './today/TodayJots'
+import { TodaySection } from './today/TodaySection'
+import { TodayTasks } from './today/TodayTasks'
+import { useTodayAppointments } from './today/useTodayAppointments'
 import './Today.css'
-
-/** Emoji give each count a face at a glance. They are drawn by CSS, so they are not part of the link text or read aloud. */
-const SUMMARY_EMOJI = { files: '📄', tasks: '📌', cards: '🃏' } as const
 
 function describeLearningAction(action: NextLearningAction, t: TypedT<'today'>, workspace: TypedT<'studyWorkspace'>) {
   switch (action.kind) {
@@ -71,6 +78,9 @@ export function Today() {
   const { pending } = useJotOutbox()
   const [captureOpen, setCaptureOpen] = useState(false)
   const [peek, setPeek] = useState<PeekTarget | null>(null)
+  const { day, minutes, now } = useCampusDay()
+  const timetable = useTodayAppointments(day, preferences.modules.deadlines)
+  const tasks = useApi<TasksResponse>(TASKS_PATH, { enabled: preferences.modules.deadlines })
   const seenThrough = useSeenMaterials()
   const { data: notifications } = useNotifications()
   const unseenMaterials =
@@ -96,7 +106,7 @@ export function Today() {
     ...(conflictNeedsAttention && syncNeedsAttention ? [t('checkConnection')] : []),
     ...(connectorNeedsAttention && (conflictNeedsAttention || syncNeedsAttention) ? [connectorWarningLink] : []),
   ]
-  const hour = new Date().getHours()
+  const hour = now.getHours()
   const greeting = hour < 11 ? t('greetingMorning') : hour < 18 ? t('greetingDay') : t('greetingEvening')
   const learningAction = nextLearningAction({
     resume,
@@ -107,6 +117,8 @@ export function Today() {
     deadlinesEnabled: preferences.modules.deadlines,
   })
   const learningCue = describeLearningAction(learningAction, t, workspace)
+  const taskGroups = groupTasks(tasks.data?.tasks ?? [], day)
+  const showDay = preferences.modules.deadlines && (timetable.subscribed === true || timetable.appointments.length > 0)
   return (
     <Shell title={tNav('today')} cachedAt={updatedAt}>
       {loading && !data ? (
@@ -117,24 +129,39 @@ export function Today() {
         data && (
           <div className="today-content">
             <section className="today-intro" aria-label={t('overviewLabel')}>
-              <p>
-                {new Intl.DateTimeFormat(activeIntlLocale(), { weekday: 'long', day: 'numeric', month: 'long' }).format(
-                  new Date(),
-                )}
-              </p>
-              <h2>
-                {greeting}. <span>{t('greetingSuffix')}</span>
-              </h2>
-              <div className="today-focus">
+              <header className="today-greeting">
                 <UliBuddy
                   className="today-mascot"
-                  size={64}
+                  size={52}
                   mood={mascotMoodFor({
                     hour,
                     dueCards: cardStatus?.mode === 'integrated' ? cardStatus.due : 0,
                     openTasks: data.deadlines.length,
                   })}
                 />
+                <div>
+                  <p>
+                    {new Intl.DateTimeFormat(activeIntlLocale(), {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                    }).format(new Date())}
+                  </p>
+                  <h2>{greeting}.</h2>
+                  {preferences.modules.deadlines && <TodaySession appointments={timetable.appointments} now={now} />}
+                </div>
+              </header>
+              <TodayBriefing
+                showDeadlines={preferences.modules.deadlines}
+                day={day}
+                deadline={preferences.modules.deadlines ? (nextDeadline(data.deadlines, now.getTime()) ?? null) : null}
+                upcomingCount={data.deadlines.length}
+                dueTasks={taskGroups.overdue.length + taskGroups.today.length}
+                dueCards={cardStatus?.mode === 'integrated' ? cardStatus.due : null}
+                newFiles={unseenMaterials.length}
+                onSeenFiles={() => markMaterialsSeen(unseenMaterials.map((item) => item.id))}
+              />
+              <div className="today-focus">
                 <div className="today-focus-main">
                   {preferences.modules.courses && (
                     <div className="today-learning-cue" data-learning-action={learningAction.kind}>
@@ -144,25 +171,6 @@ export function Today() {
                       <small>{learningCue.reason}</small>
                     </div>
                   )}
-                  <div className="today-summary" aria-label={t('currentOverviewLabel')}>
-                    {unseenMaterials.length > 0 && (
-                      <Link
-                        data-emoji={SUMMARY_EMOJI.files}
-                        to="/activity?kind=new"
-                        onClick={() => markMaterialsSeen(unseenMaterials.map((item) => item.id))}
-                      >
-                        <strong>{unseenMaterials.length}</strong> {t('newFiles', { count: unseenMaterials.length })}
-                      </Link>
-                    )}
-                    <Link to="/deadlines" data-emoji={SUMMARY_EMOJI.tasks}>
-                      <strong>{data.deadlines.length}</strong> {t('upcomingTasks', { count: data.deadlines.length })}
-                    </Link>
-                    {cardStatus?.mode === 'integrated' && (
-                      <Link to="/study" data-emoji={SUMMARY_EMOJI.cards}>
-                        <strong>{cardStatus.due}</strong> {t('cardsDue')}
-                      </Link>
-                    )}
-                  </div>
                 </div>
                 <div className="today-focus-actions">
                   {preferences.modules.courses &&
@@ -267,121 +275,93 @@ export function Today() {
                 </AlertDescription>
               </Alert>
             )}
-            <div className="today-workspace">
-              {!!rulePins?.length && (
-                <section className="today-section" aria-labelledby="today-rules-heading">
-                  <div className="today-section-heading">
-                    <h3 id="today-rules-heading">
-                      <Bell size={17} /> {t('fromYourRules')}
-                    </h3>
-                    <Link to="/rules">
-                      {t('viewRules')} <ArrowRight size={15} />
-                    </Link>
-                  </div>
-                  <div className="today-section-rows">
-                    {rulePins.slice(0, 3).map((item) => (
-                      <div className="today-event" key={item.id}>
-                        <span className="today-event-date">{t('rememberedLabel')}</span>
-                        <div>
-                          <Link to={item.url}>
-                            <strong>{item.title}</strong>
-                          </Link>
-                          <span>{item.rule_name}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-              {preferences.modules.deadlines && (
-                <section className="today-section" aria-labelledby="today-next-heading">
-                  <div className="today-section-heading">
-                    <h3 id="today-next-heading">
-                      <CalendarDays size={17} /> {t('next')}
-                    </h3>
-                    <Link to="/deadlines">
-                      {t('allDeadlines')} <ArrowRight size={15} />
-                    </Link>
-                  </div>
-                  {data.deadlines.length ? (
+            <div className={`today-board ${showDay ? '' : 'is-single'}`}>
+              <div className="today-workspace">
+                {!!rulePins?.length && (
+                  <section className="today-section" aria-labelledby="today-rules-heading">
+                    <div className="today-section-heading">
+                      <h3 id="today-rules-heading">
+                        <Bell size={17} /> {t('fromYourRules')}
+                      </h3>
+                      <Link to="/rules">
+                        {t('viewRules')} <ArrowRight size={15} />
+                      </Link>
+                    </div>
                     <div className="today-section-rows">
-                      {data.deadlines.slice(0, 3).map((item) => (
+                      {rulePins.slice(0, 3).map((item) => (
                         <div className="today-event" key={item.id}>
-                          <span className="today-event-date">
-                            {localDate(item.due_at, { day: '2-digit', month: '2-digit' })}
-                          </span>
+                          <span className="today-event-date">{t('rememberedLabel')}</span>
                           <div>
-                            <button
-                              className="today-peek-trigger"
-                              type="button"
-                              onClick={() =>
-                                setPeek({
-                                  kind: item.assignment_id ? 'assignment' : 'deadline',
-                                  id: item.assignment_id ?? item.id,
-                                })
-                              }
-                            >
+                            <Link to={item.url}>
                               <strong>{item.title}</strong>
-                            </button>
-                            {item.course_id && <span>{data.courses[item.course_id]}</span>}
+                            </Link>
+                            <span>{item.rule_name}</span>
                           </div>
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <p className="today-empty">{t('noUpcomingDeadlines')}</p>
-                  )}
-                </section>
-              )}
-              {preferences.modules.notifications && (
-                <section className="today-section" aria-labelledby="today-new-heading">
-                  <div className="today-section-heading">
-                    <h3 id="today-new-heading">
-                      <FileClock size={17} /> {t('recentActivity')}
-                    </h3>
-                    <Link to="/activity">
-                      {t('viewAll')} <ArrowRight size={15} />
-                    </Link>
-                  </div>
-                  {data.changes.length ? (
-                    <div className="today-section-rows">
-                      {data.changes.slice(0, 4).map((item) => (
-                        <div className="today-event" key={item.id}>
-                          <span className="today-event-date">
-                            {localDate(item.created_at, { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                          <div>
-                            {item.course_id && data.courses[item.course_id] && (
-                              <Link to={`/courses/${item.course_id}`} className="today-event-course">
-                                {data.courses[item.course_id]}
-                              </Link>
-                            )}
-                            {item.assignment_id ? (
-                              <button
-                                className="today-peek-trigger"
-                                type="button"
-                                onClick={() => setPeek({ kind: 'assignment', id: item.assignment_id! })}
-                              >
+                  </section>
+                )}
+                {preferences.modules.deadlines && (
+                  <>
+                    <TodayDeadlines data={data} day={day} onPeek={setPeek} />
+                    <TodayTasks tasks={tasks.data?.tasks ?? []} day={day} error={tasks.error} reload={tasks.reload} />
+                  </>
+                )}
+                {preferences.modules.courses && <TodayDecks />}
+                <TodayJots />
+                {preferences.modules.notifications && (
+                  <TodaySection
+                    id="new"
+                    icon={FileClock}
+                    title={t('recentActivity')}
+                    to="/activity"
+                    linkLabel={t('viewAll')}
+                  >
+                    {data.changes.length ? (
+                      <div className="today-section-rows">
+                        {data.changes.slice(0, 4).map((item) => (
+                          <div className="today-event" key={item.id}>
+                            <span className="today-event-date">
+                              {localDate(item.created_at, { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            <div>
+                              {item.course_id && data.courses[item.course_id] && (
+                                <Link to={`/courses/${item.course_id}`} className="today-event-course">
+                                  {data.courses[item.course_id]}
+                                </Link>
+                              )}
+                              {item.assignment_id ? (
+                                <button
+                                  className="today-peek-trigger"
+                                  type="button"
+                                  onClick={() => setPeek({ kind: 'assignment', id: item.assignment_id! })}
+                                >
+                                  <strong>{item.summary}</strong>
+                                </button>
+                              ) : item.resource_id && item.course_id ? (
+                                <Link to={`/courses/${item.course_id}#resource-${item.resource_id}`}>
+                                  <strong>{item.summary}</strong>
+                                </Link>
+                              ) : (
                                 <strong>{item.summary}</strong>
-                              </button>
-                            ) : item.resource_id && item.course_id ? (
-                              <Link to={`/courses/${item.course_id}#resource-${item.resource_id}`}>
-                                <strong>{item.summary}</strong>
-                              </Link>
-                            ) : (
-                              <strong>{item.summary}</strong>
-                            )}
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="today-empty">{t('noNewContent')}</p>
-                  )}
-                </section>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="today-empty">{t('noNewContent')}</p>
+                    )}
+                  </TodaySection>
+                )}
+              </div>
+              {showDay && (
+                <aside className="today-day">
+                  <DayAgenda day={day} minutes={minutes} now={now} timetable={timetable} />
+                </aside>
               )}
             </div>
-            {preferences.modules.deadlines && <TimetablePanel compact />}
             <MensaToday />
             {data.moodle_configured && <MoodleRefresh />}
             {preferences.modules.addons && <AddonWidgetSlot slot="today.secondary" />}

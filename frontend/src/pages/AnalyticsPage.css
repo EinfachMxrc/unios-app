@@ -8,8 +8,7 @@
   color: var(--app-muted);
   font-size: 0.72rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 .study-analytics-intro h2 {
   margin: 0 0 7px;

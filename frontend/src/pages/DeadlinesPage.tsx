@@ -14,6 +14,7 @@ import { useWritableHost } from '@/hooks/host'
 import { DeadlineViews } from '@/components/DeadlineViews'
 import { DeadlineProposalsPanel } from '@/components/DeadlineProposalsPanel'
 import { TimetablePanel } from '@/components/TimetablePanel'
+import { TasksPanel } from '@/components/tasks/TasksPanel'
 import { TaskPeekDrawer, type PeekTarget } from '@/components/TaskPeekDrawer'
 import { nextDeadline, splitEvents } from '@/lib/deadlineOverview'
 import { useWorkspaceState } from '@/lib/workspaceState'
@@ -64,8 +65,9 @@ type PublicPeriodsStatus = {
   periods: PublicPeriod[]
 }
 type PublicPeriodsReport = { checked: number; created: number; updated: number }
-type PageView = 'calendar' | 'assignments'
-const isPageView = (value: unknown): value is PageView => value === 'calendar' || value === 'assignments'
+type PageView = 'calendar' | 'assignments' | 'tasks'
+const isPageView = (value: unknown): value is PageView =>
+  value === 'calendar' || value === 'assignments' || value === 'tasks'
 
 function dateOnly(value: string) {
   return new Intl.DateTimeFormat(activeIntlLocale(), { dateStyle: 'medium', timeZone: 'UTC' }).format(
@@ -140,7 +142,8 @@ export function DeadlinesPage() {
   const location = useLocation()
   useEffect(() => {
     if (location.hash === '#timetable') setPageView('calendar')
-  }, [location.hash, setPageView])
+    if (location.hash === '#tasks') setPageView('tasks')
+  }, [location.hash, location.key, setPageView])
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 30_000)
@@ -257,6 +260,9 @@ export function DeadlinesPage() {
         <button type="button" aria-pressed={pageView === 'assignments'} onClick={() => setPageView('assignments')}>
           {t('pageAssignments')}
         </button>
+        <button type="button" aria-pressed={pageView === 'tasks'} onClick={() => setPageView('tasks')}>
+          {t('pageTasks')}
+        </button>
       </div>
       <div className="deadline-pane" hidden={pageView !== 'calendar'}>
         <TimetablePanel />
@@ -285,6 +291,11 @@ export function DeadlinesPage() {
         )}
         {data && <DeadlineViews data={data} />}
       </div>
+      {pageView === 'tasks' && (
+        <div className="deadline-pane">
+          <TasksPanel />
+        </div>
+      )}
       <details className="deadline-sources">
         <summary>{t('sourcesHeading')}</summary>
         <Panel title={t('enrollmentTitle')}>

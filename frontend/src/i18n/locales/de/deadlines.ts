@@ -162,6 +162,7 @@ export default {
   pageViewLabel: 'Terminbereich',
   pageCalendar: 'Kalender',
   pageAssignments: 'Abgaben',
+  pageTasks: 'Meine Aufgaben',
   nextDeadlineHeading: 'Nächste Frist',
   noUpcomingDeadline: 'Keine kommende Frist im aktuellen Bestand.',
   allAssignments: 'Alle Abgaben & Fristen',

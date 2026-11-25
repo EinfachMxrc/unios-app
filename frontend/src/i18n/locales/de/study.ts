@@ -95,7 +95,7 @@ export default {
   sessionBrand: 'UniOS · Karteikarten',
   integratedNotEnabledTitle: 'Integriertes Lernen ist nicht aktiviert',
   openFlashcardsLink: 'Karteikarten öffnen',
-  sessionEyebrow: 'LERNSESSION',
+  sessionEyebrow: 'Lernsession',
   sessionProgressText_one: '{{completed}} von {{total}} Karte bearbeitet',
   sessionProgressText_other: '{{completed}} von {{total}} Karten bearbeitet',
   noCardsDueText: 'Keine Karten fällig',

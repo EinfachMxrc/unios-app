@@ -2,6 +2,19 @@
 
 # Änderungen
 
+## 0.1.32 – Neues Design, neue Startseite und eigene Aufgaben (25.11.2026)
+
+- Neu: Komplett neues Design. Titelleiste mit Vor/Zurück, Seitenleiste direkt im Fenster mit Uli und dem heutigen Datum, Tabs und Seite in einem Panel, Schrift Inter, Petrol aus Uli als Markenfarbe und Orange für „jetzt“. Das bisherige globale Stylesheet ist gelöscht; nur die Raster einzelner Seiten wurden ohne alte Optik übernommen.
+
+- Neu: Eigene Aufgaben mit Status (offen, in Arbeit, erledigt), Termin, Kurs und Notizen unter Termine → Meine Aufgaben und auf der Startseite; Löschen geht über den Papierkorb mit „Rückgängig“, die Daten sind im Export enthalten. Neue Datenbankmigration `ffa1b7c3d9e4`.
+- Neu: Startseite mit Tagesbriefing in kurzen Sätzen, Reitern für Fristen und Aufgaben, fälligen Kartenstapeln, offenen Schnellnotizen und dem Tagesplan mit Jetzt-Linie.
+- Neu: Datumskarte mit den heutigen Terminen und Zähler für fällige Aufgaben und Karten in der Seitenleiste.
+- Neu: Die Befehlspalette zeigt „Anlegen“ (Notiz, Aufgabe) vor den Befehlen; Strg/⌘+Alt+N öffnet die Schnellerfassung von überall.
+- Neu: Die Notizseite bietet ohne geöffnete Seite „Weiterschreiben“ mit den zuletzt bearbeiteten Notizen.
+- Geändert: Feste Kursfarben als Marken in Listen, Karten und Tagesplan.
+- Geändert: Die Suche findet schon das angefangene letzte Wort („Übungs“ findet „Übungsblatt“).
+- Behoben: Abgegebene Fristen zählen in Sammlungen nicht mehr als überfällig; eine unlesbare Abgabeprüfung bricht keine Sammlung mehr ab.
+
 ## 0.1.31 – Notion-Tastatur und Markdown einfügen (20.10.2026)
 
 - Behoben: Eingefügter Markdown-Text (Überschriften, Formeln `$…$`/`$$…$$`, Tabellen, Bilder, Listen) wird beim Einfügen in Blöcke umgewandelt statt mit den Zeichen angezeigt; verschachtelte Listen und gespeicherte Bilder werden dabei erkannt.

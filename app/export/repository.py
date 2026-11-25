@@ -17,7 +17,7 @@ TABLES = {
     "note_versions": "note_versions", "materials": "resources", "material_versions": "resource_versions",
     "annotations": "material_annotations", "relationships": "links", "topics": "learning_topics",
     "exercises": "exercises", "exercise_attempts": "exercise_attempts", "projects": "projects",
-    "captures": "jots", "journal": "study_journal_days", "journal_courses": "study_journal_courses",
+    "captures": "jots", "tasks": "tasks", "journal": "study_journal_days", "journal_courses": "study_journal_courses",
     "card_proposals": "anki_card_queue", "card_links": "anki_cards", "card_reviews": "anki_reviews",
     "views": "smart_collections", "properties": "object_metadata", "calendar_events": "calendar_events", "calendar_series_rules": "calendar_series_rules",
     "grades": "grades", "mail": "mail_items", "inbox": "inbox_clips", "voice": "voice_memos",
