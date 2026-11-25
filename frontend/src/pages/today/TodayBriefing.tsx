@@ -75,13 +75,12 @@ export function TodayBriefing({
     <div className="today-summary" role="group" aria-label={t('currentOverviewLabel')}>
       {showDeadlines && (
         <Link to="/deadlines#tasks" className="today-stat" data-empty={dueTasks === 0 || undefined}>
-          <strong>{dueTasks}</strong>
-          <span>{t('statTasks', { count: dueTasks })}</span>
+          <strong>{dueTasks}</strong> <span>{t('statTasks', { count: dueTasks })}</span>
         </Link>
       )}
       {showDeadlines && (
         <Link to="/deadlines" className="today-stat" data-empty={upcomingCount === 0 || undefined}>
-          <strong>{upcomingCount}</strong>
+          <strong>{upcomingCount}</strong>{' '}
           <span>
             {t('statDeadlines', { count: upcomingCount })}
             {when && <small>{t('statNextDue', { when })}</small>}
@@ -90,14 +89,12 @@ export function TodayBriefing({
       )}
       {dueCards !== null && (
         <Link to="/study" className="today-stat" data-empty={dueCards === 0 || undefined}>
-          <strong>{dueCards}</strong>
-          <span>{t('statCards', { count: dueCards })}</span>
+          <strong>{dueCards}</strong> <span>{t('statCards', { count: dueCards })}</span>
         </Link>
       )}
       {newFiles > 0 && (
         <Link to="/activity?kind=new" className="today-stat" onClick={onSeenFiles}>
-          <strong>{newFiles}</strong>
-          <span>{t('newFiles', { count: newFiles })}</span>
+          <strong>{newFiles}</strong> <span>{t('newFiles', { count: newFiles })}</span>
         </Link>
       )}
     </div>
