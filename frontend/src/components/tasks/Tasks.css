@@ -1,0 +1,209 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+.tasks-panel {
+  display: grid;
+  gap: 18px;
+}
+.task-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 4px 6px 4px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+  background: var(--app-surface);
+  color: var(--app-muted);
+}
+.task-add:focus-within {
+  border-color: var(--ring);
+}
+.task-add-title {
+  flex: 1 1 180px;
+  min-width: 0;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--app-text);
+  font-size: 0.85rem;
+  outline: none;
+}
+.task-add input[type='date'],
+.task-add select {
+  height: 32px;
+  max-width: 100%;
+  padding: 0 8px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-control);
+  background: var(--app-surface-strong);
+  color: var(--app-text);
+  font-size: 0.76rem;
+}
+.task-group h3,
+.task-group summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 6px;
+  color: var(--app-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+.task-group summary {
+  cursor: pointer;
+}
+.task-group[data-group='overdue'] h3 {
+  color: var(--destructive);
+}
+.task-group h3 span,
+.task-group summary span {
+  font-weight: 450;
+}
+.task-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: var(--ui-row-height, 34px);
+  padding: 2px 6px 2px 2px;
+  border-radius: var(--ui-radius-control);
+}
+.task-row:hover {
+  background: var(--nav-hover);
+}
+.task-status {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.task-status > span {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--app-muted);
+  border-radius: 50%;
+}
+.task-row[data-status='doing'] .task-status > span {
+  border-color: var(--app-accent);
+  background: linear-gradient(90deg, transparent 50%, var(--app-accent) 50%);
+}
+.task-row[data-status='done'] .task-status > span {
+  border-color: var(--positive);
+  background: var(--positive);
+  color: var(--app-bg);
+}
+.task-status:disabled {
+  opacity: 0.5;
+}
+.task-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding-block: 6px;
+  color: var(--app-text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-row[data-status='done'] .task-title {
+  color: var(--app-muted);
+  text-decoration: line-through;
+}
+.task-due {
+  flex: none;
+  min-width: 48px;
+  color: var(--app-muted);
+  font-size: 0.74rem;
+  text-align: end;
+}
+.task-due.is-late {
+  color: var(--destructive);
+  font-weight: 600;
+}
+.task-error {
+  flex-basis: 100%;
+  color: var(--destructive);
+  font-size: 0.78rem;
+}
+.task-undo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.task-dialog {
+  width: min(520px, calc(100vw - 24px));
+}
+.task-dialog form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.task-field {
+  display: grid;
+  gap: 5px;
+  color: var(--app-muted);
+  font-size: 0.76rem;
+}
+.task-field-wide {
+  grid-column: 1 / -1;
+}
+.task-field :is(input, select, textarea) {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--input);
+  border-radius: var(--ui-radius-control);
+  background: var(--app-surface-strong);
+  color: var(--app-text);
+  font-size: 0.85rem;
+}
+.task-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.task-dialog-actions > :first-child {
+  margin-inline-end: auto;
+}
+@media (pointer: coarse) {
+  .task-status {
+    width: 44px;
+    height: 44px;
+  }
+  .task-row {
+    min-height: 44px;
+  }
+}
+@media (max-width: 480px) {
+  .task-row .course-chip {
+    display: none;
+  }
+}
+
+/* ---- Tasks: the status ring in petrol ---- */
+.task-row[data-status='doing'] .task-status > span {
+  border-color: var(--app-accent);
+  background: linear-gradient(90deg, transparent 50%, var(--app-accent) 50%);
+}
+.task-add {
+  border-style: dashed;
+  background: transparent;
+}
+.task-add:focus-within {
+  border-style: solid;
+  background: var(--app-bg);
+}

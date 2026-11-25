@@ -152,6 +152,9 @@ from app.setup.api import setup_router
 from app.submissions.api import submission_router
 from app.sync.engine import SyncEngine
 from app.sync.scheduler import SyncScheduler
+from app.tasks.api import tasks_router
+from app.tasks.repository import TaskRepository
+from app.tasks.service import TaskService
 from app.trash.api import trash_router
 from app.voice.api import voice_router
 from app.web.api import make_api_router
@@ -319,6 +322,7 @@ def create_app(settings: Settings | None = None, connectors=None, start_schedule
     app.include_router(entities_router(factory, entity_actions))
     app.include_router(journal_router(settings, factory, coordinator))
     app.include_router(trash_router(settings, factory, coordinator))
+    app.include_router(tasks_router(TaskService(TaskRepository(factory)), coordinator))
     app.include_router(backup_router(settings, coordinator))
     app.include_router(inbox_router(settings, factory, coordinator))
     app.include_router(intake_router(IntakeService(IntakeRepository(factory, settings)), coordinator))

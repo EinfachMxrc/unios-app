@@ -11,6 +11,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from app.config import Settings
+from app.db.models import Jot, Note, Task
 from app.host.lease import HostCoordinator
 from app.notes.store import NoteCorrupt, NoteMissing
 from app.trash import service
@@ -20,7 +21,7 @@ log = logging.getLogger(__name__)
 
 
 class TrashItemView(BaseModel):
-    kind: Literal["note", "jot"]
+    kind: Literal["note", "jot", "task"]
     id: str
     title: str
     course_id: int | None
@@ -33,7 +34,7 @@ class TrashView(BaseModel):
 
 
 class TrashedView(BaseModel):
-    kind: Literal["note", "jot"]
+    kind: Literal["note", "jot", "task"]
     id: str
     deleted_at: datetime | None
 
@@ -77,13 +78,28 @@ def trash_router(settings: Settings, factory, coordinator: HostCoordinator) -> A
                 raise HTTPException(404, str(exc)) from None
             return {"kind": "jot", "id": jot.id, "deleted_at": jot.deleted_at}
 
-    @router.post("/trash/{kind}/{item_id}/restore", response_model=TrashedView)
-    def restore(kind: Literal["note", "jot"], item_id: str):
+    @router.post("/tasks/{task_id}/trash", response_model=TrashedView)
+    def trash_task(task_id: str):
         coordinator.assert_writer()
         with factory() as session:
             try:
-                item = (service.restore_note(session, settings, _uuid(item_id)) if kind == "note"
-                        else service.restore_jot(session, _uuid(item_id)))
+                task = service.trash_task(session, _uuid(task_id))
+            except TrashMissing as exc:
+                raise HTTPException(404, str(exc)) from None
+            return {"kind": "task", "id": task.id, "deleted_at": task.deleted_at}
+
+    @router.post("/trash/{kind}/{item_id}/restore", response_model=TrashedView)
+    def restore(kind: Literal["note", "jot", "task"], item_id: str):
+        coordinator.assert_writer()
+        with factory() as session:
+            try:
+                item: Note | Jot | Task
+                if kind == "note":
+                    item = service.restore_note(session, settings, _uuid(item_id))
+                elif kind == "task":
+                    item = service.restore_task(session, _uuid(item_id))
+                else:
+                    item = service.restore_jot(session, _uuid(item_id))
             except TrashMissing as exc:
                 raise HTTPException(404, str(exc)) from None
             except NoteCorrupt as exc:
@@ -91,12 +107,14 @@ def trash_router(settings: Settings, factory, coordinator: HostCoordinator) -> A
             return {"kind": kind, "id": item.id, "deleted_at": item.deleted_at}
 
     @router.delete("/trash/{kind}/{item_id}", status_code=204)
-    def erase(kind: Literal["note", "jot"], item_id: str):
+    def erase(kind: Literal["note", "jot", "task"], item_id: str):
         coordinator.assert_writer()
         with factory() as session:
             try:
                 if kind == "note":
                     service.erase_note(session, settings, _uuid(item_id))
+                elif kind == "task":
+                    service.erase_task(session, _uuid(item_id))
                 else:
                     service.erase_jot(session, _uuid(item_id))
             except TrashMissing as exc:

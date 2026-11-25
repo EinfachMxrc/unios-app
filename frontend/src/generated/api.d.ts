@@ -5712,6 +5712,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Tasks */
+        get: operations["list_tasks_api_tasks_get"];
+        put?: never;
+        /** Create Task */
+        post: operations["create_task_api_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Change Task */
+        patch: operations["change_task_api_tasks__task_id__patch"];
+        trace?: never;
+    };
+    "/api/tasks/{task_id}/trash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Trash Task */
+        post: operations["trash_task_api_tasks__task_id__trash_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/timetable/changes/{identifier}/undo": {
         parameters: {
             query?: never;
@@ -12621,6 +12673,79 @@ export interface components {
             snapshot: components["schemas"]["SnapshotHealthView"];
             sync_continuity: components["schemas"]["SyncContinuityView"];
         };
+        /** TaskChange */
+        TaskChange: {
+            /** Course Id */
+            course_id?: number | null;
+            /** Due On */
+            due_on?: string | null;
+            /** Expected Revision */
+            expected_revision: number;
+            /** Notes */
+            notes?: string | null;
+            /** Status */
+            status?: ("open" | "doing" | "done") | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** TaskInput */
+        TaskInput: {
+            /** Course Id */
+            course_id?: number | null;
+            /** Due On */
+            due_on?: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /** Title */
+            title: string;
+        };
+        /** TaskView */
+        TaskView: {
+            /** Completed At */
+            completed_at: string | null;
+            /** Course Id */
+            course_id: number | null;
+            /** Course Name */
+            course_name: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Due On */
+            due_on: string | null;
+            /** Id */
+            id: string;
+            /** Notes */
+            notes: string;
+            /** Revision */
+            revision: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "doing" | "done";
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** TasksView */
+        TasksView: {
+            /** Tasks */
+            tasks: components["schemas"]["TaskView"][];
+        };
         /** TimetableEvent */
         TimetableEvent: {
             /**
@@ -12770,7 +12895,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "note" | "jot";
+            kind: "note" | "jot" | "task";
             /** Title */
             title: string;
         };
@@ -12789,7 +12914,7 @@ export interface components {
              * Kind
              * @enum {string}
              */
-            kind: "note" | "jot";
+            kind: "note" | "jot" | "task";
         };
         /** UniversityProfileView */
         UniversityProfileView: {
@@ -23911,6 +24036,125 @@ export interface operations {
             };
         };
     };
+    list_tasks_api_tasks_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TasksView"];
+                };
+            };
+        };
+    };
+    create_task_api_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_task_api_tasks__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskChange"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    trash_task_api_tasks__task_id__trash_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrashedView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     undo_change_api_timetable_changes__identifier__undo_post: {
         parameters: {
             query?: never;
@@ -24302,7 +24546,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                kind: "note" | "jot";
+                kind: "note" | "jot" | "task";
                 item_id: string;
             };
             cookie?: never;
@@ -24332,7 +24576,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                kind: "note" | "jot";
+                kind: "note" | "jot" | "task";
                 item_id: string;
             };
             cookie?: never;

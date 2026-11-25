@@ -3,7 +3,7 @@
 import { request } from '@/api'
 import { queryClient } from '@/offlineCache'
 
-export type TrashKind = 'note' | 'jot'
+export type TrashKind = 'note' | 'jot' | 'task'
 export type TrashItem = {
   kind: TrashKind
   id: string
@@ -14,7 +14,16 @@ export type TrashItem = {
 }
 
 /** Every cached list that may show a note or a quick note, refreshed after the trash changes. */
-const AFFECTED = ['/api/notes', '/api/jots', '/api/search', '/api/trash', '/api/links', '/api/courses', '/api/overview']
+const AFFECTED = [
+  '/api/notes',
+  '/api/jots',
+  '/api/search',
+  '/api/trash',
+  '/api/links',
+  '/api/courses',
+  '/api/overview',
+  '/api/tasks',
+]
 
 export function refreshAfterTrash() {
   return queryClient.invalidateQueries({
@@ -26,7 +35,7 @@ export function refreshAfterTrash() {
 }
 
 export async function moveToTrash(kind: TrashKind, id: string) {
-  await request(`/api/${kind === 'note' ? 'notes' : 'jots'}/${encodeURIComponent(id)}/trash`, { method: 'POST' })
+  await request(`/api/${kind}s/${encodeURIComponent(id)}/trash`, { method: 'POST' })
   void refreshAfterTrash()
 }
 

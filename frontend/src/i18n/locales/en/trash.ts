@@ -2,12 +2,13 @@
 
 export default {
   pageTitle: 'Trash',
-  pageEyebrow: 'Deleted notes and quick notes',
+  pageEyebrow: 'Deleted notes, quick notes and tasks',
   intro: 'Deleted items stay here until you restore them or delete them for good.',
   emptyTitle: 'The trash is empty',
-  emptyText: 'Deleted notes and quick notes end up here and can be restored.',
+  emptyText: 'Deleted notes, quick notes and tasks end up here and can be restored.',
   kindNote: 'Note',
   kindJot: 'Quick note',
+  kindTask: 'Task',
   deletedOn: 'deleted {{date}}',
   noCourse: 'No course',
   restore: 'Restore',

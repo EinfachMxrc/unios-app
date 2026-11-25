@@ -2,12 +2,13 @@
 
 export default {
   pageTitle: 'Papierkorb',
-  pageEyebrow: 'Gelöschte Notizen und Schnellnotizen',
+  pageEyebrow: 'Gelöschte Notizen, Schnellnotizen und Aufgaben',
   intro: 'Gelöschtes bleibt hier, bis du es wiederherstellst oder endgültig löschst.',
   emptyTitle: 'Der Papierkorb ist leer',
-  emptyText: 'Gelöschte Notizen und Schnellnotizen landen hier und lassen sich wiederherstellen.',
+  emptyText: 'Gelöschte Notizen, Schnellnotizen und Aufgaben landen hier und lassen sich wiederherstellen.',
   kindNote: 'Notiz',
   kindJot: 'Schnellnotiz',
+  kindTask: 'Aufgabe',
   deletedOn: 'gelöscht {{date}}',
   noCourse: 'Ohne Kurs',
   restore: 'Wiederherstellen',

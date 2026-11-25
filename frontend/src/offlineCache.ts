@@ -108,7 +108,7 @@ export function mayCache(path: string): boolean {
   if (/^\/api\/(?:notes\/link-targets|entities\/note)(?:\?|$)/.test(path)) return true
   const focus = /^\/api\/learning\/focus\/(?:block|cycle)\/([1-9]\d{0,15})$/.exec(path)
   if (focus) return Number.isSafeInteger(Number(focus[1]))
-  return /^\/api\/(overview|courses(?:\/\d+(?:\/material)?)?|material\/\d+|learning\/questions|anki\/study\/(?:status|due|stats)|deadlines|activity|search|notes(?:\/[0-9a-f-]+)?|jots)(?:\?|$)/.test(
+  return /^\/api\/(overview|courses(?:\/\d+(?:\/material)?)?|material\/\d+|learning\/questions|anki\/study\/(?:status|due|stats)|deadlines|tasks|activity|search|notes(?:\/[0-9a-f-]+)?|jots)(?:\?|$)/.test(
     path,
   )
 }

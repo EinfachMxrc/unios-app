@@ -210,6 +210,24 @@ class Jot(Base):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
 
 
+class Task(Base):
+    """Something the student writes down themselves; university assignments stay separate."""
+
+    __tablename__ = "tasks"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    title: Mapped[str] = mapped_column(String(300))
+    notes: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(String(10), default="open", index=True)
+    due_on: Mapped[date | None] = mapped_column(Date)
+    course_id: Mapped[int | None] = mapped_column(ForeignKey("courses.id"), index=True)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Set while the task sits in the trash; queries hide it (app.db.trash).
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+
+
 class StudyJournalDay(Base):
     __tablename__ = "study_journal_days"
     day: Mapped[date] = mapped_column(Date, primary_key=True)

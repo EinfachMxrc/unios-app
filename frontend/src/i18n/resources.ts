@@ -80,6 +80,7 @@ import studyWorkspace from './locales/de/studyWorkspace'
 import reviewUndo from './locales/de/reviewUndo'
 import ownTaskSupport from './locales/de/ownTaskSupport'
 import examImpact from './locales/de/examImpact'
+import tasks from './locales/de/tasks'
 
 export const deResources = {
   lectureCoverage,
@@ -156,6 +157,7 @@ export const deResources = {
   addons,
   feedback,
   campus,
+  tasks,
 } as const
 
 export type Namespace = keyof typeof deResources

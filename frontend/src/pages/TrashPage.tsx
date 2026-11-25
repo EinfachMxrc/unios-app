@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { useState } from 'react'
-import { NotebookPen, RotateCcw, StickyNote, Trash2 } from 'lucide-react'
+import { ListChecks, NotebookPen, RotateCcw, StickyNote, Trash2 } from 'lucide-react'
 import { localDate, useApi } from '@/api'
 import { ActionFeedback } from '@/components/ActionFeedback'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
@@ -16,7 +16,7 @@ import './TrashPage.css'
 
 type Pending = { kind: 'erase'; item: TrashItem } | { kind: 'empty' } | null
 
-/** Deleted notes and quick notes: bring them back, or erase them after one confirmation. */
+/** Deleted notes, quick notes and tasks: bring them back, or erase them after one confirmation. */
 export function TrashPage() {
   const { t } = useT('trash')
   const canWrite = useWritableHost()
@@ -81,15 +81,15 @@ export function TrashPage() {
       ) : (
         <ul className="trash-list">
           {items.map((item) => {
-            const Icon = item.kind === 'note' ? NotebookPen : StickyNote
+            const Icon = item.kind === 'note' ? NotebookPen : item.kind === 'task' ? ListChecks : StickyNote
             return (
               <li key={`${item.kind}-${item.id}`} className="trash-row">
                 <Icon size={18} aria-hidden="true" className="trash-row-icon" />
                 <div className="trash-row-text">
                   <strong>{item.title}</strong>
                   <small>
-                    {item.kind === 'note' ? t('kindNote') : t('kindJot')} · {item.course_name ?? t('noCourse')} ·{' '}
-                    {t('deletedOn', { date: localDate(item.deleted_at) })}
+                    {item.kind === 'note' ? t('kindNote') : item.kind === 'task' ? t('kindTask') : t('kindJot')} ·{' '}
+                    {item.course_name ?? t('noCourse')} · {t('deletedOn', { date: localDate(item.deleted_at) })}
                   </small>
                 </div>
                 <div className="trash-row-actions">
