@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useT } from '@/i18n/useT'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import type { Jot } from '@/types'
 import { useWorkspaceState, workspaceValue } from '@/lib/workspaceState'
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
 
-export function JotCapture({ compact = false }: { compact?: boolean }) {
+export function JotCapture({ compact = false, autoFocus = false }: { compact?: boolean; autoFocus?: boolean }) {
   const { t } = useT('jots')
   const host = useContext(HostContext)
   const online = useHostOnline()
@@ -22,6 +22,12 @@ export function JotCapture({ compact = false }: { compact?: boolean }) {
   const [message, setMessage] = useState('')
   const [failed, setFailed] = useState(false)
   const canCapture = !online || host?.mode === 'host'
+  const field = useRef<HTMLTextAreaElement>(null)
+  const disabled = busy || !canCapture
+  // The field is disabled until the host is known, so focus it once it can take text.
+  useEffect(() => {
+    if (autoFocus && !disabled) field.current?.focus()
+  }, [autoFocus, disabled])
 
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -59,12 +65,19 @@ export function JotCapture({ compact = false }: { compact?: boolean }) {
           <option value="todo">{t('kindTodo')}</option>
         </select>
         <textarea
+          ref={field}
           aria-label={t('captureBodyAria')}
           className="jot-textarea"
           value={body}
           onChange={(event) => {
             setMessage('')
             setBody(event.target.value)
+          }}
+          onKeyDown={(event) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+              event.preventDefault()
+              event.currentTarget.form?.requestSubmit()
+            }
           }}
           maxLength={10_000}
           placeholder={t('capturePlaceholder')}

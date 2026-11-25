@@ -56,7 +56,7 @@ export default {
 
   pageTitle: 'Learning',
   pageEyebrow: 'Exercises and questions from your materials',
-  nextStepKicker: 'YOUR NEXT STEP',
+  nextStepKicker: 'Your next step',
   nextStepCardsWaiting_one: '{{count}} planned for study today',
   nextStepCardsWaiting_other: '{{count}} planned for study today',
   nextStepToday: 'Today: {{topic}}',

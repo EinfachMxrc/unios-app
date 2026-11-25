@@ -25,4 +25,9 @@ export default {
   resetDone: 'Standard wiederhergestellt.',
   deviceOnly: 'Änderungen werden sofort auf diesem Gerät gespeichert.',
   done: 'Fertig',
+  dayLine: '{{date}} · KW {{week}}',
+  daySessions_one: '{{count}} Termin heute',
+  daySessions_other: '{{count}} Termine heute',
+  badge: '{{count}} offen',
+  dayNoTimetable: 'Stundenplan verbinden',
 }

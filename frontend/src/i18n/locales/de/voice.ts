@@ -23,7 +23,7 @@ export default {
   openCaptureLink: 'Schnellnotizen öffnen',
   openDetectedTaskLink: 'Erkannte Aufgabe öffnen',
   pageTitle: 'Sprachnotizen',
-  introKicker: 'SPRACHE FESTHALTEN',
+  introKicker: 'Sprache festhalten',
   introTitle: 'Ein Gedanke, bevor er weg ist.',
   introText:
     'Nimm ein kurzes eigenes Memo auf. Audio bleibt bei UniOS; prüfe und bearbeite den Text vor dem Speichern.',

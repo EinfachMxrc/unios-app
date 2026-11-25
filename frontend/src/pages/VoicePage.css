@@ -8,7 +8,7 @@
   color: var(--app-muted);
   font-size: 0.71rem;
   font-weight: 680;
-  letter-spacing: 0.09em;
+  letter-spacing: 0;
 }
 .voice-intro h2 {
   margin: 7px 0;

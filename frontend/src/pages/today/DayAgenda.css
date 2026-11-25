@@ -1,0 +1,178 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+@import '../../components/CourseChip.css';
+
+.agenda {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay);
+  background: var(--app-surface);
+  box-shadow: var(--ui-panel-shadow);
+}
+.agenda > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 10px 14px;
+  border-bottom: 1px solid var(--app-border);
+}
+.agenda > header h3 {
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+.agenda > header a {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-muted);
+}
+.agenda > header a:hover {
+  background: var(--nav-hover);
+  color: var(--app-text);
+}
+.agenda-warning {
+  padding: 8px 14px;
+  color: var(--caution);
+  font-size: 0.74rem;
+}
+.agenda-grid {
+  position: relative;
+  margin: 10px 10px 14px 0;
+}
+.agenda-hour {
+  position: absolute;
+  right: 0;
+  left: 52px;
+  border-top: 1px solid var(--app-border);
+}
+.agenda-hour span {
+  position: absolute;
+  top: -8px;
+  right: calc(100% + 8px);
+  color: var(--app-muted);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+}
+.agenda-grid ol {
+  position: absolute;
+  inset: 0 0 0 54px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.agenda-grid li {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 4px 8px;
+  border: 1px solid color-mix(in srgb, var(--course-hue) 65%, transparent);
+  border-radius: var(--ui-radius-item);
+  background: color-mix(in srgb, var(--course-hue) 16%, var(--app-surface));
+  line-height: 1.35;
+}
+.agenda-grid li[data-state='past'] {
+  opacity: 0.55;
+}
+.agenda-grid li[data-state='current'] {
+  border-width: 2px;
+}
+.agenda-grid li strong {
+  overflow: hidden;
+  font-size: 0.74rem;
+  font-weight: 620;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agenda-grid li span {
+  color: var(--app-muted);
+  font-size: 0.68rem;
+}
+.agenda-grid li em {
+  color: var(--app-accent);
+  font-size: 0.66rem;
+  font-style: normal;
+  font-weight: 700;
+}
+.agenda-grid li[data-short] {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.agenda-now {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  left: 52px;
+  border-top: 2px solid var(--destructive);
+  pointer-events: none;
+}
+.agenda-now span {
+  position: absolute;
+  top: -10px;
+  right: calc(100% + 3px);
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--destructive);
+  color: var(--app-bg);
+  font-size: 0.64rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.timetable-summary-empty.agenda-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-overlay);
+  background: var(--app-surface);
+}
+.agenda-empty > svg {
+  flex: none;
+  color: var(--app-muted);
+}
+.agenda-empty h2 {
+  font-size: 0.85rem;
+  font-weight: 620;
+}
+.agenda-empty p {
+  color: var(--app-muted);
+  font-size: 0.74rem;
+}
+.agenda-empty a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 0.74rem;
+}
+
+/* ---- The day column: "now" in Uli's orange ---- */
+.agenda {
+  border-radius: var(--ui-radius-overlay);
+  box-shadow: var(--ui-panel-shadow);
+}
+.agenda-now {
+  border-top-color: var(--warm);
+}
+.agenda-now span {
+  background: var(--warm);
+  color: #1d1307;
+}
+.agenda-grid li {
+  border-width: 0 0 0 3px;
+  border-color: var(--course-hue);
+  border-radius: 4px var(--ui-radius-item) var(--ui-radius-item) 4px;
+  background: color-mix(in srgb, var(--course-hue) 12%, var(--app-bg));
+}
+.agenda-grid li[data-state='current'] {
+  border-width: 0 0 0 3px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--warm) 60%, transparent);
+}
+.agenda-grid li em {
+  color: var(--warm);
+}

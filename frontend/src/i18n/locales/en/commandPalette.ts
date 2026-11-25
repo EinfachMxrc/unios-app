@@ -5,6 +5,8 @@ export default {
   clearRecent: 'Clear history',
   navigationText: 'Open a section',
   newNote: 'New note',
+  createLabel: 'Create',
+  newTask: 'New task',
   dueCards: 'Today’s cards',
   openQuestions: 'Open questions',
   entityActions: 'Entity actions',
@@ -23,6 +25,8 @@ export default {
 
   shortcutHintMac: '⌘ K',
   shortcutHintOther: 'Ctrl K',
+  captureShortcutMac: '⌥⌘ N',
+  captureShortcutOther: 'Ctrl Alt N',
   openButtonLabel: 'Open command palette',
   openButtonTitle: 'Command palette (⌘K / Ctrl+K)',
   triggerText: 'Search courses and files',

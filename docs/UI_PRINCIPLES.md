@@ -15,7 +15,7 @@ UniOS führt Studierende von einer konkreten Handlung zur Quelle. Die Oberfläch
 
 ## Gestaltung
 
-- Die Farben, Abstände und Oberflächen stehen in [`design/design-tokens.json`](design/design-tokens.json) und [`frontend/src/styles/theme-tokens.css`](../frontend/src/styles/theme-tokens.css). [`application.css`](../frontend/src/styles/application.css) legt die aktiven CSS-Schichten fest; [`workspace-layout.css`](../frontend/src/styles/workspace-layout.css) enthält gemeinsame Layoutregeln.
+- Die Farben, Abstände und Oberflächen stehen in [`design/design-tokens.json`](design/design-tokens.json) und [`frontend/src/styles/tokens.css`](../frontend/src/styles/tokens.css). [`application.css`](../frontend/src/styles/application.css) legt die aktiven CSS-Schichten fest; [`shell.css`](../frontend/src/styles/shell.css) und [`components.css`](../frontend/src/styles/components.css) enthalten Rahmen und gemeinsame Bausteine.
 - Pro Ansicht gibt es eine dominante nächste Handlung. Weitere Aktionen stehen in einem benannten Menü oder Detailbereich.
 - Überschrift, Abschnitt, Zeile, Metadaten und Status benutzen eine konsistente Textskala. Große leere Karten vermeiden.
 - Die Hauptwege funktionieren bei 390 Pixeln ohne horizontales Scrollen. Tastaturfokus und Fehlermeldungen bleiben sichtbar.

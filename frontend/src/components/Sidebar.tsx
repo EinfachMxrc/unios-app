@@ -2,9 +2,9 @@
 import { useSidebarScroll } from '@/hooks/useSidebarScroll'
 import { courseName } from '@/lib/courseNames'
 
-import './Sidebar.css'
 
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import type { ReactNode } from 'react'
 import {
   BookOpen,
   ChevronDown,
@@ -38,11 +38,24 @@ type Props = {
   sidebarCourses: CoursesResponse['courses']
   activeId?: string
   compact?: boolean
+  header?: ReactNode
+  badges?: Record<string, string>
 }
-export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activeId, compact = false }: Props) {
+export function Sidebar({
+  state,
+  layout,
+  catalog,
+  courses,
+  sidebarCourses,
+  activeId,
+  compact = false,
+  header,
+  badges,
+}: Props) {
   const { sidebarWidth, collapsedSections, openCourse, toggleSidebar, toggleSection, toggleCourse, resizeSidebar } =
     state
   const { t } = useT('shell')
+  const { t: side } = useT('sidebar')
   const { t: palette } = useT('commandPalette')
   const preferences = usePreferences()
   const location = useLocation()
@@ -85,6 +98,7 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
         </button>
       </div>
       <nav {...scroll} aria-label={t('mainNavigation')} className="app-nav" style={{ overflowAnchor: 'none' }}>
+        {header}
         {hasNavigation && (
           <div className="sidebar-tools">
             <button
@@ -122,6 +136,7 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
                     key={id}
                     to={to}
                     aria-label={label}
+                    aria-describedby={badges?.[id] ? `nav-badge-${id}` : undefined}
                     title={compact ? label : undefined}
                     className={`nav-item ${activeId === id && !(id === 'courses' && layout.showCourses && sidebarCourses.some((course) => location.pathname === `/courses/${course.id}`)) ? 'active' : ''}`}
                     aria-current={
@@ -137,6 +152,16 @@ export function Sidebar({ state, layout, catalog, courses, sidebarCourses, activ
                   >
                     <Icon size={16} strokeWidth={1.8} aria-hidden="true" />
                     <span>{label}</span>
+                    {badges?.[id] && (
+                      <span className="nav-badge" aria-hidden="true">
+                        {badges[id]}
+                      </span>
+                    )}
+                    {badges?.[id] && (
+                      <span id={`nav-badge-${id}`} className="sr-only">
+                        {side('badge', { count: badges[id] })}
+                      </span>
+                    )}
                     <span className="sidebar-action-slot" aria-hidden="true" />
                   </Link>
                 ))}

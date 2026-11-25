@@ -24,4 +24,9 @@ export default {
   resetDone: 'Defaults restored.',
   deviceOnly: 'Changes are saved immediately on this device.',
   done: 'Done',
+  dayLine: '{{date}} · week {{week}}',
+  daySessions_one: '{{count}} appointment today',
+  daySessions_other: '{{count}} appointments today',
+  badge: '{{count}} waiting',
+  dayNoTimetable: 'Connect timetable',
 }

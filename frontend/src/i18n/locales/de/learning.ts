@@ -57,7 +57,7 @@ export default {
   tabFlashcards: 'Karteikarten',
   pageTitle: 'Lernen',
   pageEyebrow: 'Übungen und Fragen aus deinen Unterlagen',
-  nextStepKicker: 'DEIN NÄCHSTER SCHRITT',
+  nextStepKicker: 'Dein nächster Schritt',
   nextStepCardsWaiting_one: '{{count}} heute zum Lernen geplant',
   nextStepCardsWaiting_other: '{{count}} heute zum Lernen geplant',
   nextStepToday: 'Heute: {{topic}}',

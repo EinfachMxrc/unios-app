@@ -2,7 +2,19 @@
 
 import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowDownToLine, ArrowRight, ChevronRight, Clock3, FileText } from 'lucide-react'
+import {
+  ArrowDownToLine,
+  ArrowRight,
+  ChevronRight,
+  Clock3,
+  File,
+  FileCode2,
+  FileSpreadsheet,
+  FileText,
+  Image,
+  Link2,
+  Presentation,
+} from 'lucide-react'
 import { localDate } from '@/api'
 import { ListRows } from '@/components/State'
 import { ResourceHistory } from '@/components/ResourceHistory'
@@ -11,6 +23,24 @@ import { hasPdfView, openHref, opensAsDocument } from '@/lib/materialView'
 import type { Assignment, CourseDetail } from '@/types'
 
 type Resource = CourseDetail['resources'][number]
+
+const FILE_KINDS = [
+  ['pdf', /\.pdf$/i, FileText],
+  ['slides', /\.(pptx?|key|odp)$/i, Presentation],
+  ['sheet', /\.(xlsx?|csv|ods)$/i, FileSpreadsheet],
+  ['doc', /\.(docx?|odt|rtf|md|txt)$/i, FileText],
+  ['code', /\.(py|java|c|cpp|h|js|ts|ipynb|zip)$/i, FileCode2],
+  ['image', /\.(png|jpe?g|gif|svg|webp)$/i, Image],
+] as const
+
+/** What a row shows as its icon: links and known file types get their own shape and colour. */
+export function fileKind(resource: Pick<Resource, 'kind' | 'name' | 'filename'>, mimeType?: string | null) {
+  if (resource.kind === 'link') return { kind: 'link', Icon: Link2 } as const
+  const name = resource.filename ?? resource.name
+  const byMime = mimeType === 'application/pdf' ? 'x.pdf' : mimeType?.startsWith('image/') ? 'x.png' : ''
+  const match = FILE_KINDS.find(([, pattern]) => pattern.test(name) || pattern.test(byMime))
+  return match ? ({ kind: match[0], Icon: match[2] } as const) : ({ kind: 'file', Icon: File } as const)
+}
 
 /** Section names by id, built once per course instead of searched per row. */
 export function useSectionNames(detail: CourseDetail) {
@@ -66,6 +96,7 @@ export function CourseResourceList({
         // The first version the app can show decides where the title leads.
         const opener =
           versions.map((version) => openHref(version.id, fileName, version.mime_type)).find(Boolean) ?? null
+        const { kind, Icon } = fileKind(resource, versions[0]?.mime_type)
         return (
           <div
             className={`resource-row anchor-target ${hash === `#resource-${resource.id}` ? 'is-target' : ''}`}
@@ -73,8 +104,8 @@ export function CourseResourceList({
             tabIndex={-1}
             key={resource.id}
           >
-            <span className="file-symbol">
-              <FileText size={18} />
+            <span className="file-symbol" data-kind={kind}>
+              <Icon size={17} />
             </span>
             <div>
               {opener ? (

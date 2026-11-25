@@ -76,7 +76,7 @@ test('switching to English updates shell, Today, and Settings, and persists acro
   await expect(page.getByRole('heading', { name: 'Learning', exact: true })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Overview & exercises' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Flashcards', exact: true })).toBeVisible()
-  await expect(page.getByText('YOUR NEXT STEP', { exact: true })).toBeVisible()
+  await expect(page.getByText('Your next step', { exact: true })).toBeVisible()
 
   // Inbox page.
   await page.goto('/inbox')

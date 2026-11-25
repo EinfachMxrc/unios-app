@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import './TopbarLayout.css'
-
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { ChevronRight, MoreHorizontal, PanelLeftOpen } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ChevronRight, MoreHorizontal, PanelLeftOpen } from 'lucide-react'
 import { useT } from '@/i18n/useT'
 import { areaForPath, sidebarCatalog } from '@/components/sidebarCatalog'
 import { usePreferences } from '@/preferences'
@@ -32,6 +30,9 @@ export function Topbar({
   const { t: more } = useT('more')
   const preferences = usePreferences()
   const location = useLocation()
+  const navigate = useNavigate()
+  // React Router numbers entries in this tab; the first one has nowhere to go back to.
+  const canGoBack = typeof window !== 'undefined' && (window.history.state?.idx ?? 0) > 0
   const owner = areaForPath(location.pathname)
   const parent = sidebarCatalog(preferences, nav, t, more).find((area) => area.id === owner?.parent)
   const trail = breadcrumbs ?? [...(parent ? [{ label: parent.label, to: parent.to }] : []), { label: title }]
@@ -49,6 +50,25 @@ export function Topbar({
             <PanelLeftOpen size={18} />
           </button>
         )}
+        <button
+          type="button"
+          className="topbar-history"
+          aria-label={t('historyBack')}
+          title={t('historyBack')}
+          disabled={!canGoBack}
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft size={16} />
+        </button>
+        <button
+          type="button"
+          className="topbar-history"
+          aria-label={t('historyForward')}
+          title={t('historyForward')}
+          onClick={() => navigate(1)}
+        >
+          <ArrowRight size={16} />
+        </button>
         <ol>
           {trail.map((crumb, index) => (
             <li key={`${index}:${crumb.label}`}>

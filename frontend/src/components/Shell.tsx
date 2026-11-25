@@ -9,6 +9,7 @@ import { ShieldCheck } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Sidebar } from '@/components/Sidebar'
+import { SidebarDayCard, useSidebarBadges } from '@/components/SidebarStatus'
 import { Topbar, type Breadcrumb } from '@/components/Topbar'
 import { useSidebarState } from '@/hooks/useSidebarState'
 import { useStudyKeyboard } from '@/hooks/keyboard'
@@ -22,7 +23,6 @@ import type { CoursesResponse } from '@/types'
 import { recordPage } from '@/lib/usageMetrics'
 import { nameWorkspaceTab } from '@/lib/workspaceTabs'
 import { WorkspaceTabs } from './WorkspaceTabs'
-import './PageHeader.css'
 export function Shell({
   children,
   title,
@@ -31,6 +31,7 @@ export function Shell({
   compactNavigation = false,
   actions,
   description,
+  headingHue,
 }: {
   children: ReactNode
   title: string
@@ -40,6 +41,8 @@ export function Shell({
   compactNavigation?: boolean
   actions?: ReactNode
   description?: string
+  /** Course colour index: the page head becomes the course's banner. */
+  headingHue?: number
 }) {
   useStudyKeyboard()
   const sidebar = useSidebarState()
@@ -88,6 +91,7 @@ export function Shell({
   const sidebarCourses = (courseData?.courses ?? [])
     .filter((course) => !layout.hiddenCourses.includes(course.id))
     .sort((a, b) => courseRank(a.id) - courseRank(b.id))
+  const badges = useSidebarBadges(preferences.modules)
   const host = useContext(HostContext)
   const online = useHostOnline()
   const focusControl = focusAvailable && (
@@ -112,6 +116,8 @@ export function Shell({
         courses={courseData?.courses}
         sidebarCourses={sidebarCourses}
         activeId={activeId}
+        header={<SidebarDayCard enabled={preferences.modules.deadlines} />}
+        badges={badges}
       />
       <div className="app-main">
         <Topbar
@@ -121,63 +127,68 @@ export function Shell({
           toggleSidebar={toggleNavigation}
           workspaceAction={compactNavigation && !focusMode ? focusControl : undefined}
         />
-        <WorkspaceTabs />
-        <main
-          id="main-content"
-          data-workspace-key={location.key}
-          tabIndex={-1}
-          className={`content ${location.pathname.startsWith('/courses/') ? 'course-page' : ''}`}
-        >
-          <header className={`page-heading ${compactNavigation && !focusMode ? 'reader-workspace-heading' : ''}`}>
-            <div className="page-heading-copy">
-              <h1 className={compactNavigation && !focusMode ? 'sr-only' : undefined}>{title}</h1>
-              {description && <p className="page-description">{description}</p>}
-            </div>
-            {(actions || ((!compactNavigation || focusMode) && focusControl)) && (
-              <div className="page-heading-actions">
-                {actions}
-                {(!compactNavigation || focusMode) && focusControl}
+        <div className="workspace-panel">
+          <WorkspaceTabs />
+          <main
+            id="main-content"
+            data-workspace-key={location.key}
+            tabIndex={-1}
+            className={`content ${location.pathname.startsWith('/courses/') ? 'course-page' : ''}`}
+          >
+            <header
+              className={`page-heading ${compactNavigation && !focusMode ? 'reader-workspace-heading' : ''} ${headingHue !== undefined ? 'page-heading-banner' : ''}`}
+              data-hue={headingHue}
+            >
+              <div className="page-heading-copy">
+                <h1 className={compactNavigation && !focusMode ? 'sr-only' : undefined}>{title}</h1>
+                {description && <p className="page-description">{description}</p>}
+              </div>
+              {(actions || ((!compactNavigation || focusMode) && focusControl)) && (
+                <div className="page-heading-actions">
+                  {actions}
+                  {(!compactNavigation || focusMode) && focusControl}
+                </div>
+              )}
+            </header>
+            {!online && (
+              <Alert role="status" className="notice mb-5">
+                <AlertTitle>
+                  {t('offlineTitle', {
+                    date: cachedAt ? localDate(new Date(cachedAt).toISOString()) : t('offlineNoData'),
+                  })}
+                </AlertTitle>
+                <AlertDescription>
+                  {t('offlineDescription')}
+                  <details className="offline-capabilities">
+                    <summary>{quality('offlineDetails')}</summary>
+                    <p>{quality('offlineCapabilities')}</p>
+                  </details>
+                </AlertDescription>
+              </Alert>
+            )}
+            {(host?.mode === 'standby' || host?.mode === 'released') && (
+              <Alert className="notice mb-5">
+                <ShieldCheck className="size-4" />
+                <AlertTitle>{host.mode === 'released' ? t('hostReleasedTitle') : t('hostStandbyTitle')}</AlertTitle>
+                <AlertDescription>
+                  {host.mode === 'released' ? t('hostReleasedDescription') : t('hostStandbyDescription')}{' '}
+                  {t('hostDescriptionSuffix')}
+                </AlertDescription>
+              </Alert>
+            )}
+            {children}
+            {location.pathname !== '/settings' && (
+              <div className="mt-10 text-right">
+                <Link
+                  className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                  to={`/settings?feedback=problem&from=${encodeURIComponent(location.pathname)}#feedback`}
+                >
+                  {t('reportProblemLink')}
+                </Link>
               </div>
             )}
-          </header>
-          {!online && (
-            <Alert role="status" className="notice mb-5">
-              <AlertTitle>
-                {t('offlineTitle', {
-                  date: cachedAt ? localDate(new Date(cachedAt).toISOString()) : t('offlineNoData'),
-                })}
-              </AlertTitle>
-              <AlertDescription>
-                {t('offlineDescription')}
-                <details className="offline-capabilities">
-                  <summary>{quality('offlineDetails')}</summary>
-                  <p>{quality('offlineCapabilities')}</p>
-                </details>
-              </AlertDescription>
-            </Alert>
-          )}
-          {(host?.mode === 'standby' || host?.mode === 'released') && (
-            <Alert className="notice mb-5">
-              <ShieldCheck className="size-4" />
-              <AlertTitle>{host.mode === 'released' ? t('hostReleasedTitle') : t('hostStandbyTitle')}</AlertTitle>
-              <AlertDescription>
-                {host.mode === 'released' ? t('hostReleasedDescription') : t('hostStandbyDescription')}{' '}
-                {t('hostDescriptionSuffix')}
-              </AlertDescription>
-            </Alert>
-          )}
-          {children}
-          {location.pathname !== '/settings' && (
-            <div className="mt-10 text-right">
-              <Link
-                className="text-sm text-muted-foreground underline-offset-4 hover:underline"
-                to={`/settings?feedback=problem&from=${encodeURIComponent(location.pathname)}#feedback`}
-              >
-                {t('reportProblemLink')}
-              </Link>
-            </div>
-          )}
-        </main>
+          </main>
+        </div>
       </div>
       <nav className="mobile-nav" aria-label={t('mobileNavigation')}>
         {mobileItems.map(({ id, to, label, icon: Icon }) => (

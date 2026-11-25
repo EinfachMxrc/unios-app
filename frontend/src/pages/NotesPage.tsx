@@ -7,7 +7,7 @@ import { ListPagination } from '@/components/ListPagination'
 import { Shell } from '@/components/Shell'
 import { Failure, ListRows, Loading } from '@/components/State'
 import { TrashUndo, type Trashed } from '@/components/TrashUndo'
-import { UliBuddy } from '@/components/UliBuddy'
+import { NotesWelcome } from './notes/NotesWelcome'
 import { Button } from '@/components/ui/button'
 import { useWritableHost } from '@/hooks/host'
 import { extractApiErrorMessage } from '@/hooks/useApiMutation'
@@ -281,16 +281,7 @@ export function NotesPage() {
             onTrash={(title) => void trashNote(selectedId, title)}
           />
         ) : (
-          <div className="note-canvas note-welcome">
-            <UliBuddy mood="awake" size={72} />
-            <h2>{t('welcomeTitle')}</h2>
-            <p>{t('welcomeText')}</p>
-            {canWrite && (
-              <Button variant="outline" onClick={openNew}>
-                <Plus size={16} /> {t('newNoteButton')}
-              </Button>
-            )}
-          </div>
+          <NotesWelcome notes={visible} canWrite={canWrite} onChoose={choose} onNew={openNew} />
         )}
       </div>
       <AddonWidgetSlot slot="note.toolbar" />

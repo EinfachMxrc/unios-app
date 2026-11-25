@@ -11,7 +11,7 @@ Der Arbeitsbereich bündelt Kurse, Notizen, Termine und Lernen in einer festen N
 
 ## System
 
-Die aktiven CSS-Schichten werden in `frontend/src/styles/application.css` festgelegt. `frontend/src/styles/theme-tokens.css` definiert die Tokens, `frontend/src/styles/workspace-layout.css` die gemeinsamen Layoutregeln; komponenteneigene Styles liegen bei ihren Komponenten. Eine kompakte Tokenübersicht steht in `docs/design/design-tokens.json`. Neue Komponenten verwenden diese Tokens. Die früheren unimportierten CSS-Quellen wurden entfernt; ihre Historie bleibt in Git erhalten.
+Die aktiven CSS-Schichten werden in `frontend/src/styles/application.css` festgelegt: `tokens.css` (einzige Farbquelle), `shell.css` (Fenster, Titelleiste, Seitenleiste, Panel mit Tabs), `components.css` (geteilte Bausteine), `page-layouts.css` (nur Raster einzelner Seiten) und `polish.css` (UniOS-Feinschliff). Komponenteneigene Styles liegen bei ihren Komponenten. Eine kompakte Tokenübersicht steht in `docs/design/design-tokens.json`. Neue Komponenten verwenden diese Tokens. Die früheren unimportierten CSS-Quellen wurden entfernt; ihre Historie bleibt in Git erhalten.
 
 | Element | Hell | Dunkel |
 | --- | --- | --- |

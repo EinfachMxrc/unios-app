@@ -32,15 +32,15 @@ describe('pluralization', () => {
   })
 
   it('picks the singular German form for count 1 and the plural form otherwise', () => {
-    // The study-day counter has no inflected noun; task labels still exercise plural selection.
-    expect(i18n.t('today:upcomingTasks', { count: 1 })).toBe('anstehende Aufgabe')
-    expect(i18n.t('today:upcomingTasks', { count: 2 })).toBe('anstehende Aufgaben')
-    expect(i18n.t('today:upcomingTasks', { count: 0 })).toBe('anstehende Aufgaben')
+    // The study-day counter has no inflected noun; assignment labels still exercise plural selection.
+    expect(i18n.t('today:statDeadlines', { count: 1 })).toBe('Abgabe offen')
+    expect(i18n.t('today:statDeadlines', { count: 2 })).toBe('Abgaben offen')
+    expect(i18n.t('today:statDeadlines', { count: 0 })).toBe('Abgaben offen')
   })
 
   it('picks the correct English plural form after switching language', async () => {
     await i18n.changeLanguage('en')
-    expect(i18n.t('today:upcomingTasks', { count: 1 })).toBe('upcoming task')
-    expect(i18n.t('today:upcomingTasks', { count: 5 })).toBe('upcoming tasks')
+    expect(i18n.t('today:statDeadlines', { count: 1 })).toBe('assignment open')
+    expect(i18n.t('today:statDeadlines', { count: 5 })).toBe('assignments open')
   })
 })

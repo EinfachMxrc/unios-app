@@ -2,7 +2,7 @@
 
 export default {
   pageTitle: 'Regeln',
-  introKicker: 'AUTOMATIONEN',
+  introKicker: 'Automationen',
   introTitle: 'Wenn etwas passiert, weißt du es.',
   introText:
     'Baue kleine Regeln aus deinen eigenen Studiendaten. Vorschau und trockener Lauf zeigen Treffer, bevor du eine Aktion ausführst.',

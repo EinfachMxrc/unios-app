@@ -29,7 +29,7 @@
   margin: 0 0 6px;
   color: var(--app-muted);
   font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
 }
 .course-desk-copy h2 {
   margin: 0 0 7px;
@@ -492,4 +492,386 @@
   .course-task-card {
     transition: none;
   }
+}
+
+/* ==== Course page: banner, tabs, week cards and file rows ==== */
+
+/* The head is the banner of the course. */
+.page-heading.page-heading-banner {
+  position: relative;
+  align-items: flex-end;
+  min-height: 148px;
+  margin-bottom: 18px;
+  padding: 22px 24px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--course-hue) 28%, var(--app-border));
+  border-radius: var(--ui-radius-overlay);
+  background:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--course-hue) 26%, transparent) 1px, transparent 1.6px) 0
+      0 / 14px 14px,
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--course-hue) 30%, transparent), transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--course-hue) 16%, var(--app-bg)), var(--app-bg) 75%);
+}
+.page-heading.page-heading-banner::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  width: 36px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--course-hue);
+}
+.page-heading-banner h1 {
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.page-heading-banner .page-description {
+  margin-top: 6px;
+  color: var(--app-muted);
+  font-size: 0.84rem;
+}
+.page-heading-banner .page-heading-actions {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+.page-heading-banner .page-actions {
+  gap: 4px;
+}
+.page-heading-banner :is(.subtle-link, .course-new-note, .course-settings > summary) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: var(--ui-radius-control);
+  background: color-mix(in srgb, var(--app-bg) 80%, transparent);
+  box-shadow: inset 0 0 0 1px var(--app-border);
+  color: var(--app-text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+}
+.page-heading-banner :is(.subtle-link, .course-new-note, .course-settings > summary):hover {
+  background: var(--app-bg);
+  text-decoration: none;
+}
+
+/* Tabs: a page-level bar with icons. */
+.course-tabs.scroll-tabs,
+.scroll-tabs-wrap .course-tabs {
+  gap: 4px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--app-border);
+}
+.course-tabs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  margin-bottom: -1px;
+  padding: 0 10px;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--app-muted);
+  font-size: 0.84rem;
+  font-weight: 500;
+}
+.course-tabs a:hover {
+  color: var(--app-text);
+  text-decoration: none;
+}
+.course-tabs a[aria-current] {
+  border-bottom-color: var(--app-accent);
+  color: var(--app-text);
+}
+.course-tabs a[aria-current] svg {
+  color: var(--app-accent);
+}
+.course-tabs span:not(:empty) {
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-text) 6%, transparent);
+  color: var(--app-muted);
+  font-size: 0.7rem;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Weeks: numbered cards. */
+.course-materials {
+  counter-reset: course-week;
+}
+.course-material-group {
+  margin: 0 0 14px;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-panel);
+  background: var(--app-bg);
+}
+.course-material-group h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--app-border);
+  background: var(--app-surface-alt);
+  color: var(--app-text);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+.course-material-group h3::before {
+  counter-increment: course-week;
+  content: counter(course-week);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--app-bg);
+  box-shadow: inset 0 0 0 1px var(--app-border);
+  color: var(--app-muted);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+.course-material-group .row-list {
+  padding: 4px 6px;
+}
+
+/* File rows: typed icon, title and meta left, compact actions right. */
+.resource-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--ui-radius-item);
+}
+.resource-row + .resource-row {
+  box-shadow: 0 -1px 0 var(--app-border);
+}
+.resource-row:hover {
+  background: var(--app-surface-alt);
+  box-shadow: none;
+}
+.resource-row:hover + .resource-row {
+  box-shadow: none;
+}
+.resource-row.is-target {
+  background: var(--app-blue-soft);
+}
+.file-symbol {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--file-hue, var(--app-muted)) 13%, var(--app-bg));
+  color: var(--file-hue, var(--app-muted));
+}
+.file-symbol[data-kind='pdf'] {
+  --file-hue: #e5484d;
+}
+.file-symbol[data-kind='slides'] {
+  --file-hue: #e8902a;
+}
+.file-symbol[data-kind='sheet'] {
+  --file-hue: #30a46c;
+}
+.file-symbol[data-kind='doc'] {
+  --file-hue: #3e63dd;
+}
+.file-symbol[data-kind='code'] {
+  --file-hue: #8e4ec6;
+}
+.file-symbol[data-kind='image'] {
+  --file-hue: #12a594;
+}
+.file-symbol[data-kind='link'] {
+  --file-hue: var(--app-accent);
+}
+.resource-row > div:last-child {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+  min-width: 0;
+}
+.resource-row > div:last-child > :is(a, strong, span) {
+  grid-column: 1;
+  min-width: 0;
+}
+.resource-title-link,
+.resource-row > div:last-child > strong {
+  overflow: hidden;
+  color: var(--app-text);
+  font-size: 0.86rem;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.resource-title-link:hover {
+  color: var(--app-accent);
+  text-decoration: none;
+}
+.resource-row > div:last-child > span {
+  color: var(--app-muted);
+  font-size: 0.74rem;
+}
+.resource-row > div:last-child > .version-links {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+}
+.version-links > span {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.version-links a,
+.resource-more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: var(--ui-radius-control);
+  color: var(--app-muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.version-links a:hover,
+.resource-more > summary:hover {
+  background: var(--nav-hover);
+  color: var(--app-text);
+  text-decoration: none;
+}
+.version-links .resource-open {
+  background: var(--app-blue-soft);
+  color: var(--app-accent);
+  font-weight: 600;
+}
+.version-links .resource-open:hover {
+  background: color-mix(in srgb, var(--app-accent) 18%, var(--app-bg));
+  color: var(--app-accent);
+}
+.resource-more > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.resource-more > summary::-webkit-details-marker {
+  display: none;
+}
+.resource-more > div {
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-panel);
+  background: var(--ui-overlay);
+  box-shadow: var(--ui-overlay-shadow);
+}
+
+/* Course tasks: tidy rows with the date below the title. */
+.course-task-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 10px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--ui-radius-item);
+  background: var(--app-bg);
+  box-shadow: none;
+  text-align: start;
+}
+.course-task-card:hover {
+  border-color: var(--app-border-strong);
+  background: var(--app-surface-alt);
+}
+.course-task-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--warm-soft);
+  color: var(--warm);
+}
+.course-task-copy {
+  display: grid;
+  flex: 1;
+  gap: 1px;
+  min-width: 0;
+}
+.course-task-copy strong {
+  overflow: hidden;
+  font-size: 0.85rem;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.course-task-copy span,
+.course-task-copy small {
+  color: var(--app-muted);
+  font-size: 0.74rem;
+}
+.course-task-list {
+  display: grid;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .page-heading.page-heading-banner {
+    min-height: 0;
+    padding-top: 64px;
+  }
+  .page-heading-banner .page-heading-actions {
+    right: 10px;
+    left: 10px;
+  }
+  .resource-row > div:last-child {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .resource-row > div:last-child > .version-links {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 6px;
+  }
+  .version-links > span {
+    justify-content: flex-start;
+  }
+}
+
+/* Sections on the course page are open areas; the week cards carry the frame. */
+.course-content [data-slot='card'].glass-card {
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.course-content [data-slot='card'] > :is([data-slot='card-header'], [data-slot='card-content']) {
+  padding-inline: 0;
+}
+.course-content [data-slot='card-title'] {
+  font-size: 0.95rem;
+}
+.page-heading-banner [data-slot='button'] {
+  min-height: 30px;
+  height: 30px;
+  background: color-mix(in srgb, var(--app-bg) 80%, transparent);
+  box-shadow: inset 0 0 0 1px var(--app-border);
+  color: var(--app-text);
+  font-size: 0.8rem;
 }

@@ -9,8 +9,7 @@
   color: var(--app-muted);
   font-size: 0.72rem;
   font-weight: 660;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 .collections-intro h2 {
   margin: 0 0 7px;

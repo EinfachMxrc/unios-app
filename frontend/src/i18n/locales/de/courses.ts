@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 export default {
+  heroMaterials_one: '{{count}} Unterlage',
+  heroMaterials_other: '{{count}} Unterlagen',
+  heroTasks_one: '{{count}} Aufgabe',
+  heroTasks_other: '{{count}} Aufgaben',
   tab_views: 'Ansichten',
   savedViews: 'Gespeicherte Ansichten',
   manageView: 'Ansicht verwalten',
@@ -60,7 +64,7 @@ export default {
   makeActive: 'Kurs aktivieren',
   showInactive: 'Inaktive anzeigen',
   inactiveHint: 'Der Kurs ist abgeschlossen oder pausiert. Seine Unterlagen bleiben erhalten.',
-  nextTask: 'ALS NÄCHSTES',
+  nextTask: 'Als Nächstes',
   courseViews: 'Kursansichten',
   tab_overview: 'Übersicht',
   tab_materials: 'Unterlagen',

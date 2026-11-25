@@ -1,6 +1,8 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 @layer theme, base, components, utilities, workspace, interactions, accessibility;
-@import './theme-tokens.css';
-@import './workspace-layout.css' layer(workspace);
-@import '../microinteractions.css' layer(interactions);
+@import './tokens.css' layer(workspace);
+@import './shell.css' layer(workspace);
+@import './components.css' layer(workspace);
+@import './page-layouts.css' layer(workspace);
+@import './polish.css' layer(workspace);
 @import '../accessibility.css' layer(accessibility);

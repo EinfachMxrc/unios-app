@@ -39,7 +39,7 @@ UniOS steht unter AGPL-3.0-or-later. Die folgenden Bestandteile behalten ihre je
 | PDF.js (`pdfjs-dist` 6.3.289) | [mozilla/pdf.js](https://github.com/mozilla/pdf.js) | Apache-2.0 | Transitive Abhängigkeit von React-PDF; PDF-Worker und Textebene im Material-Viewer. Der vollständige Lizenztext wird unter `frontend/public/licenses/PDFjs-Apache-2.0.txt` mit dem Build ausgeliefert. |
 | Anki Python 26.9.3 | [ankitects/anki](https://github.com/ankitects/anki) | AGPL-3.0-or-later | Paketabhängigkeit in `pyproject.toml` und `uv.lock`; offizielle Collection, FSRS-Planung und `.apkg`-Import/Export in `app/anki/`. Kein Anki-Quelltext wurde kopiert. |
 | ts-fsrs 5.4.2 | [open-spaced-repetition/ts-fsrs](https://github.com/open-spaced-repetition/ts-fsrs) | MIT | Paketabhängigkeit in `frontend/package.json`; unverbindliche Intervallvorschau im Offline-Lernmodus. Kein Quelltext wurde kopiert. |
-| Geist Variable 5.3.0 | [vercel/geist-font](https://github.com/vercel/geist-font) | OFL-1.1 | Schriftdateien aus `@fontsource-variable/geist` werden in den Frontend-Build übernommen. Der vollständige Lizenztext wird mit dem Build unter `frontend/public/licenses/Geist-OFL.txt` ausgeliefert. |
+| Inter Variable 5.3.0 | [rsms/inter](https://github.com/rsms/inter) | OFL-1.1 | Schriftdateien aus `@fontsource-variable/inter` werden in den Frontend-Build übernommen. Der vollständige Lizenztext wird mit dem Build unter `frontend/public/licenses/Inter-OFL.txt` ausgeliefert. |
 
 Die UniOS-Wortmarken unter `docs/brand/v2` und `frontend/public/brand/v2` enthalten
 Geist-Glyphen als Vektorpfade (Gewicht 650). `docs/brand/v2/Geist-OFL.txt` enthält
