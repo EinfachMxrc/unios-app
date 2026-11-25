@@ -9,7 +9,7 @@ from app.extract.search import search_expression
 
 def search_clips(session, query: str, course_id: int | None = None,
                  semester_id: int | None = None, limit: int = 50) -> list[dict]:
-    expression = search_expression(query)
+    expression = search_expression(query, prefix=True)
     if not expression:
         return []
     rows = session.execute(text("""

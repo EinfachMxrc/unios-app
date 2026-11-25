@@ -209,3 +209,37 @@ def test_ical_feed_contains_deadlines_and_events(factory):
     names = [item.get("summary") for item in calendar.walk("VEVENT")]
     assert "Abgabe: Abgabe 1" in names
     assert "Vorlesung" in names
+
+
+def test_search_expression_matches_the_word_being_typed_as_a_prefix():
+    from app.extract.search import search_expression
+
+    assert search_expression("Übungs", prefix=True) == '"Übungs"*'
+    assert search_expression("lineare alg", prefix=True) == '"lineare" AND "alg"*'
+    # One letter would match nearly everything, and long questions stay exact.
+    assert search_expression("a", prefix=True) == '"a"'
+    assert "*" not in search_expression("Wann ist die Klausur über lineare Algebra", prefix=True)
+    assert search_expression("Übungs") == '"Übungs"'
+
+
+def test_document_search_finds_a_partly_typed_word_with_or_without_umlaut(factory):
+    with factory() as session:
+        session.execute(text("CREATE VIRTUAL TABLE resource_texts_fts USING fts5(text, content='resource_texts', content_rowid='id')"))
+        session.execute(text("CREATE TRIGGER resource_texts_ai AFTER INSERT ON resource_texts BEGIN INSERT INTO resource_texts_fts(rowid, text) VALUES (new.id, new.text); END"))
+        course = Course(source="test", source_id="prefix-search", name="Fictional algebra")
+        session.add(course)
+        session.flush()
+        resource = Resource(source="test", source_key="prefix-search", course_id=course.id, kind="file",
+                            name="Blatt 3", url="")
+        session.add(resource)
+        session.flush()
+        version = ResourceVersion(resource_id=resource.id, version=1, sha256="d" * 64,
+                                  relative_path="uni/blatt-3.pdf", size=1, mime_type="application/pdf")
+        session.add(version)
+        session.flush()
+        session.add(ResourceText(version_id=version.id, page_number=1, text="Übungsblatt zu Matrizen",
+                                 markdown="Übungsblatt zu Matrizen"))
+        session.commit()
+        for query in ["Übungs", "ubungs", "Matriz"]:
+            hits = search_documents(session, query)
+            assert [hit["version_id"] for hit in hits] == [version.id], query

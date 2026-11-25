@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import logging
 from datetime import UTC, datetime, timedelta
 from urllib.parse import quote
 
@@ -21,6 +22,11 @@ from app.db.models import (
 from app.learning.progress import progress_for_topics
 from app.submissions.service import latest_check
 from app.timeutil import as_utc
+
+# Moodle check results that mean the work is handed in (see app/submissions/api.py).
+SUBMITTED_STATUSES = frozenset({"submitted", "graded"})
+
+log = logging.getLogger(__name__)
 
 
 def _config(item: SmartCollection) -> CollectionConfig:
@@ -125,15 +131,22 @@ def _results(session, settings: Settings, config: CollectionConfig, limit: int |
                 source=resource.source, own_group=resource.group_category == "own_group"))
     elif config.kind == "deadlines":
         for deadline, course in repository.view_rows(session, config, now):
-            if config.submission_filter == "unsubmitted":
-                if deadline.assignment_id is None:
-                    continue
-                check = latest_check(settings, deadline.assignment_id)
-                # Missing or unclear checks never mean "not submitted".
-                if check is None or check.status not in {"none", "draft"}:
-                    continue
+            check = None
+            if deadline.assignment_id is not None:
+                try:
+                    check = latest_check(settings, deadline.assignment_id)
+                except (OSError, ValueError):
+                    log.warning("Abgabeprüfung nicht lesbar; Status bleibt unbekannt")
+            # Missing or unclear checks never mean "not submitted".
+            if config.submission_filter == "unsubmitted" and (check is None or check.status not in {"none", "draft"}):
+                continue
+            # Nothing is late once it is handed in; unknown checks keep the date-based status.
+            submitted = check is not None and check.status in SUBMITTED_STATUSES
+            if submitted and config.time_filter == "overdue":
+                continue
             due = as_utc(deadline.due_at)
-            status = "Überfällig" if due < now else "Bald" if due < now + timedelta(days=3) else "Anstehend"
+            status = ("Abgegeben" if submitted else "Überfällig" if due < now
+                      else "Bald" if due < now + timedelta(days=3) else "Anstehend")
             items.append(CollectionItem(id=str(deadline.id), title=deadline.title,
                 subtitle=f"Fällig am {due.astimezone(settings.timezone):%d.%m.%Y}",
                 course_name=course.name if course else None, course_id=course.id if course else None,

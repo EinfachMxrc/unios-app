@@ -24,9 +24,20 @@ def _query_terms(query: str) -> tuple[list[str], bool]:
     return terms, True
 
 
-def search_expression(query: str) -> str:
+PREFIX_MIN_LENGTH = 2
+
+
+def search_expression(query: str, prefix: bool = False) -> str:
+    """FTS5 expression; with ``prefix`` the last word of a short query also matches longer words.
+
+    Interactive search boxes pass ``prefix`` so "Übungs" finds "Übungsblatt" while typing.
+    Long questions stay exact because they are matched with OR across their key terms.
+    """
     terms, all_required = _query_terms(query)
-    return (" AND " if all_required else " OR ").join(f'"{term}"' for term in terms)
+    quoted = [f'"{term}"' for term in terms]
+    if prefix and all_required and quoted and len(terms[-1]) >= PREFIX_MIN_LENGTH:
+        quoted[-1] += "*"
+    return (" AND " if all_required else " OR ").join(quoted)
 
 
 def search_announcements(session, query: str, course_id: int | None = None,
@@ -62,7 +73,7 @@ def search_announcements(session, query: str, course_id: int | None = None,
 
 def search_documents(session, query: str, course_id: int | None = None,
                      semester_id: int | None = None, limit: int = 50) -> list[dict]:
-    expression = search_expression(query)
+    expression = search_expression(query, prefix=True)
     if not expression:
         return []
     maximum = min(max(limit, 1), 100)
@@ -125,7 +136,7 @@ def search_documents(session, query: str, course_id: int | None = None,
 
 def search_annotations(session, query: str, course_id: int | None = None,
                        semester_id: int | None = None, limit: int = 50) -> list[dict]:
-    expression = search_expression(query)
+    expression = search_expression(query, prefix=True)
     if not expression:
         return []
     rows = session.execute(text("""
@@ -150,7 +161,7 @@ def search_annotations(session, query: str, course_id: int | None = None,
 
 def search_course_notes(session, query: str, course_id: int | None = None,
                         semester_id: int | None = None, limit: int = 50) -> list[dict]:
-    expression = search_expression(query)
+    expression = search_expression(query, prefix=True)
     if not expression:
         return []
     rows = session.execute(text("""
